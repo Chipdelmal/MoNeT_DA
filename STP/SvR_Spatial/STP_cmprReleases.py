@@ -18,7 +18,7 @@ SCA = 100000000
 ###############################################################################
 # Create directories structure
 ###############################################################################
-PT_ROT = '/media/hdd/WorkExperiments/STP/PAN/sim/'
+PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
 PT_DTA = ['{}{}/SUMMARY/{}'.format(PT_ROT, exp, ID_MTR) for exp in EXPS]
 PT_OUT = PT_ROT + 'SUMMARY/'
 PT_IMG = PT_ROT + 'img/'

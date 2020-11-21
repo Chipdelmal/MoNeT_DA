@@ -2,16 +2,13 @@
 import os
 import math
 import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 from os import path
 import pandas as pd
-import seaborn as sns
-from sklearn import tree
-from sklearn import metrics
 from joblib import dump, load
 import MoNeT_MGDrivE as monet
-import STP_dataAnalysis as da
-import matplotlib.pyplot as plt
+from sklearn import metrics
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
@@ -20,25 +17,31 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import classification_report
 from pandas.plotting import scatter_matrix
+import STP_dataAnalysis as da
 
 
+###############################################################################
+# Inputs breakdown: 
+#   i_rer: Release ratio (number of mosquitoes released as compared to total)
+#   i_ren: Release number (number of weekly released)
+#   i_rsg: Resistance generation (non-cleavable genotypes)
+#   i_fic: Fitness cost (sterility)
+#   i_gsv: Genetic standing vatiation (similar to resistance)
+###############################################################################
 (MTR, ERR, OVW, THS, QNT) = ('WOP', False, True, '0.1', '50')
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 FEATS = ['i_sex', 'i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv', 'i_grp']
-(ESTRS, DPTH) = (20, 8)
+(ESTRS, DPTH) = (10, 8)
 # Classifier Variables --------------------------------------------------------
-(OPRAN, TV_SPLT) = (
-    ((0, 1), (1, 5), (5, 100)),
-    .3
-)
+(OPRAN, TV_SPLT) = (((0, 1), (1, 3), (3, 5), (5, 10)), .5)
 (modelFeats, classNames) = (
     ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv'],
-    ['None', 'Transient', 'Permanent']
+    ['None', 'Low', 'Mid', 'High']
 )
 ###############################################################################
 # Create directories structure
 ###############################################################################
-PT_ROT = '/media/hdd/WorkExperiments/STP/PAN/sim/'
+PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
 PT_OUT = PT_ROT + 'SUMMARY/'
 PT_DTA = '{}{}_{}'.format(PT_OUT, 'Full', ID_MTR)
 PT_IMG = PT_ROT + 'img/'
@@ -69,6 +72,7 @@ corrScores = dataFiltered.corr(method='spearman')[THS][modelFeats]
 # Calculate Operational Ranges ------------------------------------------------
 grpMtr = np.asarray(dataFiltered[THS])
 groupBools = [[i[0]*365 <= feat < i[1]*365 for i in OPRAN] for feat in grpMtr]
+set(tuple(i) for i in groupBools)
 groupIx = [i.index(True) for i in groupBools]
 # Features/Labels Separate ----------------------------------------------------
 (features, labels) = (dataFiltered[modelFeats], groupIx)
@@ -109,7 +113,8 @@ for i in zip(modelFeats, corrScores, rf.feature_importances_):
     print('\t* {}: \t{:.3f} \t{:.3f}'.format(*i))
 plot_confusion_matrix(
     rf, xval, yval,
-    display_labels=classNames, cmap=plt.cm.Blues
+    display_labels=classNames, cmap=plt.cm.Blues,
+    normalize=None
 )
 print(classification_report(yval, ypred, target_names=classNames))
 # tree_in_forest = rf.estimators_[0]
@@ -122,6 +127,7 @@ print(classification_report(yval, ypred, target_names=classNames))
 #   ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv']
 ###############################################################################
 FEATS_LVLS
+len(yval)
 inProbe = [.1, 1, 1e-2, 1, 1e-3]
 inTransform = sc.transform([inProbe])
 classNames[rf.predict(inTransform)[0]]
