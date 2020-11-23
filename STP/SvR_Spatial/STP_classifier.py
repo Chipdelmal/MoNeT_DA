@@ -33,10 +33,10 @@ ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 FEATS = ['i_sex', 'i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv', 'i_grp']
 (ESTRS, DPTH) = (10, 8)
 # Classifier Variables --------------------------------------------------------
-(OPRAN, TV_SPLT) = (((0, 1), (1, 3), (3, 5), (5, 10)), .5)
+(OPRAN, TV_SPLT) = (((0, 1), (1, 2), (2, 3), (3, 5), (5, 10)), .25)
 (modelFeats, classNames) = (
     ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv'],
-    ['None', 'Low', 'Mid', 'High']
+    ['None', 'Low', 'Mid', 'High', 'Permanent']
 )
 ###############################################################################
 # Create directories structure
@@ -63,6 +63,7 @@ print('* Filtering datasets...')
 # Select dataset and create filter rules --------------------------------------
 filterRules = (
     data['i_grp'] == 0,
+    # data['i_sex'] == 'gravidFemale'
 )
 # Filter with rules -----------------------------------------------------------
 fltr = [all(i) for i in zip(*filterRules)]
@@ -79,9 +80,15 @@ groupIx = [i.index(True) for i in groupBools]
 ###############################################################################
 # Split and preprocess dataset
 ###############################################################################
+print('* Splitting')
 (xtrn, xval, ytrn, yval) = train_test_split(
     features, labels, test_size=TV_SPLT
 )
+(trnSize, valSize) = (len(xtrn), len(xval))
+totalSize = valSize + trnSize
+print('\t* Train entries: {} ({})'.format(trnSize, trnSize/totalSize))
+print('\t* Validate entries: {} ({})'.format(valSize, valSize/totalSize))
+print('\t* Total entries: {} '.format(totalSize))
 sc = StandardScaler()
 xtrn = sc.fit_transform(xtrn)
 xval = sc.transform(xval)
@@ -106,6 +113,7 @@ else:
 ###############################################################################
 # Metrics
 ###############################################################################
+print('* Validating...')
 ypred = rf.predict(xval)
 print('\t* Accuracy: {:.3f}'.format(metrics.accuracy_score(yval, ypred)))
 print('* Feature Correlations and Importances...')
@@ -117,19 +125,17 @@ plot_confusion_matrix(
     normalize=None
 )
 print(classification_report(yval, ypred, target_names=classNames))
-# tree_in_forest = rf.estimators_[0]
-# tree.plot_tree(
-#     rf.estimators_[0], filled=True,
-#     class_names=classNames, feature_names=modelFeats
-# )
 ###############################################################################
 # Probes
 #   ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv']
 ###############################################################################
+print('* Testing...')
 FEATS_LVLS
-len(yval)
 inProbe = [.1, 1, 1e-2, 1, 1e-3]
 inTransform = sc.transform([inProbe])
-classNames[rf.predict(inTransform)[0]]
-rf.predict_log_proba(inTransform)
+className = classNames[rf.predict(inTransform)[0]]
+pred = rf.predict_log_proba(inTransform)
+print('\t* Class [{}]'.format(className))
+print('\t* Log-probs {}'.format(pred))
+
 # scatter_matrix(dataFiltered[modelFeats], figsize=(12, 8))

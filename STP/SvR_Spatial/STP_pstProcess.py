@@ -64,7 +64,7 @@ for (i, fPath) in enumerate(fPaths):
             monet.calcTTO(repRto, thoS),
             monet.calcWOP(repRto, thwS)
         )
-    (minS, maxS) = monet.calcMinMax(repRto)
+    (minS, maxS, _, _) = monet.calcMinMax(repRto)
     rapS = monet.getRatioAtTime(repRto, tapS)
     #######################################################################
     # Calculate Quantiles
