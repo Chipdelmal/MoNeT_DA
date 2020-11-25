@@ -12,16 +12,19 @@ from sklearn.preprocessing import LabelBinarizer
 # Setup constants (user input)
 ###############################################################################
 (MTR, QNT) = ('WOP', '50')
-OPRAN = ((0, 1), (1, 2.5), (2.5, 5), (5, 10))
+OPRAN = ((0, 1), (1, 2), (2, 5), (5, 10))
 SEX_CATS = {
     'mixed': (0, 'i_smx'), 
     'gravidFemale': (1, 'i_sgv'), 
     'nonGravidFemale': (2, 'i_sgn')
 }
-DTA_TYPES = {
-    'i_ren': 'int8', 'i_smx': np.bool_,
-    'i_sgv': np.bool_, 'i_sgn': np.bool_
-}
+(DTA_ITYPES, DTA_OTYPES) = (
+    {
+        'i_ren': 'int8', 'i_smx': np.bool_,
+        'i_sgv': np.bool_, 'i_sgn': np.bool_,
+    },
+    'int8'
+)
 ###############################################################################
 # Create directories structure
 ###############################################################################
@@ -77,11 +80,12 @@ for ths in LBS:
 ###############################################################################
 # Sort and coerce data output
 ###############################################################################
-DTA_CLN = DTA_CLN.astype(DTA_TYPES)
-# Sort alphabetically ---------------------------------------------------------
+DTA_CLN = DTA_CLN.astype(DTA_ITYPES)
+DTA_CLN = DTA_CLN.astype({i: DTA_OTYPES for i in LBS})
+# Sort alphabetically --------------------------------------------------------
 colsSorted = sorted(list(DTA_CLN.columns.values), reverse=True)
 DTA_CLN = DTA_CLN[colsSorted]
 ###############################################################################
 # Export
 ###############################################################################
-DTA_CLN.to_csv(path.join(PT_OUT, 'PRE_' + ID_MTR))
+DTA_CLN.to_csv(path.join(PT_OUT, 'CLN_'+ID_MTR), index=False)

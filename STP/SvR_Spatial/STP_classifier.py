@@ -77,7 +77,6 @@ onehot_encoder = OneHotEncoder(sparse=False)
 integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
 onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
 inverted = label_encoder.inverse_transform([np.argmax(onehot_encoded[0, :])])
-inverted
 # Calculate Operational Ranges ------------------------------------------------
 grpMtr = np.asarray(dataFiltered[THS])
 groupBools = [[i[0]*365 <= feat < i[1]*365 for i in OPRAN] for feat in grpMtr]
