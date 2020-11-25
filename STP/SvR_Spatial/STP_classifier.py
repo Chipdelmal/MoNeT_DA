@@ -17,11 +17,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import classification_report
 from pandas.plotting import scatter_matrix
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 import STP_dataAnalysis as da
 
 
 ###############################################################################
 # Inputs breakdown: 
+#   i_sex: Sex of the releases
 #   i_rer: Release ratio (number of mosquitoes released as compared to total)
 #   i_ren: Release number (number of weekly released)
 #   i_rsg: Resistance generation (non-cleavable genotypes)
@@ -69,7 +71,13 @@ filterRules = (
 fltr = [all(i) for i in zip(*filterRules)]
 dataFiltered = data[fltr]
 corrScores = dataFiltered.corr(method='spearman')[THS][modelFeats]
-# sns.pairplot(dataFiltered)
+label_encoder = LabelEncoder()
+integer_encoded = label_encoder.fit_transform(np.array(dataFiltered['i_sex']))
+onehot_encoder = OneHotEncoder(sparse=False)
+integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
+onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
+inverted = label_encoder.inverse_transform([np.argmax(onehot_encoded[0, :])])
+inverted
 # Calculate Operational Ranges ------------------------------------------------
 grpMtr = np.asarray(dataFiltered[THS])
 groupBools = [[i[0]*365 <= feat < i[1]*365 for i in OPRAN] for feat in grpMtr]

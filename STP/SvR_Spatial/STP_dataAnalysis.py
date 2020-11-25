@@ -14,7 +14,7 @@ def unifySexesDataframe(dfRC, EXPS, FEATS, LBLS):
     return df
 
 
-def rescaleDataset(df, SCA):
+def rescaleDataset(df, SCA=1):
     df['i_rer'] = df['i_rer'] / SCA
     df['i_ren'] = df['i_ren']
     df['i_rsg'] = df['i_rsg'] / SCA
