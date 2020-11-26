@@ -137,7 +137,6 @@ print(classification_report(yval, ypred, target_names=classNames))
 #   ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv']
 ###############################################################################
 print('* Testing...')
-FEATS_LVLS
 inProbe = [.1, 1, 1e-2, 1, 1e-3]
 inTransform = sc.transform([inProbe])
 className = classNames[rf.predict(inTransform)[0]]
