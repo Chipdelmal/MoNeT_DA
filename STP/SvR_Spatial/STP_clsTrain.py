@@ -3,18 +3,20 @@
 from os import path
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from joblib import dump
 from matplotlib.pyplot import cm
 from sklearn import metrics
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+from sklearn.decomposition import PCA
 
 
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
-(MTR, QNT) = ('WOP', '50')
+(MTR, QNT, JOBS) = ('WOP', '50', 4)
 (FEATS, LABLS) = (
     [
         'i_smx', 'i_sgv', 'i_sgn',
@@ -23,7 +25,7 @@ from sklearn.ensemble import RandomForestClassifier
     ['0.1']
 )
 (VT_SPLIT, KFOLD) = (.5, 20)
-(TREES, DEPTH) = (8, 8)
+(TREES, DEPTH) = (10, 10)
 ###############################################################################
 # Create directories structure
 ###############################################################################
@@ -58,30 +60,59 @@ correlation = DTA_CLN.corr(method='spearman')[LABLS][:len(FEATS)]
 ###############################################################################
 # Training Model
 ###############################################################################
-rf = RandomForestClassifier(n_estimators=TREES, max_depth=DEPTH)
+rf = RandomForestClassifier(
+    n_estimators=TREES, max_depth=DEPTH, criterion='entropy',
+    min_samples_split=5, min_samples_leaf=50,
+    max_features=None, max_leaf_nodes=None,
+    n_jobs=JOBS
+)
 # K-fold training -------------------------------------------------------------
-kScores = cross_val_score(rf, TRN_X, TRN_Y, cv=KFOLD)
+kScores = cross_val_score(
+    rf, TRN_X, TRN_Y, 
+    cv=KFOLD, scoring=metrics.make_scorer(metrics.f1_score, average='weighted')
+)
 # Final training --------------------------------------------------------------
 rf.fit(TRN_X, TRN_Y)
 PRD_Y = rf.predict(VAL_X)
-accuracy = metrics.accuracy_score(VAL_Y, PRD_Y)
+(accuracy, f1, precision, recall, jaccard) = (
+    metrics.accuracy_score(VAL_Y, PRD_Y),
+    metrics.f1_score(VAL_Y, PRD_Y, average='weighted'),
+    metrics.precision_score(VAL_Y, PRD_Y, average='weighted'),
+    metrics.recall_score(VAL_Y, PRD_Y, average='weighted'),
+    metrics.jaccard_score(VAL_Y, PRD_Y, average='weighted')
+)
+report = metrics.classification_report(VAL_Y, PRD_Y)
 confusionMat = metrics.plot_confusion_matrix(
     rf, VAL_X, VAL_Y, 
     display_labels=['None', 'Low', 'Mid', 'Full'],
-    cmap=cm.Blues, normalize='pred'
+    cmap=cm.Blues, normalize=None
 )
 featImportance = list(rf.feature_importances_)
 ###############################################################################
 # Statistics
 ###############################################################################
 print('* Train/Validate entries: {}/{} ({})'.format(TRN_L, VAL_L, TRN_L+VAL_L))
-print('* Cross-validation: %0.2f (+/-%0.2f)'%(kScores.mean(), kScores.std()*2))
+print('* Cross-validation F1: %0.2f (+/-%0.2f)'%(kScores.mean(), kScores.std()*2))
 print('* Validation Accuracy: {:.2f}'.format(accuracy))
+print('* Validation F1: {:.2f} ({:.2f}/{:.2f})'.format(f1, precision, recall))
+print('* Jaccard: {:.2f}'.format(jaccard))
 print('* Features importance & correlation')
 for i in zip(FEATS, featImportance, correlation[LABLS[0]]):
     print('\t* {}: {:.3f}, {:.3f}'.format(*i))
+print('* Class report: ')
+print(report)
 ###############################################################################
 # Export
 ###############################################################################
-strMod = PT_MOD+ID_MTR[4:-7]+'RF.joblib'
+strMod = PT_MOD+ID_MTR[4:-7]+str(int(float(LABLS[0])*100))+'_RF.joblib'
 dump(rf, strMod)
+
+
+###############################################################################
+# PCA Tests
+###############################################################################
+pca = PCA(n_components = 2)
+X2D = pca.fit_transform(TRN_X)
+X2DT = X2D.T
+plt.scatter(x=X2DT[0], y=X2DT[1])
+
