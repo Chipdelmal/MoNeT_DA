@@ -54,7 +54,8 @@ correlation = DTA_CLN.corr(method='spearman')[LABLS][:len(FEATS)]
 ###############################################################################
 (inputs, outputs) = (DTA_CLN[FEATS], DTA_CLN[LABLS])
 (TRN_X, VAL_X, TRN_Y, VAL_Y) = train_test_split(
-    inputs, outputs, test_size=VT_SPLIT
+    inputs, outputs, 
+    test_size=VT_SPLIT, stratify=outputs
 )
 (TRN_L, VAL_L) = [i.shape[0] for i in (TRN_X, VAL_X)]
 ###############################################################################
@@ -111,8 +112,8 @@ dump(rf, strMod)
 ###############################################################################
 # PCA Tests
 ###############################################################################
-pca = PCA(n_components = 2)
-X2D = pca.fit_transform(TRN_X)
-X2DT = X2D.T
-plt.scatter(x=X2DT[0], y=X2DT[1])
+# pca = PCA(n_components = 2)
+# X2D = pca.fit_transform(TRN_X)
+# X2DT = X2D.T
+# plt.scatter(x=X2DT[0], y=X2DT[1])
 
