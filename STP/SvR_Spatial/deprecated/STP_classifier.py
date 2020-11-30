@@ -33,9 +33,9 @@ import STP_dataAnalysis as da
 (MTR, ERR, OVW, THS, QNT) = ('WOP', False, True, '0.1', '50')
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 FEATS = ['i_sex', 'i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv', 'i_grp']
-(ESTRS, DPTH) = (10, 8)
+(ESTRS, DPTH) = (15, 8)
 # Classifier Variables --------------------------------------------------------
-(OPRAN, TV_SPLT) = (((0, 1), (1, 2), (2, 3), (3, 5), (5, 10)), .25)
+(OPRAN, TV_SPLT) = (((0, 1), (1, 2), (2, 3), (3, 4), (4, 10)), .5)
 (modelFeats, classNames) = (
     ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv'],
     ['None', 'Low', 'Mid', 'High', 'Permanent']
