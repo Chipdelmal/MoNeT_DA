@@ -11,7 +11,7 @@ from sklearn.preprocessing import LabelBinarizer
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
-(MTR, QNT) = ('WOP', '50')
+(MTR, QNT) = ('WOP', '90')
 OPRAN = ((0, 1), (1, 3), (3, 5), (5, 10))
 SEX_CATS = {
     'mixed': (0, 'i_smx'), 

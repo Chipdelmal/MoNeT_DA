@@ -8,7 +8,7 @@ import STP_dataAnalysis as da
 import matplotlib.pyplot as plt
 
 
-(MTR, ERR, OVW, THS, QNT) = ('WOP', False, True, '0.1', '50')
+(MTR, ERR, OVW, THS, QNT) = ('WOP', False, True, '0.1', '85')
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 EXPS = ('mixed', 'gravidFemale', 'nonGravidFemale')
 FEATS = ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv', 'i_grp']
