@@ -90,4 +90,4 @@ def driveParameters(TYPE, popSize):
             ['O-', 'W*', 'Total'], XSD_TRS
         )
         yRange = popSize/2
-    return (aggD, yRange)
+    return (aggD, yRange, 'xLinked')

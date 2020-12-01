@@ -4,6 +4,7 @@ import re
 import matplotlib
 import pandas as pd
 # import numpy as np
+from glob import glob
 import MoNeT_MGDrivE as monet
 
 
@@ -11,14 +12,15 @@ import MoNeT_MGDrivE as monet
     'E_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
     'E_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
+
 # #############################################################################
 # Paths and Style
 # #############################################################################
-def selectPath(USR, SET, EXP, DRV):
+def selectPath(USR, SET, DRV, EXP):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/yLinked/{}/{}/{}/'.format(SET, EXP, DRV)
+        PATH_ROOT = '/RAID5/marshallShare/yLinked/{}/{}/{}/'.format(SET, DRV, EXP)
     elif USR == 'lap':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/YDR/{}/{}/{}/'.format(SET, EXP, DRV)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/YDR/{}/{}/{}/'.format(SET, DRV, EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
@@ -57,14 +59,14 @@ def selectDepVars(MOI, THS, AOI):
     return (scalers, HD_DEP, IND_RAN, cmap)
 
 
-def setupFolder(USR, DRV, exp, HD_IND):
-    (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT) = selectPath(USR, DRV, exp)
-    PT_IMG = PT_IMG[:-1]+'Pst/'
-    fldrName = '{}_{}/'.format(*HD_IND)
-    PT_IMG_XP = PT_IMG+fldrName
-    monet.makeFolder(PT_IMG)
-    monet.makeFolder(PT_IMG_XP)
-    return (PT_ROT, PT_IMG_XP, PT_DTA, PT_PRE, PT_OUT)
+# def setupFolder(USR, DRV, exp, HD_IND):
+#     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT) = selectPath(USR, DRV, exp)
+#     PT_IMG = PT_IMG[:-1]+'Pst/'
+#     fldrName = '{}_{}/'.format(*HD_IND)
+#     PT_IMG_XP = PT_IMG+fldrName
+#     monet.makeFolder(PT_IMG)
+#     monet.makeFolder(PT_IMG_XP)
+#     return (PT_ROT, PT_IMG_XP, PT_DTA, PT_PRE, PT_OUT)
 
 
 def loadDFFromFiles(fName, IND_RAN):
@@ -82,6 +84,24 @@ def loadDFFromSummary(fName):
     indRan = sum([i[0] == 'i' for i in header])
     headerInd = header[:indRan]
     return (df, header, headerInd)
+
+# #############################################################################
+# Paths and Names
+# #############################################################################
+def getExpPaths(PATH_DATA):
+    (expDirsMean, expDirsTrac) = (
+            monet.listDirectoriesWithPathWithinAPath(PATH_DATA + 'ANALYZED/'),
+            monet.listDirectoriesWithPathWithinAPath(PATH_DATA + 'TRACE/')
+        )
+    expDirsMean.sort()
+    expDirsTrac.sort()
+    return (expDirsMean, expDirsTrac)
+
+
+def splitExpNames(PATH_OUT, ext='bz'):
+    out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
+    return sorted(list(set(out)))
+
 
 # #############################################################################
 # Style
@@ -104,11 +124,10 @@ def axisRange(x):
 # #############################################################################
 # Terminal
 # #############################################################################
-
 def printExperimentHead(PATH_ROOT, PATH_IMG, PATH_DATA, time, title):
     print(monet.PAD)
     (cred, cwht, cend) = (monet.CRED, monet.CWHT, monet.CEND)
-    print(cwht+'MoNeT '+title+' ['+str(time)+']'+cend)
+    print(cwht+'* MoNeT '+title+' ['+str(time)+']'+cend)
     print(monet.PAD)
     print('{}* Root: {}{}'.format(cred, PATH_ROOT, cend))
     print('{}* Imgs: {}{}'.format(cred, PATH_IMG, cend))
@@ -125,21 +144,18 @@ cdict = {
         'blue':     ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (0.5, 1.0, 1.0), (1.0, 0.25, 0.25))
     }
 cmapB = matplotlib.colors.LinearSegmentedColormap('cmapK', cdict, 256)
-
 cdict = {
         'red':      ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.95, 0.95)),
         'green':    ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0, 0)),
         'blue':     ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.4, 0.4))
     }
 cmapC = matplotlib.colors.LinearSegmentedColormap('cmapK', cdict, 256)
-
 cdict = {
         'red':      ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0, 0)),
         'green':    ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.65, 0.65)),
         'blue':     ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, .95, .95))
     }
 cmapM = matplotlib.colors.LinearSegmentedColormap('cmapK', cdict, 256)
-
 cdict = {
         'red':      ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.05, 0.05)),
         'green':    ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.91, 0.91)),
