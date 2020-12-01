@@ -8,8 +8,8 @@ import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
 
-(USR, SET, DRV, AOI) = ('lap', 'homing', 'XSD', 'HLT')
-# (USR, EXP, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+# (USR, SET, DRV, AOI) = ('srv', 'homing', 'ASD', 'HLT')
+(USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 (FMT, OVW, MF, JOB) = ('bz2', True, (False, True), 8)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 EXPS = ('000', '002', '004', '006', '008')
