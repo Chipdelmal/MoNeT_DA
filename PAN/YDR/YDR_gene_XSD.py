@@ -56,7 +56,7 @@ XSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-hGenes = (('Y', (0, 1)), )
+hGenes = (('X', (0, 1)), )
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 wGenes = (
     ('X', (0, 1)), ('C', (0, 1)),
