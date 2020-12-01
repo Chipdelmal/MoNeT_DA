@@ -62,7 +62,7 @@ wGenes = (
     ('G', (2, 3)), ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-YSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
+YSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 
 
 ###############################################################################
@@ -71,7 +71,7 @@ YSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(
-            ['W', 'H', 'R', 'B'], YSD_ECO
+            ['X', 'Y', 'C', 'W', 'G', 'R', 'B'], YSD_ECO
         )
         yRange = popSize
     elif TYPE == 'HLT':
@@ -81,12 +81,12 @@ def driveParameters(TYPE, popSize):
         yRange = popSize/2
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(
-            ['H*', 'O-', 'Total'], YSD_TRS
+            ['C*', 'O-', 'Total'], YSD_TRS
         )
-        yRange = popSize/2
+        yRange = popSize
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(
-            ['O-', 'W*', 'Total'], YSD_TRS
+            ['O-', 'W*', 'Total'], YSD_WLD
         )
-        yRange = popSize/2
+        yRange = popSize
     return (aggD, yRange, 'yLinked')

@@ -9,7 +9,10 @@ import MoNeT_MGDrivE as monet
 # Colors
 ###############################################################################
 # Ecology ---------------------------------------------------------------------
-COLEN = ['#2614ed', '#FF006E', '#45d40c', '#8338EC', '#1888e3', '#BC1097']
+COLEN = [
+    '#2614ed', '#FF006E', '#45d40c', '#8338EC', 
+    '#1888e3', '#BC1097', '#FFE93E', '#3b479d'
+]
 COLEN = [c+'1A' for c in COLEN]
 COLEO = [i[:-2]+'FF' for i in COLEN]
 COLEM = monet.generateAlphaColorMapFromColorArray(COLEO)

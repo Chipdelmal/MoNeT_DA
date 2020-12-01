@@ -61,7 +61,7 @@ ASD_WLD = [list(i) for i in (hPos - wPos, wPos, wPos | hPos)]
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(
-            ['W', 'H', 'R', 'B'], ASD_ECO
+            ['WA', 'H', 'R', 'B', 'C', 'WB'], ASD_ECO
         )
         yRange = popSize
     elif TYPE == 'HLT':
@@ -71,12 +71,14 @@ def driveParameters(TYPE, popSize):
         yRange = popSize/2
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(
-            ['H*', 'O-', 'Total'], ASD_TRS
+            ['C*', 'O-', 'Total'], ASD_TRS
         )
-        yRange = popSize/2
+        yRange = popSize
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(
             ['O-', 'W*', 'Total'], ASD_WLD
         )
-        yRange = popSize/2
+        yRange = popSize
     return (aggD, yRange, 'autosomal')
+
+
