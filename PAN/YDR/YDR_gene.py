@@ -1,5 +1,7 @@
 
 import YDR_gene_ASD as ASD
+import YDR_gene_ASD as XSD
+import YDR_gene_ASD as YSD
 import MoNeT_MGDrivE as monet
 
 
@@ -37,7 +39,11 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
     if DRIVE == 'ASD':
         (aggD, yRange) = ASD.driveParameters(TYPE, popSize)
     # X-Linked Split Drive ----------------------------------------------------
+    if DRIVE == 'XSD':
+        (aggD, yRange) = XSD.driveParameters(TYPE, popSize)
     # Y-Linked Split Drive ----------------------------------------------------
+    if DRIVE == 'YSD':
+        (aggD, yRange) = YSD.driveParameters(TYPE, popSize)
     # Autosomal X-Shredder ----------------------------------------------------
     # Autosomal Y-Shredder ----------------------------------------------------
     ###########################################################################
@@ -50,4 +56,5 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
     elif TYPE == 'WLD':
         colors = COLWN
     ###########################################################################
-    return {'gDict': aggD, 'yRange': yRange, 'colors': colors}
+    geneDict = {'gDict': aggD, 'yRange': yRange, 'colors': colors}
+    return geneDict
