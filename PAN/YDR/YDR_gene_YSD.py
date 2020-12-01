@@ -27,7 +27,7 @@ rGenes = (('R', allGeneIx), )
 rPos = monet.aggregateGeneAppearances(genotypes, rGenes)
 bGenes = (('B', allGeneIx), )
 bPos = monet.aggregateGeneAppearances(genotypes, bGenes)
-XSD_ECO = (xPos, yPos, cPos, wPos, gPos, rPos, bPos)
+YSD_ECO = (xPos, yPos, cPos, wPos, gPos, rPos, bPos)
 
 ###############################################################################
 # Health genotype counts
@@ -39,7 +39,7 @@ wGenes = (
     ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-XSD_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
+YSD_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 
 ###############################################################################
 # Trash genotype counts
@@ -51,7 +51,7 @@ wGenes = (
     ('G', (2, 3)), ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-XSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
+YSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 
 ###############################################################################
 # Wild genotype counts
@@ -63,7 +63,7 @@ wGenes = (
     ('G', (2, 3)), ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-XSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
+YSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 
 
 ###############################################################################
@@ -72,22 +72,22 @@ XSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(
-            ['W', 'H', 'R', 'B'], XSD_ECO
+            ['W', 'H', 'R', 'B'], YSD_ECO
         )
         yRange = popSize
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(
-            ['H*', 'O-', 'Total'], XSD_HLT
+            ['H*', 'O-', 'Total'], YSD_HLT
         )
         yRange = popSize/2
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(
-            ['H*', 'O-', 'Total'], XSD_TRS
+            ['H*', 'O-', 'Total'], YSD_TRS
         )
         yRange = popSize/2
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(
-            ['O-', 'W*', 'Total'], XSD_TRS
+            ['O-', 'W*', 'Total'], YSD_TRS
         )
         yRange = popSize/2
     return (aggD, yRange)

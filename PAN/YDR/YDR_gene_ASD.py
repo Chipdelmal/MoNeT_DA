@@ -58,25 +58,25 @@ ASD_WLD = [list(i) for i in (hPos - wPos, wPos, wPos | hPos)]
 ###############################################################################
 # Drive Selector
 ###############################################################################
-def driveParameters(TYPE):
+def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(
             ['W', 'H', 'R', 'B'], ASD_ECO
         )
-        yRange = 11000
+        yRange = popSize
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(
             ['H*', 'O-', 'Total'], ASD_HLT
         )
-        yRange = 11000/2
+        yRange = popSize/2
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(
             ['H*', 'O-', 'Total'], ASD_TRS
         )
-        yRange = 11000/2
+        yRange = popSize/2
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(
             ['O-', 'W*', 'Total'], ASD_WLD
         )
-        yRange = 11000/2
+        yRange = popSize/2
     return (aggD, yRange)

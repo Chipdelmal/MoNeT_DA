@@ -31,11 +31,11 @@ COLWM = monet.generateAlphaColorMapFromColorArray(COLWO)
 ###############################################################################
 # Drive
 ###############################################################################
-def driveSelector(DRIVE, TYPE):
+def driveSelector(DRIVE, TYPE, popSize=11000):
     ###########################################################################
     # Autosomal Split Drive ---------------------------------------------------
     if DRIVE == 'ASD':
-        (aggD, yRange) = ASD.driveParameters(TYPE)
+        (aggD, yRange) = ASD.driveParameters(TYPE, popSize)
     # X-Linked Split Drive ----------------------------------------------------
     # Y-Linked Split Drive ----------------------------------------------------
     # Autosomal X-Shredder ----------------------------------------------------
