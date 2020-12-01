@@ -103,6 +103,12 @@ def splitExpNames(PATH_OUT, ext='bz'):
     return sorted(list(set(out)))
 
 
+def getFilteredFiles(filterGlobPattern, unfilteredGlobPattern):
+    filterSet = set(glob(filterGlobPattern))
+    fullSet = set(glob(unfilteredGlobPattern))
+    filteredList = sorted(list(fullSet - filterSet))
+    return filteredList
+
 # #############################################################################
 # Style
 # #############################################################################
