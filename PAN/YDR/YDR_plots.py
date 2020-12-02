@@ -1,9 +1,8 @@
 
 import numpy as np
-import pandas as pd
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+
 
 def exportTracesPlot(tS, nS, STYLE, PATH_IMG, append='', vLines=[0, 0], hLines=[0], wop=0):
     figArr = monet.plotNodeTraces(tS, STYLE)
@@ -54,4 +53,3 @@ def exportTracesPlot(tS, nS, STYLE, PATH_IMG, append='', vLines=[0, 0], hLines=[
         )
     plt.close('all')
     return True
-

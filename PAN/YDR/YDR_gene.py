@@ -9,30 +9,19 @@ import MoNeT_MGDrivE as monet
 
 ###############################################################################
 # Colors
+#   Ecology, Health, Trash, Wild
 ###############################################################################
-# Ecology ---------------------------------------------------------------------
 COLEN = [
     '#2614ed', '#FF006E', '#45d40c', '#8338EC', 
     '#1888e3', '#BC1097', '#FFE93E', '#3b479d'
 ]
-COLEN = [c+'1A' for c in COLEN]
-COLEO = [i[:-2]+'FF' for i in COLEN]
-COLEM = monet.generateAlphaColorMapFromColorArray(COLEO)
-# Health ----------------------------------------------------------------------
 COLHN = ['#FF006E', '#8338EC', '#0C4887']
-COLHN = [c+'1A' for c in COLHN]
-COLHO = [i[:-2]+'FF' for i in COLHN]
-COLHM = monet.generateAlphaColorMapFromColorArray(COLHO)
-# Trash ----------------------------------------------------------------------
 COLTN = ['#00a2fe', '#8337ec', '#0C4887']
-COLTN = [c+'1A' for c in COLTN]
-COLTO = [i[:-2]+'FF' for i in COLTN]
-COLTM = monet.generateAlphaColorMapFromColorArray(COLTO)
-# Wild ----------------------------------------------------------------------
 COLWN = ['#0eeb10', '#8337ec', '#0C4887']
-COLWN = [c+'1A' for c in COLWN]
-COLWO = [i[:-2]+'FF' for i in COLWN]
-COLWM = monet.generateAlphaColorMapFromColorArray(COLWO)
+# Auto-generate colorsets with required alphas --------------------------------
+(COLEN, COLHN, COLTN, COLWN) = [monet.addHexOpacity(i, alpha='1A') for i in (COLEN, COLHN, COLTN, COLWN)]
+(COLEO, COLHO, COLTO, COLWO) = [monet.replaceHexOpacity(i, alpha='FF') for i in (COLEN, COLHN, COLTN, COLWN)]
+(COLEM, COLHM, COLTM, COLWM) = [monet.generateAlphaColorMapFromColorArray(COLWO) for i in (COLEO, COLHO, COLTO, COLWO)]
 
 
 ###############################################################################

@@ -11,9 +11,8 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
-
+# (USR, SET, DRV, AOI) = ('srv', 'homing', 'ASD', 'HLT')
 (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-# (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
 (FMT, SKP, FZ) = ('bz2', False, False)
 EXPS = ('000', '002', '004', '006', '008')
 ###############################################################################
@@ -48,11 +47,10 @@ for EXP in EXPS:
     tyTag = ('sum', 'srp')
     if FZ:
         fLists = list(zip(*[
-                aux.getFilteredFiles(
-                    PT_PRE+'*_00_*'+AOI+'*'+tp+'*',
-                    PT_PRE+'*'+AOI+'*'+tp+'*'
-                ) 
-                for tp in tyTag
+            aux.getFilteredFiles(
+                PT_PRE+'*_00_*'+AOI+'*'+tp+'*', 
+                PT_PRE+'*'+AOI+'*'+tp+'*'
+            )  for tp in tyTag
         ]))
     else:
         fLists = list(zip(
@@ -70,9 +68,10 @@ for EXP in EXPS:
         # Export plots --------------------------------------------------------
         plots.exportTracesPlot(repDta, name, STYLE, PT_IMG, append='TRA')
         cl = [i[:-2]+'cc' for i in CLR]
+    # Export gene legend ------------------------------------------------------
     monet.exportGeneLegend(
             sumDta['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
         )
     tE = datetime.now()
-    print('* Analyzed ({}/{})                   '.format(xpNum, xpNum), end='\n')
+    # print('* Analyzed ({}/{})                   '.format(xpNum, xpNum), end='\n')
     print(monet.PAD)
