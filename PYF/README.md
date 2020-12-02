@@ -1,1 +1,1 @@
-# Tahiti, French Polynesia 
+# French Polynesia 
