@@ -14,7 +14,7 @@ import MoNeT_MGDrivE as monet
 
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # (USR, AOI, REL, LND) = ('dsk', 'HLT', 'gravidFemale', 'PAN')
-(DRV, SKP, QNT, OVW) = ('LDR', False, '90', True)
+(DRV, SKP, QNT, OVW) = ('LDR', False, '75', True)
 (gIx, hIx) = (1, 0)
 
 
