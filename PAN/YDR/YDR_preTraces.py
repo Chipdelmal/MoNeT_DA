@@ -11,9 +11,8 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
-
+# (USR, SET, DRV, AOI) = ('srv', 'homing', 'ASD', 'HLT')
 (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-# (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
 (FMT, SKP, FZ) = ('bz2', False, False)
 EXPS = ('000', '002', '004', '006', '008')
 ###############################################################################

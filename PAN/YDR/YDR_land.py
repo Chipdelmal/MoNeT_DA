@@ -1,8 +1,6 @@
 
 
-# Panmictic
-PAN = ([0], )
-# STP Grouped
+PAN = ([0, 1, 2], )
 SPA = ([0], [1], [2])
 
 def landSelector(land):
