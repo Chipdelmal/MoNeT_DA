@@ -19,26 +19,22 @@ xGenes = (('X', allGeneIx), )
 xPos = monet.aggregateGeneAppearances(genotypes, xGenes)
 yGenes = (('Y', allGeneIx), )
 yPos = monet.aggregateGeneAppearances(genotypes, yGenes)
-cGenes = (('C', allGeneIx), )
-cPos = monet.aggregateGeneAppearances(genotypes, cGenes)
 wGenes = (('W', allGeneIx), )
 wPos = monet.aggregateGeneAppearances(genotypes, wGenes)
-gGenes = (('G', allGeneIx), )
-gPos = monet.aggregateGeneAppearances(genotypes, gGenes)
 rGenes = (('R', allGeneIx), )
 rPos = monet.aggregateGeneAppearances(genotypes, rGenes)
 bGenes = (('B', allGeneIx), )
 bPos = monet.aggregateGeneAppearances(genotypes, bGenes)
-YSD_ECO = (aPos, xPos, yPos, cPos, wPos, gPos, rPos, bPos)
+YSD_ECO = (aPos, xPos, yPos, wPos, rPos, bPos)
 
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-hGenes = (('G', (2, 3)), )
+hGenes = (('A', allGeneIx), )
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 wGenes = (
-    ('X', (0, 1)), ('Y', (0, 1)), ('C', (0, 1)), 
-    ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
+    ('W', allGeneIx), ('X', allGeneIx), ('Y', allGeneIx),
+    ('R', allGeneIx), ('B', allGeneIx)
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
 YSD_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
@@ -46,11 +42,11 @@ YSD_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 ###############################################################################
 # Trash genotype counts
 ###############################################################################
-hGenes = (('C', (0, 1)), )
+hGenes = (('R', allGeneIx), ('B', allGeneIx))
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 wGenes = (
-    ('X', (0, 1)), ('Y', (0, 1)),
-    ('G', (2, 3)), ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
+    ('W', allGeneIx), ('X', allGeneIx), ('Y', allGeneIx),
+    ('A', allGeneIx)
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
 YSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
@@ -58,11 +54,11 @@ YSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-hGenes = (('Y', (0, 1)), )
+hGenes = (('W', allGeneIx), )
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 wGenes = (
-    ('X', (0, 1)), ('C', (0, 1)),
-    ('G', (2, 3)), ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
+    ('A', allGeneIx), ('X', allGeneIx), ('Y', allGeneIx),
+    ('R', allGeneIx), ('B', allGeneIx)
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
 YSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
@@ -74,7 +70,7 @@ YSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(
-            ['A', 'X', 'Y', 'C', 'W', 'G', 'R', 'B'], YSD_ECO
+            ['A', 'X', 'Y', 'WA', 'WB', 'R', 'B'], YSD_ECO
         )
         yRange = popSize
     elif TYPE == 'HLT':

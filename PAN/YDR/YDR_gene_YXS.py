@@ -25,11 +25,11 @@ YXS_ECO = (xPos, yPos, aPos, bPos, rPos)
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-hGenes = (('G', (0, 1)), )
+hGenes = (('A', (0, 1)), )
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 wGenes = (
-    ('X', (0, 1)), ('Y', (0, 1)), ('C', (0, 1)), 
-    ('W', (0, 1)), ('R', (0, 1)), ('B', (0, 1))
+    ('X', (0, 1)), ('Y', (0, 1)), 
+    ('R', (0, 1)), ('B', (0, 1))
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
 YXS_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
@@ -37,11 +37,11 @@ YXS_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 ###############################################################################
 # Trash genotype counts
 ###############################################################################
-hGenes = (('C', (0, 1)), )
+hGenes = (('R', (0, 1)), ('B', (0, 1)))
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 wGenes = (
     ('X', (0, 1)), ('Y', (0, 1)),
-    ('G', (0, 1)), ('W', (0, 1)), ('R', (0, 1)), ('B', (0, 1))
+    ('A', (0, 1))
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
 YXS_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
@@ -49,11 +49,10 @@ YXS_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-hGenes = (('Y', (0, 1)), )
+hGenes = (('Y', (0, 1)), ('X', (0, 1)), )
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 wGenes = (
-    ('X', (0, 1)), ('C', (0, 1)),
-    ('G', (0, 1)), ('W', (0, 1)), ('R', (0, 1)), ('B', (0, 1))
+    ('A', (0, 1)), ('R', (0, 1)), ('B', (0, 1))
 )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
 YXS_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
