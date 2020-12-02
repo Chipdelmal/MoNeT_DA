@@ -68,6 +68,5 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 
         'colors': colors, 'folder': folder
-    } 
-    print(aggD)
+    }
     return geneDict
