@@ -24,6 +24,8 @@ Analyses scripts are saved in a geographic structure, adhering as much to 3-lett
 * [PYF](./PYF): French Polynesia 
 * [STP](./STP): São Tomé and Príncipe
 
+<br><br>
+
 ![electronic mosquito](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/mosquito.png)
 
 ## Authors

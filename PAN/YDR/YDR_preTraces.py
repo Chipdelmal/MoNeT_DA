@@ -47,11 +47,10 @@ for EXP in EXPS:
     tyTag = ('sum', 'srp')
     if FZ:
         fLists = list(zip(*[
-                aux.getFilteredFiles(
-                    PT_PRE+'*_00_*'+AOI+'*'+tp+'*',
-                    PT_PRE+'*'+AOI+'*'+tp+'*'
-                ) 
-                for tp in tyTag
+            aux.getFilteredFiles(
+                PT_PRE+'*_00_*'+AOI+'*'+tp+'*', 
+                PT_PRE+'*'+AOI+'*'+tp+'*'
+            )  for tp in tyTag
         ]))
     else:
         fLists = list(zip(
@@ -69,6 +68,7 @@ for EXP in EXPS:
         # Export plots --------------------------------------------------------
         plots.exportTracesPlot(repDta, name, STYLE, PT_IMG, append='TRA')
         cl = [i[:-2]+'cc' for i in CLR]
+    # Export gene legend ------------------------------------------------------
     monet.exportGeneLegend(
             sumDta['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
         )

@@ -8,10 +8,20 @@ from glob import glob
 import MoNeT_MGDrivE as monet
 
 
-(XP_HOM, XP_SUP) = (
-    'E_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
-    'E_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
+(XP_HOM, XP_SHR) = (
+    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
+    'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
+
+
+def patternForReleases(SET, ren, AOI, ftype):
+    if SET == 'homing':
+        patList = ['*','*','*','*','*','*','*','*','*',ren,AOI,'*',ftype,'bz']
+        return XP_HOM.format(*patList)
+    else:
+        patList = ['*','*','*','*','*','*','*',ren,AOI,'*',ftype,'bz']
+        return XP_SHR.format(*patList)
+
 
 # #############################################################################
 # Paths and Style
@@ -19,7 +29,7 @@ import MoNeT_MGDrivE as monet
 def selectPath(USR, SET, DRV, EXP):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/yLinked/{}/{}/{}/'.format(SET, DRV, EXP)
-    elif USR == 'lap':
+    elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/YDR/{}/{}/{}/'.format(SET, DRV, EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
@@ -57,16 +67,6 @@ def selectDepVars(MOI, THS, AOI):
     elif AOI == 'WLD':
         cmap = cmapW
     return (scalers, HD_DEP, IND_RAN, cmap)
-
-
-# def setupFolder(USR, DRV, exp, HD_IND):
-#     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT) = selectPath(USR, DRV, exp)
-#     PT_IMG = PT_IMG[:-1]+'Pst/'
-#     fldrName = '{}_{}/'.format(*HD_IND)
-#     PT_IMG_XP = PT_IMG+fldrName
-#     monet.makeFolder(PT_IMG)
-#     monet.makeFolder(PT_IMG_XP)
-#     return (PT_ROT, PT_IMG_XP, PT_DTA, PT_PRE, PT_OUT)
 
 
 def loadDFFromFiles(fName, IND_RAN):
@@ -108,6 +108,17 @@ def getFilteredFiles(filterGlobPattern, unfilteredGlobPattern):
     fullSet = set(glob(unfilteredGlobPattern))
     filteredList = sorted(list(fullSet - filterSet))
     return filteredList
+
+
+def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
+    filesList = glob(PATH_EXP+'/E*')
+    fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
+    splitFilenames = [re.split('_|-', i)[:skip] for i in fileNames]
+    ids = []
+    for c in range(len(splitFilenames[0])):
+        colSet = set([i[c] for i in splitFilenames])
+        ids.append(sorted(list(colSet)))
+    return ids
 
 # #############################################################################
 # Style
