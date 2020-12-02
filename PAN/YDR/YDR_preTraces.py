@@ -14,14 +14,14 @@ import compress_pickle as pkl
 
 (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
-(FMT, SKP, MF, FZ) = ('bz2', False, (True, True), False)
+(FMT, SKP, FZ) = ('bz2', False, False)
 EXPS = ('000', '002', '004', '006', '008')
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
 for EXP in EXPS:
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=11000),
+        drv.driveSelector(DRV, AOI, popSize=22000),
         lnd.landSelector('SPA')
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
@@ -41,7 +41,7 @@ for EXP in EXPS:
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()
-    aux.printExperimentHead(PT_ROT, PT_IMG, PT_PRE, tS, 'PreTraces')
+    aux.printExperimentHead(PT_IMG, PT_ROT, PT_PRE, tS, 'PreTraces')
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################

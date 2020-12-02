@@ -92,4 +92,4 @@ def driveParameters(TYPE, popSize):
             ['O-', 'W*', 'Total'], YSD_WLD
         )
         yRange = popSize
-    return (aggD, yRange, 'yLinked')
+    return (aggD, yRange, 'autosomal')
