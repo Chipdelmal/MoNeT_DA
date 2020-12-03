@@ -54,6 +54,8 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
     elif TYPE == 'WLD':
         colors = COLWN
     ###########################################################################
+    if TYPE != 'ECO':
+        yRange = yRange / 2
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 
         'colors': colors, 'folder': folder

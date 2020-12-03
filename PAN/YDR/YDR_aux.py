@@ -120,6 +120,11 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
         ids.append(sorted(list(colSet)))
     return ids
 
+
+def divideChunks(l, n): 
+    for i in range(0, len(l), n):  
+        yield l[i:i + n] 
+
 # #############################################################################
 # Style
 # #############################################################################

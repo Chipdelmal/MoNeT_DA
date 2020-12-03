@@ -34,13 +34,13 @@ for EXP in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .25, "alpha": .15, "dpi": 250, "legend": True,
+            "width": .3, "alpha": .3, "dpi": 300, "legend": True,
             "aspect": .25, "colors": CLR, "xRange": [0, (365*10)/3],
             "yRange": YRAN
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()
-    aux.printExperimentHead(PT_IMG, PT_ROT, PT_PRE, tS, 'PreTraces')
+    aux.printExperimentHead(PT_IMG, PT_ROT, PT_PRE, tS, 'PreTraces ' + AOI)
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################
@@ -70,7 +70,7 @@ for EXP in EXPS:
         cl = [i[:-2]+'cc' for i in CLR]
     # Export gene legend ------------------------------------------------------
     monet.exportGeneLegend(
-            sumDta['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
+            sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
         )
     tE = datetime.now()
     # print('* Analyzed ({}/{})                   '.format(xpNum, xpNum), end='\n')
