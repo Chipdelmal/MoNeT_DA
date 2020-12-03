@@ -139,24 +139,6 @@ def getStyle(colors, aspectR, xRange, yRange):
     return style
 
 
-def axisRange(x):
-    return (min(x), max(x))
-
-
-# #############################################################################
-# Terminal
-# #############################################################################
-def printExperimentHead(PATH_ROOT, PATH_IMG, PATH_DATA, time, title):
-    # print(monet.PAD)
-    (cred, cwht, cend) = (monet.CRED, monet.CWHT, monet.CEND)
-    print(cwht+'* MoNeT '+title+' ['+str(time)+']'+cend)
-    # print(monet.PAD)
-    print('{}* Root: {}{}'.format(cred, PATH_ROOT, cend))
-    # print('{}* Imgs: {}{}'.format(cred, PATH_IMG, cend))
-    # print('{}* Data: {}{}'.format(cred, PATH_DATA, cend))
-    # print(monet.PAD)
-
-
 # #############################################################################
 # Color Palette
 # #############################################################################

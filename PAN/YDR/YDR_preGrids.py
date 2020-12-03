@@ -26,18 +26,18 @@ for EXP in EXPS:
     (PT_IMG_I, PT_IMG_O) = (PT_IMG + 'preTraces/', PT_IMG + 'preGrids/')
     monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
-    aux.printExperimentHead(PT_ROT, PT_IMG_I, PT_IMG_O, tS, 'Grids ')
+    monet.printExperimentHead(PT_IMG_I, PT_IMG_O, tS, 'Grids ')
     # Get files ---------------------------------------------------------------
     NODE_NUM = len(land)
     imgLists = sorted([glob('{}*{}*{}*'.format(PT_IMG_I, i, '*')) for i in AOI])
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
-    imgChunks = sorted(list(aux.divideChunks(imgTuples, NODE_NUM))[:-1])
+    imgChunks = list(aux.divideChunks(imgTuples, NODE_NUM))[:-1]
     # #########################################################################
     # Iterate through images
     # #########################################################################
-    fmt = 'Processing {}/' + str(len(imgTuples)).zfill(3)
+    (xpNum, digs) = monet.lenAndDigits(imgChunks)
     for (i, chunk) in enumerate(imgChunks):
-        print(fmt.format(str(i+1).zfill(3)), end='\r')
+        monet.printProgress(i+1, xpNum, digs)
         expGrid = vconcat([hconcat([imread(i) for i in j]) for j in chunk])
         fName = chunk[0][0].split('/')[-1].split('-')[0]
         imwrite(PT_IMG_O + fName + '.png', expGrid)

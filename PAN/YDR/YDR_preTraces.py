@@ -6,7 +6,6 @@ from glob import glob
 import YDR_aux as aux
 import YDR_gene as drv
 import YDR_land as lnd
-import YDR_plots as plots
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
@@ -40,7 +39,7 @@ for EXP in EXPS:
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()
-    aux.printExperimentHead(PT_IMG, PT_ROT, PT_PRE, tS, 'PreTraces ' + AOI)
+    monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'PreTraces ' + AOI)
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################
@@ -60,18 +59,15 @@ for EXP in EXPS:
     # Process files
     ###########################################################################
     (xpNum, digs) = monet.lenAndDigits(fLists)
-    msg = '* Analyzing ({}/{})'
     for i in range(0, xpNum):
-        print(msg.format(str(i+1).zfill(digs), str(xpNum).zfill(digs)), end='\r')
+        monet.printProgress(i+1, xpNum, digs)
         (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
         name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
         # Export plots --------------------------------------------------------
-        plots.exportTracesPlot(repDta, name, STYLE, PT_IMG, append='TRA')
+        monet.exportTracesPlot(repDta, name, STYLE, PT_IMG)
         cl = [i[:-2]+'cc' for i in CLR]
     # Export gene legend ------------------------------------------------------
     monet.exportGeneLegend(
             sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
         )
     tE = datetime.now()
-    # print('* Analyzed ({}/{})                   '.format(xpNum, xpNum), end='\n')
-    # print(monet.PAD)

@@ -33,7 +33,7 @@ for EXP in EXPS:
     )
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
-    aux.printExperimentHead(PT_ROT, PT_IMG, PT_PRE, tS, 'Preprocess ' + AOI)
+    monet.printExperimentHead(PT_DTA, PT_PRE, tS, 'Preprocess ' + AOI)
     ###########################################################################
     # Load folders
     ###########################################################################

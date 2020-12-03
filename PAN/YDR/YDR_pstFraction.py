@@ -33,7 +33,7 @@ for EXP in EXPS:
         USR, SET, fldr, EXP
     )
     tS = datetime.now()
-    aux.printExperimentHead(PT_ROT, PT_IMG, PT_OUT, tS, 'PstFraction')
+    monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'PstFraction')
     # #########################################################################
     # Base experiments
     #   These are the experiments without any releases (for fractions)
@@ -48,10 +48,9 @@ for EXP in EXPS:
     #   sum: Analyzed data aggregated into one node
     #   srp: Garbage data aggregated into one node
     # #########################################################################
-    msg = '* Analyzing ({}/{})'
     (xpNum, digs) = monet.lenAndDigits(ren)
     for (i, rnIt) in enumerate(ren):
-        print(msg.format(str(i+1).zfill(digs), str(xpNum).zfill(digs)), end='\r')
+        monet.printProgress(i+1, xpNum, digs)
         # Mean data (Analyzed) ------------------------------------------------
         meanPat = aux.patternForReleases(SET, rnIt, AOI, 'sum')
         meanFiles = sorted(glob(PT_PRE+meanPat))
