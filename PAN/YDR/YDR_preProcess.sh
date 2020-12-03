@@ -8,5 +8,8 @@ python YDR_preProcess.py $1 $expSet $2 WLD
 python YDR_preProcess.py $1 $expSet $2 TRS
 
 if [ "$3" = "True" ]; then
-	./YDR_preTraces.sh $1 $expSet $2
+    python YDR_preTraces.py $1 $expSet $2 ECO
+    python YDR_preTraces.py $1 $expSet $2 HLT
+    python YDR_preTraces.py $1 $expSet $2 WLD
+    python YDR_preTraces.py $1 $expSet $2 TRS
 fi
