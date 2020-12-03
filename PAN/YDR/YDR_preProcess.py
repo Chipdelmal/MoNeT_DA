@@ -10,7 +10,7 @@ from joblib import Parallel, delayed
 
 # (USR, SET, DRV, AOI) = ('srv', 'homing', 'ASD', 'HLT')
 (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(FMT, OVW, JOB) = ('bz2', True, 8)
+(FMT, OVW, JOB) = ('bz2', True, 16)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 EXPS = ('000', '002', '004', '006', '008')
