@@ -31,7 +31,7 @@ for EXP in EXPS:
     NODE_NUM = len(land)
     imgLists = sorted([glob('{}*{}*{}*'.format(PT_IMG_I, i, '*')) for i in AOI])
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
-    imgChunks = list(aux.divideChunks(imgTuples, NODE_NUM))[:-1]
+    imgChunks = sorted(list(aux.divideChunks(imgTuples, NODE_NUM))[:-1])
     # #########################################################################
     # Iterate through images
     # #########################################################################
