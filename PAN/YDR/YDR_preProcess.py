@@ -23,8 +23,7 @@ for EXP in EXPS:
     # Setting up paths and style
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=11000),
-        lnd.landSelector('SPA')
+        drv.driveSelector(DRV, AOI, popSize=11000), lnd.landSelector('SPA')
     )
     gene = drive.get('gDict')
     fldr = drive.get('folder')
@@ -37,7 +36,7 @@ for EXP in EXPS:
     ###########################################################################
     # Load folders
     ###########################################################################
-    (expDirsMean, expDirsTrac) = aux.getExpPaths(PT_DTA)
+    (expDirsMean, expDirsTrac) = monet.getExpPaths(PT_DTA)
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
     outNames = aux.splitExpNames(PT_OUT)
     outExpNames = set(outNames)

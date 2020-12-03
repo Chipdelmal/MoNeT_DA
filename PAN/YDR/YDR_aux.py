@@ -69,35 +69,9 @@ def selectDepVars(MOI, THS, AOI):
     return (scalers, HD_DEP, IND_RAN, cmap)
 
 
-def loadDFFromFiles(fName, IND_RAN):
-    df = pd.read_csv(fName[0])
-    for filename in fName:
-        df = df.append(pd.read_csv(filename))
-    header = list(df.columns)
-    headerInd = header[:IND_RAN]
-    return (df, header, headerInd)
-
-
-def loadDFFromSummary(fName):
-    df = pd.read_csv(fName)
-    header = list(df.columns)
-    indRan = sum([i[0] == 'i' for i in header])
-    headerInd = header[:indRan]
-    return (df, header, headerInd)
-
 # #############################################################################
 # Paths and Names
 # #############################################################################
-def getExpPaths(PATH_DATA):
-    (expDirsMean, expDirsTrac) = (
-            monet.listDirectoriesWithPathWithinAPath(PATH_DATA + 'ANALYZED/'),
-            monet.listDirectoriesWithPathWithinAPath(PATH_DATA + 'TRACE/')
-        )
-    expDirsMean.sort()
-    expDirsTrac.sort()
-    return (expDirsMean, expDirsTrac)
-
-
 def splitExpNames(PATH_OUT, ext='bz'):
     out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
     return sorted(list(set(out)))
@@ -121,7 +95,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
     return ids
 
 
-def divideChunks(l, n): 
+def divideListInChunks(l, n): 
     for i in range(0, len(l), n):  
         yield l[i:i + n] 
 
