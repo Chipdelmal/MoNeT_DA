@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 # chmod +x YDR_preTraces.sh
 expSet=$(./YDR_selector.sh $2)
