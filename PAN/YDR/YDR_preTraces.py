@@ -74,4 +74,4 @@ for EXP in EXPS:
         )
     tE = datetime.now()
     # print('* Analyzed ({}/{})                   '.format(xpNum, xpNum), end='\n')
-    print(monet.PAD)
+    # print(monet.PAD)
