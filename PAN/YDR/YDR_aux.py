@@ -97,7 +97,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 
 def divideListInChunks(l, n): 
     for i in range(0, len(l), n):  
-        yield l[i:i + n] 
+        yield l[i:i+n] 
 
 # #############################################################################
 # Style
@@ -114,7 +114,7 @@ def getStyle(colors, aspectR, xRange, yRange):
 
 
 # #############################################################################
-# Color Palette
+# Color Palette for Heatmaps
 # #############################################################################
 cdict = {
         'red':  ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (0.5, 0.25, 0.25), (1.0, 0.0, 0.0)),
