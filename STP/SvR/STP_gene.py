@@ -1,91 +1,38 @@
+
 import MoNeT_MGDrivE as monet
+import STP_gene_LDR as LDR
 
 ###############################################################################
 # Colors
 ###############################################################################
-# Health ----------------------------------------------------------------------
-COLHN = [
-        "#FF006E5A", "#8338EC5A", "#0C48875A"
-    ]
-COLHO = [i[:-2]+'FF' for i in COLHN]
-COLHM = monet.generateAlphaColorMapFromColorArray(COLHO)
-# Ecology ---------------------------------------------------------------------
-COLEN = [
-        "#ff004d5A", "#C7FF035A", "#66FF005A",
-        "#8338EC5A", "#0904465A", "#7fff3a5A"
-    ]
-COLEO = [i[:-2]+'FF' for i in COLEN]
-COLEM = monet.generateAlphaColorMapFromColorArray(COLEO)
+COLEN = ['#2614ed', '#FF006E', '#45d40c', '#8338EC', '#1888e3', '#BC1097', '#FFE93E', '#3b479d']
+COLHN = ['#FF006E', '#8338EC', '#0C4887']
+COLTN = ['#00a2fe', '#8338EC', '#0C4887']
+COLWN = ['#0eeb10', '#8338EC', '#0C4887']
+# Auto-generate colorsets with required alphas --------------------------------
+(COLEN, COLHN, COLTN, COLWN) = [monet.addHexOpacity(i, alpha='1A') for i in (COLEN, COLHN, COLTN, COLWN)]
+(COLEO, COLHO, COLTO, COLWO) = [monet.replaceHexOpacity(i, alpha='FF') for i in (COLEN, COLHN, COLTN, COLWN)]
+(COLEM, COLHM, COLTM, COLWM) = [monet.generateAlphaColorMapFromColorArray(COLWO) for i in (COLEO, COLHO, COLTO, COLWO)]
+
 ###############################################################################
-# Gene-Dictionaries
+# Drive
 ###############################################################################
-# Linked Drive Replacement ----------------------------------------------------
-# 0: WW, 1: WH, 2: WR, 3: WB, 4: HH,
-# 5: HR, 6: HB, 7: RR, 8: RB, 9: BB
-drive_LDR = {
-        'id': 'Replacement', 'folder': 'LDR', 'loc': 1,
-        'HLT': {
-            'gDict': monet.generateAggregationDictionary(
-                    ["H", "Other", "Total"],
-                    [
-                        [1, 4, 5, 6],
-                        [0, 2, 3, 7, 8, 9],
-                        [1, 4, 5, 6, 0, 2, 3, 7, 8, 9]
-                    ]
-                ),
-            'color': [COLHN, COLHO, COLHM]
-        },
-        'ECO': {
-            'gDict': monet.generateAggregationDictionary(
-                    ["H", "B", "R", "W", "Total"],
-                    [
-                        [1, 4, 4, 5, 6],
-                        [3, 6, 8, 9, 9],
-                        [2, 5, 7, 7, 8],
-                        [0, 0, 1, 2, 3],
-                        [
-                            0, 0, 1, 1, 2, 2, 3, 3, 4, 4,
-                            5, 5, 6, 6, 7, 7, 8, 8, 9, 9
-                        ]
-                    ]
-                ),
-            'color': [COLEN, COLEO, COLEM]
-        }
+def driveSelector(DRIVE, TYPE, popSize=110000):
+    # Linked Drive ------------------------------------------------------------
+    if DRIVE == 'LDR':
+        (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
+    ###########################################################################
+    if TYPE == 'ECO':
+        colors = COLEN
+    elif TYPE == 'HLT':
+        colors = COLHN
+    elif TYPE == 'TRS':
+        colors = COLTN
+    elif TYPE == 'WLD':
+        colors = COLWN
+    ###########################################################################
+    geneDict = {
+        'gDict': aggD, 'yRange': yRange, 
+        'colors': colors, 'folder': folder
     }
-
-# Linked Drive Suppression ----------------------------------------------------
-drive_LDS = {
-        'id': 'LDS', 'folder': 'LDS', 'loc': 1,
-        'HLT': {
-            'gDict': monet.generateAggregationDictionary(
-                    ["H", "Other", "Total"],
-                    [
-                        [1, 4, 5, 6],
-                        [0, 2, 3, 7, 8, 9],
-                        [1, 4, 5, 6, 0, 2, 3, 7, 8, 9]
-                    ]
-                ),
-            'color': [COLHN, COLHO, COLHM]
-        },
-        'ECO': {
-            'gDict': monet.generateAggregationDictionary(
-                    ["H", "B", "R", "W", "Total"],
-                    [
-                        [1, 4, 4, 5, 6],
-                        [3, 6, 8, 9, 9],
-                        [2, 5, 7, 7, 8],
-                        [0, 0, 1, 2, 3],
-                        [1, 4, 5, 6, 0, 2, 3, 7, 8, 9]
-                    ]
-                ),
-            'color': [COLEN, COLEO, COLEM]
-        }
-    }
-
-
-# Selector --------------------------------------------------------------------
-def driveSelector(dID):
-    drive = drive_LDR
-    if dID == 'LDS':
-        drive = drive_LDS
-    return drive
+    return geneDict

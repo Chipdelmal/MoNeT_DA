@@ -65,7 +65,7 @@ def selectPath(USR, LND, EXP):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/STP/{}/sim/{}/'.format(LND, EXP)
     else:
-        PATH_ROOT = '/media/hdd/WorkExperiments/STP/{}/sim/{}/'.format(LND, EXP)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP/{}/{}/'.format(LND, EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
