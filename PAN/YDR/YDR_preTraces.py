@@ -44,17 +44,10 @@ for EXP in EXPS:
     # Load preprocessed files lists
     ###########################################################################
     tyTag = ('sum', 'srp')
+    (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
     if FZ:
-        fLists = list(zip(*[
-            aux.getFilteredFiles(
-                PT_PRE+'*_00_*'+AOI+'*'+tp+'*', 
-                PT_PRE+'*'+AOI+'*'+tp+'*'
-            )  for tp in tyTag
-        ]))
-    else:
-        fLists = list(zip(
-                *[sorted(glob(PT_PRE+'*'+AOI+'*'+tp+'*')) for tp in tyTag]
-            ))
+        fltrPattern = PT_PRE+'*_00_*'+AOI+'*'+'{}'+'*'
+    fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
     ###########################################################################
     # Process files
     ###########################################################################

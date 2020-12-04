@@ -14,12 +14,6 @@ from scipy.interpolate import griddata
 mpl.rcParams['axes.linewidth'] = 1
 
 
-def getFilteredFiles(filterGlobPattern, unfilteredGlobPattern):
-    filterSet = set(glob(filterGlobPattern))
-    fullSet = set(glob(unfilteredGlobPattern))
-    filteredList = sorted(list(fullSet - filterSet))
-    return filteredList
-
 
 def flatten(l):
     return reduce(lambda x, y: x+y, l)
