@@ -22,7 +22,7 @@ LDR_ECO = (wPos, hPos, rPos, bPos)
 # Health genotype counts
 ###############################################################################
 hGenes = (('H', allGeneIx), )
-hPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
+hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
 oGenes = (('W', allGeneIx), ('R', allGeneIx), ('B', allGeneIx))
 oPos = set(monet.aggregateGeneAppearances(genotypes, oGenes))
 LDR_HLT = [list(i) for i in (hPos, oPos - hPos, oPos | hPos)]
@@ -31,7 +31,7 @@ LDR_HLT = [list(i) for i in (hPos, oPos - hPos, oPos | hPos)]
 # Trash genotype counts
 ###############################################################################
 rGenes = (('R', allGeneIx), ('B', allGeneIx))
-rPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
+rPos = set(monet.aggregateGeneAppearances(genotypes, rGenes))
 oGenes = (('W', allGeneIx), ('H', allGeneIx))
 oPos = set(monet.aggregateGeneAppearances(genotypes, oGenes))
 LDR_TRS = [list(i) for i in (hPos, oPos - rPos, oPos | rPos)]

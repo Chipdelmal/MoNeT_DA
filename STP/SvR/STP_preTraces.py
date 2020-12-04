@@ -52,11 +52,11 @@ else:
 msg = '* Analyzing ({}/{})'
 i = 0
 for i in range(0, xpNum):
-    print(msg.format(str(i+1).zfill(digs), str(xpNum).zfill(digs)), end='\r')
+    monet.printProgress(i+1, xpNum, digs)
     (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
     name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
     # Export plots ------------------------------------------------------------
-    fun.exportTracesPlot(repDta, name, STYLE, PT_IMG, append='TRA', vLines=[0, 0])
+    monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, append='TRA', vLines=[0, 0])
     cl = [i[:-2]+'cc' for i in CLR]
 monet.exportGeneLegend(
         sumDta['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
