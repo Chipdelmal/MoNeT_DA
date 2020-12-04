@@ -2,17 +2,17 @@
 
 Codebase for the [Marshall lab's](https://www.marshalllab.com/) analysis on spatiotemporal analysis of gene drives realistic geographical settings.
 
-![MGDrivE](https://marshalllab.github.io/MGDrivE/images/modelDiagram.png)
+![SvR](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/modelDiagram.png)
 
 ## Description
 
 This is the second iteration of the [MoNeT](https://github.com/Chipdelmal/MoNeT) grown out the improvements  on the pipelines and [python package](https://github.com/Chipdelmal/MoNeT_MGDrivE). It is a complementary group of workflows and pipelines to our main simulation [MGDrivE](https://marshalllab.github.io/MGDrivE/) with which we do most of the data analysis required for our presentations and publications.
 
+![SvR](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/01.png)
 
 Follow our [youtube playlist](https://www.youtube.com/watch?v=sZXuUtToszw&list=PLRzY6w7pvIWqFJi94ZfhPkSVnazlUylpN) for some demos and explanations on our work, and our [MGDrivE](https://marshalllab.github.io/MGDrivE/) website for an updated list of publications.
 
 
-![SvR](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/01.png)
 
 ## Structure
 
