@@ -2,7 +2,7 @@
 
 Codebase for the [Marshall lab's](https://www.marshalllab.com/) analysis on spatiotemporal analysis of gene drives realistic geographical settings.
 
-![MGDrivE](https://marshalllab.github.io/MGDrivE/images/modelDiagram.png)
+![MGDrivE](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/stp.png)
 
 ## Description
 
