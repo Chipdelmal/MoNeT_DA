@@ -77,13 +77,6 @@ def splitExpNames(PATH_OUT, ext='bz'):
     return sorted(list(set(out)))
 
 
-def getFilteredFiles(filterGlobPattern, unfilteredGlobPattern):
-    filterSet = set(glob(filterGlobPattern))
-    fullSet = set(glob(unfilteredGlobPattern))
-    filteredList = sorted(list(fullSet - filterSet))
-    return filteredList
-
-
 def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
     filesList = glob(PATH_EXP+'/E*')
     fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
@@ -94,10 +87,6 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
         ids.append(sorted(list(colSet)))
     return ids
 
-
-def divideListInChunks(l, n): 
-    for i in range(0, len(l), n):  
-        yield l[i:i+n] 
 
 # #############################################################################
 # Style

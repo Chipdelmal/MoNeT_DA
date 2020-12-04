@@ -36,8 +36,11 @@ To run the grids of all the experiments (after doing their traces):
 ./preGrids.sh USR 
 ```
 
-# And the grids
+And the grids
+
+```bash
 ./preGrids.sh USR DRV
+```
 
 ## Authors
 
