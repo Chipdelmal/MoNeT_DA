@@ -22,27 +22,29 @@ import MoNeT_MGDrivE as monet
 uids = fun.getExperimentsIDSets(PT_PRE, skip=-1)
 (rer, ren, rsg, fic, gsv, aoi, grp) = uids[1:]
 tS = datetime.now()
-aux.printExperimentHead(PT_ROT, PT_IMG, PT_OUT, tS, 'PstFraction')
+monet.printExperimentHead(PT_PRE, PT_OUT, tS, 'UCIMI PstFraction '+AOI)
 # #########################################################################
 # Base experiments
 #   These are the experiments without any releases (for fractions)
 # #########################################################################
-basePat = aux.XP_NPAT.format('*', '00', '*', '*', '*', AOI, '*', 'sum', 'bz')
+# basePat = aux.XP_NPAT.format('*', '00', '*', '*', '*', AOI, '*', 'sum', 'bz')
+basePat = aux.patternForReleases('00', AOI, 'sum')
 baseFiles = sorted(glob(PT_PRE+basePat))
 # #########################################################################
 # Probe experiments
 #   sum: Analyzed data aggregated into one node
 #   srp: Garbage data aggregated into one node
 # #########################################################################
-msg = '* Analyzing ({}/{})'
 (xpNum, digs) = monet.lenAndDigits(ren)
 for (i, rnIt) in enumerate(ren):
-    print(msg.format(str(i+1).zfill(digs), str(xpNum).zfill(digs)), end='\r')
+    monet.printProgress(i+1, xpNum, digs)
     # Mean data (Analyzed) ------------------------------------------------
-    meanPat = aux.XP_NPAT.format('*', rnIt, '*', '*', '*', AOI, '*', 'sum', 'bz')
+    # meanPat = aux.XP_NPAT.format('*', rnIt, '*', '*', '*', AOI, '*', 'sum', 'bz')
+    meanPat = aux.patternForReleases(rnIt, AOI, 'sum')
     meanFiles = sorted(glob(PT_PRE+meanPat))
     # Repetitions data (Garbage) ------------------------------------------
-    tracePat = aux.XP_NPAT.format('*', rnIt, '*', '*', '*', AOI, '*', 'srp', 'bz')
+    # tracePat = aux.XP_NPAT.format('*', rnIt, '*', '*', '*', AOI, '*', 'srp', 'bz')
+    tracePat = aux.patternForReleases(rnIt, AOI, 'srp')
     traceFiles = sorted(glob(PT_PRE+tracePat))
     # #####################################################################
     # Load data
