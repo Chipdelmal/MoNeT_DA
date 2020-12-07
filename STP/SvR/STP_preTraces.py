@@ -34,7 +34,7 @@ PT_IMG = PT_IMG + 'preTraces/'
 monet.makeFolder(PT_IMG)
 # Setup the run ---------------------------------------------------------------
 tS = datetime.now()
-monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'Traces')
+monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'UCIMI PreTraces '+AOI)
 ###############################################################################
 # Load preprocessed files lists
 ###############################################################################
