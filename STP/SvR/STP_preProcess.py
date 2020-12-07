@@ -1,12 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys
+from datetime import datetime
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 import STP_functions as fun
-from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
@@ -20,11 +19,9 @@ from joblib import Parallel, delayed
 ###############################################################################
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=10000), 
-    lnd.landSelector(LND)
+    drv.driveSelector(DRV, AOI, popSize=10000), lnd.landSelector(LND)
 )
-gene = drive.get('gDict')
-fldr = drive.get('folder')
+(gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'Preprocess ' + AOI)
