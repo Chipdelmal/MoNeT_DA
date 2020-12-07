@@ -17,7 +17,7 @@ COLWN = ['#0eeb10', '#8338EC', '#0C4887']
 ###############################################################################
 # Drive
 ###############################################################################
-def driveSelector(DRIVE, TYPE, popSize=110000):
+def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
     # Linked Drive ------------------------------------------------------------
     if DRIVE == 'LDR':
         (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
