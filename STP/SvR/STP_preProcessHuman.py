@@ -1,22 +1,20 @@
-
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
 from datetime import datetime
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 import STP_functions as fun
-import STP_preProcessDevFun as deb
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
 
-# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]. sys.argv[5])
-# (USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'mixed', 'PAN', 'v1')
-(USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'male', 'EPI', 'v2')
-(DRV, FMT, OVW, MF, JOB) = ('LDR', 'bz2', True, (True, True), 8)
-(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, False)
+# (USR, AOI, REL, LND, MGV) = (sys.argv[1], 'HUM', sys.argv[3], sys.argv[4]. sys.argv[5])
+(USR, AOI, REL, LND, MGV) = ('dsk', 'HUM', 'male', 'EPI', 'v2')
+(DRV, FMT, OVW, MF, JOB) = (AOI, 'bz2', True, (True, False), 4)
+(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
@@ -38,12 +36,13 @@ outExpNames = set(outNames)
 ###############################################################################
 # Analyze data
 ###############################################################################
-exIx = 0
-monet.preProcess(
+Parallel(n_jobs=JOB)(
+    delayed(monet.preProcess)(
         exIx, expNum, expDirsMean, expDirsTrac, gene,
         analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-        outExpNames=outExpNames, fNameFmt='{}{}-{}_', OVW=OVW,
+        outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
         MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
         SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
-        sexFilenameIdentifiers={"male": "M_", "female": "F_"}
-    ) 
+        sexFilenameIdentifiers={"male": "H_", "female": "_"}
+    ) for exIx in range(0, expNum)
+)
