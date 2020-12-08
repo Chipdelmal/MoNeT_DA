@@ -50,7 +50,7 @@ STP_AGG = [[i-1 for i in range(28, 268)]]
 
 
 def landSelector(land):
-    if land == 'PAN':
-        return PAN
-    else:
+    if land == 'STP':
         return STP
+    else:
+        return PAN
