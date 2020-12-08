@@ -29,7 +29,7 @@ for EXP in EXPS:
     monet.printExperimentHead(PT_IMG_I, PT_IMG_O, tS, 'Grids ')
     # Get files ---------------------------------------------------------------
     NODE_NUM = len(land)
-    imgLists = sorted([glob('{}*{}*{}*'.format(PT_IMG_I, i, '*')) for i in AOI])
+    imgLists = [glob('{}*{}*{}*'.format(PT_IMG_I, i, '*')) for i in AOI]
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
     imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:-1]
     # #########################################################################

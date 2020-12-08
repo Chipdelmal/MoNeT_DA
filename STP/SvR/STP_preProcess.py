@@ -25,7 +25,7 @@ from joblib import Parallel, delayed
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
-monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'Preprocess ' + AOI)
+monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'UCIMI Preprocess '+AOI)
 ###############################################################################
 # Load folders
 ###############################################################################

@@ -14,8 +14,8 @@ import MoNeT_MGDrivE as monet
 
 # (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
 (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(FMT, OVW, JOB) = ('bz2', True, 8)
-(OVW, gIx, hIx) = (True, 1, 0)
+(FMT, OVW) = ('bz2', True)
+(gIx, hIx) = (1, 0)
 ###############################################################################
 EXPS = ('000', '002', '004', '006', '008')
 # Homing or shredder pattern-matching -----------------------------------------
@@ -33,7 +33,7 @@ for EXP in EXPS:
         USR, SET, fldr, EXP
     )
     tS = datetime.now()
-    monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'PstFraction')
+    monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'PstFraction '+AOI)
     # #########################################################################
     # Base experiments
     #   These are the experiments without any releases (for fractions)

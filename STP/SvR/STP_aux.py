@@ -11,6 +11,9 @@ import MoNeT_MGDrivE as monet
 
 XP_NPAT = 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 
+def patternForReleases(ren, AOI, ftype):
+    strPat = XP_NPAT.format('*', ren, '*', '*', '*', AOI, '*', ftype, 'bz')
+    return strPat
 
 # #############################################################################
 # Dependent Variables for Heatmaps
@@ -34,14 +37,6 @@ def selectDepVars(MOI, AOI):
     elif AOI == 'WLD':
         cmap = cmapW
     return (scalers, HD_DEP, IND_RAN, cmap)
-
-
-def loadDFFromSummary(fName):
-    df = pd.read_csv(fName)
-    header = list(df.columns)
-    indRan = sum([i[0] == 'i' for i in header])
-    headerInd = header[:indRan]
-    return (df, header, headerInd)
 
 
 # #############################################################################
