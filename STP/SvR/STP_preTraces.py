@@ -12,8 +12,8 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, AOI, REL, LND) = ('dsk', 'ECO', 'mixed', 'PAN')
+(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+# (USR, AOI, REL, LND) = ('dsk', 'ECO', 'mixed', 'PAN')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, True)
 ###############################################################################
 # Setting up paths and style
@@ -34,7 +34,7 @@ PT_IMG = PT_IMG + 'preTraces/'
 monet.makeFolder(PT_IMG)
 # Setup the run ---------------------------------------------------------------
 tS = datetime.now()
-monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'Traces')
+monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'UCIMI PreTraces '+AOI)
 ###############################################################################
 # Load preprocessed files lists
 ###############################################################################

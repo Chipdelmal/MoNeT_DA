@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
 from datetime import datetime
 import STP_aux as aux
 import STP_gene as drv
@@ -10,8 +11,8 @@ import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
 
-# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, AOI, REL, LND) = ('srv', 'HLT', 'mixed', 'PAN')
+(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+# (USR, AOI, REL, LND) = ('srv', 'HLT', 'mixed', 'PAN')
 (DRV, FMT, OVW, MF, JOB) = ('LDR', 'bz2', True, (False, True), 28)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
