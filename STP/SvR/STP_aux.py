@@ -15,6 +15,18 @@ def patternForReleases(ren, AOI, ftype):
     strPat = XP_NPAT.format('*', ren, '*', '*', '*', AOI, '*', ftype, 'bz')
     return strPat
 
+
+def selectVersionPath(MGV, PT_DTA):
+    if MGV == 'v2':
+        (expDirsMean, expDirsTrac) = monet.getExpPaths(
+            PT_DTA, mean='analyzed/', reps='traces/'
+        )
+    else:
+        (expDirsMean, expDirsTrac) = monet.getExpPaths(
+            PT_DTA, mean='ANALYZED/', reps='GARBAGE/'
+        )
+    return (expDirsMean, expDirsTrac)
+
 # #############################################################################
 # Dependent Variables for Heatmaps
 # #############################################################################

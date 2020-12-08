@@ -11,8 +11,9 @@ import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
 
-(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-# (USR, AOI, REL, LND) = ('srv', 'HLT', 'mixed', 'PAN')
+(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]. sys.argv[5])
+# (USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'mixed', 'PAN', 'v1')
+# (USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'male', 'EPI', 'v2')
 (DRV, FMT, OVW, MF, JOB) = ('LDR', 'bz2', True, (False, True), 4)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
@@ -29,9 +30,7 @@ monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'UCIMI Preprocess '+AOI)
 ###############################################################################
 # Load folders
 ###############################################################################
-(expDirsMean, expDirsTrac) = monet.getExpPaths(
-    PT_DTA, mean='ANALYZED/', reps='GARBAGE/'
-)
+(expDirsMean, expDirsTrac) = aux.selectVersionPath(MGV, PT_DTA)
 (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
 outNames = fun.splitExpNames(PT_OUT)
 outExpNames = set(outNames)
@@ -44,6 +43,7 @@ Parallel(n_jobs=JOB)(
         analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
         outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
         MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
-        SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP
+        SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
+        sexFilenameIdentifiers={"male": "M_", "female": "F_"}
     ) for exIx in range(0, expNum)
 )
