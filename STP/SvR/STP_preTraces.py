@@ -12,7 +12,7 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # (USR, AOI, REL, LND) = ('dsk', 'ECO', 'mixed', 'PAN')
 (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', 'male', 'EPI', 'v2')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, False)
@@ -25,8 +25,8 @@ import compress_pickle as pkl
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
 STYLE = {
-    "width": .5, "alpha": .15, "dpi": 100, "legend": True, "aspect": .25,
-    "colors": CLR, "xRange": [0, 365 * 3], "yRange": [0, YRAN]
+    "width": .5, "alpha": .15, "dpi": 500, "legend": True, "aspect": .25,
+    "colors": CLR, "xRange": [0, 365 * 10], "yRange": [0, YRAN]
 }
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
 # Paths -----------------------------------------------------------------------
