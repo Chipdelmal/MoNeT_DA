@@ -1,6 +1,6 @@
 from joblib import dump, load
 import MoNeT_MGDrivE as monet
-
+import numpy as np
 
 
 (MTR, QNT, JOBS) = ('WOP', '50', 4)
@@ -11,8 +11,6 @@ import MoNeT_MGDrivE as monet
     ],
     ['0.1']
 )
-(VT_SPLIT, KFOLD) = (.5, 20)
-(TREES, DEPTH) = (10, 10)
 ###############################################################################
 # Create directories structure
 ###############################################################################
@@ -37,3 +35,4 @@ className = rf.predict(inProbe)
 pred = rf.predict_log_proba(inProbe)
 print('\t* Class [{}]'.format(className))
 print('\t* Log-probs {}'.format(pred))
+

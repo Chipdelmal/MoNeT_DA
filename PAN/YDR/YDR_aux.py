@@ -61,11 +61,11 @@ def selectDepVars(MOI, THS, AOI):
         (HD_DEP, IND_RAN) = ('min', 7)
     # Color Mapping -----------------------------------------------------------
     if AOI == 'HLT':
-        cmap = cmapC
+        cmap = monet.cmapC
     elif AOI == 'TRS':
-        cmap = cmapM
+        cmap = monet.cmapM
     elif AOI == 'WLD':
-        cmap = cmapW
+        cmap = monet.cmapW
     return (scalers, HD_DEP, IND_RAN, cmap)
 
 
@@ -100,34 +100,3 @@ def getStyle(colors, aspectR, xRange, yRange):
         }
     style['aspect'] = monet.scaleAspect(aspectR, style)
     return style
-
-
-# #############################################################################
-# Color Palette for Heatmaps
-# #############################################################################
-cdict = {
-        'red':  ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (0.5, 0.25, 0.25), (1.0, 0.0, 0.0)),
-        'green':    ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (0.5, 0.3, 0.3), (1.0, 0.0, 0.0)),
-        'blue':     ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (0.5, 1.0, 1.0), (1.0, 0.25, 0.25))
-    }
-cmapB = matplotlib.colors.LinearSegmentedColormap('cmapK', cdict, 256)
-cdict = {
-        'red':      ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.95, 0.95)),
-        'green':    ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0, 0)),
-        'blue':     ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.4, 0.4))
-    }
-cmapC = matplotlib.colors.LinearSegmentedColormap('cmapK', cdict, 256)
-cdict = {
-        'red':      ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0, 0)),
-        'green':    ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.65, 0.65)),
-        'blue':     ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, .95, .95))
-    }
-cmapM = matplotlib.colors.LinearSegmentedColormap('cmapK', cdict, 256)
-cdict = {
-        'red':      ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.05, 0.05)),
-        'green':    ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.91, 0.91)),
-        'blue':     ((0.0, 1.0, 1.0), (0.1, 1.0, 1.0), (1.0, 0.06, 0.06))
-    }
-cmapW = matplotlib.colors.LinearSegmentedColormap('cmapK', cdict, 256)
-
-# [i/256 for i in (14, 235, 16)]
