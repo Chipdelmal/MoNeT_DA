@@ -14,7 +14,8 @@ import compress_pickle as pkl
 
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # (USR, AOI, REL, LND) = ('dsk', 'ECO', 'mixed', 'PAN')
-(DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, True)
+(USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', 'male', 'EPI', 'v2')
+(DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, False)
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
@@ -55,7 +56,8 @@ for i in range(0, xpNum):
 ###############################################################################
 # Export plot legend
 ###############################################################################
-cl = [i[:-2]+'cc' for i in CLR]
-monet.exportGeneLegend(
-    sumDta['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
-)
+if len(fLists) > 0:
+    cl = [i[:-2]+'cc' for i in CLR]
+    monet.exportGeneLegend(
+        sumDta['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
+    )
