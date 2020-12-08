@@ -13,7 +13,7 @@ from joblib import Parallel, delayed
 
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # (USR, AOI, REL, LND) = ('srv', 'HLT', 'mixed', 'PAN')
-(DRV, FMT, OVW, MF, JOB) = ('LDR', 'bz2', True, (False, True), 28)
+(DRV, FMT, OVW, MF, JOB) = ('LDR', 'bz2', True, (False, True), 4)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Setting up paths and style
@@ -29,7 +29,9 @@ monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'UCIMI Preprocess '+AOI)
 ###############################################################################
 # Load folders
 ###############################################################################
-(expDirsMean, expDirsTrac) = fun.getExpPaths(PT_DTA)
+(expDirsMean, expDirsTrac) = monet.getExpPaths(
+    PT_DTA, mean='ANALYZED/', reps='GARBAGE/'
+)
 (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
 outNames = fun.splitExpNames(PT_OUT)
 outExpNames = set(outNames)
