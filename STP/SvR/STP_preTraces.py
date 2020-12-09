@@ -12,13 +12,14 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-# (USR, AOI, REL, LND) = ('dsk', 'ECO', 'mixed', 'PAN')
+(USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+# (USR, AOI, REL, LND, MGV) = ('srv', 'HUM', 'male', 'EPI', 'v2')
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', 'male', 'EPI', 'v2')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, False)
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
+(DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (drive, land) = (
     drv.driveSelector(DRV, AOI, popSize=100*12000), 
     lnd.landSelector(LND)
@@ -26,7 +27,7 @@ import compress_pickle as pkl
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
 STYLE = {
     "width": .5, "alpha": .15, "dpi": 500, "legend": True, "aspect": .25,
-    "colors": CLR, "xRange": [0, 365 * 10], "yRange": [0, YRAN/5]
+    "colors": CLR, "xRange": [0, 365 * 10], "yRange": [0, YRAN]
 }
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
 # Paths -----------------------------------------------------------------------
@@ -52,7 +53,9 @@ for i in range(0, xpNum):
     monet.printProgress(i+1, xpNum, digs)
     (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
     name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
-    monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, vLines=[0, 0])
+    monet.exportTracesPlot(
+        repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=False
+    )
 ###############################################################################
 # Export plot legend
 ###############################################################################

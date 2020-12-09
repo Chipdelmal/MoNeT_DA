@@ -20,8 +20,6 @@ from joblib import Parallel, delayed
 # Setting up paths and style
 ###############################################################################
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
-print(DRV)
-print(MGV)
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 (drive, land) = (
     drv.driveSelector(DRV, AOI, popSize=10000), lnd.landSelector(LND)
@@ -40,13 +38,13 @@ outExpNames = set(outNames)
 ###############################################################################
 # Analyze data
 ###############################################################################
-# Parallel(n_jobs=JOB)(
-#     delayed(monet.preProcess)(
-#         exIx, expNum, expDirsMean, expDirsTrac, gene,
-#         analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-#         outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
-#         MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
-#         SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
-#         sexFilenameIdentifiers={"male": "M_", "female": "F_"}
-#     ) for exIx in range(0, expNum)
-# )
+Parallel(n_jobs=JOB)(
+    delayed(monet.preProcess)(
+        exIx, expNum, expDirsMean, expDirsTrac, gene,
+        analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
+        outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
+        MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
+        SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
+        sexFilenameIdentifiers={"male": "M_", "female": "F_"}
+    ) for exIx in range(0, expNum)
+)
