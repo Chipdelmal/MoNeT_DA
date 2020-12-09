@@ -1,5 +1,7 @@
 
 
+import sys
+from datetime import datetime
 from os import path
 from re import match
 import numpy as np
@@ -8,13 +10,14 @@ import MoNeT_MGDrivE as monet
 from sklearn.preprocessing import LabelBinarizer
 
 
+(MTR, QNT) = (sys.argv[1], sys.argv[2])
+# (MTR, QNT) = ('WOP', '50')
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
-(MTR, QNT) = ('WOP', '90')
 OPRAN = ((0, 1), (1, 3), (3, 5), (5, 10))
 SEX_CATS = {
-    'mixed': (0, 'i_smx'), 
+    'male': (0, 'i_smx'), 
     'gravidFemale': (1, 'i_sgv'), 
     'nonGravidFemale': (2, 'i_sgn')
 }
@@ -35,6 +38,8 @@ PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
 )
 PT_DTA = '{}{}_{}'.format(PT_OUT, 'Full', ID_MTR)
 [monet.makeFolder(i) for i in (PT_OUT, PT_MOD)]
+tS = datetime.now()
+monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'UCIMI ML-Classifier Clean '+MTR)
 ###############################################################################
 # Read dataset and drop non-needed columns
 ###############################################################################

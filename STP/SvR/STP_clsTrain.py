@@ -1,6 +1,7 @@
 
-
+import sys
 from os import path
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,12 +12,16 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.decomposition import PCA
+import MoNeT_MGDrivE as monet
 
 
+
+(MTR, QNT, THS) = (sys.argv[1], sys.argv[2], sys.argv[3])
+# (MTR, QNT, THS) = ('WOP', '85', '0.1')
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
-(MTR, QNT, JOBS) = ('WOP', '50', 4)
+JOBS = 1
 (FEATS, LABLS) = (
     [
         'i_smx', 'i_sgv', 'i_sgn',
@@ -39,6 +44,8 @@ ID_MTR = 'CLN_HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 # Load and inspect dataset
 ###############################################################################
 DTA_RAW = pd.read_csv(path.join(PT_OUT, ID_MTR))
+tS = datetime.now()
+monet.printExperimentHead(PT_OUT, PT_MOD, tS, 'UCIMI ML-Classifier Train '+MTR)
 DTA_TYPES = {
     'i_smx': np.bool_, 'i_sgv': np.bool_, 'i_sgn': np.bool_,
     'i_rsg': 'float64', 'i_rer': 'float64',
@@ -69,11 +76,11 @@ rf = RandomForestClassifier(
 )
 # K-fold training -------------------------------------------------------------
 kScores = cross_val_score(
-    rf, TRN_X, TRN_Y, 
+    rf, TRN_X, TRN_Y.values.ravel(), 
     cv=KFOLD, scoring=metrics.make_scorer(metrics.f1_score, average='weighted')
 )
 # Final training --------------------------------------------------------------
-rf.fit(TRN_X, TRN_Y)
+rf.fit(TRN_X, TRN_Y.values.ravel())
 PRD_Y = rf.predict(VAL_X)
 (accuracy, f1, precision, recall, jaccard) = (
     metrics.accuracy_score(VAL_Y, PRD_Y),

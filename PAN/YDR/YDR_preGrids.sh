@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# argv1: User
+
 python YDR_preGrids.py $1 homing ASD
 python YDR_preGrids.py $1 homing XSD
 python YDR_preGrids.py $1 homing YSD
