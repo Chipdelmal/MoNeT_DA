@@ -13,11 +13,12 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.decomposition import PCA
 import MoNeT_MGDrivE as monet
+from contextlib import redirect_stdout
 
 
 
 (MTR, QNT, THS) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (MTR, QNT, THS) = ('WOP', '85', '0.1')
+# (MTR, QNT, THS) = ('WOP', '95', '0.1')
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
@@ -97,23 +98,23 @@ confusionMat = metrics.plot_confusion_matrix(
 )
 featImportance = list(rf.feature_importances_)
 ###############################################################################
-# Statistics
+# Statistics & Model Export
 ###############################################################################
-print('* Train/Validate entries: {}/{} ({})'.format(TRN_L, VAL_L, TRN_L+VAL_L))
-print('* Cross-validation F1: %0.2f (+/-%0.2f)'%(kScores.mean(), kScores.std()*2))
-print('* Validation Accuracy: {:.2f}'.format(accuracy))
-print('* Validation F1: {:.2f} ({:.2f}/{:.2f})'.format(f1, precision, recall))
-print('* Jaccard: {:.2f}'.format(jaccard))
-print('* Features importance & correlation')
-for i in zip(FEATS, featImportance, correlation[LABLS[0]]):
-    print('\t* {}: {:.3f}, {:.3f}'.format(*i))
-print('* Class report: ')
-print(report)
-###############################################################################
-# Export
-###############################################################################
-strMod = PT_MOD+ID_MTR[4:-7]+str(int(float(LABLS[0])*100))+'_RF.joblib'
-dump(rf, strMod)
+strMod = PT_MOD+ID_MTR[4:-7]+str(int(float(LABLS[0])*100))
+plt.savefig(strMod+'_RF.jpg', dpi=300)
+dump(rf, strMod+'_RF.joblib')
+with open(strMod+'_RF.txt', 'w') as f:
+    with redirect_stdout(f):
+        print('* Train/Validate entries: {}/{} ({})'.format(TRN_L, VAL_L, TRN_L+VAL_L))
+        print('* Cross-validation F1: %0.2f (+/-%0.2f)'%(kScores.mean(), kScores.std()*2))
+        print('* Validation Accuracy: {:.2f}'.format(accuracy))
+        print('* Validation F1: {:.2f} ({:.2f}/{:.2f})'.format(f1, precision, recall))
+        print('* Jaccard: {:.2f}'.format(jaccard))
+        print('* Features importance & correlation')
+        for i in zip(FEATS, featImportance, correlation[LABLS[0]]):
+            print('\t* {}: {:.3f}, {:.3f}'.format(*i))
+        print('* Class report: ')
+        print(report)
 
 
 ###############################################################################
