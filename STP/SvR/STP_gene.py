@@ -13,7 +13,7 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
     # Human -------------------------------------------------------------------
     if DRIVE == 'HUM':
-        (aggD, yRange, folder) = HUM.driveParameters(TYPE, popSize)
+        (aggD, yRange, folder) = HUM.driveParameters(TYPE)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN

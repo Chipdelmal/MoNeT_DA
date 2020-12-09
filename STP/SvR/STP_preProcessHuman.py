@@ -12,7 +12,7 @@ from joblib import Parallel, delayed
 
 
 # (USR, AOI, REL, LND, MGV) = (sys.argv[1], 'HUM', sys.argv[3], sys.argv[4]. sys.argv[5])
-(USR, AOI, REL, LND, MGV) = ('dsk', 'HUM', 'male', 'EPI', 'v2')
+(USR, AOI, REL, LND, MGV) = ('srv', 'HUM', 'male', 'EPI', 'v2')
 (DRV, FMT, OVW, MF, JOB) = (AOI, 'bz2', True, (True, False), 4)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
