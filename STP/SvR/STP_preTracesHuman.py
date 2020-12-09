@@ -13,7 +13,7 @@ import compress_pickle as pkl
 
 
 # (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, AOI, REL, LND, MGV) = ('dsk', 'HUM', 'male', 'EPI', 'v2')
+(USR, AOI, REL, LND, MGV) = ('srv', 'HUM', 'male', 'EPI', 'v2')
 (DRV, FMT, OVW, FZ) = (AOI, 'bz2', True, False)
 ###############################################################################
 # Setting up paths and style
