@@ -11,6 +11,14 @@ import MoNeT_MGDrivE as monet
 
 XP_NPAT = 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 
+
+def humanSelector(AOI, DRV, MGV):
+    (drive, mgversion) = (DRV, MGV)
+    if AOI == 'HUM':
+        (drive, mgversion) = ('HUM', 'v2')
+    return (drive, mgversion)
+
+
 def patternForReleases(ren, AOI, ftype):
     strPat = XP_NPAT.format('*', ren, '*', '*', '*', AOI, '*', ftype, 'bz')
     return strPat
