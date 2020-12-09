@@ -13,8 +13,8 @@ import compress_pickle as pkl
 from cv2 import imread, imwrite, hconcat, vconcat
 
 
-(USR, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, REL, LND) = ('dsk', 'mixed', 'PAN')
+# (USR, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
+(USR, REL, LND) = ('dsk', 'mixed', 'PAN')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, True)
 AOI = ['ECO', 'HLT', 'TRS', 'WLD']
 ###############################################################################

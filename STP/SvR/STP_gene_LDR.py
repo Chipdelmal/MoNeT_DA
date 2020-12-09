@@ -61,10 +61,10 @@ def driveParameters(TYPE, popSize):
         aggD = monet.generateAggregationDictionary(
             ['R*', 'O-', 'Total'], LDR_TRS
         )
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(
             ['O-', 'W*', 'Total'], LDR_WLD
         )
-        yRange = popSize
+        yRange = popSize/2
     return (aggD, yRange, 'LDR')
