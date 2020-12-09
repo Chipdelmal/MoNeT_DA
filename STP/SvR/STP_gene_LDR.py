@@ -1,4 +1,8 @@
 
+###############################################################################
+# https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_main.R
+###############################################################################
+
 import MoNeT_MGDrivE as monet
 
 genotypes = ('WW', 'WH', 'WR', 'WB', 'HH', 'HR', 'HB', 'RR', 'RB', 'BB')

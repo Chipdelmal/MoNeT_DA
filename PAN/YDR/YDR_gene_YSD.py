@@ -1,4 +1,8 @@
 
+###############################################################################
+# https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-SplitDriveY.R
+###############################################################################
+
 import MoNeT_MGDrivE as monet
 
 genotypes = (
