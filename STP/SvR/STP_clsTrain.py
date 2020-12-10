@@ -17,8 +17,10 @@ from contextlib import redirect_stdout
 
 
 
-(MTR, THS) = (sys.argv[1], sys.argv[2])
-(MTR, QNT, THS) = ('WOP', '50', '0.1')
+(MTR, THS, VT_SPLIT, KFOLD) = (
+    sys.argv[1], sys.argv[2], float(sys.argv[3]), int(sys.argv[4])
+)
+# (MTR, THS) = ('WOP', '0.1')
 QNTS = ['50', '70', '75', '85', '90', '95']
 ###############################################################################
 # Setup constants (user input)
@@ -31,7 +33,7 @@ JOBS = 1
     ],
     ['0.1']
 )
-(VT_SPLIT, KFOLD) = (.5, 20)
+# (VT_SPLIT, KFOLD) = (.5, 20)
 (TREES, DEPTH) = (10, 10)
 ###############################################################################
 # Create directories structure

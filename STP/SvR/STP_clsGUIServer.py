@@ -6,6 +6,7 @@ from bokeh.plotting import figure, output_file, save
 from joblib import dump, load
 import MoNeT_MGDrivE as monet
 import numpy as np
+import STP_classify as cls
 
 MTR = 'WOP'
 (FEATS, LABLS) = (
@@ -42,26 +43,8 @@ bto = Button(label='Output', disabled=True)
 # Testing Evaluation
 #   'i_smx', 'i_sgv', 'i_sgn', 'i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic
 ###############################################################################
-def labelTranslate(className):
-    label = "No"
-    if className == 1:
-        label = "Low"
-    elif className == 2:
-        label = "Mid"
-    elif className == 3:
-        label = "Permanent"
-    return label
-
-def sexTranslate(sexValue):
-    sexes = [True, False, False]
-    if sexValue == 1:
-        sexes = [False, True, False]
-    elif sexValue == 1:
-        sexes = [False, False, True]
-    return sexes
-
 def change_click():
-    sexes = sexTranslate(sex.active)
+    sexes = cls.sexTranslate(sex.active)
     inProbe = [[
         sexes[0], sexes[1], sexes[2], rsg.value, rer.value, 
         ren.value, qnt.value, gsv.value, fic.value
@@ -71,7 +54,7 @@ def change_click():
     print("I: {}".format(inProbe))
     print("O: {} [{}]".format(className, pred[0]))
     bto.label='Protection Prediction: {}'.format(
-        labelTranslate(className[0])
+        cls.labelTranslate(className[0])
     )
 btn.on_click(change_click)
 ###############################################################################
