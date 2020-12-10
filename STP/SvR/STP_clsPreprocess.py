@@ -40,7 +40,7 @@ PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
 PT_DTA = '{}{}_{}'.format(PT_OUT, 'Full', ID_MTR)
 [monet.makeFolder(i) for i in (PT_OUT, PT_MOD)]
 tS = datetime.now()
-monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'UCIMI ML-Classifier Clean '+MTR)
+monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'UCIMI ML-Class Clean '+QNT)
 ###############################################################################
 # Read dataset and drop non-needed columns
 ###############################################################################

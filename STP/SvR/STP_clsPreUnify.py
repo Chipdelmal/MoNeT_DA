@@ -30,7 +30,7 @@ monet.makeFolder(PT_OUT)
 # Read and clean datasets
 ###############################################################################
 tS = datetime.now()
-monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'UCIMI ML-Classifier Unify '+MTR)
+monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'UCIMI ML-Class Unify '+QNT)
 dfRC = {
     i[0]: da.rescaleDataset(pd.read_csv(i[1]), SCA) for i in zip(EXPS, PT_DTA)
 }

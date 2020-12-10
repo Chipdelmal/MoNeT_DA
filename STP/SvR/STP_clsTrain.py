@@ -46,7 +46,7 @@ ID_MTR = ['CLN_HLT_{}_{}_qnt.csv'.format(MTR, i) for i in QNTS]
 ###############################################################################
 DTA_RAW = pd.concat([pd.read_csv(path.join(PT_OUT, i)) for i in ID_MTR])
 tS = datetime.now()
-monet.printExperimentHead(PT_OUT, PT_MOD, tS, 'UCIMI ML-Classifier Train '+MTR)
+monet.printExperimentHead(PT_OUT, PT_MOD, tS, 'UCIMI ML-Class Train '+MTR)
 DTA_TYPES = {
     'i_smx': np.bool_, 'i_sgv': np.bool_, 'i_sgn': np.bool_,
     'i_rsg': 'float64', 'i_rer': 'float64',
