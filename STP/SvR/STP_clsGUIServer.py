@@ -1,8 +1,8 @@
 from bokeh.io import curdoc
 from bokeh.layouts import column, row
 from bokeh.models import ColumnDataSource, Slider, TextInput, RadioGroup, Button
-from bokeh.plotting import figure
 from bokeh.plotting import figure, output_notebook, show
+from bokeh.plotting import figure, output_file, save
 from joblib import dump, load
 import MoNeT_MGDrivE as monet
 import numpy as np
@@ -52,8 +52,20 @@ def labelTranslate(className):
         label = "Permanent"
     return label
 
+def sexTranslate(sexValue):
+    sexes = [True, False, False]
+    if sexValue == 1:
+        sexes = [False, True, False]
+    elif sexValue == 1:
+        sexes = [False, False, True]
+    return sexes
+
 def change_click():
-    inProbe = [[True, False, False, rsg.value, rer.value, ren.value, qnt.value, gsv.value, fic.value]]
+    sexes = sexTranslate(sex.active)
+    inProbe = [[
+        sexes[0], sexes[1], sexes[2], rsg.value, rer.value, 
+        ren.value, qnt.value, gsv.value, fic.value
+    ]]
     className = rf.predict(inProbe)
     pred = rf.predict_log_proba(inProbe)
     print("I: {}".format(inProbe))
@@ -68,3 +80,4 @@ btn.on_click(change_click)
 output_notebook()
 selectors = column(sex, rer, ren, rsg, fic, gsv, qnt, btn, bto)
 curdoc().add_root(column(selectors))
+output_file(PT_ROT+"test.html")
