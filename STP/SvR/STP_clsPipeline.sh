@@ -3,7 +3,7 @@
 
 MTR="WOP"
 THS="0.5"
-VT_SPLIT="0.75"
+VT_SPLIT="0.5"
 KFOLD="50"
 
 declare -a quantiles=("50" "70" "75" "85" "90" "95")

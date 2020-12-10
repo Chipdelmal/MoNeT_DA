@@ -27,7 +27,7 @@ for label in OUT_THS:
     ###############################################################################
     # Setup constants (user input)
     ###############################################################################
-    JOBS = 1
+    JOBS = 8
     (FEATS, LABLS) = (
         [
             'i_smx', 'i_sgv', 'i_sgn',
@@ -36,7 +36,7 @@ for label in OUT_THS:
         [label]
     )
     # (VT_SPLIT, KFOLD) = (.5, 20)
-    (TREES, DEPTH) = (10, 10)
+    (TREES, DEPTH) = (30, 15)
     ###############################################################################
     # Create directories structure
     ###############################################################################
@@ -74,7 +74,7 @@ for label in OUT_THS:
     ###############################################################################
     # Training Model
     ###############################################################################
-    rf = RandomForestClassifier(
+    rf = ExtraTreesClassifier(
         n_estimators=TREES, max_depth=DEPTH, criterion='entropy',
         min_samples_split=5, min_samples_leaf=50,
         max_features=None, max_leaf_nodes=None,
@@ -98,7 +98,7 @@ for label in OUT_THS:
     report = metrics.classification_report(VAL_Y, PRD_Y)
     confusionMat = metrics.plot_confusion_matrix(
         rf, VAL_X, VAL_Y, 
-        display_labels=['None', 'Low', 'Mid', 'High', 'Semi', 'Permanent'],
+        display_labels=['None', 'Low', 'Mid', 'High', 'Permanent'],
         cmap=cm.Blues, normalize=None
     )
     featImportance = list(rf.feature_importances_)

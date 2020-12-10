@@ -7,8 +7,6 @@ def labelTranslate(className):
     elif className == 3:
         label = "High"
     elif className == 4:
-        label = "Semi-Permanent"
-    elif className == 5:
         label = "Permanent"
     return label
 
