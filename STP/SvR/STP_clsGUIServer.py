@@ -21,7 +21,7 @@ PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
     PT_ROT+'img/', PT_ROT+'MODELS/', PT_ROT+'SUMMARY/'
 )
 ID_MTR = 'CLN_HLT_{}_{}_qnt.csv'.format(MTR, QNT)
-PTH_MOD = PT_MOD+ID_MTR[4:-7]+str(int(float(LABLS[0])*100))+'_RF.joblib'
+PTH_MOD = PT_MOD+ID_MTR[4:-10]+str(int(float(LABLS[0])*100))+'_RF.joblib'
 ###############################################################################
 # Load Model
 ###############################################################################
