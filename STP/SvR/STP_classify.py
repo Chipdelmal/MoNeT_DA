@@ -1,5 +1,5 @@
 def labelTranslate(className):
-    label = "No"
+    label = "None"
     if className == 1:
         label = "Low"
     elif className == 2:
