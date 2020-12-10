@@ -25,6 +25,7 @@ SEX_CATS = {
     {
         'i_ren': 'int8', 'i_smx': np.bool_,
         'i_sgv': np.bool_, 'i_sgn': np.bool_,
+        'i_qnt': 'int8'
     },
     'int8'
 )
@@ -72,6 +73,8 @@ for (i, cat) in enumerate(inSexCats):
     DTA_CLN[SEX_CATS[cat][1]] = sexOH[i]
 # Drop the 'i_sex' label as it is redundant with one-hot ----------------------
 DTA_CLN = DTA_CLN.drop(['i_sex'], axis=1)
+# Add Quantile as Feature -----------------------------------------------------
+DTA_CLN['i_qnt'] = [QNT] * DTA_CLN.shape[0]
 ###############################################################################
 # Classify output
 ###############################################################################

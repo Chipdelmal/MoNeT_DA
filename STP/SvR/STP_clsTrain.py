@@ -17,8 +17,9 @@ from contextlib import redirect_stdout
 
 
 
-(MTR, QNT, THS) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (MTR, QNT, THS) = ('WOP', '95', '0.1')
+(MTR, THS) = (sys.argv[1], sys.argv[2])
+(MTR, QNT, THS) = ('WOP', '50', '0.1')
+QNTS = ['50', '70', '75', '85', '90', '95']
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
@@ -26,7 +27,7 @@ JOBS = 1
 (FEATS, LABLS) = (
     [
         'i_smx', 'i_sgv', 'i_sgn',
-        'i_rsg', 'i_rer', 'i_ren', 'i_gsv', 'i_fic'
+        'i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic'
     ],
     ['0.1']
 )
@@ -35,21 +36,21 @@ JOBS = 1
 ###############################################################################
 # Create directories structure
 ###############################################################################
-ID_MTR = 'CLN_HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
 (PT_IMG, PT_MOD, PT_OUT) = (
     PT_ROT+'img/', PT_ROT+'MODELS/', PT_ROT+'SUMMARY/'
 )
-ID_MTR = 'CLN_HLT_{}_{}_qnt.csv'.format(MTR, QNT)
+ID_MTR = ['CLN_HLT_{}_{}_qnt.csv'.format(MTR, i) for i in QNTS]
 ###############################################################################
 # Load and inspect dataset
 ###############################################################################
-DTA_RAW = pd.read_csv(path.join(PT_OUT, ID_MTR))
+DTA_RAW = pd.concat([pd.read_csv(path.join(PT_OUT, i)) for i in ID_MTR])
 tS = datetime.now()
 monet.printExperimentHead(PT_OUT, PT_MOD, tS, 'UCIMI ML-Classifier Train '+MTR)
 DTA_TYPES = {
     'i_smx': np.bool_, 'i_sgv': np.bool_, 'i_sgn': np.bool_,
     'i_rsg': 'float64', 'i_rer': 'float64',
+    'i_qnt': 'int8',
     'i_gsv': 'float64', 'i_fic': 'float64',
     'i_ren': 'int8', '0.95': 'int8', '0.9':  'int8', '0.75': 'int8',
     '0.5':  'int8', '0.25': 'int8', '0.1':  'int8', '0.05': 'int8',
@@ -100,11 +101,12 @@ featImportance = list(rf.feature_importances_)
 ###############################################################################
 # Statistics & Model Export
 ###############################################################################
-strMod = PT_MOD+ID_MTR[4:-7]+str(int(float(LABLS[0])*100))
+strMod = PT_MOD+ID_MTR[0][4:-10]+str(int(float(LABLS[0])*100))
 plt.savefig(strMod+'_RF.jpg', dpi=300)
 dump(rf, strMod+'_RF.joblib')
 with open(strMod+'_RF.txt', 'w') as f:
     with redirect_stdout(f):
+        print('* Feats Order: {}'.format(list(DTA_CLN.columns)))
         print('* Train/Validate entries: {}/{} ({})'.format(TRN_L, VAL_L, TRN_L+VAL_L))
         print('* Cross-validation F1: %0.2f (+/-%0.2f)'%(kScores.mean(), kScores.std()*2))
         print('* Validation Accuracy: {:.2f}'.format(accuracy))
