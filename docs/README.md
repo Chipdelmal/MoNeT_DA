@@ -8,6 +8,16 @@ Our data analysis pipelines have been designed wit re-usability in mind. As such
    2. Spatial Aggregation
    3. Genetic Aggregation
    4. Pre-Process
+   5. Pre-Traces
 3. [Post-Process](./PstProcess.md)
+   1. Post-Fraction
+   2. Post-Process
+   3. Heatmap
+   4. Post-Traces
+4. [Machine Learning](./ML.md)
+
+
+
+<br>
 
 ![pipelines](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/MoNeT.jpg)
