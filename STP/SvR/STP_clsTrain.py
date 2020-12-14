@@ -74,7 +74,7 @@ for label in OUT_THS:
     ###############################################################################
     # Training Model
     ###############################################################################
-    rf = ExtraTreesClassifier(
+    rf = RandomForestClassifier(
         n_estimators=TREES, max_depth=DEPTH, criterion='entropy',
         min_samples_split=5, min_samples_leaf=50,
         max_features=None, max_leaf_nodes=None,
