@@ -6,44 +6,41 @@
 import MoNeT_MGDrivE as monet
 
 genotypes = ('WW', 'WH', 'WR', 'WB', 'HH', 'HR', 'HB', 'RR', 'RB', 'BB')
-allGeneIx = list(range(len(genotypes[0])))
+locus = list(range(len(genotypes[0])))
 
 ###############################################################################
 # Ecology genotype counts
 ###############################################################################
-wGenes = (('W', allGeneIx), )
-wPos = monet.aggregateGeneAppearances(genotypes, wGenes)
-hGenes = (('H', allGeneIx), )
-hPos = monet.aggregateGeneAppearances(genotypes, hGenes)
-rGenes = (('R', allGeneIx), )
-rPos = monet.aggregateGeneAppearances(genotypes, rGenes)
-bGenes = (('B', allGeneIx), )
-bPos = monet.aggregateGeneAppearances(genotypes, bGenes)
-LDR_ECO = (wPos, hPos, rPos, bPos)
+wGenes = (('W', locus), )
+hGenes = (('H', locus), )
+rGenes = (('R', locus), )
+bGenes = (('B', locus), )
+genesSlot = (wGenes, hGenes, rGenes, bGenes)
+LDR_ECO = [monet.aggregateGeneAppearances(genotypes, i) for i in genesSlot]
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-hGenes = (('H', allGeneIx), )
+hGenes = (('H', locus), )
 hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
-oGenes = (('W', allGeneIx), ('R', allGeneIx), ('B', allGeneIx))
+oGenes = (('W', locus), ('R', locus), ('B', locus))
 oPos = set(monet.aggregateGeneAppearances(genotypes, oGenes))
 LDR_HLT = [list(i) for i in (hPos, oPos - hPos, oPos | hPos)]
 
 ###############################################################################
 # Trash genotype counts
 ###############################################################################
-rGenes = (('R', allGeneIx), ('B', allGeneIx))
+rGenes = (('R', locus), ('B', locus))
 rPos = set(monet.aggregateGeneAppearances(genotypes, rGenes))
-oGenes = (('W', allGeneIx), ('H', allGeneIx))
+oGenes = (('W', locus), ('H', locus))
 oPos = set(monet.aggregateGeneAppearances(genotypes, oGenes))
 LDR_TRS = [list(i) for i in (hPos, oPos - rPos, oPos | rPos)]
 
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-wGenes = (('W', allGeneIx), )
+wGenes = (('W', locus), )
 wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-oGenes = (('H', allGeneIx), ('R', allGeneIx), ('B', allGeneIx))
+oGenes = (('H', locus), ('R', locus), ('B', locus))
 oPos = set(monet.aggregateGeneAppearances(genotypes, oGenes))
 LDR_WLD = [list(i) for i in (wPos, oPos - wPos, oPos | wPos)]
 
