@@ -10,5 +10,4 @@ Our data analysis pipelines have been designed wit re-usability in mind. As such
    4. Pre-Process
 3. [Post-Process](./PstProcess.md)
 
-
-<iframe src="https://drive.google.com/file/d/1QjwtFAGJuo2X3Y_xgld6KfNszdeWgFAR/preview" width="640" height="480"></iframe>
+![pipelines](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/MoNeT.jpg)
