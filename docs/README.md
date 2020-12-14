@@ -32,7 +32,7 @@ This convention was established to make factorial experiments easier to analyze,
 
 ## Pre-Process
 
-The initial step for every analysis pipeline is the **PreProcess** phase. This script takes the original CSV files and transforms them into more manageable and lightweight [compressed-pickle](https://pypi.org/project/compress-pickle/) files by aggregating the genetic and spatial information of the experiments (which will be explained in the following subsections). Running the pre-processing scripts generates a subset of the following files:
+The initial step for every analysis pipeline is the **Pre-Process** phase. This script takes the original CSV files and transforms them into more manageable and lightweight [compressed-pickle](https://pypi.org/project/compress-pickle/) files by aggregating the genetic and spatial information of the experiments (which will be explained in the following subsections). Running the pre-processing scripts generates a subset of the following files:
 
 ```bash
 EXPERIMENT_SET
@@ -63,7 +63,7 @@ To understand the spread of genetic constructs we sometimes have to group a numb
 LAND = ((0, 2, 4, 6), (1, 3, 5, 7))
 ```
 
-would sum together the even nodes' information in **GRP** 0 and the odds in **GRP** 1. Please note that nodes are zero-indexed and that it corresponds to the lexicographical order in which the files are read and sorted into Python ([MGDrivE](https://marshalllab.github.io/MGDrivE/)'s output should conform to the same standard). These lists can be arbitrarily long and selected as needed by the specific geography or research question. In a simpler example, to do the analysis of a single-node population, we would define the landscape as:
+would sum together the even nodes' information in **GRP** 0 and the odds in **GRP** 1 (please note that nodes are zero-indexed and that it corresponds to the lexicographical order in which the files are read and sorted into Python [MGDrivE](https://marshalllab.github.io/MGDrivE/)'s output should conform to the same standard). These lists can be arbitrarily long and selected as needed by the specific geography or research question. In a simpler example, to do the analysis of a single-node population, we would define the landscape as:
 
 ```python
 LAND = ((0), )
@@ -94,7 +94,9 @@ geneDict = {
 }
 ```
 
-As mentioned before, the gene-aggregation files are the most complex in our pipelines, so we will spend a bit of time describing their rationale and options. To do so, we will use the ["linked-drive"](https://github.com/MarshallLab/MGDrivE/blob/master/MGDrivE/R/Cube-CRISPR2MF.R) (mutagenic chain reaction) drive **EID_gene_LDR**. This drive contains 10 different genotype combinations: 
+As mentioned before, the gene-aggregation files are the most complex in our pipelines, so we will spend a bit of time describing their rationale and options. To do so, we will use the ["linked-drive"](https://github.com/MarshallLab/MGDrivE/blob/master/MGDrivE/R/Cube-CRISPR2MF.R) (mutagenic chain reaction) drive **EID_gene_LDR**. 
+
+This drive contains 10 different genotype combinations: 
 
 ```python
 genotypes = ('WW', 'WH', 'WR', 'WB', 'HH', 'HR', 'HB', 'RR', 'RB', 'BB')
@@ -128,7 +130,7 @@ LDR_ECO = [monet.aggregateGeneAppearances(genotypes, i) for i in genesSlot]
 If we were only interested in doing this **ECO** analyis, we could return the following structure:
 
 ```python
-aggD = monet.generateAggregationDictionary(['W', 'H', 'R', 'B'], LDR_ECO)
+monet.generateAggregationDictionary(['W', 'H', 'R', 'B'], LDR_ECO)
 ```
 
 in which the first list is the name our genes will take in the plot routines, and the second one our gene appearances list (they need to be sorted in the same way).
@@ -139,11 +141,16 @@ Now, let's say we are interested in determining if dominant disease-blocking gen
 hGenes = (('H', locus), )
 oGenes = (('W', locus), ('R', locus), ('B', locus))
 genesSlot = (hGenes, oGenes)
-genesSets = [set(monet.aggregateGeneAppearances(genotypes, i)) for i in genesSlot]
+(hPos, oPos) = [set(monet.aggregateGeneAppearances(genotypes, i)) for i in genesSlot]
 LDR_HLT = [list(i) for i in (hPos, oPos - hPos, oPos | hPos)]
+monet.generateAggregationDictionary(['H', 'Other', 'Total'], LDR_HLT)
 ```
 
 Breaking down this code, we start by counting "H" in one aggregation group and "all the other ones" in another one. Now, a slight modification with respect to the previous example is that we are casting the aggregation list as a set to remove duplicates. This has another important advantage, we can use set operations to remove the intersection of "H" from "Other" so that we have all the dominant appearances in the first collection, all the non-dominant in the second, and the whole count in the third. As a last step, we re-cast our genotypes collection as a list, so that it remains consistent with our whole pipeline.
+
+
+### Running the Pre-Process Routine
+
 
 
 ## Post-Process
