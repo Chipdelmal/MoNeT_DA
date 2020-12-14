@@ -11,4 +11,4 @@ Our data analysis pipelines have been designed wit re-usability in mind. As such
 3. [Post-Process](./PstProcess.md)
 
 
-<img src="https://drive.google.com/file/d/1QjwtFAGJuo2X3Y_xgld6KfNszdeWgFAR/preview"></img>
+<iframe src="https://drive.google.com/file/d/1QjwtFAGJuo2X3Y_xgld6KfNszdeWgFAR/preview" width="640" height="480"></iframe>
