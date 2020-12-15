@@ -14,27 +14,32 @@ import compress_pickle as pkl
 import STP_aux as aux
 
 
-(USR, LND, REL) = ('dsk', 'SPA', '265')
+(USR, REL) = ('dsk', '265')
 clusters = 2
 
-
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
-PTH_PTS = ''.join(PT_ROT.split('/'+REL))
+###############################################################################
+# Selecting Paths
+###############################################################################
+if USR == 'srv':
+    PTH_ROT = '/RAID5/marshallShare/STP/SPA/GEO/'
+else:
+    PTH_ROT = '/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/'
 if REL == '265':
-    filename = '/GEO/cluster_1/stp_cluster_sites_v5.csv'
-pts = pd.read_csv(PTH_PTS+filename)
+    PTH_PTS = PTH_ROT + 'cluster_1/'
+    filename = 'stp_cluster_sites_v5.csv'
 ###############################################################################
 # ID clusters
 ###############################################################################
+pts = pd.read_csv(PTH_PTS+filename)
 df = pts[['lon', 'lat']]
-kmeans = KMeans(n_clusters=clusters, random_state=0).fit(df)
+kmeans = KMeans(n_clusters=clusters, random_state=7415341).fit(df)
 df['clst'] = kmeans.labels_
 ids = [i for i in range(df.shape[0])]
 df['id'] = ids
 ###############################################################################
 # Export
 ###############################################################################
-df.to_csv(PTH_pts+'clusters.csv')
+df.to_csv(PTH_PTS+'clusters.csv')
 # sns.scatterplot(data=df, x="lon", y="lat", style="clst")
 clstIDs = list(sorted(set(kmeans.labels_)))
 centroid = []
@@ -43,7 +48,7 @@ for clstID in clstIDs:
     tmpDF = df[df['clst'] == clstID]
     centroid.append([np.mean(i) for i in (tmpDF['lon'], tmpDF['lat'])])
     groupings.append(list(tmpDF['id']))
-pkl.dump(groupings, PTH_pts + 'clusters', compression='bz2')
+pkl.dump(groupings, PTH_PTS + 'clusters', compression='bz2')
 # #############################################################################
 # Export Map
 # #############################################################################
@@ -86,4 +91,4 @@ mH.scatter(
     alpha=.5, marker='x', s=[5],
     color='#233090', zorder=3
 )
-fun.quickSaveFig(PTH_pts + 'clusters.png', fig, dpi=750)
+fun.quickSaveFig(PTH_PTS + 'clusters.png', fig, dpi=750)
