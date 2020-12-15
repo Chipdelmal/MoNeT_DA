@@ -1,5 +1,7 @@
 
 
+import sys
+from datetime import datetime
 from os import path
 from re import match
 import numpy as np
@@ -8,13 +10,14 @@ import MoNeT_MGDrivE as monet
 from sklearn.preprocessing import LabelBinarizer
 
 
+(MTR, QNT) = (sys.argv[1], sys.argv[2])
+# (MTR, QNT) = ('WOP', '50')
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
-(MTR, QNT) = ('WOP', '90')
-OPRAN = ((0, 1), (1, 3), (3, 5), (5, 10))
+OPRAN = ((0, 1), (1, 2), (2, 3), (3, 4), (4, 10))
 SEX_CATS = {
-    'mixed': (0, 'i_smx'), 
+    'male': (0, 'i_smx'), 
     'gravidFemale': (1, 'i_sgv'), 
     'nonGravidFemale': (2, 'i_sgn')
 }
@@ -22,6 +25,7 @@ SEX_CATS = {
     {
         'i_ren': 'int8', 'i_smx': np.bool_,
         'i_sgv': np.bool_, 'i_sgn': np.bool_,
+        'i_qnt': 'int8'
     },
     'int8'
 )
@@ -35,6 +39,8 @@ PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
 )
 PT_DTA = '{}{}_{}'.format(PT_OUT, 'Full', ID_MTR)
 [monet.makeFolder(i) for i in (PT_OUT, PT_MOD)]
+tS = datetime.now()
+monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'UCIMI ML-Class Clean '+QNT)
 ###############################################################################
 # Read dataset and drop non-needed columns
 ###############################################################################
@@ -67,6 +73,8 @@ for (i, cat) in enumerate(inSexCats):
     DTA_CLN[SEX_CATS[cat][1]] = sexOH[i]
 # Drop the 'i_sex' label as it is redundant with one-hot ----------------------
 DTA_CLN = DTA_CLN.drop(['i_sex'], axis=1)
+# Add Quantile as Feature -----------------------------------------------------
+DTA_CLN['i_qnt'] = [QNT] * DTA_CLN.shape[0]
 ###############################################################################
 # Classify output
 ###############################################################################

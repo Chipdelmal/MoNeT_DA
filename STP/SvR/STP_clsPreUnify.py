@@ -1,3 +1,6 @@
+
+import sys
+from datetime import datetime
 import numpy as np
 from os import path
 import pandas as pd
@@ -8,9 +11,11 @@ import STP_dataAnalysis as da
 import matplotlib.pyplot as plt
 
 
-(MTR, ERR, OVW, THS, QNT) = ('WOP', False, True, '0.1', '85')
+(MTR, QNT) = (sys.argv[1], sys.argv[2])
+# (MTR,  QNT) = ('WOP', '85')
+(ERR, OVW) = (False, True)
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
-EXPS = ('mixed', 'gravidFemale', 'nonGravidFemale')
+EXPS = ('male', 'gravidFemale', 'nonGravidFemale')
 FEATS = ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv', 'i_grp']
 SCA = 100000000
 ###############################################################################
@@ -24,13 +29,15 @@ monet.makeFolder(PT_OUT)
 ###############################################################################
 # Read and clean datasets
 ###############################################################################
+tS = datetime.now()
+monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'UCIMI ML-Class Unify '+QNT)
 dfRC = {
     i[0]: da.rescaleDataset(pd.read_csv(i[1]), SCA) for i in zip(EXPS, PT_DTA)
 }
-HEADER = list(dfRC['mixed'].columns)
+HEADER = list(dfRC['male'].columns)
 (LBLS, FEAT_LVLS) = (
     sorted(list(set(HEADER) - set(FEATS))),
-    [set(dfRC['mixed'][i].unique()) for i in FEATS]
+    [set(dfRC['male'][i].unique()) for i in FEATS]
 )
 ###############################################################################
 # Unify Dataframe

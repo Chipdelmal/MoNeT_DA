@@ -1,4 +1,8 @@
 
+###############################################################################
+# https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-ShredderY.R
+###############################################################################
+
 import MoNeT_MGDrivE as monet
 
 genotypes = (
