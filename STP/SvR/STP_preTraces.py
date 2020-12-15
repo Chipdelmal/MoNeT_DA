@@ -12,16 +12,17 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-(USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+# (USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 # (USR, AOI, REL, LND, MGV) = ('srv', 'HUM', 'male', 'EPI', 'v2')
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', 'male', 'EPI', 'v2')
+(USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '265', 'SPA', 'v1')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, False)
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=100*12000), 
+    drv.driveSelector(DRV, AOI, popSize=.01*12000), 
     lnd.landSelector(LND)
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))

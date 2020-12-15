@@ -11,8 +11,8 @@ import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
 
-(USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-# (USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'mixed', 'PAN', 'v1')
+# (USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+(USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '265', 'SPA', 'v1')
 # (USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'male', 'EPI', 'v2')
 (DRV, FMT, OVW, MF, JOB) = ('LDR', 'bz2', True, (False, True), 4)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
@@ -22,7 +22,8 @@ from joblib import Parallel, delayed
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=10000), lnd.landSelector(LND)
+    drv.driveSelector(DRV, AOI, popSize=10000), 
+    lnd.landSelector(LND, REL, PT_ROT)
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 # Time and head ---------------------------------------------------------------
