@@ -20,10 +20,15 @@ import compress_pickle as pkl
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
+# Paths -----------------------------------------------------------------------
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
+PT_IMG = PT_IMG + 'preTraces/'
+monet.makeFolder(PT_IMG)
+# Drive and land --------------------------------------------------------------
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (drive, land) = (
     drv.driveSelector(DRV, AOI, popSize=.01*12000), 
-    lnd.landSelector(LND)
+    lnd.landSelector(LND, REL, PT_ROT)
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
 STYLE = {
@@ -31,10 +36,6 @@ STYLE = {
     "colors": CLR, "xRange": [0, 365 * 10], "yRange": [0, YRAN]
 }
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
-# Paths -----------------------------------------------------------------------
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
-PT_IMG = PT_IMG + 'preTraces/'
-monet.makeFolder(PT_IMG)
 # Setup the run ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'UCIMI PreTraces '+AOI)
