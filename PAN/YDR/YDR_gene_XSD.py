@@ -12,7 +12,7 @@ genotypes = (
     'XYWW','XYWG','XYWR','XYWB','XYGG','XYGR','XYGB','XYRR','XYRB','XYBB',
     'CYWW','CYWG','CYWR','CYWB','CYGG','CYGR','CYGB','CYRR','CYRB','CYBB'
 )
-(locusA, locusB, locusF) = ((0, 1), (2, 3), list(range(len(genotypes[0]))))
+(locusA, locusB, locusF) = ((0, 1), (2, 3), (0, 1, 2, 3))
 
 ###############################################################################
 # Ecology genotype counts
@@ -33,11 +33,7 @@ XSD_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 ###############################################################################
 HLT_DICT = OrderedDict((
     ('H*', (('G', locusB), )),
-    ('O-', (
-            ('X', locusA), ('Y', locusA), ('C', locusA), 
-            ('W', locusB), ('R', locusB), ('B', locusB)
-        )
-    )
+    ('O-', (('W', locusB), ('R', locusB), ('B', locusB)))
 ))
 XSD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
@@ -46,10 +42,7 @@ XSD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 ###############################################################################
 TRS_DICT = OrderedDict((
     ('C*', (('C', locusA), )),
-    ('O-', (
-            ('X', locusA), ('Y', locusA), 
-            ('G', locusB), ('W', locusB), ('R', locusB), ('B', locusB)
-        )
+    ('O-', (('X', locusA), ('Y', locusA))
     )
 ))
 XSD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
@@ -69,7 +62,7 @@ XSD_WLD= monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*XSD_ECO)
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*XSD_HLT)
         yRange = popSize/2

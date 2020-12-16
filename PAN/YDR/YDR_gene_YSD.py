@@ -11,8 +11,7 @@ genotypes = (
     'XYWW','XYWG','XYWR','XYWB','XYGG','XYGR','XYGB','XYRR','XYRB','XYBB',
     'XCWW','XCWG','XCWR','XCWB','XCGG','XCGR','XCGB','XCRR','XCRB','XCBB'
 )
-(locusA, locusB, locusF) = ((0, 1), (2, 3), list(range(len(genotypes[0]))))
-
+(locusA, locusB, locusF) = ((0, 1), (2, 3), (0, 1, 2, 3))
 
 ###############################################################################
 # Ecology genotype counts
@@ -33,10 +32,7 @@ YSD_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 ###############################################################################
 HLT_DICT = OrderedDict((
     ('H*', (('G', locusB), )),
-    ('O-', (
-            ('X', locusA), ('Y', locusA), ('C', locusA), 
-            ('W', locusB), ('R', locusB), ('B', locusB)
-        )
+    ('O-', (('W', locusB), ('R', locusB), ('B', locusB))
     )
 ))
 YSD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
@@ -44,27 +40,20 @@ YSD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 ###############################################################################
 # Trash genotype counts
 ###############################################################################
-hGenes = (('C', locusA), )
-hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
-wGenes = (
-    ('X', locusA), ('Y', locusA),
-    ('G', locusB), ('W', locusB), ('R', locusB), ('B', locusB)
-)
-wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-YSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
+TRS_DICT = OrderedDict((
+    ('C*', (('C', locusA), )),
+    ('O-', (('X', locusA), ('Y', locusA)))   
+))
+YSD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-hGenes = (('Y', locusA), )
-hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
-wGenes = (
-    ('X', locusA), ('C', locusA),
-    ('G', locusB), ('W', locusB), ('R', locusB), ('B', locusB)
-)
-wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-YSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
-
+WLD_DICT = OrderedDict((
+    ('O*', (('C', locusA), )),
+    ('W-', (('X', locusA), ('Y', locusA)))
+))
+YSD_WLD = monet.carrierFrequencies(WLD_DICT, genotypes)
 
 ###############################################################################
 # Drive Selector
@@ -72,18 +61,14 @@ YSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*YSD_ECO)
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*YSD_HLT)
         yRange = popSize/2
     elif TYPE == 'TRS':
-        aggD = monet.generateAggregationDictionary(
-            ['C*', 'O-', 'Total'], YSD_TRS
-        )
+        aggD = monet.generateAggregationDictionary(*YSD_TRS)
         yRange = popSize
     elif TYPE == 'WLD':
-        aggD = monet.generateAggregationDictionary(
-            ['O-', 'W*', 'Total'], YSD_WLD
-        )
+        aggD = monet.generateAggregationDictionary(*YSD_WLD)
         yRange = popSize
     return (aggD, yRange, 'yLinked')

@@ -12,7 +12,7 @@ genotypes = (
     'WCRB', 'WCBB', 'CCWW', 'CCWH', 'CCWR', 'CCWB', 'CCHH', 'CCHR', 'CCHB',
     'CCRR', 'CCRB', 'CCBB'
 )
-(locusA, locusB, locusF) = ((0, 1), (2, 3), list(range(len(genotypes[0]))))
+(locusA, locusB, locusF) = ((0, 1), (2, 3), (0, 1, 2, 3))
 
 ###############################################################################
 # Ecology genotype counts
@@ -60,7 +60,7 @@ ASD_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*ASD_ECO)
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*ASD_HLT)
         yRange = popSize/2
