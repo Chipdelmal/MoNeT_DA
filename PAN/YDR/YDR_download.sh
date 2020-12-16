@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# argv1: User
+# argv1: Folder
 
 python YDR_download.py homing ASD $1
 python YDR_download.py homing XSD $1
