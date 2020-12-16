@@ -7,7 +7,7 @@ import compress_pickle as pkl
 def landSelector(land, REL, PT_ROT):
     if land == 'SPA':
         if REL == '265':
-            pth = ''.join(PT_ROT.split('/'+REL))
+            pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
             STP = pkl.load(pth+ '/GEO/cluster_1/clusters.bz')
         return STP
     else:
