@@ -27,7 +27,7 @@ monet.makeFolder(PT_IMG)
 # Drive and land --------------------------------------------------------------
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=.01*12000), 
+    drv.driveSelector(DRV, AOI, popSize=100000), 
     lnd.landSelector(LND, REL, PT_ROT)
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
