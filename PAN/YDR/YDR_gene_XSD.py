@@ -1,10 +1,10 @@
 
+from collections import OrderedDict
+import MoNeT_MGDrivE as monet
+
 ###############################################################################
 # https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-SplitDriveX.R
 ###############################################################################
-
-import MoNeT_MGDrivE as monet
-
 genotypes = (
     'XXWW','XXWG','XXWR','XXWB','XXGG','XXGR','XXGB','XXRR','XXRB','XXBB',
     'XCWW','XCWG','XCWR','XCWB','XCGG','XCGR','XCGB','XCRR','XCRB','XCBB',
@@ -12,79 +12,71 @@ genotypes = (
     'XYWW','XYWG','XYWR','XYWB','XYGG','XYGR','XYGB','XYRR','XYRB','XYBB',
     'CYWW','CYWG','CYWR','CYWB','CYGG','CYGR','CYGB','CYRR','CYRB','CYBB'
 )
-allGeneIx = list(range(len(genotypes[0])))
+(locusA, locusB, locusF) = ((0, 1), (2, 3), list(range(len(genotypes[0]))))
 
 ###############################################################################
 # Ecology genotype counts
 ###############################################################################
-xGenes = (('X', allGeneIx), )
-yGenes = (('Y', allGeneIx), )
-cGenes = (('C', allGeneIx), )
-wGenes = (('W', allGeneIx), )
-gGenes = (('G', allGeneIx), )
-rGenes = (('R', allGeneIx), )
-bGenes = (('B', allGeneIx), )
-genes = (xGenes, yGenes, cGenes, wGenes, gGenes, rGenes, bGenes)
-XSD_ECO = [monet.aggregateGeneAppearances(genotypes, i) for i in genes]
-XSD_ECO_L = ('X', 'Y', 'C', 'W', 'G', 'R', 'B')
+ECO_DICT = OrderedDict((
+    ('X', (('X', locusF), )),
+    ('Y', (('Y', locusF), )),
+    ('C', (('C', locusF), )),
+    ('W', (('W', locusF), )),
+    ('G', (('G', locusF), )),
+    ('R', (('R', locusF), )),
+    ('B', (('B', locusF), ))
+))
+XSD_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-hGenes = (('G', (2, 3)), )
-hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
-wGenes = (
-    ('X', (0, 1)), ('Y', (0, 1)), ('C', (0, 1)), 
-    ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
-)
-wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-XSD_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
+HLT_DICT = OrderedDict((
+    ('H*', (('G', locusB), )),
+    ('O-', (
+            ('X', locusA), ('Y', locusA), ('C', locusA), 
+            ('W', locusB), ('R', locusB), ('B', locusB)
+        )
+    )
+))
+XSD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
 ###############################################################################
 # Trash genotype counts
 ###############################################################################
-hGenes = (('C', (0, 1)), )
-hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
-wGenes = (
-    ('X', (0, 1)), ('Y', (0, 1)),
-    ('G', (2, 3)), ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
-)
-wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-XSD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
+TRS_DICT = OrderedDict((
+    ('C*', (('C', locusA), )),
+    ('O-', (
+            ('X', locusA), ('Y', locusA), 
+            ('G', locusB), ('W', locusB), ('R', locusB), ('B', locusB)
+        )
+    )
+))
+XSD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-hGenes = (('X', (0, 1)), )
-hPos = set(monet.aggregateGeneAppearances(genotypes, hGenes))
-wGenes = (
-    ('X', (0, 1)), ('C', (0, 1)),
-    ('G', (2, 3)), ('W', (2, 3)), ('R', (2, 3)), ('B', (2, 3))
-)
-wPos = set(monet.aggregateGeneAppearances(genotypes, wGenes))
-XSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
-
+WLD_DICT = OrderedDict((
+    ('O*', (('C', locusA), )),
+    ('W-', (('X', locusA), ('Y', locusA)))
+))
+XSD_WLD= monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
 
 ###############################################################################
 # Drive Selector
 ###############################################################################
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
-        aggD = monet.generateAggregationDictionary(XSD_ECO_L, XSD_ECO)
+        aggD = monet.generateAggregationDictionary(*XSD_ECO)
         yRange = popSize
     elif TYPE == 'HLT':
-        aggD = monet.generateAggregationDictionary(
-            ['H*', 'O-', 'Total'], XSD_HLT
-        )
+        aggD = monet.generateAggregationDictionary(*XSD_HLT)
         yRange = popSize/2
     elif TYPE == 'TRS':
-        aggD = monet.generateAggregationDictionary(
-            ['C*', 'O-', 'Total'], XSD_TRS
-        )
+        aggD = monet.generateAggregationDictionary(*XSD_TRS)
         yRange = popSize
     elif TYPE == 'WLD':
-        aggD = monet.generateAggregationDictionary(
-            ['O-', 'W*', 'Total'], XSD_WLD
-        )
+        aggD = monet.generateAggregationDictionary(*XSD_WLD)
         yRange = popSize
     return (aggD, yRange, 'xLinked')
