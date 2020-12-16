@@ -14,11 +14,14 @@ from joblib import Parallel, delayed
 (USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '265', 'SPA', 'v1')
 # (USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'male', 'EPI', 'v2')
-(DRV, FMT, OVW, MF, JOB) = ('LDR', 'bz2', True, (False, True), 8)
+(DRV, FMT, OVW, JOB) = ('LDR', 'bz2', True, 8)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
+MF = (True, True)
+if AOI == 'HLT':
+    MF = (False, True)
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 (drive, land) = (
@@ -26,6 +29,7 @@ from joblib import Parallel, delayed
     lnd.landSelector(LND, REL, PT_ROT)
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'UCIMI Preprocess '+AOI)
