@@ -12,7 +12,7 @@ genotypes = (
     'XYWW','XYWG','XYWR','XYWB','XYGG','XYGR','XYGB','XYRR','XYRB','XYBB',
     'CYWW','CYWG','CYWR','CYWB','CYGG','CYGR','CYGB','CYRR','CYRB','CYBB'
 )
-(locusA, locusB, locusF) = ((0, 1), (2, 3), list(range(len(genotypes[0]))))
+(locusA, locusB, locusF) = ((0, 1), (2, 3), (0, 1, 2, 3))
 
 ###############################################################################
 # Ecology genotype counts

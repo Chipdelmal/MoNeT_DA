@@ -12,7 +12,7 @@ genotypes = (
     'WCRB', 'WCBB', 'CCWW', 'CCWH', 'CCWR', 'CCWB', 'CCHH', 'CCHR', 'CCHB',
     'CCRR', 'CCRB', 'CCBB'
 )
-(locusA, locusB, locusF) = ((0, 1), (2, 3), list(range(len(genotypes[0]))))
+(locusA, locusB, locusF) = ((0, 1), (2, 3), (0, 1, 2, 3))
 
 ###############################################################################
 # Ecology genotype counts
