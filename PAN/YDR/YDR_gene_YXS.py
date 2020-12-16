@@ -53,7 +53,10 @@ YXS_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 ###############################################################################
 WLD_DICT = OrderedDict((
     ('O*', (('A', locusA), ('R', locusA), ('B', locusA))),
-    ('W-', (('X', locusA), ), ('Y', locusA))
+    ('W-', (
+            ('X', locusA), ('Y', locusA)
+        )
+    )
 ))
 YXS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
 
