@@ -62,7 +62,7 @@ XSD_WLD= monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*XSD_ECO)
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*XSD_HLT)
         yRange = popSize/2
