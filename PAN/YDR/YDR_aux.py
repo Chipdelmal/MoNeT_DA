@@ -100,3 +100,4 @@ def getStyle(colors, aspectR, xRange, yRange):
         }
     style['aspect'] = monet.scaleAspect(aspectR, style)
     return style
+

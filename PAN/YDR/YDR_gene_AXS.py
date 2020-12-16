@@ -18,18 +18,14 @@ allGeneIx = list(range(len(genotypes[0])))
 # Ecology genotype counts
 ###############################################################################
 aGenes = (('A', allGeneIx), )
-aPos = monet.aggregateGeneAppearances(genotypes, aGenes)
 xGenes = (('X', allGeneIx), )
-xPos = monet.aggregateGeneAppearances(genotypes, xGenes)
 yGenes = (('Y', allGeneIx), )
-yPos = monet.aggregateGeneAppearances(genotypes, yGenes)
 wGenes = (('W', allGeneIx), )
-wPos = monet.aggregateGeneAppearances(genotypes, wGenes)
 rGenes = (('R', allGeneIx), )
-rPos = monet.aggregateGeneAppearances(genotypes, rGenes)
 bGenes = (('B', allGeneIx), )
-bPos = monet.aggregateGeneAppearances(genotypes, bGenes)
-YSD_ECO = (aPos, xPos, yPos, wPos, rPos, bPos)
+genes = (aGenes, xGenes, yGenes, wGenes, rGenes, bGenes)
+YSD_ECO = [monet.aggregateGeneAppearances(genotypes, i) for i in genes]
+YSD_ECO_L = ('A', 'X', 'Y', 'W', 'R', 'B')
 
 ###############################################################################
 # Health genotype counts
@@ -73,9 +69,7 @@ YSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 ###############################################################################
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
-        aggD = monet.generateAggregationDictionary(
-            ['A', 'X', 'Y', 'WA', 'WB', 'R', 'B'], YSD_ECO
-        )
+        aggD = monet.generateAggregationDictionary(YSD_ECO_L, YSD_ECO)
         yRange = popSize
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(
