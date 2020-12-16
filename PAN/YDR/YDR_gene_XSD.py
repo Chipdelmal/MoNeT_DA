@@ -33,11 +33,7 @@ XSD_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 ###############################################################################
 HLT_DICT = OrderedDict((
     ('H*', (('G', locusB), )),
-    ('O-', (
-            ('X', locusA), ('Y', locusA), ('C', locusA), 
-            ('W', locusB), ('R', locusB), ('B', locusB)
-        )
-    )
+    ('O-', (('W', locusB), ('R', locusB), ('B', locusB)))
 ))
 XSD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
@@ -46,10 +42,7 @@ XSD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 ###############################################################################
 TRS_DICT = OrderedDict((
     ('C*', (('C', locusA), )),
-    ('O-', (
-            ('X', locusA), ('Y', locusA), 
-            ('G', locusB), ('W', locusB), ('R', locusB), ('B', locusB)
-        )
+    ('O-', (('X', locusA), ('Y', locusA))
     )
 ))
 XSD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
