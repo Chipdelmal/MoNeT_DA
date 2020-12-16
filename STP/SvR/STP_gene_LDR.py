@@ -1,70 +1,66 @@
 
+
+from collections import OrderedDict
+import MoNeT_MGDrivE as monet
 ###############################################################################
 # https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_main.R
 ###############################################################################
 
-import MoNeT_MGDrivE as monet
-
 genotypes = ('WW', 'WH', 'WR', 'WB', 'HH', 'HR', 'HB', 'RR', 'RB', 'BB')
-locus = list(range(len(genotypes[0])))
+locus = (0, 1)
 
 ###############################################################################
 # Ecology genotype counts
 ###############################################################################
-wGenes = (('W', locus), )
-hGenes = (('H', locus), )
-rGenes = (('R', locus), )
-bGenes = (('B', locus), )
-genesSlot = (wGenes, hGenes, rGenes, bGenes)
-LDR_ECO = [monet.aggregateGeneAppearances(genotypes, i) for i in genesSlot]
+ECO_DICT = OrderedDict((
+    ('W', (('W', locus), )),
+    ('H', (('H', locus), )),
+    ('R', (('R', locus), )),
+    ('B', (('B', locus), ))
+))
+LDR_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
+
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-hGenes = (('H', locus), )
-oGenes = (('W', locus), ('R', locus), ('B', locus))
-genesSlot = (hGenes, oGenes)
-(hPos, oPos) = [set(monet.aggregateGeneAppearances(genotypes, i)) for i in genesSlot]
-LDR_HLT = [list(i) for i in (hPos, oPos - hPos, oPos | hPos)]
+HLT_DICT = OrderedDict((
+    ('H*', (('H', locus), )),
+    ('O-', (('W', locus), ('R', locus), ('B', locus)))
+))
+LDR_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
 ###############################################################################
 # Trash genotype counts
 ###############################################################################
-rGenes = (('R', locus), ('B', locus))
-oGenes = (('W', locus), ('H', locus))
-genesSlot = (rGenes, oGenes)
-(rPos, oPos) = [set(monet.aggregateGeneAppearances(genotypes, i)) for i in genesSlot]
-LDR_TRS = [list(i) for i in (rPos, oPos - rPos, oPos | rPos)]
+TRS_DICT = OrderedDict((
+    ('RB*', (('R', locus), ('B', locus) )),
+    ('O-', (('H', locus), ('W', locus)))
+))
+LDR_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-wGenes = (('W', locus), )
-oGenes = (('H', locus), ('R', locus), ('B', locus))
-(wPos, oPos) = [set(monet.aggregateGeneAppearances(genotypes, i)) for i in genesSlot]
-LDR_WLD = [list(i) for i in (wPos, oPos - wPos, oPos | wPos)]
+WLD_DICT = OrderedDict((
+    ('O*', (('R', locus), ('B', locus), ('H', locus))),
+    ('W-', (('W', locus), ))
+))
+LDR_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
 
 ###############################################################################
 # Drive Selector
 ###############################################################################
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
-        aggD = monet.generateAggregationDictionary(
-            ['W', 'H', 'R', 'B'], LDR_ECO
-        )
+        aggD = monet.generateAggregationDictionary(*LDR_ECO)
         yRange = popSize
     elif TYPE == 'HLT':
-        aggD = monet.generateAggregationDictionary(
-            ['H*', 'O-', 'Total'], LDR_HLT
-        )
+        aggD = monet.generateAggregationDictionary(*LDR_HLT)
         yRange = popSize/2
     elif TYPE == 'TRS':
-        aggD = monet.generateAggregationDictionary(
-            ['R*', 'O-', 'Total'], LDR_TRS
-        )
-        yRange = popSize/2
+        aggD = monet.generateAggregationDictionary(*LDR_TRS)
+        yRange = popSize
     elif TYPE == 'WLD':
-        aggD = monet.generateAggregationDictionary(
-            ['O-', 'W*', 'Total'], LDR_WLD
-        )
-        yRange = popSize/2
+        aggD = monet.generateAggregationDictionary(*LDR_WLD)
+        yRange = popSize
     return (aggD, yRange, 'LDR')
