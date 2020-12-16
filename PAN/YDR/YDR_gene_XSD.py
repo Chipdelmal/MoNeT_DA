@@ -1,6 +1,6 @@
 
 ###############################################################################
-# https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-ShredderMF.R
+# https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-SplitDriveX.R
 ###############################################################################
 
 import MoNeT_MGDrivE as monet
@@ -18,20 +18,15 @@ allGeneIx = list(range(len(genotypes[0])))
 # Ecology genotype counts
 ###############################################################################
 xGenes = (('X', allGeneIx), )
-xPos = monet.aggregateGeneAppearances(genotypes, xGenes)
 yGenes = (('Y', allGeneIx), )
-yPos = monet.aggregateGeneAppearances(genotypes, yGenes)
 cGenes = (('C', allGeneIx), )
-cPos = monet.aggregateGeneAppearances(genotypes, cGenes)
 wGenes = (('W', allGeneIx), )
-wPos = monet.aggregateGeneAppearances(genotypes, wGenes)
 gGenes = (('G', allGeneIx), )
-gPos = monet.aggregateGeneAppearances(genotypes, gGenes)
 rGenes = (('R', allGeneIx), )
-rPos = monet.aggregateGeneAppearances(genotypes, rGenes)
 bGenes = (('B', allGeneIx), )
-bPos = monet.aggregateGeneAppearances(genotypes, bGenes)
-XSD_ECO = (xPos, yPos, cPos, wPos, gPos, rPos, bPos)
+genes = (xGenes, yGenes, cGenes, wGenes, gGenes, rGenes, bGenes)
+XSD_ECO = [monet.aggregateGeneAppearances(genotypes, i) for i in genes]
+XSD_ECO_L = ('X', 'Y', 'C', 'W', 'G', 'R', 'B')
 
 ###############################################################################
 # Health genotype counts
@@ -75,9 +70,7 @@ XSD_WLD = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
 ###############################################################################
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
-        aggD = monet.generateAggregationDictionary(
-            ['X', 'Y', 'C', 'W', 'G', 'R', 'B'], XSD_ECO
-        )
+        aggD = monet.generateAggregationDictionary(XSD_ECO_L, XSD_ECO)
         yRange = popSize
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(
