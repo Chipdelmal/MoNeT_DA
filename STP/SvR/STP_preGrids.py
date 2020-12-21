@@ -17,15 +17,17 @@ from cv2 import imread, imwrite, hconcat, vconcat
 (USR, REL, LND) = ('dsk', 'mixed', 'PAN')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, True)
 AOI = ['ECO', 'HLT', 'TRS', 'WLD']
-###############################################################################
+###########################################################################
 # Setting up paths and style
-###############################################################################
-(drive, land) = (
-    drv.driveSelector(DRV, AOI[0], popSize=100*12000),  lnd.landSelector(LND)
-)
-# Paths -----------------------------------------------------------------------
+###########################################################################
+# Paths -------------------------------------------------------------------
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 monet.makeFolder(PT_IMG)
+# Drive and land selector -------------------------------------------------
+(drive, land) = (
+    drv.driveSelector(DRV, AOI[0], popSize=100*12000),  
+    lnd.landSelector(LND, REL, PT_ROT)
+)
 # #########################################################################
 # Setup paths and drive
 # #########################################################################

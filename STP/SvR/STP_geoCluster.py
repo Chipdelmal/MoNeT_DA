@@ -22,13 +22,21 @@ clusters = 2
 ###############################################################################
 # Selecting Paths
 ###############################################################################
+# Base Geo Path ---------------------------------------------------------------
 if USR == 'srv':
     PTH_ROT = '/RAID5/marshallShare/STP/SPA/GEO/'
 else:
     PTH_ROT = '/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/'
+# Population files ------------------------------------------------------------
 if REL == '265':
     PTH_PTS = PTH_ROT + 'cluster_1/'
     filename = 'stp_cluster_sites_v5.csv'
+elif REL == '505':
+    PTH_PTS = PTH_ROT + 'regular/'
+    filename = 'stp_all_sites_v5.csv'
+elif REL == '106':
+    PTH_PTS = PTH_ROT + 'regular/'
+    filename = 'stp_all_sites_v5.csv'
 ###############################################################################
 # ID clusters
 ###############################################################################

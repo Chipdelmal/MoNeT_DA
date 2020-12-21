@@ -25,6 +25,10 @@ import compress_pickle as pkl
 PT_IMG = PT_IMG + 'preTraces/'
 monet.makeFolder(PT_IMG)
 # Drive and land --------------------------------------------------------------
+if LND == 'SPA'
+    pop = 100000
+else:
+    pop = 100000
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (drive, land) = (
     drv.driveSelector(DRV, AOI, popSize=100000), 
