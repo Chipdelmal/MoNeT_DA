@@ -5,6 +5,7 @@
 # argv3: Spatial Setting
 # argv4: MGDrivE Version
 
+# ./STP_preProcess.sh srv 265 SPA v2
 python STP_preProcess.py $1 ECO $2 $3 $4
 python STP_preProcess.py $1 HLT $2 $3 $4
 python STP_preProcess.py $1 TRS $2 $3 $4
