@@ -58,7 +58,7 @@ WLD_DICT = OrderedDict((
         )
     )
 ))
-YXS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
+YXS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
 
 ###############################################################################
 # Drive Selector

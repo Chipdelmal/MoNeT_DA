@@ -36,7 +36,9 @@ for EXP in EXPS:
     ###########################################################################
     # Load folders
     ###########################################################################
-    (expDirsMean, expDirsTrac) = monet.getExpPaths(PT_DTA, mean='ANALYZED/', reps='TRACE/')
+    (expDirsMean, expDirsTrac) = monet.getExpPaths(
+        PT_DTA, mean='ANALYZED/', reps='TRACE/'
+    )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
     outNames = aux.splitExpNames(PT_OUT)
     outExpNames = set(outNames)

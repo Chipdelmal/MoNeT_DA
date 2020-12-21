@@ -38,7 +38,7 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
         colors = monet.COLWN
     ###########################################################################
     if TYPE != 'ECO':
-        yRange = yRange / 2
+        yRange = yRange/2
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 

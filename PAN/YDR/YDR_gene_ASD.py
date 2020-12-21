@@ -52,7 +52,7 @@ WLD_DICT = OrderedDict((
     ('O*', (('H', locusA), ('R', locusA), ('B', locusA), ('C', locusA))),
     ('W-', (('W', locusA), ))
 ))
-ASD_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=True)
+ASD_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
 
 ###############################################################################
 # Drive Selector
