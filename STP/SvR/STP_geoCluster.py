@@ -35,8 +35,8 @@ elif REL == '505':
     PTH_PTS = PTH_ROT + 'regular/'
     filename = 'stp_all_sites_v5.csv'
 elif REL == '106':
-    PTH_PTS = PTH_ROT + 'regular/'
-    filename = 'stp_all_sites_v5.csv'
+    PTH_PTS = PTH_ROT + 'cluster_2/'
+    filename = 'stp_cluster_sites_pop_01_v5.csv'
 ###############################################################################
 # ID clusters
 ###############################################################################
