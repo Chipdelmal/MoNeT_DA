@@ -25,7 +25,7 @@ import compress_pickle as pkl
 PT_IMG = PT_IMG + 'preTraces/'
 monet.makeFolder(PT_IMG)
 # Drive and land --------------------------------------------------------------
-if LND == 'SPA'
+if LND == 'SPA':
     pop = 100000
 else:
     pop = 100000
