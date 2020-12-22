@@ -15,7 +15,7 @@ import compress_pickle as pkl
 (USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 # (USR, AOI, REL, LND, MGV) = ('srv', 'HUM', 'male', 'EPI', 'v2')
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', 'male', 'EPI', 'v2')
-(USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '106', 'SPA', 'v1')
+# (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '505', 'SPA', 'v1')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, False)
 ###############################################################################
 # Setting up paths and style
@@ -26,7 +26,7 @@ PT_IMG = PT_IMG + 'preTraces/'
 monet.makeFolder(PT_IMG)
 # Drive and land --------------------------------------------------------------
 if LND == 'SPA':
-    pop = 100000
+    pop = 10000
 else:
     pop = 100000
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
@@ -60,10 +60,10 @@ for i in range(0, xpNum):
     (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
     name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
     # Traces ------------------------------------------------------------------
-    STYLE['yRange'] = (0, sum(sumDta['population'][0]) * 1.25)
+    STYLE['yRange'] = (0, sum(sumDta['population'][0]) * 2 + 2000)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     monet.exportTracesPlot(
-        repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=False
+        repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=True, wop=i
     )
 ###############################################################################
 # Export plot legend

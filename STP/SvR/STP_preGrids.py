@@ -13,10 +13,11 @@ import compress_pickle as pkl
 from cv2 import imread, imwrite, hconcat, vconcat
 
 
-# (USR, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
-(USR, REL, LND) = ('dsk', 'mixed', 'PAN')
+(USR, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
+# (USR, REL, LND) = ('dsk', '505', 'SPA')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, True)
-AOI = ['ECO', 'HLT', 'TRS', 'WLD']
+# AOI = ['ECO', 'HLT', 'TRS', 'WLD']
+AOI = ['HLT', ]
 ###########################################################################
 # Setting up paths and style
 ###########################################################################
@@ -31,7 +32,6 @@ monet.makeFolder(PT_IMG)
 # #########################################################################
 # Setup paths and drive
 # #########################################################################
-(drive, land) = (drv.driveSelector(DRV, AOI[0]), lnd.landSelector('SPA'))
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_IMG_I, PT_IMG_O) = (PT_IMG + 'preTraces/', PT_IMG + 'preGrids/')
 monet.makeFolder(PT_IMG_O)
@@ -48,6 +48,6 @@ imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:-1]
 (xpNum, digs) = monet.lenAndDigits(imgChunks)
 for (i, chunk) in enumerate(imgChunks):
     monet.printProgress(i+1, xpNum, digs)
-    expGrid = vconcat([hconcat([imread(i) for i in j]) for j in chunk])
+    expGrid = hconcat([vconcat([imread(i) for i in j]) for j in chunk])
     fName = chunk[0][0].split('/')[-1].split('-')[0]
     imwrite(PT_IMG_O + fName + '.png', expGrid)

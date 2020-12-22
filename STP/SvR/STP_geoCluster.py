@@ -15,9 +15,8 @@ import compress_pickle as pkl
 import STP_aux as aux
 
 
-(USR, REL, clusters) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, REL) = ('dsk', '265')
-# clusters = 2
+(USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
+# (USR, REL, CLS) = ('dsk', '505', 10)
 
 ###############################################################################
 # Selecting Paths
@@ -42,7 +41,7 @@ elif REL == '106':
 ###############################################################################
 pts = pd.read_csv(PTH_PTS+filename)
 df = pts[['lon', 'lat']]
-kmeans = KMeans(n_clusters=clusters, random_state=7415341).fit(df)
+kmeans = KMeans(n_clusters=CLS, random_state=7415341).fit(df)
 df['clst'] = kmeans.labels_
 ids = [i for i in range(df.shape[0])]
 df['id'] = ids
@@ -91,14 +90,22 @@ ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 ax.spines["bottom"].set_visible(False)
 ax.spines["left"].set_visible(False)
+(lon, lat) = (list(pts['lon']), list(pts['lat']))
 mH.scatter(
-    list(pts['lon']), list(pts['lat']), latlon=True,
-    alpha=.1, marker='.', s=[1],
+    lon, lat, latlon=True,
+    alpha=.25, marker='.', s=[2],
     color='#E048B8', zorder=3
 )
+for i in range(len(lon)):
+    (x, y) = mH(lon[i], lat[i])
+    ax.annotate(i, xy=(x, y), size=.2, ha='center', va='center', color='white')
+fun.quickSaveFig(PTH_PTS + 'raw.png', fig, dpi=1000)
 mH.scatter(
     [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
     alpha=.5, marker='x', s=[5],
     color='#233090', zorder=3
 )
-fun.quickSaveFig(PTH_PTS + 'clusters.png', fig, dpi=750)
+for i in range(CLS):
+    (x, y) = mH(centroid[i][0], centroid[i][1])
+    ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
+fun.quickSaveFig(PTH_PTS + 'clusters.png', fig, dpi=1000)
