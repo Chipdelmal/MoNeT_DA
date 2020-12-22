@@ -15,8 +15,8 @@ import compress_pickle as pkl
 import STP_aux as aux
 
 
-(USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-# (USR, REL, CLS) = ('dsk', '505', 10)
+# (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
+(USR, REL, CLS) = ('dsk', '106', 30)
 
 ###############################################################################
 # Selecting Paths
@@ -30,12 +30,15 @@ else:
 if REL == '265':
     PTH_PTS = PTH_ROT + 'cluster_1/'
     filename = 'stp_cluster_sites_v5.csv'
+    kernelName = 'kernel_cluster_v5.csv'
+elif REL == '106':
+    PTH_PTS = PTH_ROT + 'cluster_2/'
+    filename = 'stp_cluster_sites_01_v5.csv'
+    kernelName = 'kernel_cluster_01_v5.csv'
 elif REL == '505':
     PTH_PTS = PTH_ROT + 'regular/'
     filename = 'stp_all_sites_v5.csv'
-elif REL == '106':
-    PTH_PTS = PTH_ROT + 'cluster_2/'
-    filename = 'stp_cluster_sites_pop_01_v5.csv'
+    kernelName = 'kernel_1_1029.csv'
 ###############################################################################
 # ID clusters
 ###############################################################################
@@ -109,3 +112,11 @@ for i in range(CLS):
     (x, y) = mH(centroid[i][0], centroid[i][1])
     ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
 fun.quickSaveFig(PTH_PTS + 'clusters.png', fig, dpi=1000)
+# #############################################################################
+# Kernel Heatmap
+# #############################################################################
+kernel = np.genfromtxt(PTH_PTS + kernelName, delimiter=',')
+np.fill_diagonal(kernel, 0)
+fig = plt.figure(figsize=(5, 5))
+plt.imshow(kernel, interpolation='nearest', cmap='Purples', vmax=2e-04, vmin=0)
+fun.quickSaveFig(PTH_PTS + 'heat.png', fig, dpi=1000)
