@@ -31,3 +31,17 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         'colors': colors, 'folder': folder
     }
     return geneDict
+
+
+def colorSelector(AOI):
+    if AOI == 'ECO':
+        colors = monet.COLEO
+    elif AOI == 'HLT':
+        colors = monet.COLHO
+    elif AOI == 'TRS':
+        colors = monet.COLTO
+    elif AOI == 'WLD':
+        colors = monet.COLWO
+    elif AOI == 'HUM':
+        colors = monet.COLHO
+    return colors
