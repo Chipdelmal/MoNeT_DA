@@ -93,7 +93,7 @@ def plotMap(
     # Lo-Res Basemap ----------------------------------------------------------
     mH.scatter(
         list(pts['lon']), list(pts['lat']), latlon=True,
-        alpha=.15, marker='.', 
+        alpha=.05, marker='.', 
         s=popsToPtSize(list(pts['pop']), offset=10, amplitude=10),
         color=ptColor, zorder=3
     )
@@ -124,9 +124,10 @@ def plotPopsOnMap(
     fig, ax, mapR, 
     lngs, lats, fractions, pops, 
     color='#ed174b', marker=(6, 0),
-    offset=10, amplitude=10
+    offset=10, amplitude=10, alpha=.85
 ):
-    colors = [color + '%02x' % floatToHex(i) for i in fractions]
+    # print(fractions)
+    colors = [color + '%02x' % int(floatToHex(i*alpha)) for i in fractions]
     mapR.scatter(
         lngs, lats, 
         latlon=True, marker=marker,
@@ -140,7 +141,7 @@ def plotGenePopsOnMap(
     fig, ax, mapR,
     lngs, lats, colors, 
     GC_FRA, time,
-    marker=(6, 0), offset=10, amplitude=10
+    marker=(6, 0), offset=10, amplitude=10, alpha=.85
 ):
     geneFraSlice = np.asarray([i[time] for i in GC_FRA]).T
     for gIx in range(geneFraSlice.shape[0]-1):
@@ -148,6 +149,7 @@ def plotGenePopsOnMap(
             fig, ax, mapR, 
             lngs, lats, geneFraSlice[gIx], geneFraSlice[-1],
             color=colors[gIx], marker=marker,
-            offset=offset, amplitude=amplitude
+            offset=offset, amplitude=amplitude,
+            alpha=alpha
         )
     return (fig, ax, mapR)

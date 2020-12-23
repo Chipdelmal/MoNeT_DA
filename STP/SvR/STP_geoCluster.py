@@ -15,8 +15,8 @@ import compress_pickle as pkl
 import STP_aux as aux
 
 
-# (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-(USR, REL, CLS) = ('dsk', '106', 30)
+(USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
+# (USR, REL, CLS) = ('dsk', '106', 30)
 
 ###############################################################################
 # Selecting Paths
@@ -29,15 +29,15 @@ else:
 # Population files ------------------------------------------------------------
 if REL == '265':
     PTH_PTS = PTH_ROT + 'cluster_1/'
-    filename = 'stp_cluster_sites_v5.csv'
+    filename = 'stp_cluster_sites_pop_v5_fixed.csv'
     kernelName = 'kernel_cluster_v5.csv'
 elif REL == '106':
     PTH_PTS = PTH_ROT + 'cluster_2/'
-    filename = 'stp_cluster_sites_01_v5.csv'
+    filename = 'stp_cluster_sites_pop_01_v5_fixed.csv'
     kernelName = 'kernel_cluster_01_v5.csv'
 elif REL == '505':
     PTH_PTS = PTH_ROT + 'regular/'
-    filename = 'stp_all_sites_v5.csv'
+    filename = 'stp_all_sites_pop_v5_fixed.csv'
     kernelName = 'kernel_1_1029.csv'
 ###############################################################################
 # ID clusters
