@@ -112,7 +112,7 @@ def plotMap(
 
 
 def floatToHex(a, minVal=0, maxVal=1):
-    intVal = round(np.interp(a, (minVal, maxVal), (0, 255)))
+    intVal = int(np.interp(a, (minVal, maxVal), (0, 255)))
     return intVal
 
 
@@ -127,7 +127,7 @@ def plotPopsOnMap(
     offset=10, amplitude=10, alpha=.85
 ):
     # print(fractions)
-    colors = [color + '%02x' % int(floatToHex(i*alpha)) for i in fractions]
+    colors = [color + '%02x' % floatToHex(i*alpha) for i in fractions]
     mapR.scatter(
         lngs, lats, 
         latlon=True, marker=marker,
