@@ -15,8 +15,8 @@ import compress_pickle as pkl
 import STP_aux as aux
 
 
-# (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-(USR, REL, CLS) = ('dsk', '106', 30)
+(USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
+# (USR, REL, CLS) = ('dsk', '106', 30)
 
 ###############################################################################
 # Selecting Paths
