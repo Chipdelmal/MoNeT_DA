@@ -19,9 +19,9 @@ from joblib import Parallel, delayed
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
-MF = (True, True)
-if AOI == 'HLT':
-    MF = (False, True)
+MF = (False, True)
+# if AOI == 'HLT':
+#     MF = (False, True)
 (DRV, MGV) = aux.humanSelector(AOI, DRV, MGV)
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 (drive, land) = (
