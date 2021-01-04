@@ -19,9 +19,9 @@ import STP_functions as fun
 import STP_dataAnalysis as da
 
 
-EXP = 'E_0020000000_05_0000000100_0000000000_0000015730'
-# (USR, AOI, REL, LND) = ('dsk', 'HLT', '265', 'SPA')
-(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+EXP = 'E_0020000000_03_0000000100_0100000000_0000015730'
+(USR, AOI, REL, LND) = ('dsk', 'HLT', '265', 'SPA')
+# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 tmax = 2 * 365
 EXP_NAM = '{}-{}'.format(EXP, AOI)
 # #############################################################################

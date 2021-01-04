@@ -63,7 +63,7 @@ for i in range(0, xpNum):
     STYLE['yRange'] = (0, sum(sumDta['population'][0]) * 2 + 2000)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     monet.exportTracesPlot(
-        repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=True, wop=i
+        repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=False, wop=i
     )
 ###############################################################################
 # Export plot legend
