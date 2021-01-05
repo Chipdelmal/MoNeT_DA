@@ -14,7 +14,7 @@ from joblib import Parallel, delayed
 (USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '265', 'SPA', 'v1')
 # (USR, AOI, REL, LND, MGV) = ('srv', 'HLT', 'male', 'EPI', 'v2')
-(DRV, FMT, OVW, JOB) = ('LDR', 'bz2', True, 24)
+(DRV, FMT, OVW, JOB) = ('LDR', 'bz2', True, 8)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Setting up paths and style

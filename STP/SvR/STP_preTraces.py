@@ -36,7 +36,7 @@ else:
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
 STYLE = {
-    "width": .5, "alpha": .15, "dpi": 500, "legend": True, "aspect": .25,
+    "width": .5, "alpha": .15, "dpi": 100, "legend": True, "aspect": .25,
     "colors": CLR, "xRange": [0, 365 * 10], "yRange": [0, YRAN]
 }
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
@@ -63,7 +63,7 @@ for i in range(0, xpNum):
     STYLE['yRange'] = (0, sum(sumDta['population'][0]) * 2 + 2000)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     monet.exportTracesPlot(
-        repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=True, wop=i
+        repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=False, wop=i
     )
 ###############################################################################
 # Export plot legend

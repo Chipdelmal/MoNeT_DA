@@ -19,7 +19,7 @@ import STP_functions as fun
 import STP_dataAnalysis as da
 
 
-EXP = 'E_0020000000_05_0000000100_0000000000_0000015730'
+EXP = 'E_0020000000_03_0000000100_0100000000_0000015730'
 # (USR, AOI, REL, LND) = ('dsk', 'HLT', '265', 'SPA')
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 tmax = 2 * 365
@@ -75,7 +75,7 @@ for time in range(tmax): # range(GC_FRA[0].shape[0]):
         fig, ax, mapR,
         lngs, lats, DRV_COL, 
         GC_FRA, time,
-        marker=(6, 0), offset=2.5, amplitude=5, alpha=.35
+        marker=(6, 0), offset=2.5, amplitude=2, alpha=.35
     )
     ax.text(
         0.75, 0.1, str(time).zfill(4), 
@@ -84,6 +84,6 @@ for time in range(tmax): # range(GC_FRA[0].shape[0]):
     )
     fun.quickSaveFig(
         '{}/{}.png'.format(EXP_VID, str(time).zfill(4)),
-        fig, dpi=500
+        fig, dpi=250
     )
     plt.close('all')
