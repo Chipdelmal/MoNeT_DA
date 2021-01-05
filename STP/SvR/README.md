@@ -27,6 +27,7 @@ which launches the following scripts in order:
 1. Run [STP_preProcess.sh](./STP_preProcess.sh) for ECO, HLT, WLD, TRS *PREPROCESS*
 1. Run [STP_preTraces.sh](./STP_preTraces.sh) for ECO, HLT, WLD, TRS *preTraces* and *preGrids* 
 1. Run [STP_preVideo](./STP_preVideo.py) after selecting a desired experiment to export (hard-coded ID)
+
 ##  ASTMH Poster
 
 * [STP_cmprReleasesASTMH](./deprecated/STP_cmprReleasesASTMH.py)
