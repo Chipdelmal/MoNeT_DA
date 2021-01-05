@@ -12,11 +12,12 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-(USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+# (USR, AOI, REL, LND, MGV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 # (USR, AOI, REL, LND, MGV) = ('srv', 'HUM', 'male', 'EPI', 'v2')
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', 'male', 'EPI', 'v2')
-# (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '505', 'SPA', 'v1')
+(USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '106', 'SPA', 'v1')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, False)
+tStable = 90
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
@@ -36,8 +37,8 @@ else:
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
 STYLE = {
-    "width": .5, "alpha": .15, "dpi": 100, "legend": True, "aspect": .25,
-    "colors": CLR, "xRange": [0, 365 * 10], "yRange": [0, YRAN]
+    "width": .5, "alpha": .5, "dpi": 150, "legend": True, "aspect": .25,
+    "colors": CLR, "xRange": [0, 365 * 6], "yRange": [0, YRAN]
 }
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
 # Setup the run ---------------------------------------------------------------
@@ -55,12 +56,14 @@ fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
 # Process files
 ###############################################################################
 (xpNum, digs) = monet.lenAndDigits(fLists)
+i=0
 for i in range(0, xpNum):
     monet.printProgress(i+1, xpNum, digs)
     (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
     name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
     # Traces ------------------------------------------------------------------
-    STYLE['yRange'] = (0, sum(sumDta['population'][0]) * 2 + 2000)
+    balPop = sum(sumDta['population'][tStable])
+    STYLE['yRange'] = (0,  balPop*2+balPop*.1)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     monet.exportTracesPlot(
         repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=False, wop=i
