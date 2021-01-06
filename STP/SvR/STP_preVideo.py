@@ -9,6 +9,7 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
+from joblib import Parallel, delayed
 from os import path
 from glob import glob
 import STP_aux as aux
@@ -20,10 +21,10 @@ import STP_dataAnalysis as da
 
 
 EXP = 'E_0020000000_03_0000000100_0100000000_0000015730'
-# (USR, AOI, REL, LND) = ('dsk', 'HLT', '505', 'SPA')
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 tmax = 10 * 365
 EXP_NAM = '{}-{}'.format(EXP, AOI)
+JOB = 4
 # #############################################################################
 # Paths
 # #############################################################################
@@ -63,27 +64,9 @@ monet.printExperimentHead(PT_ROT, PT_VID, tS, 'UCIMI PreVideo '+AOI)
 # #############################################################################
 # Coordinates -----------------------------------------------------------------
 (lngs, lats) = (AGG_centroids[:, 0], AGG_centroids[:, 1])
-for time in range(tmax): # range(GC_FRA[0].shape[0]):
-    print('* Exporting {}'.format(str(time).zfill(4)), end='\r')
-    # Create map --------------------------------------------------------------
-    (fig, ax) = plt.subplots(figsize=(10, 10))
-    (fig, ax, mapR) = plo.plotMap(
-        fig, ax, UA_sites, BLAT, BLNG, ptColor='#6347ff'
-    )
-    # Pops --------------------------------------------------------------------
-    (fig, ax, mapR) = plo.plotGenePopsOnMap(
-        fig, ax, mapR,
-        lngs, lats, DRV_COL, 
-        GC_FRA, time,
-        marker=(6, 0), offset=2, amplitude=3, alpha=.35
-    )
-    ax.text(
-        0.75, 0.1, str(time).zfill(4), 
-        horizontalalignment='center', verticalalignment='center', 
-        transform=ax.transAxes, fontsize=30
-    )
-    fun.quickSaveFig(
-        '{}/{}.png'.format(EXP_VID, str(time).zfill(4)),
-        fig, dpi=250
-    )
-    plt.close('all')
+Parallel(n_jobs=JOB)(
+    delayed(plo.plotMapFrame)(
+        time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
+        offset=2.5, amplitude=2, alpha=.35, marker=(6, 0)
+    ) for time in range(0, tmax)
+)

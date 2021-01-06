@@ -5,6 +5,7 @@ import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import STP_dataAnalysis as da
+import STP_functions as fun
 
 def rescaleRGBA(colorsTuple, colors=255):
     return [i/colors for i in colorsTuple]
@@ -153,3 +154,33 @@ def plotGenePopsOnMap(
             alpha=alpha
         )
     return (fig, ax, mapR)
+
+
+
+def plotMapFrame(
+    time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
+    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0)
+):
+    print('* Exporting {}'.format(str(time).zfill(4)), end='\r')
+    # Create map --------------------------------------------------------------
+    (fig, ax) = plt.subplots(figsize=(10, 10))
+    (fig, ax, mapR) = plotMap(
+        fig, ax, UA_sites, BLAT, BLNG, ptColor='#6347ff'
+    )
+    # Pops --------------------------------------------------------------------
+    (fig, ax, mapR) = plotGenePopsOnMap(
+        fig, ax, mapR,
+        lngs, lats, DRV_COL, 
+        GC_FRA, time,
+        marker=marker, offset=offset, amplitude=amplitude, alpha=alpha
+    )
+    ax.text(
+        0.75, 0.1, str(time).zfill(4), 
+        horizontalalignment='center', verticalalignment='center', 
+        transform=ax.transAxes, fontsize=30
+    )
+    fun.quickSaveFig(
+        '{}/{}.png'.format(EXP_VID, str(time).zfill(4)),
+        fig, dpi=250
+    )
+    plt.close(fig)

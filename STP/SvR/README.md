@@ -1,9 +1,9 @@
-#   Spatial Extension of the SvR BioEssays Paper
+#   Spatial Extension of the SvR BioEssays Paper (Suppression versus Replacement)
 
 
 ## MGDrivE Experiments Pipeline
 
-These sets of experiments involve the transition between MGDrivE1 and MGDrivE2, so 
+These sets of experiments involve the transition between MGDrivE1 and MGDrivE2, so there is an additional toggle in the data analysis routines to accommodate both types of datasets.
 
 ##  Classifier
 
