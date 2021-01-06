@@ -18,13 +18,14 @@ import STP_land as lnd
 import STP_plots as plo
 import STP_functions as fun
 import STP_dataAnalysis as da
-
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 EXP = 'E_0020000000_03_0000000100_0100000000_0000015730'
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 tmax = 10 * 365
 EXP_NAM = '{}-{}'.format(EXP, AOI)
-JOB = 4
+JOB = 20
 # #############################################################################
 # Paths
 # #############################################################################
@@ -68,5 +69,5 @@ Parallel(n_jobs=JOB)(
     delayed(plo.plotMapFrame)(
         time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
         offset=2.5, amplitude=2, alpha=.35, marker=(6, 0)
-    ) for time in range(0, tmax)
+    ) for time in range(1750, tmax)
 )

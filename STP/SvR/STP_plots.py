@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import STP_dataAnalysis as da
 import STP_functions as fun
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 def rescaleRGBA(colorsTuple, colors=255):
     return [i/colors for i in colorsTuple]
