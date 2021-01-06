@@ -63,7 +63,7 @@ for i in range(0, xpNum):
     name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
     # Traces ------------------------------------------------------------------
     balPop = sum(sumDta['population'][tStable])
-    STYLE['yRange'] = (0,  balPop*2+balPop*.1)
+    STYLE['yRange'] = (0,  balPop/2+balPop*.25)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     monet.exportTracesPlot(
         repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=False, wop=i
