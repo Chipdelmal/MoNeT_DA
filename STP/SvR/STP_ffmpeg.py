@@ -9,7 +9,7 @@ import subprocess
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '265', 'SPA', 'v1')
 id = "{}-{}".format('E_0020000000_03_0000000100_0100000000_0000015730', 'HLT')
 # basePath = "/home/chipdelmal/Documents/WorkSims/STP/SPA/505/video/"
-rate = 30
+rate = 45
 ###############################################################################
 # User select
 ###############################################################################
@@ -28,7 +28,7 @@ inPath = basePath + id + "/" + '%04d.png'
 ###############################################################################
 sp = subprocess.Popen([
     'ffmpeg',
-    '-loglevel', '+info',
+    # '-loglevel', '+info',
     '-start_number', '1',
     '-r', str(rate),
     '-f', 'image2',
