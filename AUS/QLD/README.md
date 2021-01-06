@@ -1,1 +1,3 @@
 # Queensland, Australia
+
+Simulations of incompatible insect technique (*Wolbachia*) on the towns of [Murgon](https://www.google.com/maps/place/Murgon+QLD+4605,+Australia/data=!4m2!3m1!1s0x6b951b07e9d816cb:0x400eef17f20e6d0?sa=X&ved=2ahUKEwjD1Zu07ofuAhXT854KHfTtCskQ8gEwAHoECAYQAQ) and [Wondai](https://www.google.com/maps/place/Wondai+QLD+4606,+Australia/@-26.2948605,151.8287727,13z/data=!3m1!4b1!4m5!3m4!1s0x6b950fa4f0cbe1b5:0x400eef17f20e710!8m2!3d-26.316667!4d151.866667). These simulations include time-varying parameters in weather (seasonality) and larval source reductions.
