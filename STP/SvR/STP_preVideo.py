@@ -18,14 +18,15 @@ import STP_land as lnd
 import STP_plots as plo
 import STP_functions as fun
 import STP_dataAnalysis as da
-
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 EXP = 'E_0020000000_03_0000000100_0100000000_0000015730'
 (USR, AOI, REL, LND) = ('dsk', 'HLT', '106', 'SPA')
 # (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 tmax = 3 * 365
 EXP_NAM = '{}-{}'.format(EXP, AOI)
-JOB = 4
+JOB = 8
 # #############################################################################
 # Paths
 # #############################################################################
