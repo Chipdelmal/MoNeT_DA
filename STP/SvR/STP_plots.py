@@ -161,7 +161,7 @@ def plotGenePopsOnMap(
 
 def plotMapFrame(
     time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
-    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0)
+    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0), DPI=250
 ):
     print('* Exporting {}'.format(str(time).zfill(4)), end='\r')
     # Create map --------------------------------------------------------------
@@ -183,6 +183,6 @@ def plotMapFrame(
     )
     fun.quickSaveFig(
         '{}/{}.png'.format(EXP_VID, str(time).zfill(4)),
-        fig, dpi=250
+        fig, dpi=DPI
     )
     plt.close(fig)
