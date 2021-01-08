@@ -5,7 +5,7 @@
 # argv3: Spatial Setting
 # argv4: MGDrivE Version
 
-# ./STP_SimAndPreProcess.sh srv 265 SPA v1 True
+# ./STP_simAndPreProcess.sh srv 106 SPA v1 True
 Rscript ~/MGDrivE/Main/STP/STP_spatial.R
 python ~/MoNeT2/STP/SvR/STP_preProcess.py $1 HLT $2 $3 $4
 python ~/MoNeT2/STP/SvR/STP_preProcess.py $1 TRS $2 $3 $4
