@@ -23,12 +23,12 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 EXP = 'E_0025000000_03_0000000100_0100000000_0000015730'
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-tmax = 10 * 365
+(JOB, tmax) = (20, 10 * 365)
 EXP_NAM = '{}-{}'.format(EXP, AOI)
-JOB = 20
 # #############################################################################
 # Paths
 # #############################################################################
+EXP_NAM = '{}-{}'.format(EXP, AOI)
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 AG_IDs = lnd.landSelector(LND, REL, PT_ROT)
 (PT_UAS, PT_VID) = lnd.landPopSelector(REL, PT_ROT)
