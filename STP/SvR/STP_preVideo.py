@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 #EXP = 'E_0025000000_03_0000000001_0100000000_0000000000'
 EXP = sys.argv[5]
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(JOB, TMIN, TMAX) = (20, 0, 50)
+(JOB, TMIN, TMAX) = (20, 0, 10*365)
 EXP_NAM = '{}-{}'.format(EXP, AOI)
 # #############################################################################
 # Paths
