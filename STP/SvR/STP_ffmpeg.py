@@ -7,7 +7,7 @@ import subprocess
 ###############################################################################
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # (USR, AOI, REL, LND, MGV) = ('dsk', 'HLT', '265', 'SPA', 'v1')
-id = "{}-{}".format('E_0025000000_03_0000000001_0000000000_0000015730', AOI)
+id = "{}-{}".format(sys.argv[5], AOI)
 # basePath = "/home/chipdelmal/Documents/WorkSims/STP/SPA/505/video/"
 rate = 45
 ###############################################################################
@@ -29,7 +29,7 @@ inPath = basePath + id + "/" + '%04d.png'
 sp = subprocess.Popen([
     'ffmpeg',
     # '-loglevel', '+info',
-    '-start_number', '75',
+    '-start_number', '1',
     '-r', str(rate),
     '-f', 'image2',
     '-s', '1920x1080',
