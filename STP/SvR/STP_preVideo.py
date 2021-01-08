@@ -21,7 +21,7 @@ import STP_dataAnalysis as da
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
-EXP = 'E_0025000000_03_0000000100_0100000000_0000015730'
+EXP = 'E_0025000000_03_0000000001_0100000000_0000015730'
 (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 (JOB, tmax) = (20, 10 * 365)
 EXP_NAM = '{}-{}'.format(EXP, AOI)
@@ -71,11 +71,5 @@ monet.printExperimentHead(PT_ROT, PT_VID, tS, 'UCIMI PreVideo '+AOI)
 Parallel(n_jobs=JOB)(
     delayed(plo.plotMapFrame)(
         time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
-<<<<<<< HEAD
         offset=1, amplitude=10, alpha=.35, marker=(6, 0)
-    ) for time in range(0, tmax)
-=======
-        offset=10, amplitude=10, alpha=.35, marker=(6, 0)
     ) for time in range(50, tmax)
->>>>>>> f8ca08bcf4800b34c9dea9bbd2a6f189afe32e5e
-)
