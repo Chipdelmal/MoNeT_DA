@@ -71,6 +71,11 @@ monet.printExperimentHead(PT_ROT, PT_VID, tS, 'UCIMI PreVideo '+AOI)
 Parallel(n_jobs=JOB)(
     delayed(plo.plotMapFrame)(
         time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
+<<<<<<< HEAD
         offset=1, amplitude=10, alpha=.35, marker=(6, 0)
     ) for time in range(0, tmax)
+=======
+        offset=10, amplitude=10, alpha=.35, marker=(6, 0)
+    ) for time in range(50, tmax)
+>>>>>>> f8ca08bcf4800b34c9dea9bbd2a6f189afe32e5e
 )
