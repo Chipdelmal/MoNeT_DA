@@ -120,7 +120,8 @@ def floatToHex(a, minVal=0, maxVal=1):
 
 
 def popsToPtSize(pops, offset=10, amplitude=10):
-    return [max(offset, amplitude * math.sqrt(i)) for i in pops]
+    # return [max(offset, amplitude * math.log(i, 1.1)) for i in pops]
+    return [max(offset, amplitude * (i**(1/2.5))) for i in pops]
 
 
 def plotPopsOnMap(
