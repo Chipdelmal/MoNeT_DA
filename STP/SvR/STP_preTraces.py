@@ -36,6 +36,8 @@ else:
     lnd.landSelector(LND, REL, PT_ROT)
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
+if AOI == 'ECO':
+    YRAN = 2*YRAN
 STYLE = {
     "width": .5, "alpha": .5, "dpi": 150, "legend": True, "aspect": .25,
     "colors": CLR, "xRange": [0, 365 * 6], "yRange": [0, YRAN]
