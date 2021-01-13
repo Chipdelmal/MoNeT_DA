@@ -1,7 +1,10 @@
 
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# /home/chipdelmal/miniconda3/envs/MoNeT/lib/python3.7/site-packages/shapefile.py
+###############################################################################
+# /home/chipdelmal/miniconda3/envs/ox/lib/python3.7/site-packages/shapefile.py
+# pip install matplotlib==3.2
+###############################################################################
 
 import os
 import math
@@ -14,7 +17,11 @@ import pandas as pd
 import PYF_plots as plo
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.mplot3d import Axes3D
-
+from matplotlib.patches import Polygon
+from matplotlib.collections import PatchCollection
+from matplotlib.patches import PathPatch
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 plt.rcParams.update({
     "figure.facecolor":  (1.0, 0.0, 0.0, 0),  # red   with alpha = 30%
@@ -25,52 +32,68 @@ plt.rcParams.update({
 
 PTH_pts = '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/'
 pts = pd.read_csv(PTH_pts+'data/Onetahi.csv', sep=',')
-(COLORS, DPI) = (plo.COLORS, 300)
+(COLORS, DPI) = (plo.COLORS, 500)
 ###############################################################################
 # Map
 ###############################################################################
-PAD = .01
-(minLat, minLong) = [i-PAD for i in (min(list(pts['lats'])), min(list(pts['lons'])))]
-(maxLat, maxLong) = [i+PAD for i in (max(list(pts['lats'])), max(list(pts['lons'])))]
+PAD = .00675
+point = (-17.0187975, -149.591045)
+# (minLat, minLong) = [i-PAD for i in (min(list(pts['lats'])), min(list(pts['lons'])))]
+# (maxLat, maxLong) = [i+PAD for i in (max(list(pts['lats'])), max(list(pts['lons'])))]
+(minLat, minLong) = [i-PAD for i in point]
+(maxLat, maxLong) = [i+PAD for i in point]
 fig = plt.figure(figsize=(5, 5))
 ax = fig.add_subplot(111, label="1")
+###############################################################################
+# Get footprints
+###############################################################################
 # Geography -------------------------------------------------------------------
 mH = Basemap(
-    projection='merc',
-    llcrnrlat=minLat, urcrnrlat=maxLat,
-    llcrnrlon=minLong, urcrnrlon=maxLong,
-    lat_ts=20, resolution='h', ax=ax
+    projection='merc', lat_ts=20, resolution='h', ax=ax,
+    llcrnrlat=minLat, urcrnrlat=maxLat, llcrnrlon=minLong, urcrnrlon=maxLong   
 )
-mH.drawcoastlines(color=COLORS[0], linewidth=2, zorder=1)
-mH.drawcoastlines(color=COLORS[0], linewidth=.25, zorder=2)
-mL = Basemap(
-    projection='merc',
-    llcrnrlat=minLat, urcrnrlat=maxLat,
-    llcrnrlon=minLong, urcrnrlon=maxLong,
-    lat_ts=20, resolution='i', ax=ax
+mH.readshapefile(
+    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/bh400kc3500', 
+    'PYF', drawbounds=True, linewidth=15, color=COLORS[4], zorder=-1
 )
-mL.drawcoastlines(color=COLORS[0], linewidth=10, zorder=0)
+mH.readshapefile(
+    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/bh400kc3500', 
+    'PYF', drawbounds=True, linewidth=4, color=COLORS[0], zorder=2
+)
+mH.readshapefile(
+    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/bh400kc3500', 
+    'PYF', drawbounds=True, linewidth=1, color=COLORS[3], zorder=2
+)
+# Buildings -------------------------------------------------------------------
+mH.readshapefile(
+    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/Onetahi', 
+    'One', drawbounds=True, linewidth=1, color=COLORS[1], zorder=3
+)
+patches   = []
+for info, shape in zip(mH.One_info, mH.One):
+    patches.append( Polygon(np.array(shape), True) )
+ax.add_collection(
+    PatchCollection(
+        patches, facecolor= COLORS[1], edgecolor=None, linewidths=1., zorder=2
+    )
+)
+# Centroids -------------------------------------------------------------------
+# mH.scatter(
+#     list(pts['lons']), list(pts['lats']), latlon=True,
+#     alpha=.1, marker='.', 
+#     s=.1, color='#233090', zorder=3
+# )
+# Remove axes -----------------------------------------------------------------
 ax.tick_params(
     axis='both', which='both',
     bottom=True, top=False, left=True, right=False,
     labelbottom=True, labelleft=True
 )
-ax.spines["top"].set_visible(False)
-ax.spines["right"].set_visible(False)
-ax.spines["bottom"].set_visible(False)
-ax.spines["left"].set_visible(False)
-mH.readshapefile(
-    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/bh400kc3500', 
-    'PYF',
-    default_encoding='latin-1'
-)
-# Pointsets -------------------------------------------------------------------
-mH.scatter(
-    list(pts['lons']), list(pts['lats']), latlon=True,
-    alpha=.3, marker='.', 
-    s=10,
-    color='#233090', zorder=3
-)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+# Save figure -----------------------------------------------------------------
 fig.savefig(
     PTH_pts+'/images/ONE_map.png',
     dpi=DPI, facecolor='w', edgecolor=None,

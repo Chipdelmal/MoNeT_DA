@@ -2,8 +2,8 @@
 
 %matplotlib inline
 import pandas as pd
-import osmnx as ox
 import matplotlib.pyplot as plt
+import osmnx as ox
 ox.config(log_console=True)
 ox.__version__
 
@@ -34,3 +34,8 @@ centroids = [[list(i)[0] for i in j.centroid.xy] for j in bounds]
 (lons, lats) = list(zip(*centroids))
 df = pd.DataFrame({'lons': lons, 'lats': lats})
 df.to_csv(f'./data/{placeName}.csv', index=False)
+###############################################################################
+# Shapefile
+###############################################################################
+gdf_save = gdf.applymap(lambda x: str(x) if isinstance(x, list) else x)
+gdf_save.drop(labels='nodes', axis=1).to_file(f'./data/{placeName}.shp', driver='ESRI Shapefile')
