@@ -137,3 +137,10 @@ dmypy.json
 
 # Images
 *.png
+
+# Geo-data
+*.cst
+*.dbf
+*.shp
+*.shx
+*.prj
