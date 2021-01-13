@@ -29,9 +29,9 @@ plt.rcParams.update({
     "savefig.facecolor": (0.0, 0.0, 1.0, 0),  # blue  with alpha = 20%
 })
 
-
-PTH_pts = '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/'
-pts = pd.read_csv(PTH_pts+'data/Onetahi.csv', sep=',')
+PTH_pts = '/home/chipdelmal/Documents/WorkSims/PYF/GEO/'
+SHPFS = ('bh400kc3500', 'Onetahi')
+pts = pd.read_csv(PTH_pts+'Onetahi.csv', sep=',')
 (COLORS, DPI) = (plo.COLORS, 500)
 ###############################################################################
 # Map
@@ -53,25 +53,25 @@ mH = Basemap(
     llcrnrlat=minLat, urcrnrlat=maxLat, llcrnrlon=minLong, urcrnrlon=maxLong   
 )
 mH.readshapefile(
-    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/bh400kc3500', 
-    'PYF', drawbounds=True, linewidth=15, color=COLORS[4], zorder=-1
+    PTH_pts+SHPFS[0], 'PYF', 
+    drawbounds=True, linewidth=15, color=COLORS[4], zorder=-1
 )
 mH.readshapefile(
-    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/bh400kc3500', 
-    'PYF', drawbounds=True, linewidth=4, color=COLORS[0], zorder=2
+    PTH_pts+SHPFS[0], 'PYF', 
+    drawbounds=True, linewidth=4, color=COLORS[0], zorder=2
 )
 mH.readshapefile(
-    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/bh400kc3500', 
-    'PYF', drawbounds=True, linewidth=1, color=COLORS[3], zorder=2
+    PTH_pts+SHPFS[0], 'PYF', 
+    drawbounds=True, linewidth=1, color=COLORS[3], zorder=2
 )
 # Buildings -------------------------------------------------------------------
 mH.readshapefile(
-    '/home/chipdelmal/Documents/GitHub/MoNeT2/PYF/ONE/data/Onetahi', 
-    'One', drawbounds=True, linewidth=1, color=COLORS[1], zorder=3
+    PTH_pts+SHPFS[1], 'One', 
+    drawbounds=True, linewidth=1, color=COLORS[1], zorder=3
 )
 patches   = []
 for info, shape in zip(mH.One_info, mH.One):
-    patches.append( Polygon(np.array(shape), True) )
+    patches.append(Polygon(np.array(shape), True))
 ax.add_collection(
     PatchCollection(
         patches, facecolor= COLORS[1], edgecolor=None, linewidths=1., zorder=2
@@ -95,7 +95,7 @@ ax.spines['bottom'].set_visible(False)
 ax.spines['left'].set_visible(False)
 # Save figure -----------------------------------------------------------------
 fig.savefig(
-    PTH_pts+'/images/ONE_map.png',
+    PTH_pts+'/ONE_map.png',
     dpi=DPI, facecolor='w', edgecolor=None,
     orientation='portrait', papertype=None, format='png',
     bbox_inches='tight', pad_inches=.02
