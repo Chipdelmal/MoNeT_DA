@@ -29,8 +29,9 @@ p = re.compile('E_.*png', re.IGNORECASE)
 pats = re.findall(p, filedata)
 img_org = list({i[:-8] for i in pats})
 # Replacement ids -------------------------------------------------------------
-uids = fun.getExperimentsIDSets(PT_PRE, skip=-1)
-expSets = set(list(product(*uids[1:-2])))
+uids = fun.getExperimentsIDSets(path.join(PT_IMG, 'preTraces/'), skip=-1)
+uids[2] = uids[2][1:]   # Delete the zero releases entry
+expSets = set(list(product(*uids[1:-1])))
 ###############################################################################
 # Iterate
 ###############################################################################
