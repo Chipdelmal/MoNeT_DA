@@ -89,5 +89,7 @@ def selectPath(USR, LND, EXP):
     PATH_MTR = PATH_DATA + 'SUMMARY/'
     fldrList = [PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR]
     [monet.makeFolder(i) for i in fldrList]
+    if EXP[-1] == 'P':
+        PATH_DATA = PATH_DATA[:-2] + '/'
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
 
