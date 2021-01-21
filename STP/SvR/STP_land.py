@@ -25,7 +25,7 @@ def landSelector(land, REL, PT_ROT):
             STP = pkl.load(pth+ '/GEO/regular/SPAN/clusters.bz')
         elif REL == '106P':
             pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
-            STP = pkl.load(pth+ '/GEO/cluster_2/SPAN/clearclusters.bz')
+            STP = pkl.load(pth+ '/GEO/cluster_2/SPAN/clusters.bz')
         # Return --------------------------------------------------------------
         return STP
     else:
