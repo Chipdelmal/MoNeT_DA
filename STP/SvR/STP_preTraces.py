@@ -36,10 +36,8 @@ else:
     lnd.landSelector(LND, REL, PT_ROT)
 )
 (CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
-if AOI == 'ECO':
-    YRAN = 2*YRAN
 STYLE = {
-    "width": .5, "alpha": .5, "dpi": 150, "legend": True, "aspect": .25,
+    "width": .5, "alpha": .6, "dpi": 200, "legend": True, "aspect": .25,
     "colors": CLR, "xRange": [0, 365 * 6], "yRange": [0, YRAN]
 }
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
@@ -65,7 +63,9 @@ for i in range(0, xpNum):
     name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
     # Traces ------------------------------------------------------------------
     balPop = sum(sumDta['population'][tStable])
-    STYLE['yRange'] = (0,  balPop/2+balPop*.25)
+    STYLE['yRange'] = (0,  balPop/2+balPop*.2)
+    if AOI == 'ECO':
+        STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     monet.exportTracesPlot(
         repDta, name, STYLE, PT_IMG, vLines=[0, 0], wopPrint=False, wop=i
