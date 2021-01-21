@@ -19,7 +19,7 @@ monet.makeFolder(path.join(PT_IMG, 'panels'))
 ###############################################################################
 # Template layout
 ###############################################################################
-template = path.join(PT_IMG, '106_template.svg')
+template = path.join(PT_IMG, REL+'_template.svg')
 with open(template, 'r') as file :
     filedata = file.read()
 ###############################################################################
