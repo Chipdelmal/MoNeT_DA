@@ -56,7 +56,6 @@ fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
 # Process files
 ###############################################################################
 (xpNum, digs) = monet.lenAndDigits(fLists)
-i=0
 for i in range(0, xpNum):
     monet.printProgress(i+1, xpNum, digs)
     (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]

@@ -6,6 +6,7 @@ import compress_pickle as pkl
 
 def landSelector(land, REL, PT_ROT):
     if land == 'SPA':
+        # Fully spatial -------------------------------------------------------
         if REL == '265':
             pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
             STP = pkl.load(pth+ '/GEO/cluster_1/clusters.bz')
@@ -15,6 +16,17 @@ def landSelector(land, REL, PT_ROT):
         elif REL == '106':
             pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
             STP = pkl.load(pth+ '/GEO/cluster_2/clusters.bz')
+        # Spatial condensed ---------------------------------------------------
+        elif REL == '265P':
+            pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
+            STP = pkl.load(pth+ '/GEO/cluster_1/SPAN/clusters.bz')
+        elif REL == '505P':
+            pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
+            STP = pkl.load(pth+ '/GEO/regular/SPAN/clusters.bz')
+        elif REL == '106P':
+            pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
+            STP = pkl.load(pth+ '/GEO/cluster_2/SPAN/clearclusters.bz')
+        # Return --------------------------------------------------------------
         return STP
     else:
         PAN = ([0], )

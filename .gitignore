@@ -131,3 +131,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Data Files
+*.json
+
+# Images
+*.png
+
+# Geo-data
+*.cst
+*.dbf
+*.shp
+*.shx
+*.prj
+*.cpg
