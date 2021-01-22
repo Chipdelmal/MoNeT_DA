@@ -1,10 +1,10 @@
 
 
 import math
+import shapely
 import numpy as np
 from os import path
 import pandas as pd
-import buffered as buf
 import networkx as nx
 import matplotlib
 import cmasher as cmr
@@ -13,15 +13,16 @@ import cdlib.algorithms as cd
 from sklearn.preprocessing import normalize
 from descartes import PolygonPatch
 from mpl_toolkits.basemap import Basemap
+from matplotlib.collections import PatchCollection
 from sklearn.preprocessing import normalize
 from sklearn.cluster import AgglomerativeClustering
 from networkx.algorithms import community, centrality
-
 import STP_plots as pts
 import STP_functions as fun
 
 
 (PTH, LND) = ('/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/', 0)
+COLORS = pts.COLORS
 ###############################################################################
 # Select land
 ###############################################################################
@@ -96,8 +97,8 @@ mH = Basemap(
     llcrnrlon=minx, urcrnrlon=maxx,
     lat_ts=20, resolution='h', ax=ax
 )
-# mH.drawcoastlines(color=pts.COLORS[0], linewidth=2, zorder=1)
-# mH.drawcoastlines(color=pts.COLORS[3], linewidth=.25, zorder=2)
+mH.drawcoastlines(color=COLORS[0], linewidth=2, zorder=1)
+mH.drawcoastlines(color=COLORS[3], linewidth=.25, zorder=2)
 mL = Basemap(
     projection='merc',
     llcrnrlat=miny, urcrnrlat=maxy,
@@ -110,8 +111,9 @@ points['marker'] = 'o'
 points['community'] = labelsN
 points['color'] = [cmapP.colors[i] for i in points['community']]
 mL.scatter(
-    list(points['lon']), list(points['lat']), c='#04011f', # list(points['color']),
-    marker='o', s=1, alpha=1, lw=.25, zorder=5, latlon=True, edgecolors='w'
+    list(points['lon']), list(points['lat']), c=list(points['color']), #c='#04011f', # ,
+    marker='o', s=[1 + 1.5 * math.sqrt(i/100) for i in list(points['pop'])], 
+    alpha=1, lw=.25, zorder=5, latlon=True, edgecolors='w'
 )
 # if PLT_ID:
 #     for i in range(len(points)):
@@ -127,10 +129,31 @@ ax.axes.yaxis.set_ticklabels([])
 ax.axes.xaxis.set_visible(False)
 ax.axes.yaxis.set_visible(False)
 # Polygons -----------------------------------------------------------------
+r=.01
 X = np.asarray(points[['lon', 'lat']])
-D = buf.disjoint_polygons(X, radius=.9, n_angles=100)
-for (i, gi) in enumerate(D.geometry):
-    cl = labels[i]
-    ax.add_patch(PolygonPatch(gi, color=cmap(cl), ec='gray', lw=.5, alpha=.2))
+D = fun.disjoint_polygons(X, radius=r, n_angles=100)
+for j in list(set(labels)):
+    matches = [key for key, val in enumerate(labels) if val in set([j])]
+    base = D.geometry[matches[0]]
+    for i in range(len(matches)):
+        base = base.union(D.geometry[matches[i]].buffer(r))
+        mpoly = shapely.ops.transform(mH, base)
+    ax.add_patch(
+        PolygonPatch(
+            mpoly, fc='white', # cmap(j), 
+            ec='none', alpha=1, zorder=-4
+        )
+    )
+    ax.add_patch(
+        PolygonPatch(
+            mpoly, fc="none", ec='#6347ff', lw=1, alpha=.2, zorder=-3
+        )
+    )
+    ax.add_patch(
+        PolygonPatch(
+            mpoly, fc="none", ec='#ffffff', lw=.25, alpha=1, zorder=-1
+        )
+    )
 # Network ------------------------------------------------------------------
-pts.plotNetworkOnMap(mL, psiN, X, X, c='#04011f', lw=.1)
+# pts.plotNetworkOnMap(mL, psiN, X, X, c='#04011f', lw=.1)
+fun.quickSave(fig, ax, PT_IMG, 'centrality.png')
