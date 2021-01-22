@@ -187,3 +187,18 @@ def plotMapFrame(
         fig, dpi=DPI
     )
     plt.close(fig)
+
+# #############################################################################
+# Networks
+# #############################################################################
+
+def plotMatrix(psi):
+    (fig, ax) = plt.subplots(figsize=(8, 8))
+    ax.set_aspect(1)
+    ax.set_axis_off()
+    ax.axes.xaxis.set_ticklabels([])
+    ax.axes.yaxis.set_ticklabels([])
+    ax.axes.xaxis.set_visible(False)
+    ax.axes.yaxis.set_visible(False)
+    ax.imshow(psi, cmap='Purples')
+    return (fig, ax)
