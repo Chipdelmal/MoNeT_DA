@@ -24,7 +24,7 @@ import STP_functions as fun
 
 (PTH, LND) = ('/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/', 0)
 COLORS = pts.COLORS
-BASE_MAP = True
+BASE_MAP = False
 ###############################################################################
 # Select land
 ###############################################################################
@@ -85,8 +85,8 @@ labels = list(kmeans.labels_)
 ##############################################################################
 (width, alpha) = (.5, 5)
 cmap = matplotlib.cm.get_cmap('gist_rainbow', len(set(labels)))
-cmapP = matplotlib.cm.get_cmap('cmr.guppy', len(set(labelsN)))
-shuffle(cmapP.colors)
+cmapP = matplotlib.cm.get_cmap('cmr.chroma', len(set(labelsN)))
+# shuffle(cmapP.colors)
 (fig, ax) = plt.subplots(1, 1)
 # Map -----------------------------------------------------------------------
 xy = points[['lon', 'lat']]
@@ -134,20 +134,14 @@ ax.axes.yaxis.set_visible(False)
 # Polygons -----------------------------------------------------------------
 X = np.asarray(points[['lon', 'lat']])
 if not BASE_MAP:
-    r=.025
-    D = fun.disjoint_polygons(X, radius=r, n_angles=10)
+    r=.0225
+    D = fun.disjoint_polygons(X, radius=r, n_angles=50)
     for j in list(set(labels)):
         matches = [key for key, val in enumerate(labels) if val in set([j])]
         base = D.geometry[matches[0]]
         for i in range(len(matches)):
             base = base.union(D.geometry[matches[i]].buffer(.01*r))
             mpoly = shapely.ops.transform(mH, base)
-        ax.add_patch(
-            PolygonPatch(
-                mpoly, fc='white', # cmap(j), 
-                ec='none', alpha=1, zorder=-4
-            )
-        )
         ax.add_patch(
             PolygonPatch(
                 mpoly, fc="none", ec='#6347ff', lw=1.5, alpha=.2, zorder=-3
