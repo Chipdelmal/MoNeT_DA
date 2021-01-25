@@ -3,6 +3,7 @@
 import math
 import shapely
 import numpy as np
+import pickle as pkl
 from random import shuffle
 from os import path
 import pandas as pd
@@ -80,6 +81,11 @@ labelsN = [fun.find_in_list_of_list(comsID, i)[0] for i in range(ptsNum)]
 ##############################################################################
 kmeans = AgglomerativeClustering(n_clusters=len(comsID)).fit(longlats)
 labels = list(kmeans.labels_)
+# Reshape to export list of lists of clusters --------------------------------
+comsKM = [[] for i in range(len(comsID))]
+ids = list(range(ptsNum))
+for i in range(ptsNum):
+    comsKM[labels[i]].append(i)
 ##############################################################################
 # Plot
 ##############################################################################
@@ -155,3 +161,9 @@ if not BASE_MAP:
 # Network ------------------------------------------------------------------
 pts.plotNetworkOnMap(mL, psiN, X, X, c='#04011f', lw=.1)
 fun.quickSave(fig, ax, PT_IMG, fNameO)
+##############################################################################
+# Communities
+##############################################################################
+outPairs = (tuple([set(i) for i in comsID]), tuple([set(i) for i in comsKM]))
+pkl.dump(outPairs, open(path.join(PT_IMG, 'commsTuples.pkl'), "wb"))
+
