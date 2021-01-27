@@ -20,7 +20,8 @@ This should auto-run the factorial and place the results in the RAID5 drive. Aft
 1. Run the [STP_geoCluster.py](./STP_geoCluster.py) script with the desired level of aggregation for analysis
 1. Run [STP_preProcess.sh](./STP_preProcess.sh) for ECO, HLT, WLD, TRS *PREPROCESS*
 1. Run [STP_preTraces.sh](./STP_preTraces.sh) for ECO, HLT, WLD, TRS *preTraces* and *preGrids* 
-2. Run [STP_preVideo.sh](./STP_preVideo.sh) for desired videos (probably HLT)
+1. Run [STP_preVideo.sh](./STP_preVideo.sh) for desired videos (probably HLT)
+1. Run [STP_pstProcess.sh](./STP_pstProcess.sh) for HLT, WLD, TRS post process
 
 ##  Classifier
 

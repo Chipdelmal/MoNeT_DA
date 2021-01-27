@@ -32,7 +32,7 @@ monet.makeFolder(PT_IMG)
 # Setup paths and drive
 # #########################################################################
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
-(PT_IMG_I, PT_IMG_O) = (PT_IMG + 'preTraces/', PT_IMG + 'preGrids/')
+(PT_IMG_I, PT_IMG_O) = (PT_IMG + 'pstTraces/', PT_IMG + 'pstGrids/')
 monet.makeFolder(PT_IMG_O)
 tS = datetime.now()
 monet.printExperimentHead(PT_IMG_I, PT_IMG_O, tS, 'UCIMI Grids ')
