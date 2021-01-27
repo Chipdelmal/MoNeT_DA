@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
 import pandas as pd
 from glob import glob
 import STP_aux as aux
@@ -15,25 +16,21 @@ import compress_pickle as pkl
 
 (USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
 # (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', 'mixed', 'PAN')
-(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '90', True, True)
+(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '95', True, True)
 
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 PT_IMG = PT_IMG + 'pstTraces/'
 monet.makeFolder(PT_IMG)
-drive = drv.driveSelector(DRV)
-gene = drive.get(AOI).get('gDict')
-(CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
-if (AOI == 'ECO'):
-    (CLR, CMAPS, YRAN) = (drv.COLEN, drv.COLEM, [0, 200 * 12000])
-else:
-    (CLR, CMAPS, YRAN) = (drv.COLHN, drv.COLHM, [0, 100 * 12000 / 2])
+drive = drv.driveSelector(DRV, AOI, popSize=10*10000)
+gene = drive.get('gDict')
+(CLR, YRAN) = (drive.get('colors'), drive.get('yRange'))
 STYLE = {
-        "width": .5, "alpha": .15, "dpi": 250, "legend": True, "aspect": .25,
-        "colors": CLR, "xRange": [0, 365 * 3], "yRange": YRAN
-    }
+    "width": .5, "alpha": .6, "dpi": 200, "legend": True, "aspect": .25,
+    "colors": CLR, "xRange": [0, 365 * 6], "yRange": [0, YRAN]
+}
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
 tS = datetime.now()
-aux.printExperimentHead(PT_ROT, PT_IMG, PT_OUT, tS, 'PstTraces')
+monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'UCIMI PreTraces ' + AOI)
 ###########################################################################
 # Load postprocessed files
 ###########################################################################
