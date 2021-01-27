@@ -23,7 +23,7 @@ import STP_plots as pts
 import STP_functions as fun
 
 
-(PTH, LND) = ('/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/', 2)
+(PTH, LND) = ('/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/', 0)
 COLORS = pts.COLORS
 BASE_MAP = False
 ###############################################################################
