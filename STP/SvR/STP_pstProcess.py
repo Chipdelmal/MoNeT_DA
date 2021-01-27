@@ -32,7 +32,7 @@ outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX')
 # Setup schemes
 ###############################################################################
 tS = datetime.now()
-monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'UCIMI PstProcess '+AOI)
+monet.printExperimentHead(PT_ROT, PT_MTR, tS, 'UCIMI PstProcess '+AOI)
 # Setting up tha names for output files ---------------------------------------
 pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
 DFOPths = [pth.format(z) for z in outLabels]
