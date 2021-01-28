@@ -127,7 +127,7 @@ def popsToPtSize(pops, offset=10, amplitude=10):
 def plotPopsOnMap(
     fig, ax, mapR, 
     lngs, lats, fractions, pops, 
-    color='#ed174b', marker=(6, 0),
+    color='#ed174b', marker=(6, 0), edgecolor='#ffffff',
     offset=10, amplitude=10, alpha=.85
 ):
     # print(fractions)
@@ -136,7 +136,7 @@ def plotPopsOnMap(
         lngs, lats, 
         latlon=True, marker=marker,
         s=popsToPtSize(pops, offset=offset, amplitude=amplitude),
-        c=colors, ax=ax
+        c=colors, ax=ax, edgecolors=edgecolor
     )
     return (fig, ax, mapR)
 
@@ -144,7 +144,7 @@ def plotPopsOnMap(
 def plotGenePopsOnMap(
     fig, ax, mapR,
     lngs, lats, colors, 
-    GC_FRA, time,
+    GC_FRA, time, edgecolor='#ffffff',
     marker=(6, 0), offset=10, amplitude=10, alpha=.85
 ):
     geneFraSlice = np.asarray([i[time] for i in GC_FRA]).T
@@ -154,7 +154,7 @@ def plotGenePopsOnMap(
             lngs, lats, geneFraSlice[gIx], geneFraSlice[-1],
             color=colors[gIx], marker=marker,
             offset=offset, amplitude=amplitude,
-            alpha=alpha
+            alpha=alpha, edgecolor=edgecolor
         )
     return (fig, ax, mapR)
 
@@ -162,7 +162,8 @@ def plotGenePopsOnMap(
 
 def plotMapFrame(
     time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
-    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0), DPI=250
+    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0), DPI=250, 
+    edgecolor='#ffffff'
 ):
     print('* Exporting {}'.format(str(time).zfill(4)), end='\r')
     # Create map --------------------------------------------------------------
@@ -174,7 +175,7 @@ def plotMapFrame(
     (fig, ax, mapR) = plotGenePopsOnMap(
         fig, ax, mapR,
         lngs, lats, DRV_COL, 
-        GC_FRA, time,
+        GC_FRA, time, edgecolor=edgecolor,
         marker=marker, offset=offset, amplitude=amplitude, alpha=alpha
     )
     ax.text(

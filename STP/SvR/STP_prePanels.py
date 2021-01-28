@@ -11,8 +11,8 @@ import STP_aux as aux
 import STP_functions as fun
 
 
-# (USR, AOI, REL, LND) = ('dsk', 'WLD', '106', 'SPA')
-(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+(USR, AOI, REL, LND) = ('dsk', 'HLT', '265', 'SPA')
+# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 FIC = ('0000000000', '0100000000')
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 monet.makeFolder(path.join(PT_IMG, 'panels'))
@@ -30,10 +30,12 @@ PTRN = 'E_{}_{}_{}_{}_{}-{}'
 p = re.compile('E_.*png', re.IGNORECASE)
 pats = re.findall(p, filedata)
 img_org = list({i[:-8] for i in pats})
+print(img_org)
 # Replacement ids -------------------------------------------------------------
 uids = fun.getExperimentsIDSets(path.join(PT_IMG, 'preTraces/'), skip=-1)
 uids[2] = uids[2][1:]   # Delete the zero releases entry
 expSets = set(list(product(*uids[1:-1])))
+print(expSets)
 ###############################################################################
 # Iterate
 ###############################################################################

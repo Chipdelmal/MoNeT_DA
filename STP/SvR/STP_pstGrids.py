@@ -16,7 +16,7 @@ from cv2 import imread, imwrite, hconcat, vconcat
 (USR, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # (USR, REL, LND) = ('dsk', '505', 'SPA')
 (DRV, FMT, OVW, FZ) = ('LDR', 'bz2', True, True)
-AOI = ['ECO', 'HLT', 'TRS', 'WLD']
+AOI = ['HLT']
 ###########################################################################
 # Setting up paths and style
 ###########################################################################
