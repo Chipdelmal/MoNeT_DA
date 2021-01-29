@@ -42,6 +42,8 @@ print(expSets)
 tS = datetime.now()
 monet.printExperimentHead(PT_ROT, PT_IMG, tS, 'UCIMI PrePanels '+AOI)
 (xpNum, digs) = monet.lenAndDigits(expSets)
+i = 0
+exp = sorted(list(expSets))[-18]
 for (i, exp) in enumerate(sorted(list(expSets))):
     monet.printProgress(i+1, xpNum, digs)
     # Get exp ids -------------------------------------------------------------
