@@ -14,9 +14,9 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-# (USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', '106', 'SPA')
-(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '95', True, True)
+(USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
+# (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', '106', 'SPA')
+(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '75', True, True)
 tStable = 90
 
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
@@ -27,7 +27,7 @@ gene = drive.get('gDict')
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
         "width": .5, "alpha": .15, "dpi": 250, "legend": True, "aspect": .25,
-        "colors": CLR, "xRange": [0, 365 * 3], "yRange": YRAN
+        "colors": CLR, "xRange": [0, 365 * 6], "yRange": YRAN
     }
 STYLE['aspect'] = monet.scaleAspect(1, STYLE)
 tS = datetime.now()
@@ -63,8 +63,8 @@ for (i, repFile) in enumerate(repFiles):
     (tti, tto, wop) = [float(row[THS]) for row in xpRow[:3]]
     (mnf, mnd) = (float(xpRow[3]['min']), float(xpRow[3]['minx']))
     # Traces ------------------------------------------------------------------
-    balPop = repDta['landscapes'][0][tStable][-1]
-    STYLE['yRange'] = (0,  balPop+balPop*.2)
+    pop = repDta['landscapes'][0][tStable][-1]
+    STYLE['yRange'] = (0,  pop+pop*.2)
     if AOI == 'ECO':
         STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
