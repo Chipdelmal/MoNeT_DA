@@ -18,7 +18,7 @@ import PYF_aux as aux
 import PYF_plots as plo
 
 
-if __name__ == "__main__":
+if monet.isNotebook():
     (USR, CLS) = ('dsk', 15)
 else:
     (USR, CLS) = (sys.argv[1], sys.argv[2])

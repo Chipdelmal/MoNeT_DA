@@ -7,7 +7,8 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
-if __name__ == "__main__":
+
+if monet.isNotebook():
     (USR, DRV, AOI, LND) = ('dsk', 'PGS', 'HLT', 'PAN')
 else:
     (USR, DRV, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -27,7 +28,7 @@ monet.printExperimentHead(PT_DTA, PT_PRE, tS, 'Preprocess ' + AOI)
 ###############################################################################
 # Load landscape and drive
 ###############################################################################
-drive = drv.driveSelector(DRV, AOI, popSize=11000)
+drive = drv.driveSelector(DRV, AOI, popSize=20*62)
 land = lnd.landSelector(LND, PT_ROT)
 gene = drive.get('gDict')
 ###############################################################################

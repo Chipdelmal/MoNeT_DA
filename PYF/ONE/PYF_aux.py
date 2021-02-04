@@ -28,3 +28,4 @@ def selectPath(USR, LND):
 def splitExpNames(PATH_OUT, ext='bz'):
     out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
     return sorted(list(set(out)))
+
