@@ -1,10 +1,13 @@
 
+from os import path
+import compress_pickle as pkl
 
-PAN = (list(range(0, 62)), )
 
-
-def landSelector(land):
+def landSelector(land, PT_ROT):
     if land == 'PAN':
-        return PAN
+        lnd = (list(range(0, 62)), )
+        return lnd
     else:
-        return [()] #SPA
+        pth = ''.join(PT_ROT.replace('/sims/'+land+'/', ''))
+        lnd = pkl.load(path.join(pth, 'GEO', 'clusters.bz'))
+        return lnd

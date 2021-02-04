@@ -18,8 +18,10 @@ import PYF_aux as aux
 import PYF_plots as plo
 
 
-# (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-(USR, CLS) = ('dsk', 15)
+if __name__ == "__main__":
+    (USR, CLS) = ('dsk', 15)
+else:
+    (USR, CLS) = (sys.argv[1], sys.argv[2])
 ###############################################################################
 # Selecting Paths
 ###############################################################################

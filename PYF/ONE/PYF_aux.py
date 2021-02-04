@@ -1,5 +1,6 @@
 
 
+from glob import glob
 import MoNeT_MGDrivE as monet
 
 # #############################################################################
@@ -21,3 +22,9 @@ def selectPath(USR, LND):
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
 
 
+# #############################################################################
+# Filenames
+# #############################################################################
+def splitExpNames(PATH_OUT, ext='bz'):
+    out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
+    return sorted(list(set(out)))
