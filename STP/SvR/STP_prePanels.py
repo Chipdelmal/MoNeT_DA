@@ -11,7 +11,7 @@ import STP_aux as aux
 import STP_functions as fun
 
 
-(USR, AOI, REL, LND) = ('dsk', 'HLT', '265', 'SPA')
+(USR, AOI, REL, LND) = ('dsk', 'HLT', '106', 'SPA')
 # (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 FIC = ('0000000000', '0100000000')
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
