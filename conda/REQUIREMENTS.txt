@@ -9,7 +9,7 @@ attrs=19.3.0=py_0
 backcall=0.1.0=pypi_0
 basemap=1.2.0=py37h705c2d8_0
 basemap-data-hires=1.2.0=0
-bleach=3.1.0=pypi_0
+bleach=3.3.0=pypi_0
 boost-cpp=1.70.0=ha2d47e9_1
 branca=0.3.1=py_0
 bzip2=1.0.8=h516909a_1
@@ -22,7 +22,7 @@ click=7.0=py_0
 click-plugins=1.1.1=py_0
 cligj=0.5.0=py_0
 compress-pickle=1.2.0=pypi_0
-cryptography=2.3.1=py37hc365091_0
+cryptography=3.2=py37hc365091_0
 curl=7.61.0=h84994c4_0
 cycler=0.10.0=py_2
 dbus=1.13.6=he372182_0
@@ -110,7 +110,7 @@ nbconvert=5.6.1=pypi_0
 nbformat=4.4.0=pypi_0
 ncurses=6.1=he6710b0_1
 networkx=2.5=pypi_0
-notebook=6.0.2=pypi_0
+notebook=6.1.5=pypi_0
 numpy=1.19.5=pypi_0
 opencv-python=4.4.0.44=pypi_0
 openjpeg=2.3.1=h21c5421_1
