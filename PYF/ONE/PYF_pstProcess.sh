@@ -13,5 +13,7 @@ python PYF_pstProcess.py $1 $2 HLT $3 50
 python PYF_pstProcess.py $1 $2 HLT $3 75
 python PYF_pstProcess.py $1 $2 HLT $3 90
 # PstPlots ------------------------------------
-# python PYF_pstTraces.py $1 $2 HLT $3 $4
+python PYF_pstTraces.py $1 $2 HLT $3 50 0.1
+python PYF_pstTraces.py $1 $2 HLT $3 75 0.1
+python PYF_pstTraces.py $1 $2 HLT $3 90 0.1
 # python PYF_grids.py $1 $2 HLT $3 PST
