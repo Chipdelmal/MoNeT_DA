@@ -12,7 +12,7 @@ XP_PAT = 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 # #############################################################################
 def selectPath(USR, LND):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/PYF/{}/'.format(LND)
+        PATH_ROOT = '/RAID5/marshallShare/pyf/{}/'.format(LND)
     else:
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/PYF/Onetahi/sims/{}/'.format(LND)
     (PATH_IMG, PATH_DATA) = (
