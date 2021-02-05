@@ -58,7 +58,7 @@ for i in range(0, xpNum):
     balPop = sum(sumDta['population'][tStable])
     STYLE['yRange'] = (0,  balPop/2+balPop*.5)
     if AOI == 'ECO':
-        STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
+        STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*1.5)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     # Export plots --------------------------------------------------------
     monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
