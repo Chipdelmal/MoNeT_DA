@@ -44,10 +44,9 @@ monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF PstTraces '+AOI)
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-        "width": .5, "alpha": .15, "dpi": 250, "legend": True, "aspect": .25,
+        "width": .2, "alpha": .15, "dpi": 250, "legend": True, "aspect": .25,
         "colors": CLR, "xRange": [0, 365 * 2.5], "yRange": YRAN
     }
-STYLE['aspect'] = monet.scaleAspect(.5, STYLE)
 ###########################################################################
 # Load postprocessed files
 ###########################################################################
@@ -83,7 +82,7 @@ for (i, repFile) in enumerate(repFiles):
     STYLE['yRange'] = (0,  pop+pop*.2)
     if AOI == 'ECO':
         STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.5, STYLE)
     monet.exportTracesPlot(
             repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
             vLines=[tti, tto, mnd], hLines=[mnf*pop], wop=wop

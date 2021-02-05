@@ -32,11 +32,10 @@ gene = drive.get('gDict')
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-        "width": .3, "alpha": .5, "dpi": 300, "legend": True,
+        "width": .2, "alpha": .5, "dpi": 300, "legend": True,
         "aspect": .25, "colors": CLR, "xRange": [0, (365*2.5)],
         "yRange": YRAN
     }
-STYLE['aspect'] = monet.scaleAspect(1, STYLE)
 tS = datetime.now()
 monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'PreTraces ' + AOI)
 ###############################################################################
