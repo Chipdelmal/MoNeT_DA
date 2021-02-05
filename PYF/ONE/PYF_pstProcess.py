@@ -13,11 +13,13 @@ import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, LND) = ('dsk', 'PGS', 'HLT', 'PAN')
+    (USR, DRV, AOI, LND, QNT) = ('dsk', 'PGS', 'HLT', 'PAN', '75')
 else:
-    (USR, DRV, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    (USR, DRV, AOI, LND, QNT) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    )
 ###############################################################################
-(QNT, mlr) = ('75', True)
+mlr = True
 (thiS, thoS, thwS, tapS) = (
         [.05, .10, .25, .50, .75, .90, .95],
         [.05, .10, .25, .50, .75, .90, .95],
@@ -91,7 +93,7 @@ for (i, fPath) in enumerate(fPaths):
     #######################################################################
     # Update in Dataframes
     #######################################################################
-    xpid = fun.getXpId(fPath, xpidIx)
+    xpid = aux.getXpId(fPath, xpidIx)
     updates = [xpid+i for i in (ttiSQ, ttoSQ, wopSQ, rapSQ, list(mniSQ)+list(mnxSQ))]
     for df in zip(outDFs, updates):
         df[0].iloc[i] = df[1]

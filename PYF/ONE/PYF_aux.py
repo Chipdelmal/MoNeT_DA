@@ -47,6 +47,10 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 
 def patternForReleases(ren, AOI, ftype, ext='bz'):
     patList = ['*', ren, '*', '*', '*', AOI, '*', ftype, ext]
-    print(XP_PAT.format(*patList))
     return XP_PAT.format(*patList)
 
+
+def getXpId(pFile, idIx):
+    splitXpId = re.split('_|-', pFile.split('/')[-1].split('.')[-2])
+    xpId = [int(splitXpId[i]) for i in idIx]
+    return xpId
