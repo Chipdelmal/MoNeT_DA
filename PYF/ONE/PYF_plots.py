@@ -20,3 +20,14 @@ COLORS = [
         rescaleRGBA((0, 169, 255, 255/7.5)),    # 4: Cyan
         rescaleRGBA((0, 0, 0, 255/5))           # 5: Black
     ]
+
+# #############################################################################
+# Save
+# #############################################################################
+def quickSaveFig(filename, fig, dpi=750, transparent=True):
+    fig.savefig(
+         filename,
+         dpi=dpi, facecolor=None, edgecolor=None,
+         orientation='portrait', papertype=None, format='png',
+         transparent=transparent, bbox_inches='tight', pad_inches=.02
+     )

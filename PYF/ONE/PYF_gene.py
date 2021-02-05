@@ -2,7 +2,7 @@
 
 
 import MoNeT_MGDrivE as monet
-import PYF_gene_pgSIT as sit
+import PYF_gene_pgSIT as pgs
 
 ###############################################################################
 # Drive
@@ -10,8 +10,8 @@ import PYF_gene_pgSIT as sit
 def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
     ###########################################################################
     # Linked Drive ------------------------------------------------------------
-    if DRIVE == 'LDR':
-        (aggD, yRange, folder) = sit.driveParameters(TYPE, popSize)
+    if DRIVE == 'PGS':
+        (aggD, yRange, folder) = pgs.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN
