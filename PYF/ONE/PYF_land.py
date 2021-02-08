@@ -8,6 +8,6 @@ def landSelector(land, PT_ROT):
         lnd = (list(range(0, 62)), )
         return lnd
     else:
-        pth = ''.join(PT_ROT.replace('/sims/'+land+'/', ''))
+        pth = ''.join(PT_ROT.replace('/'+land+'/', ''))
         lnd = pkl.load(path.join(pth, 'GEO', 'clusters.bz'))
         return lnd

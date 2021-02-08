@@ -59,7 +59,7 @@ for i in range(0, xpNum):
     STYLE['yRange'] = (0,  balPop/2+balPop*.5)
     if AOI == 'ECO':
         STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*1.5)
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.3, STYLE)
     # Export plots --------------------------------------------------------
     monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
     cl = [i[:-2]+'cc' for i in CLR]

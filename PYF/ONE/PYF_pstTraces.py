@@ -82,7 +82,7 @@ for (i, repFile) in enumerate(repFiles):
     STYLE['yRange'] = (0,  pop+pop*.2)
     if AOI == 'ECO':
         STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*1.5)
-    STYLE['aspect'] = monet.scaleAspect(.5, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.3, STYLE)
     monet.exportTracesPlot(
             repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
             vLines=[tti, tto, mnd], hLines=[mnf*pop], wop=wop

@@ -16,18 +16,19 @@ import compress_pickle as pkl
 import PYF_aux as aux
 # import PYF_functions as fun
 import PYF_plots as plo
+import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
     (USR, CLS) = ('dsk', 15)
 else:
-    (USR, CLS) = (sys.argv[1], sys.argv[2])
+    (USR, CLS) = (sys.argv[1], int(sys.argv[2]))
 ###############################################################################
 # Selecting Paths
 ###############################################################################
 # Base Geo Path ---------------------------------------------------------------
 if USR == 'srv':
-    PTH_ROT = '/RAID5/marshallShare/PYF/GEO/'
+    PTH_ROT = '/RAID5/marshallShare/pyf/GEO/'
 else:
     PTH_ROT = '/home/chipdelmal/Documents/WorkSims/PYF/Onetahi/GEO/'
 PTH_PTS = PTH_ROT
