@@ -65,10 +65,10 @@ print(monet.CBBL, end='\r')
 ###########################################################################
 # Heatmaps
 ###########################################################################
-print(idTuples)
+# print(idTuples)
 for (xpNumC, xpId) in enumerate(idTuples):
     xpNumCS = str(xpNumC+1).zfill(4)
-    # print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
+    print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
     #######################################################################
     # Filter
     #######################################################################
@@ -122,7 +122,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     # Filename and export
     xpStrNm = '_'.join([str(i).zfill(4) for i in xpId])
     xpFilename = xpStrNm+'_'+AOI+'_'+MOI+'.png'
-    print(xpFilename)
-    plo.quickSaveFig(PT_IMG+xpFilename, fig, dpi=100)
+    # print(xpFilename)
+    plo.quickSaveFig(PT_IMG+xpFilename, fig, dpi=350)
     plt.close('all')
 print(monet.CEND, end='\r')
