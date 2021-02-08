@@ -27,6 +27,30 @@ def selectPath(USR, LND):
 
 
 # #############################################################################
+# Dependent Variables for Heatmaps
+# #############################################################################
+def selectDepVars(MOI, AOI):
+    # Select ranges and dependent variable-------------------------------------
+    if (MOI == 'WOP') or (MOI == 'TTI') or (MOI == 'TTO'):
+        scalers = [100, 100, round(10*365)]
+        (HD_DEP, IND_RAN) = ('0.1', 7)
+    elif (MOI == 'RAP'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('486', 7)
+    elif (MOI == 'MNX'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('min', 7)
+    # Color Mapping -----------------------------------------------------------
+    if AOI == 'HLT':
+        cmap = monet.cmapC
+    elif AOI == 'TRS':
+        cmap = monet.cmapM
+    elif AOI == 'WLD':
+        cmap = monet.cmapW
+    return (scalers, HD_DEP, IND_RAN, cmap)
+
+
+# #############################################################################
 # Filenames
 # #############################################################################
 def splitExpNames(PATH_OUT, ext='bz'):
@@ -54,3 +78,5 @@ def getXpId(pFile, idIx):
     splitXpId = re.split('_|-', pFile.split('/')[-1].split('.')[-2])
     xpId = [int(splitXpId[i]) for i in idIx]
     return xpId
+
+

@@ -9,7 +9,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, LND) = ('dsk', 'PGS', 'HLT', 'PAN')
+    (USR, DRV, AOI, LND) = ('srv', 'PGS', 'HLT', 'SPA')
 else:
     (USR, DRV, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 ###############################################################################

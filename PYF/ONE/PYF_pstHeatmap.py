@@ -3,8 +3,9 @@
 
 import sys
 import warnings
-import STP_aux as aux
-import STP_functions as fun
+import PYF_aux as aux
+import PYF_plots as plo
+import PYF_functions as fun
 from itertools import product
 from datetime import datetime
 import MoNeT_MGDrivE as monet
@@ -12,32 +13,36 @@ import matplotlib.pyplot as plt
 warnings.filterwarnings("ignore")
 
 
-# (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, AOI, REL, LND, MOI) = ('dsk', 'HLT', 'mixed', 'PAN', 'WOP')
-(DRV, FMT, QNT, OVW) = ('LDR', 'bz2', '50', True)
-# Select surface variables ----------------------------------------------------
-HD_IND = ['i_ren', 'i_fic']
+if monet.isNotebook():
+    (USR, DRV, AOI, LND, QNT, THS) = ('dsk', 'PGS', 'HLT', 'PAN', '75', '0.1')
+else:
+    (USR, DRV, AOI, LND, QNT, THS) = (
+        sys.argv[1], sys.argv[2], sys.argv[3],
+        sys.argv[4], sys.argv[5], sys.argv[6]
+    )
+###############################################################################
+# Setup analysis
+###############################################################################
+(HD_IND, MOI) = (['i_mad', 'i_mat'], 'WOP')
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (5000, 5000)
 (lvls, mthd, xSca, ySca) = (
         [-.1, 0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1, 1.1],
         'linear', 'linear', 'linear'
     )
-xRan = (1E-8, 1E-1)
+(xRan, yRan) = ((0, .5), (0, .5))
 # Patch scalers for experiment id ---------------------------------------------
-sclr = [1e8, 1e8, scalers[2]]
+sclr = [scalers[0], scalers[1], scalers[2]]
 if 'i_ren' in HD_IND:
     sclr[HD_IND.index('i_ren')] = 1
 ###############################################################################
-# Setup paths
+# Setting up paths
 ###############################################################################
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
-PT_IMG = PT_IMG + 'heat/'
-monet.makeFolder(PT_IMG)
-PT_IMG = PT_IMG+'-'.join(HD_IND)+'/'
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND)
+PT_IMG = PT_IMG + 'pstHeatmap/'
 monet.makeFolder(PT_IMG)
 tS = datetime.now()
-aux.printExperimentHead(PT_ROT, PT_IMG, PT_MTR, tS, 'Heatmap '+AOI)
+monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF PstHeatmap '+AOI)
 ###########################################################################
 # Analyses
 ###########################################################################
@@ -58,11 +63,12 @@ xpNum = len(idTuples)
 xpNumS = str(xpNum).zfill(4)
 print(monet.CBBL, end='\r')
 ###########################################################################
-# Analyzes
+# Heatmaps
 ###########################################################################
+print(idTuples)
 for (xpNumC, xpId) in enumerate(idTuples):
     xpNumCS = str(xpNumC+1).zfill(4)
-    print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
+    # print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
     #######################################################################
     # Filter
     #######################################################################
@@ -75,7 +81,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     # Prepare the response surface ----------------------------------------
     (x, y, z) = (dfSrf[HD_IND[0]], dfSrf[HD_IND[1]], dfSrf[HD_DEP])
     (a, b) = ((min(x), max(x)), (min(y), max(y)))
-    rs = fun.calcResponseSurface(x, y, z, scalers=sclr, mthd=mthd)
+    rs = monet.calcResponseSurface(x, y, z, scalers=sclr, mthd=mthd)
     (rsG, rsS) = (rs['grid'], rs['surface'])
     # Plot the response surface -------------------------------------------
     (fig, ax) = plt.subplots(figsize=(8, 7))
@@ -94,8 +100,8 @@ for (xpNumC, xpId) in enumerate(idTuples):
     plt.xlabel(HD_IND[0], fontsize=20)
     plt.ylabel(HD_IND[1], fontsize=20)
     # Grid
-    # ax.set_xscale(xSca)
-    # ax.set_yscale(ySca)
+    ax.set_xscale(xSca)
+    ax.set_yscale(ySca)
     ax.set_xticks([i/sclr[0] for i in list(set(x))], minor=True)
     ax.set_yticks([i/sclr[1] for i in list(set(y))], minor=True)
     # ax.axes.xaxis.set_ticklabels([])
@@ -105,8 +111,8 @@ for (xpNumC, xpId) in enumerate(idTuples):
     ax.grid(which='both', axis='y', lw=.1, alpha=0.1, color=(0, 0, 0))
     ax.grid(which='minor', axis='x', lw=.1, alpha=0.1, color=(0, 0, 0))
     # Limits
-    # plt.xlim(xRan[0], xRan[1])
-    # plt.ylim(b[0], b[1])
+    plt.xlim(xRan[0], xRan[1])
+    plt.ylim(yRan[0], yRan[1])
     # Title
     xpStr = [
         '{}:{}'.format(i[0], str(i[1]).zfill(4)) for i in zip(hdFree, xpId)
@@ -116,6 +122,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     # Filename and export
     xpStrNm = '_'.join([str(i).zfill(4) for i in xpId])
     xpFilename = xpStrNm+'_'+AOI+'_'+MOI+'.png'
-    fun.quickSaveFig(PT_IMG+xpFilename, fig)
+    print(xpFilename)
+    plo.quickSaveFig(PT_IMG+xpFilename, fig, dpi=100)
     plt.close('all')
 print(monet.CEND, end='\r')
