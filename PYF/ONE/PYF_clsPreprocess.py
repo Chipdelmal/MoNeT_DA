@@ -19,8 +19,6 @@ else:
 
 (ERR, OVW) = (False, True)
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
-EXPS = ('male', 'gravidFemale', 'nonGravidFemale')
-FEATS = ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat', 'i_grp']
 SCA = 100000000
 ###############################################################################
 # Setting up paths
@@ -37,12 +35,13 @@ monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF ClsPreprocess ')
 # Setup constants (user input)
 ###############################################################################
 OPRAN = ((0, 1), (1, 2), (2, 3), (3, 4), (4, 10))
-(DTA_ITYPES, DTA_OTYPES) = (
+(DTA_ITYPES, DTA_OTYPES, DTA_SCA) = (
     {
-        'i_pop': 'int8', 'i_ren': 'int8', 'i_res': 'int8',
-        'i_mad': 'int8', 'i_mat': 'int8'
+        'i_pop': 'int8', 'i_ren': 'int8', 
+        'i_res': 'float64', 'i_mad': 'float64', 'i_mat': 'float64'
     },
-    'int8'
+    'int8',
+    {'i_pop': 1, 'i_ren': 1,  'i_res': 100, 'i_mad': 100, 'i_mat': 100}
 )
 ###############################################################################
 # Read dataset and drop non-needed columns
@@ -57,6 +56,11 @@ DTA_COLS = list(DTA_RAW.columns)
 LBS = list(filter(lambda v: match('0.*', v), DTA_COLS))
 # Clean dataset for modification ----------------------------------------------
 DTA_CLN = DTA_RAW.copy()
+###############################################################################
+# Re-scale inputs
+###############################################################################
+for label in DTA_SCA:
+    DTA_CLN[label] = [col/DTA_SCA[label] for col in DTA_CLN[label]]
 ###############################################################################
 # Classify output
 ###############################################################################
