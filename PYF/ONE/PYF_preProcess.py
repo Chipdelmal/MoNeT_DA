@@ -21,7 +21,9 @@ if AOI == 'HLT':
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND)
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR, PT_MOD) = aux.selectPath(
+    USR, LND
+)
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(PT_DTA, PT_PRE, tS, 'PYF Preprocess ' + AOI)

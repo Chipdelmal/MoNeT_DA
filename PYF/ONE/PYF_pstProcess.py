@@ -35,7 +35,9 @@ outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX')
 ###############################################################################
 # Setting up paths
 ###############################################################################
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND)
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR, PT_MOD) = aux.selectPath(
+    USR, LND
+)
 tS = datetime.now()
 monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'PYF PstProcess '+AOI)
 ###############################################################################

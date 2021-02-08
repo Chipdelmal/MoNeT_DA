@@ -22,7 +22,9 @@ AOI = ['HLT']
 # #############################################################################
 # Setup paths and drive
 # #############################################################################
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND)
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR, PT_MOD) = aux.selectPath(
+    USR, LND
+)
 if STG == 'PRE':
     (PT_IMG_I, PT_IMG_O) = (
         path.join(PT_IMG, 'preTraces/'), path.join(PT_IMG, 'preGrids/')
