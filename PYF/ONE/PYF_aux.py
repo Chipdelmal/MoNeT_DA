@@ -32,7 +32,7 @@ def selectPath(USR, LND):
 def selectDepVars(MOI, AOI):
     # Select ranges and dependent variable-------------------------------------
     if (MOI == 'WOP') or (MOI == 'TTI') or (MOI == 'TTO'):
-        scalers = [100, 100, round(10*365)]
+        scalers = [100, 100, round(2000)]
         (HD_DEP, IND_RAN) = ('0.1', 7)
     elif (MOI == 'RAP'):
         scalers = [1, 100, 1]
