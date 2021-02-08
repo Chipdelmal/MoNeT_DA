@@ -34,7 +34,7 @@ monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF ClsPreprocess ')
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
-OPRAN = ((0, 1), (1, 2), (2, 3), (3, 4), (4, 10))
+OPRAN = ((0, .25), (.25, 2), (2, 10))
 (DTA_ITYPES, DTA_OTYPES, DTA_SCA) = (
     {
         'i_pop': 'int8', 'i_ren': 'int8', 
