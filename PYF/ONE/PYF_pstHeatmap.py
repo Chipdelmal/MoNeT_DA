@@ -38,7 +38,9 @@ if 'i_ren' in HD_IND:
 ###############################################################################
 # Setting up paths
 ###############################################################################
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND)
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR, PT_MOD) = aux.selectPath(
+    USR, LND
+)
 PT_IMG = PT_IMG + 'pstHeatmap/'
 monet.makeFolder(PT_IMG)
 tS = datetime.now()

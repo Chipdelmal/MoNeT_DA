@@ -1,6 +1,7 @@
 
 
 import re
+from os import path
 from glob import glob
 import MoNeT_MGDrivE as monet
 
@@ -18,12 +19,15 @@ def selectPath(USR, LND):
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
-    PATH_PRE = PATH_DATA + 'PREPROCESS/'
-    PATH_OUT = PATH_DATA + 'POSTPROCESS/'
-    PATH_MTR = PATH_DATA + 'SUMMARY/'
-    fldrList = [PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR]
+    PATH_PRE = path.join(PATH_DATA, 'PREPROCESS/')
+    PATH_OUT = path.join(PATH_DATA, 'POSTPROCESS/')
+    PATH_MTR = path.join(PATH_DATA, 'SUMMARY/')
+    PATH_MOD = path.join(PATH_DATA, 'MODELS')
+    fldrList = [
+        PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR, PATH_MOD
+    ]
     [monet.makeFolder(i) for i in fldrList]
-    return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
+    return fldrList
 
 
 # #############################################################################
