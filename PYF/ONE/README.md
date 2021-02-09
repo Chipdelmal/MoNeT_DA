@@ -15,6 +15,8 @@ Use of pgSIT technology on the [Onetahi](https://www.google.com/maps/place/Oneta
   * `mad`: Adult lifespan reduction (x100)
   * `mat`: Male mating reduction (x100)
 
-## Scripts
+## Data Analysis Scripts
 
-* `./PYF_preProcess.sh USR DRV LND`
+* `./PYF_preProcess.sh USR LND`
+* `./PYF_pstProcess.sh USR LND`
+* `./PYF_clsPipeline.sh USR LND`

@@ -10,6 +10,7 @@
 import os
 import math
 import glob
+from os import path
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
@@ -21,6 +22,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import PathPatch
+from sklearn.preprocessing import normalize
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -30,11 +32,18 @@ plt.rcParams.update({
     "savefig.facecolor": (0.0, 0.0, 1.0, 0),  # blue  with alpha = 20%
 })
 
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath('dsk', 'Onetahi', 'temp')
-PTH_pts = '/'.join(PT_ROT.split('/')[:-2]) + '/GEO/'
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR, PT_MOD) = aux.selectPath(
+    'dsk', 'Onetahi'
+)
+PTH_pts = '/'.join(PT_ROT.split('/')[:-3]) + '/GEO/'
+# Shapefiles -----------------------------------------------------------------
 SHPFS = ('bh400kc3500', 'Onetahi')
 pts = pd.read_csv(PTH_pts+'Onetahi.csv', sep=',')
-(COLORS, DPI) = (plo.COLORS, 500)
+(COLORS, DPI) = (plo.COLORS, 750)
+# Migration Network ----------------------------------------------------------
+psi = np.genfromtxt(path.join(PTH_pts, '001_PYF_MX.csv'), delimiter=',')
+np.fill_diagonal(psi, 0)
+psiN = normalize(psi, axis=1, norm='l2')
 ###############################################################################
 # Map
 ###############################################################################
@@ -76,7 +85,7 @@ for info, shape in zip(mH.One_info, mH.One):
     patches.append(Polygon(np.array(shape), True))
 ax.add_collection(
     PatchCollection(
-        patches, facecolor= COLORS[1], edgecolor=None, linewidths=1., zorder=2
+        patches, facecolor= COLORS[1], edgecolor=None, linewidths=1., zorder=10
     )
 )
 # Centroids -------------------------------------------------------------------
@@ -85,6 +94,8 @@ ax.add_collection(
 #     alpha=.1, marker='.', 
 #     s=.1, color='#233090', zorder=3
 # )
+X = np.asarray(list(zip(pts['lons'], pts['lats'])))
+plo.plotNetworkOnMap(mH, psiN, X, X, c='#000046', lw=.1)
 # Remove axes -----------------------------------------------------------------
 ax.tick_params(
     axis='both', which='both',
@@ -109,21 +120,23 @@ fig = plt.figure(figsize=(5, 5))
 ax = fig.add_subplot(111, label="1")
 map = Basemap(projection='ortho', lat_0=point[0]+20, lon_0=point[1]+30, ax=ax, resolution='c')
 # map = Basemap(projection='geos', lon_0=-89.5, lat_0=0.0, satellite_height=45786023.0, ellps='GRS80')
-map.drawmapboundary(color='#141b52', linewidth=5, zorder=5, ax=ax)
+map.drawmapboundary(color=COLORS[4], linewidth=15, zorder=5, ax=ax)
+map.drawmapboundary(color=COLORS[0], linewidth=5, zorder=5, ax=ax)
+map.drawmapboundary(color='#ffffff', linewidth=1, zorder=5, ax=ax)
 pad = 500000
 (limx, limy) = (ax.get_xlim(), ax.get_ylim())
 ax.set_xlim(limx[0] - pad, limx[1] + pad)
 ax.set_ylim(limy[0] - pad, limy[1] + pad)
 # map.drawmapboundary(fill_color='aqua')
-map.fillcontinents(color='#141b52', lake_color='#141b52')
+map.fillcontinents(color=COLORS[0], lake_color='w')
 # map.drawcoastlines()
-map.drawcoastlines(color='#141b52', linewidth=0)
+map.drawcoastlines(color=COLORS[0], linewidth=0)
 # map.drawcoastlines(color=COLORS[0], linewidth=2)
-map.drawcoastlines(color='#141b52', linewidth=0.25)
+map.drawcoastlines(color=COLORS[0], linewidth=0.25)
 # map.drawparallels(np.arange(-90., 120., 30.), labels=[1,0,0,0], color='w', linewidth=.2)
 # map.drawmeridians(np.arange(0., 420., 60.), labels=[0,0,0,1], color='w',  linewidth=.2)
 (x, y) = map(point[1], point[0])
-map.plot(x, y, marker='o', color="#e048b8F5")
+map.plot(x, y, marker='o', color="#e048b8C5")
 fig.savefig(
     PTH_pts+'PYF_globe.png',
     dpi=DPI, facecolor='w', edgecolor=None,

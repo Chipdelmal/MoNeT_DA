@@ -40,7 +40,7 @@ monet.makeFolder(PT_IMG_O)
 # Get Files
 # #############################################################################
 tS = datetime.now()
-monet.printExperimentHead(PT_IMG_I, PT_IMG_O, tS, 'Grids ')
+monet.printExperimentHead(PT_IMG_I, PT_IMG_O, tS, 'PYF Grids ')
 # Get files -------------------------------------------------------------------
 NODE_NUM = len(land)
 imgLists = [glob('{}*{}*{}*'.format(PT_IMG_I, i, '*')) for i in AOI]
