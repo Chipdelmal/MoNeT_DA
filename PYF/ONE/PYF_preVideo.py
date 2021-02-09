@@ -85,6 +85,6 @@ Parallel(n_jobs=JOB)(
         PT_PTS+SHPFS[0],
         time, UA_sites, (minLat, maxLat), (minLong, maxLong), 
         ['#8338EC', '#FF006E', '#0C4887'], GC_FRA, lngs, lats, EXP_VID,
-        offset=100, amplitude=175, alpha=.4, marker=(6, 0),
+        offset=100, amplitude=150, alpha=.4, marker=(6, 0),
         edgecolor='#F5006A', lw=2
     ) for time in range(TMIN, TMAX))
