@@ -41,7 +41,7 @@ ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 PT_IMG = PT_IMG + 'pstModel/'
 monet.makeFolder(PT_IMG)
 tS = datetime.now()
-monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF ClsPreprocess ')
+monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF ClsTrain ')
 
 for label in OUT_THS:
     ###########################################################################

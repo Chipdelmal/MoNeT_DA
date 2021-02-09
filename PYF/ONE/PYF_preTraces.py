@@ -39,7 +39,7 @@ STYLE = {
         "yRange": YRAN
     }
 tS = datetime.now()
-monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'PreTraces ' + AOI)
+monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'PYF PreTraces ' + AOI)
 ###############################################################################
 # Load preprocessed files lists
 ###############################################################################

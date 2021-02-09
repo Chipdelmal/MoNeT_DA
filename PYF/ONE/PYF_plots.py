@@ -22,6 +22,25 @@ COLORS = [
     ]
 
 # #############################################################################
+# Network
+# #############################################################################
+def plotNetworkOnMap(map, mtxTransitions, ptsB, ptsA, c='#dd5fb', lw=.4, la=5):
+    (aNum, bNum) = (ptsA.shape[0], ptsB.shape[0])
+    for j in range(aNum):
+        src = ptsA[j]
+        for i in range(bNum):
+            snk = ptsB[i]
+            map.plot(
+                [src[0], snk[0]], [src[1], snk[1]], latlon=True,
+                lw=math.log(1 + lw * mtxTransitions[j][i]),
+                alpha=min(1, math.log(1 + la * mtxTransitions[j][i])),
+                solid_capstyle='round', c=c,
+                zorder=0
+            )
+    return map
+
+
+# #############################################################################
 # Save
 # #############################################################################
 def quickSaveFig(filename, fig, dpi=750, transparent=True):
