@@ -95,7 +95,7 @@ ax.add_collection(
 #     s=.1, color='#233090', zorder=3
 # )
 X = np.asarray(list(zip(pts['lons'], pts['lats'])))
-plo.plotNetworkOnMap(mH, psiN, X, X, c='#000046', lw=.1)
+# plo.plotNetworkOnMap(mH, psiN, X, X, c='#000046', lw=.1)
 # Remove axes -----------------------------------------------------------------
 ax.tick_params(
     axis='both', which='both',
@@ -136,7 +136,7 @@ map.drawcoastlines(color=COLORS[0], linewidth=0.25)
 # map.drawparallels(np.arange(-90., 120., 30.), labels=[1,0,0,0], color='w', linewidth=.2)
 # map.drawmeridians(np.arange(0., 420., 60.), labels=[0,0,0,1], color='w',  linewidth=.2)
 (x, y) = map(point[1], point[0])
-map.plot(x, y, marker='o', color="#e048b8C5")
+map.scatter(x, y, marker='o', color="#e048b8C5", s=[200])
 fig.savefig(
     PTH_pts+'PYF_globe.png',
     dpi=DPI, facecolor='w', edgecolor=None,

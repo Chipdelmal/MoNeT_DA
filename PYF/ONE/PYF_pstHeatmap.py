@@ -3,6 +3,7 @@
 
 import sys
 import warnings
+import numpy as np
 import PYF_aux as aux
 import PYF_plots as plo
 import PYF_functions as fun
@@ -23,14 +24,18 @@ else:
 ###############################################################################
 # Setup analysis
 ###############################################################################
-(HD_IND, MOI) = (['i_mad', 'i_mat'], 'WOP')
-(scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
+(HD_IND, MOI) = (['i_ren', 'i_res'], 'WOP')
+(xRan, yRan) = ((15, 24), (0, 2))
+cmap = monet.cmapM
+# (HD_IND, MOI) = (['i_mad', 'i_mat'], 'WOP')
+# (xRan, yRan) = ((0, .5), (0, .5))
+# cmap = monet.cmapC
+(scalers, HD_DEP, _, _) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (5000, 5000)
 (lvls, mthd, xSca, ySca) = (
-        [-.1, 0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1, 1.1],
+        list(np.arange(-.1, 1.1, .1/2)),
         'linear', 'linear', 'linear'
     )
-(xRan, yRan) = ((0, .5), (0, .5))
 # Patch scalers for experiment id ---------------------------------------------
 sclr = [scalers[0], scalers[1], scalers[2]]
 if 'i_ren' in HD_IND:
@@ -67,10 +72,10 @@ print(monet.CBBL, end='\r')
 ###########################################################################
 # Heatmaps
 ###########################################################################
-print(idTuples)
+# print(idTuples)
 for (xpNumC, xpId) in enumerate(idTuples):
     xpNumCS = str(xpNumC+1).zfill(4)
-    # print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
+    print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
     #######################################################################
     # Filter
     #######################################################################
@@ -89,7 +94,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     (fig, ax) = plt.subplots(figsize=(8, 7))
     # Experiment points, contour lines, response surface
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
+    # cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # Figure Modifiers ----------------------------------------------------
     # cs.cmap.set_over('#000000')
@@ -124,7 +129,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     # Filename and export
     xpStrNm = '_'.join([str(i).zfill(4) for i in xpId])
     xpFilename = xpStrNm+'_'+AOI+'_'+MOI+'.png'
-    print(xpFilename)
-    plo.quickSaveFig(PT_IMG+xpFilename, fig, dpi=100)
+    # print(xpFilename)
+    plo.quickSaveFig(PT_IMG+xpFilename, fig, dpi=500)
     plt.close('all')
 print(monet.CEND, end='\r')
