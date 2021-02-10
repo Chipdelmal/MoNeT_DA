@@ -115,7 +115,7 @@ This would return the following list:
 [0, 0, 1, 2, 3]
 ```
 
-which indicates that "W" appears (and will be counted) twice in the "WW" genotype (position 0 in the genotypes list), once in "WH", once in "WR and so forth. To do this for all the genes, we simply run:
+which indicates that "W" appears (and will be counted) twice in the "WW" genotype (position 0 in the genotypes list), once in "WH", once in "WR" and so forth. To do this for all the genes, we simply run:
 
 ```python
 wGenes = (('W', locus), )
