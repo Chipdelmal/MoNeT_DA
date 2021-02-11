@@ -15,26 +15,30 @@ warnings.filterwarnings("ignore")
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, LND, QNT, THS) = ('dsk', 'PGS', 'HLT', 'PAN', '75', '0.1')
+    (USR, DRV, AOI, LND, QNT, THS, FIG) = (
+        'dsk', 'PGS', 'HLT', 'PAN', '90', '0.1', 'A'
+    )
 else:
-    (USR, DRV, AOI, LND, QNT, THS) = (
+    (USR, DRV, AOI, LND, QNT, THS, FIG) = (
         sys.argv[1], sys.argv[2], sys.argv[3],
-        sys.argv[4], sys.argv[5], sys.argv[6]
+        sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7]
     )
 ###############################################################################
 # Setup analysis
 ###############################################################################
-(HD_IND, MOI) = (['i_ren', 'i_res'], 'WOP')
-(xRan, yRan) = ((15, 24), (0, 2))
-cmap = monet.cmapM
-# (HD_IND, MOI) = (['i_mad', 'i_mat'], 'WOP')
-# (xRan, yRan) = ((0, .5), (0, .5))
-# cmap = monet.cmapC
+if FIG == 'A':
+    (HD_IND, MOI) = (['i_ren', 'i_res'], 'WOP')
+    (xRan, yRan) = ((15, 24), (0, 2))
+    cmap = monet.cmapM
+elif FIG == 'B':
+    (HD_IND, MOI) = (['i_mad', 'i_mat'], 'WOP')
+    (xRan, yRan) = ((0, .5), (0, .5))
+    cmap = monet.cmapC
 (scalers, HD_DEP, _, _) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (5000, 5000)
 (lvls, mthd, xSca, ySca) = (
-        list(np.arange(-.1, 1.1, .1/2)),
-        'linear', 'linear', 'linear'
+        list(np.arange(-.25, 1.25, .1)),
+        'cubic', 'linear', 'linear'
     )
 # Patch scalers for experiment id ---------------------------------------------
 sclr = [scalers[0], scalers[1], scalers[2]]
@@ -94,7 +98,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     (fig, ax) = plt.subplots(figsize=(8, 7))
     # Experiment points, contour lines, response surface
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
-    # cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
+    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # Figure Modifiers ----------------------------------------------------
     # cs.cmap.set_over('#000000')
