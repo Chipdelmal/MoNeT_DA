@@ -13,7 +13,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('dsk', 'SDR', 'HLT')
+    (USR, DRV, AOI) = ('dsk', 'SDR', 'ECO')
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 ###############################################################################
