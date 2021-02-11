@@ -103,7 +103,7 @@ for label in OUT_THS:
     report = metrics.classification_report(VAL_Y, PRD_Y)
     confusionMat = metrics.plot_confusion_matrix(
         rf, VAL_X, VAL_Y, 
-        display_labels=['None', 'Permanent'],
+        display_labels=['None', 'Transient', 'Permanent'],
         cmap=cm.Blues, normalize=None
     )
     featImportance = list(rf.feature_importances_)

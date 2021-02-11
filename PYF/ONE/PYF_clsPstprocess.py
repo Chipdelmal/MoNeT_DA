@@ -39,10 +39,10 @@ PTH_MOD = path.join(
 rf = load(PTH_MOD)
 ###############################################################################
 # Probes
-#   ['i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv']
+#   ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat']
 ###############################################################################
 print('* Testing...')
-inProbe = [[True, False, False, .1, 1, 1e-2, 1, 1e-3]]
+inProbe = [[16, 15, 1, .2, .2]]
 className = rf.predict(inProbe)
 pred = rf.predict_log_proba(inProbe)
 print('\t* Class [{}]'.format(className))
