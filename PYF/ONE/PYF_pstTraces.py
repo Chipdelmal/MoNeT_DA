@@ -47,7 +47,7 @@ monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF PstTraces '+AOI)
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 CLR = monet.COLHN
 STYLE = {
-        "width": .2, "alpha": .15, "dpi": 500, "legend": True, "aspect": .25,
+        "width": .2, "alpha": .15, "dpi": 100, "legend": True, "aspect": .25,
         "colors": CLR, "xRange": [0, 365 * 1.5], "yRange": YRAN
     }
 ###########################################################################
