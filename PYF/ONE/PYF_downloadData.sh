@@ -11,8 +11,8 @@ if [ "$2" = "True" ]; then
     scp -r "lab:/RAID5/marshallShare/pyf/${1}/PREPROCESS" "${BASE}/PYF/Onetahi/sims/${1}/"
     scp -r "lab:/RAID5/marshallShare/pyf/${1}/POSTPROCESS" "${BASE}/PYF/Onetahi/sims/${1}/"
     scp -r "lab:/RAID5/marshallShare/pyf/${1}/SUMMARY" "${BASE}/PYF/Onetahi/sims/${1}/"
+    scp -r "lab:/RAID5/marshallShare/pyf/${1}/MODELS" "${BASE}/PYF/Onetahi/sims/${1}/"
 fi
-
 if [ "$3" = "True" ]; then
     scp -r "lab:/RAID5/marshallShare/pyf/${1}/img/preTraces" "${BASE}/PYF/Onetahi/sims/${1}/img/"
     scp -r "lab:/RAID5/marshallShare/pyf/${1}/img/pstTraces" "${BASE}/PYF/Onetahi/sims/${1}/img/"

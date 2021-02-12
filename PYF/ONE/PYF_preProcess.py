@@ -9,7 +9,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, LND) = ('srv', 'PGS', 'HLT', 'SPA')
+    (USR, DRV, AOI, LND) = ('dsk', 'PGS', 'HLT', 'PAN')
 else:
     (USR, DRV, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 ###############################################################################
@@ -40,7 +40,7 @@ gene = drive.get('gDict')
     PT_DTA, mean='ANALYZED/', reps='TRACE/'
 )
 (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-done = set(aux.splitExpNames(PT_OUT))
+done = set(aux.splitExpNames(PT_PRE))
 ###############################################################################
 # Analyze data
 ###############################################################################
