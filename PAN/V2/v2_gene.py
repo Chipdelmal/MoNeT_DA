@@ -24,6 +24,8 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
         colors = monet.COLTN
     elif TYPE == 'WLD':
         colors = monet.COLWN
+    elif TYPE == 'HUM':
+        colors = monet.COLWN
     ###########################################################################
     if TYPE != 'ECO':
         yRange = yRange/2

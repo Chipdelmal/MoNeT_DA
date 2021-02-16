@@ -24,8 +24,8 @@ ECO_DICT = OrderedDict((
     ('WB',  (('W', locB), )),
     ('C',   (('C', locA), )),
     ('H',   (('H', locB), )),
-    ('R',   (('R', locB), )),
-    ('B',   (('B', locB), ))
+    ('R+B', (('R', locB), ('B', locB)))#,
+    # ('B',   (('B', locB), ))
 ))
 SDR_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 

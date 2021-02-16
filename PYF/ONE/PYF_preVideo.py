@@ -28,7 +28,7 @@ else:
     (USR, DRV, AOI, LND, EXP) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-(JOB, TMIN, TMAX) = (8, 1, int(2*365))
+(JOB, TMIN, TMAX) = (1, 1, int(2*365))
 EXP_NAM = '{}-{}'.format(EXP, AOI)
 ###############################################################################
 # Setting up paths

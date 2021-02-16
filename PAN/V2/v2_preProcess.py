@@ -27,10 +27,14 @@ else:
     PT_DTA, mean='analyzed/', reps='traces/'
 )
 (drive, land) = (drv.driveSelector(DRV, AOI, popSize=10*10000), ([0], ))
-MF = (True, True)
-if AOI == 'HLT':
-    MF = (False, True)
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+# Select sexes and ids --------------------------------------------------------
+MF = (True, True)
+sexID = {"male": "M_", "female": "F_"}
+if (AOI == 'HLT') or (AOI == 'HUM'):
+    MF = (False, True)
+if (AOI == 'HUM'):
+    sexID = {"male": "", "female": "H_"}
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'V2 Preprocess '+AOI)
@@ -48,6 +52,6 @@ Parallel(n_jobs=JOB)(
         outExpNames=(None, ), fNameFmt='{}/{}-{}_', OVW=OVW,
         MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
         SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
-        sexFilenameIdentifiers={"male": "M_", "female": "F_"}
+        sexFilenameIdentifiers=sexID
     ) for exIx in range(0, expNum)
 )
