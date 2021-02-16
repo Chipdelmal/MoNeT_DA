@@ -13,10 +13,7 @@ if monet.isNotebook():
 else:
     (USR, LND, MTR, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
-(FEATS, LABLS) = (
-    ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat'],
-    ['0.1']
-)
+(FEATS, LABLS) = (['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat'], ['0.1'])
 ###############################################################################
 # Setting up paths
 ###############################################################################
@@ -42,7 +39,7 @@ rf = load(PTH_MOD)
 #   ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat']
 ###############################################################################
 print('* Testing...')
-inProbe = [[16, 15, 1, .2, .2]]
+inProbe = [[20, 20, 1, .15, .15]]
 className = rf.predict(inProbe)
 pred = rf.predict_log_proba(inProbe)
 print('\t* Class [{}]'.format(className))
