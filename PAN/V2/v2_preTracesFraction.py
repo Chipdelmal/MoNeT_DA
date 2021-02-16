@@ -7,9 +7,17 @@ import numpy as np
 import v2_aux as aux
 import v2_gene as drv
 # import PYF_land as lnd
+import matplotlib.pyplot as plt
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
+
+
+plt.rcParams.update({
+    "figure.facecolor":  (1.0, 0.0, 0.0, 0.0),  # red   with alpha = 30%
+    "axes.facecolor":    (0.0, 1.0, 0.0, 0.0),  # green with alpha = 50%
+    "savefig.facecolor": (0.0, 0.0, 1.0, 0.0),  # blue  with alpha = 20%
+})
 
 
 if monet.isNotebook():
@@ -34,18 +42,22 @@ if AOI == 'HLT':
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
-monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'V2 Preprocess '+AOI)
+monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'V2 PreTraces ' + AOI)
 ###############################################################################
 # Style
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-        "width": .1, "alpha": .1, "dpi": 1500, "legend": True,
+        "width": .25, "alpha": .15, "dpi": 1500, "legend": True,
         "aspect": .25, "colors": CLR, "xRange": [0, (365*10)],
-        "yRange": (0, 1.25)
+        "yRange": (-0, 1)
     }
-tS = datetime.now()
-monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'V2 PreTraces ' + AOI)
+if AOI == 'ECO':
+    STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]/2)
+releases = [0, 0]
+releases.extend(list(range(3*365, 3*365 + 7*8, 7)))
+if AOI == 'HUM':
+    releases = [0, 0]
 ###############################################################################
 # Load preprocessed files lists
 ###############################################################################
@@ -68,13 +80,13 @@ for i in range(0, xpNum):
     fractionData = {'genotypes': repDta['genotypes'], 'landscapes': balPop}
     STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
     # Export plots --------------------------------------------------------
-    monet.exportTracesPlot(fractionData, name, STYLE, PT_IMG, wopPrint=False)
+    aux.exportTracesPlot(
+        fractionData, name, STYLE, PT_IMG, wopPrint=False,
+        vLines=releases
+    )
     cl = [i[:-2]+'cc' for i in CLR]
 # Export gene legend ------------------------------------------------------
 monet.exportGeneLegend(
         sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
     )
 tE = datetime.now()
-
-
-# [np.asarray([aux.zeroDivide(i, j.T[-1]) for i in j.T]).T for j in repDta['landscapes']]
