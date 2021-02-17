@@ -27,7 +27,11 @@ def selectPath(USR):
 
 
 
-def exportTracesPlot(tS, nS, STYLE, PATH_IMG, append='', vLines=[0, 0], hLines=[0], wop=0, wopPrint=True):
+def exportTracesPlot(
+    tS, nS, STYLE, PATH_IMG, append='', 
+    vLines=[0, 0], hLines=[0], wop=0, wopPrint=True,
+    AOI='HLT'
+):
     figArr = monet.plotNodeTraces(tS, STYLE)
     axTemp = figArr[0].get_axes()[0]
     axTemp.set_aspect(aspect=STYLE["aspect"])
@@ -61,6 +65,19 @@ def exportTracesPlot(tS, nS, STYLE, PATH_IMG, append='', vLines=[0, 0], hLines=[
         )
     for vline in vLines[2:]:
         axTemp.axvline(vline, alpha=.5, zorder=10, lw=.075, color='#000000')
+
+    for vline in list(range(0, 365*10, 365)):
+        axTemp.axvline(vline, alpha=.5, zorder=10, lw=.025, color='#000000')
+
+    if AOI != 'ECO':
+        for hline in list(np.arange(0, 1.25, .25)):
+            axTemp.axhline(hline, alpha=.5, zorder=10, lw=.025, color='#000000')
+    else:
+        for hline in list(np.arange(0, 1.25/2, .25/2)):
+            axTemp.axhline(hline, alpha=.5, zorder=10, lw=.025, color='#000000')
+        for vline in list(range(0, 365*10, 365)):
+            axTemp.axvline(vline, alpha=.5, zorder=10, lw=.025, color='#000000')
+
 
     if  wopPrint:
         axTemp.text(

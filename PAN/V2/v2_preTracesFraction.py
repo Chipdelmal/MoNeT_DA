@@ -82,7 +82,7 @@ for i in range(0, xpNum):
     # Export plots --------------------------------------------------------
     aux.exportTracesPlot(
         fractionData, name, STYLE, PT_IMG, wopPrint=False,
-        vLines=releases
+        vLines=releases, AOI=AOI
     )
     cl = [i[:-2]+'cc' for i in CLR]
 # Export gene legend ------------------------------------------------------

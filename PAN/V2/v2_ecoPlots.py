@@ -14,6 +14,11 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 
+plt.rcParams.update({
+    "figure.facecolor":  (1.0, 0.0, 0.0, 0.0),  # red   with alpha = 30%
+    "axes.facecolor":    (0.0, 1.0, 0.0, 0.0),  # green with alpha = 50%
+    "savefig.facecolor": (0.0, 0.0, 1.0, 0.0),  # blue  with alpha = 20%
+})
 
 if monet.isNotebook():
     (USR, DRV, AOI) = ('dsk', 'SDR', 'HLT')
@@ -45,7 +50,7 @@ monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'V2 Preprocess '+AOI)
 ###############################################################################
 rainfall = np.loadtxt(
     PT_GEO+'Rainfall/km_precip_2010s_daily.csv',
-    skiprows=1, delimiter=',', usecols=(0, )
+    skiprows=1, delimiter=',', usecols=(1, )
 )
 temperature = np.loadtxt(
     PT_GEO+'Temperature/km_temp_2010s.csv',
@@ -58,21 +63,25 @@ epi = [np.loadtxt(i, skiprows=1, delimiter=',', usecols=(1, )) for i in epiFiles
 epi = [[i / stpPop * 1000 for i in j] for j in epi]
 epiMx = max([max(i) for i in epi])
 ###############################################################################
-# Epi Plots
+# Epi Plot
 ###############################################################################
 (fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
 STYLE = {
-    "width": .0075, "alpha": .5, "dpi": 1500, "legend": True,
+    "width": .01, "alpha": .5, "dpi": 1500, "legend": True,
     "aspect": .25, "xRange": [0, (365*10)],
     "yRange": (0, 1)
 }
 STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
-colors = ('#f200600C', '#f2006059')
+colors = ('#f20060A9', )
 for i in epi:
     tmp = [j/epiMx for j in i]
-    ax.plot(range(0, len(tmp)), tmp, lw=STYLE['width'], color=colors[1])
+    ax.plot(range(0, len(tmp)), tmp, lw=STYLE['width'], color=colors[0])
 for vline in list(range(3*365, 3*365 + 7*8, 7)):
     ax.axvline(vline, alpha=.75, zorder=10, lw=.1, color='#000000')
+for vline in list(range(0, 365*10, 365)):
+    ax.axvline(vline, alpha=.5, zorder=10, lw=.1, color='#000000')
+for hline in list(np.arange(0, 1.25, .25)):
+    ax.axhline(hline, alpha=.5, zorder=10, lw=.1, color='#000000')
 ax.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
 ax.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
 ax.set_aspect(aspect=STYLE["aspect"])
@@ -83,6 +92,74 @@ ax.axes.yaxis.set_visible(False)
 ax.set_axis_off()
 fig.savefig(
         "{}/{}.png".format(PT_IMG, 'EPI'),
+        dpi=STYLE['dpi'], facecolor=None, edgecolor='w',
+        orientation='portrait', papertype=None, format='png',
+        transparent=True, bbox_inches='tight', pad_inches=0
+    )
+plt.close('all')
+###############################################################################
+# Rainfall Plot
+###############################################################################
+rain = rainfall / max(rainfall)
+(fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
+STYLE = {
+    "width": .5, "alpha": .5, "dpi": 1500, "legend": True,
+    "aspect": .25, "xRange": [0, (365*10)],
+    "yRange": (0, 1)
+}
+STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
+colors = ('#2614ED85', )
+ax.plot(range(0, len(rain)), rain, lw=STYLE['width'], color=colors[0])
+for vline in list(range(3*365, 3*365 + 7*8, 7)):
+    ax.axvline(vline, alpha=.75, zorder=10, lw=.1, color='#000000')
+for vline in list(range(0, 365*10, 365)):
+    ax.axvline(vline, alpha=.5, zorder=10, lw=.1, color='#000000')
+for hline in list(np.arange(0, 1.25, .25)):
+    ax.axhline(hline, alpha=.5, zorder=10, lw=.1, color='#000000')
+ax.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+ax.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
+ax.set_aspect(aspect=STYLE["aspect"])
+ax.axes.xaxis.set_ticklabels([])
+ax.axes.yaxis.set_ticklabels([])
+ax.axes.xaxis.set_visible(False)
+ax.axes.yaxis.set_visible(False)
+ax.set_axis_off()
+fig.savefig(
+        "{}/{}.png".format(PT_IMG, 'Rain'),
+        dpi=STYLE['dpi'], facecolor=None, edgecolor='w',
+        orientation='portrait', papertype=None, format='png',
+        transparent=True, bbox_inches='tight', pad_inches=0
+    )
+plt.close('all')
+###############################################################################
+# Temperature Plot
+###############################################################################
+temp = temperature / max(temperature)
+(fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
+STYLE = {
+    "width": .1, "alpha": .5, "dpi": 1500, "legend": True,
+    "aspect": .25, "xRange": [0, (365*10)*24],
+    "yRange": (0, 1)
+}
+STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
+colors = ('#f20060FF', '#f20060FF')
+ax.plot(range(0, len(temp)), temp, lw=STYLE['width'], color=colors[1])
+# for vline in list(range(3*365*24, 3*365*24 + 24*7*8, 24*7)):
+#     ax.axvline(vline, alpha=.75, zorder=10, lw=.1, color='#000000')
+# for vline in list(range(0, 365*10*25, 365*24)):
+#     ax.axvline(vline, alpha=.5, zorder=10, lw=.1, color='#000000')
+# for hline in list(np.arange(0, 1.25, .25)):
+#     ax.axhline(hline, alpha=.5, zorder=10, lw=.1, color='#000000')
+ax.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+ax.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
+ax.set_aspect(aspect=STYLE["aspect"])
+ax.axes.xaxis.set_ticklabels([])
+ax.axes.yaxis.set_ticklabels([])
+ax.axes.xaxis.set_visible(False)
+ax.axes.yaxis.set_visible(False)
+ax.set_axis_off()
+fig.savefig(
+        "{}/{}.png".format(PT_IMG, 'Temp'),
         dpi=STYLE['dpi'], facecolor=None, edgecolor='w',
         orientation='portrait', papertype=None, format='png',
         transparent=True, bbox_inches='tight', pad_inches=0
