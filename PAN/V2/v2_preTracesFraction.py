@@ -35,6 +35,7 @@ else:
 (expDirsMean, expDirsTrac) = monet.getExpPaths(
     PT_DTA, mean='analyzed/', reps='traces/'
 )
+PT_ANL = (PT_ROT + 'analyzed/E_001/')
 (drive, land) = (drv.driveSelector(DRV, AOI, popSize=15000), ([0], ))
 MF = (True, True)
 if AOI == 'HLT':
@@ -49,7 +50,7 @@ monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'V2 PreTraces ' + AOI)
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
         "width": .25, "alpha": .15, "dpi": 1500, "legend": True,
-        "aspect": .25, "colors": CLR, "xRange": [0, (365*10)],
+        "aspect": .25, "colors": CLR, "xRange": [0, (365*6)],
         "yRange": (-0, 1)
     }
 if AOI == 'ECO':
@@ -90,3 +91,41 @@ monet.exportGeneLegend(
         sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
     )
 tE = datetime.now()
+###############################################################################
+# Mossy Infected Plot
+###############################################################################
+# Mosquito Data ---------------------------------------------------------------
+mossy = [i[-1] for i in pkl.load(PT_PRE + 'E_001-HLT_00_sum.bz')['population']]
+infected = np.sum(
+    np.loadtxt(
+        PT_ANL+'FI_Mean_0001.csv', skiprows=1, delimiter=',', 
+        usecols=list(range(1, 30))
+    ), axis=1
+)
+if AOI == 'HLT':
+    infct = infected / np.asarray([i[-1] for i in a])
+    (fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
+    STYLE = {
+        "width": .35, "alpha": .5, "dpi": 1500, "legend": True,
+        "aspect": .25, "xRange": [0, (365*6)],
+        "yRange": (0, 1)
+    }
+    STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
+    colors = ('#3772ffEF', )
+    ax.plot(range(0, len(infct)), infct, lw=STYLE['width'], ls='--', color=colors[0])
+    ax.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+    ax.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
+    ax.set_aspect(aspect=STYLE["aspect"])
+    ax.axes.xaxis.set_ticklabels([])
+    ax.axes.yaxis.set_ticklabels([])
+    ax.axes.xaxis.set_visible(False)
+    ax.axes.yaxis.set_visible(False)
+    ax.set_axis_off()
+    fig.savefig(
+            "{}/{}.png".format(PT_IMG, 'Infected'),
+            dpi=STYLE['dpi'], facecolor=None, edgecolor='w',
+            orientation='portrait', papertype=None, format='png',
+            transparent=True, bbox_inches='tight', pad_inches=0
+        )
+    plt.close('all')
+

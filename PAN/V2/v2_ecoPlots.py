@@ -76,12 +76,12 @@ infected = np.sum(
 ###############################################################################
 (fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
 STYLE = {
-    "width": .01, "alpha": .35, "dpi": 1500, "legend": True,
-    "aspect": .25, "xRange": [0, (365*10)],
+    "width": .01, "alpha": .5, "dpi": 1500, "legend": True,
+    "aspect": .25, "xRange": [0, (365*6)],
     "yRange": (0, 1)
 }
 STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
-colors = ('#f20060B9', )
+colors = ('#f20060C9', )
 for i in epi:
     tmp = [j/epiMx for j in i]
     ax.plot(range(0, len(tmp)), tmp, lw=STYLE['width'], color=colors[0])
@@ -109,15 +109,15 @@ plt.close('all')
 ###############################################################################
 # Rainfall Plot
 ###############################################################################
-rain = rainfall / max(rainfall)
+rain = rainfall / .150 #max(rainfall)
 (fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
 STYLE = {
     "width": .5, "alpha": .5, "dpi": 1500, "legend": True,
-    "aspect": .25, "xRange": [0, (365*10)],
+    "aspect": .25, "xRange": [0, (365*6)],
     "yRange": (0, 1)
 }
 STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
-colors = ('#2614ED85', )
+colors = ('#2614EDDF', )
 ax.plot(range(0, len(rain)), rain, lw=STYLE['width'], color=colors[0])
 for vline in list(range(3*365, 3*365 + 7*8, 7)):
     ax.axvline(vline, alpha=.75, zorder=10, lw=.1, color='#000000')
@@ -143,22 +143,16 @@ plt.close('all')
 ###############################################################################
 # Temperature Plot
 ###############################################################################
-temp = temperature / max(temperature)
+temp = temperature / 30# max(temperature)
 (fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
 STYLE = {
     "width": .1, "alpha": .35, "dpi": 1500, "legend": True,
-    "aspect": .25, "xRange": [0, (365*10)*24],
+    "aspect": .25, "xRange": [0, (365*6)*24],
     "yRange": (0, 1)
 }
 STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
-colors = ('#f20060FF', '#f20060DF')
+colors = ('#f20060FF', '#f20060FF')
 ax.plot(range(0, len(temp)), temp, lw=STYLE['width'], color=colors[1])
-# for vline in list(range(3*365*24, 3*365*24 + 24*7*8, 24*7)):
-#     ax.axvline(vline, alpha=.75, zorder=10, lw=.1, color='#000000')
-# for vline in list(range(0, 365*10*25, 365*24)):
-#     ax.axvline(vline, alpha=.5, zorder=10, lw=.1, color='#000000')
-# for hline in list(np.arange(0, 1.25, .25)):
-#     ax.axhline(hline, alpha=.5, zorder=10, lw=.1, color='#000000')
 ax.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
 ax.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
 ax.set_aspect(aspect=STYLE["aspect"])
@@ -177,11 +171,11 @@ plt.close('all')
 ###############################################################################
 # Mossy Plot
 ###############################################################################
-mosquito = mossy / max(mossy)
+mosquito = [i/190e3 for i in mossy] # max(mossy)
 (fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
 STYLE = {
-    "width": .35, "alpha": .5, "dpi": 1500, "legend": True,
-    "aspect": .25, "xRange": [0, (365*10)],
+    "width": .45, "alpha": .5, "dpi": 1500, "legend": True,
+    "aspect": .25, "xRange": [0, (365*6)],
     "yRange": (0, 1)
 }
 STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
@@ -197,34 +191,6 @@ ax.axes.yaxis.set_visible(False)
 ax.set_axis_off()
 fig.savefig(
         "{}/{}.png".format(PT_IMG, 'Mossy'),
-        dpi=STYLE['dpi'], facecolor=None, edgecolor='w',
-        orientation='portrait', papertype=None, format='png',
-        transparent=True, bbox_inches='tight', pad_inches=0
-    )
-plt.close('all')
-###############################################################################
-# Mossy Infected Plot
-###############################################################################
-infct = infected / max(infected)
-(fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
-STYLE = {
-    "width": .35, "alpha": .5, "dpi": 1500, "legend": True,
-    "aspect": .25, "xRange": [0, (365*10)],
-    "yRange": (0, 1)
-}
-STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
-colors = ('#3772ffAF', )
-ax.plot(range(0, len(infct)), infct, lw=STYLE['width'], ls='--', color=colors[0])
-ax.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
-ax.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
-ax.set_aspect(aspect=STYLE["aspect"])
-ax.axes.xaxis.set_ticklabels([])
-ax.axes.yaxis.set_ticklabels([])
-ax.axes.xaxis.set_visible(False)
-ax.axes.yaxis.set_visible(False)
-ax.set_axis_off()
-fig.savefig(
-        "{}/{}.png".format(PT_IMG, 'Infected'),
         dpi=STYLE['dpi'], facecolor=None, edgecolor='w',
         orientation='portrait', papertype=None, format='png',
         transparent=True, bbox_inches='tight', pad_inches=0
