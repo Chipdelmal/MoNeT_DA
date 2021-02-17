@@ -28,7 +28,7 @@ else:
 ###############################################################################
 if FIG == 'A':
     (HD_IND, MOI) = (['i_ren', 'i_res'], 'WOP')
-    (xRan, yRan) = ((15, 24), (0, 2))
+    (xRan, yRan) = ((10, 24), (0, 2))
     cmap = monet.cmapM
 elif FIG == 'B':
     (HD_IND, MOI) = (['i_mad', 'i_mat'], 'WOP')
