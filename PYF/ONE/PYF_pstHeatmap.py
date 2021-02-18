@@ -16,7 +16,7 @@ warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
     (USR, DRV, AOI, LND, QNT, THS, FIG) = (
-        'dsk', 'PGS', 'HLT', 'PAN', '90', '0.1', 'A'
+        'dsk', 'PGS', 'HLT', 'PAN', '75', '0.1', 'B'
     )
 else:
     (USR, DRV, AOI, LND, QNT, THS, FIG) = (
@@ -37,7 +37,7 @@ elif FIG == 'B':
 (scalers, HD_DEP, _, _) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (5000, 5000)
 (lvls, mthd, xSca, ySca) = (
-        list(np.arange(-.25, 1.25, .1)),
+        list(np.arange(-.05, 1.05, .1)),
         'cubic', 'linear', 'linear'
     )
 # Patch scalers for experiment id ---------------------------------------------
@@ -77,6 +77,7 @@ print(monet.CBBL, end='\r')
 # Heatmaps
 ###########################################################################
 # print(idTuples)
+(xpNumC, xpId) = (0, idTuples[0])
 for (xpNumC, xpId) in enumerate(idTuples):
     xpNumCS = str(xpNumC+1).zfill(4)
     print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
@@ -91,6 +92,8 @@ for (xpNumC, xpId) in enumerate(idTuples):
     #######################################################################
     # Prepare the response surface ----------------------------------------
     (x, y, z) = (dfSrf[HD_IND[0]], dfSrf[HD_IND[1]], dfSrf[HD_DEP])
+    if (len(x) + len(y) + len(z)) <= 3:
+        continue
     (a, b) = ((min(x), max(x)), (min(y), max(y)))
     rs = monet.calcResponseSurface(x, y, z, scalers=sclr, mthd=mthd)
     (rsG, rsS) = (rs['grid'], rs['surface'])
@@ -98,7 +101,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     (fig, ax) = plt.subplots(figsize=(8, 7))
     # Experiment points, contour lines, response surface
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
+    # cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # Figure Modifiers ----------------------------------------------------
     # cs.cmap.set_over('#000000')
