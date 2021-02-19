@@ -36,7 +36,7 @@ monet.printExperimentHead(basePath, outPath, tS, 'PYF PstTraces '+AOI)
 ###############################################################################
 sp = subprocess.Popen([
     'ffmpeg',
-    '-loglevel', '+quiet',
+    '-loglevel', 'quiet',
     '-start_number', '1',
     '-r', str(rate),
     '-f', 'image2',
