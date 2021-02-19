@@ -51,8 +51,8 @@ DRV_COL = [i[:-2] for i in drv.colorSelector(AOI)]
 # Geography
 # #############################################################################
 # Bounding box ----------------------------------------------------------------
-(BLAT, BLNG) = ((-0.045, 1.75), (6.4, 7.5))
-# (BLAT, BLNG) = ((-0.045, .5), (6.4, 6.8))
+# (BLAT, BLNG) = ((-0.045, 1.75), (6.4, 7.5))
+(BLAT, BLNG) = ((-0.045, .5), (6.4, 6.8))
 # LonLats and populations -----------------------------------------------------
 (lonLat, pop) = (UA_sites[['lon', 'lat']], UA_sites['pop'])
 # Landscape aggregation -------------------------------------------------------
@@ -73,5 +73,5 @@ monet.printExperimentHead(PT_ROT, PT_VID, tS, 'UCIMI PreVideo '+AOI)
 Parallel(n_jobs=JOB)(
     delayed(plo.plotMapFrame)(
         time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
-        offset=1, amplitude=7.5, alpha=.75, marker=(6, 0)
+        offset=1, amplitude=30, alpha=.75, marker=(6, 0)
     ) for time in range(TMIN, TMAX))
