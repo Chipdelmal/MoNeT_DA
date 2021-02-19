@@ -35,11 +35,11 @@ if AOI == 'HLT':
 tS = datetime.now()
 monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'V2 Preprocess '+AOI)
 ###############################################################################
-# Style 
+# Style
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-        "width": .2, "alpha": .5, "dpi": 300, "legend": True,
+        "width": .1, "alpha": .1, "dpi": 1500, "legend": True,
         "aspect": .25, "colors": CLR, "xRange": [0, (365*10)],
         "yRange": YRAN
     }
@@ -60,11 +60,11 @@ for i in range(0, xpNum):
     (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
     name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
     # Traces ------------------------------------------------------------------
-    balPop = sum(sumDta['population'][tStable])
+    balPop = max([max(i) for i in sumDta['population']])
     STYLE['yRange'] = (0,  balPop/2+balPop*.5)
     if AOI == 'ECO':
-        STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*1.5)
-    STYLE['aspect'] = monet.scaleAspect(.3, STYLE)
+        STYLE['yRange'] = (STYLE['yRange'][0], balPop * 1.1)
+    STYLE['aspect'] = monet.scaleAspect(.125, STYLE)
     # Export plots --------------------------------------------------------
     monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
     cl = [i[:-2]+'cc' for i in CLR]

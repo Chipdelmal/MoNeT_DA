@@ -117,6 +117,7 @@ def plotPopsOnMap(
 ):
     # print(fractions)
     colors = [color + '%02x' % floatToHex(i*alpha) for i in fractions]
+    ptSize = popsToPtSize(pops, offset=offset, amplitude=amplitude)
     mapR.scatter(
         lngs, lats, 
         latlon=True, marker=marker,

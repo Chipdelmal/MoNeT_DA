@@ -14,10 +14,10 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
-
+1800/365
 
 if monet.isNotebook():
-    (USR, DRV, AOI, LND, QNT, THS) = ('dsk', 'PGS', 'HLT', 'PAN', '90', '0.1')
+    (USR, DRV, AOI, LND, QNT, THS) = ('dsk', 'PGS', 'HLT', 'PAN', '75', '0.1')
 else:
     (USR, DRV, AOI, LND, QNT, THS) = (
         sys.argv[1], sys.argv[2], sys.argv[3],
@@ -47,7 +47,7 @@ monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF PstTraces '+AOI)
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 CLR = monet.COLHN
 STYLE = {
-        "width": .2, "alpha": .15, "dpi": 500, "legend": True, "aspect": .25,
+        "width": .2, "alpha": .15, "dpi": 750, "legend": True, "aspect": .25,
         "colors": CLR, "xRange": [0, 365 * 1.5], "yRange": YRAN
     }
 ###########################################################################
@@ -85,6 +85,7 @@ for (i, repFile) in enumerate(repFiles):
     STYLE['yRange'] = (0,  pop+pop*.2)
     STYLE['aspect'] = monet.scaleAspect(.15, STYLE)
     monet.exportTracesPlot(
-            repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-            vLines=[tti, tto, mnd], hLines=[mnf*pop], wop=wop
+            repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG, 
+            vLines=[tti, tto], wop=wop,
+            wopPrint=False
         )

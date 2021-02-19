@@ -20,12 +20,16 @@ genotypes = (
 # Ecology genotype counts
 ###############################################################################
 ECO_DICT = OrderedDict((
-    ('WA',  (('W', locA), )),
-    ('WB',  (('W', locB), )),
+    ('B',   (('B', locB), )),
+    ('W',   (('W', locB), )),
     ('C',   (('C', locA), )),
     ('H',   (('H', locB), )),
     ('R',   (('R', locB), )),
-    ('B',   (('B', locB), ))
+    ('Total', (
+            ('W', locA), ('C', locA), 
+            ('H', locB), ('W', locB), ('R', locB), ('B', locB)
+        )
+    )
 ))
 SDR_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
