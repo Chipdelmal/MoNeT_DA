@@ -5,10 +5,16 @@ import PYF_clsLayout as layouts
 import PYF_clsModel as model
 import PYF_clsDial as dial
 import dash
+import sys
 import os
 import re
 
-MODELS = '/home/chipdelmal/Documents/WorkSims/PYF/Onetahi/sims/PAN/MODELS/'
+
+if len(sys.argv) > 1:
+    MODELS = sys.argv[1]
+else:
+    MODELS = '/home/chipdelmal/Documents/WorkSims/PYF/Onetahi/sims/PAN/MODELS/'
+
 def get_kv_pair(model_name):
     key = int(re.search(r'[0-9]+', model_name)[0])
     # print(key)

@@ -17,6 +17,15 @@ Use of pgSIT technology on the [Onetahi](https://www.google.com/maps/place/Oneta
 
 ## Data Analysis Scripts
 
-* `./PYF_preProcess.sh USR LND`
-* `./PYF_pstProcess.sh USR LND`
+* `./PYF_preProcess.sh USR LND PLOTS_BOOL`
+* `./PYF_pstProcess.sh USR LND PLOTS_BOOL HEAT_BOOL`
 * `./PYF_clsPipeline.sh USR LND`
+
+
+## Machine Learning Dashboard
+
+After running the [ML pipeline](./PYF_clsPipeline.sh), load the dashboard with:
+
+`python PYF_clsApp.py PATH_TO_MODELS`
+
+Go to `http://127.0.0.1:8050/`
