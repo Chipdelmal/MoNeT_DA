@@ -17,7 +17,7 @@ import STP_functions as fun
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('dsk', '505', 20)
+    (USR, REL, CLS) = ('dsk', '505', 30)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 ###############################################################################
@@ -121,7 +121,7 @@ mH.scatter(
     alpha=.5, marker='x', s=[5],
     color='#233090', zorder=3
 )
-for i in range(CLS+len(notAccessible)):
+for i in range(len(centroid)):
     (x, y) = mH(centroid[i][0], centroid[i][1])
     ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
 fun.quickSaveFig(PTH_PTS + 'clusters.png', fig, dpi=1000)
