@@ -11,6 +11,7 @@ import re
 MODELS = '/home/chipdelmal/Documents/WorkSims/PYF/Onetahi/sims/PAN/MODELS/'
 def get_kv_pair(model_name):
     key = int(re.search(r'[0-9]+', model_name)[0])
+    # print(key)
     val = model.Model(os.path.join(MODELS, model_name))
     return key, val
 
@@ -26,8 +27,11 @@ app.layout = html.Div([
     dbc.Row([
         dbc.Col(
             dbc.Container([
+                dbc.Row([
+                    dbc.Col(layouts.pop_div), 
+                    dbc.Col(layouts.ren_div)
+                ]),
                 layouts.mdl_div(rfm.keys()),
-                dbc.Row([layouts.pop_div, layouts.ren_div]),
                 layouts.res_div,
                 layouts.mad_div,
                 layouts.mat_div,
@@ -36,8 +40,6 @@ app.layout = html.Div([
         ),
         dbc.Col(
             dbc.Container([
-                html.Div(html.H5("Prediction Dial:")),
-                html.Div(id='dial'),
                 dbc.Col(layouts.prd_div)
             ])
         )
@@ -46,7 +48,7 @@ app.layout = html.Div([
 
 @app.callback(
     dash.dependencies.Output('prediction', 'children'),
-    dash.dependencies.Output('dial', 'children'),    
+    # dash.dependencies.Output('dial', 'children'),    
     dash.dependencies.Input('mdl-slider', 'value'),
     dash.dependencies.Input('pop-input' , 'value'),
     dash.dependencies.Input('ren-input' , 'value'),
@@ -57,7 +59,8 @@ app.layout = html.Div([
 
 def update_prediction(mdl, pop, ren, res, mad, mat):
     prediction = rfm[mdl].predict(pop, ren, res, mad, mat)
-    return prediction, dcc.Graph(figure=dial.create_dial(prediction))
+    # print([pop, ren, res, mad, mat])
+    return prediction
 
 if __name__ == '__main__':
     app.run_server(debug=True)

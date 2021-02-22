@@ -18,13 +18,13 @@ def mdl_div(model_keys):
     mink = min(model_keys)
     maxk = max(model_keys)
     return html.Div([
-        html.H5('Model:'),
+        html.H5('Threshold:'),
         dcc.Slider(
             id='mdl-slider',
             min=mink,
             max=maxk,
             step=None,
-            value=maxk,
+            value=10,
             marks={k: str(k) for k in model_keys}
         )
     ])
@@ -43,7 +43,7 @@ ren_div = html.Div([
     dcc.Input(
         id="ren-input",
         type="number",
-        value=10
+        value=20
     )
 ])
 
@@ -53,8 +53,8 @@ res_div = html.Div([
         id='res-slider',
         min=0,
         max=1,
-        step=0.1,
-        value=0.5,
+        step=0.15,
+        value=1,
         marks=get_marks(0, 10 + 1, 1, 10)
     )
 ])
@@ -63,11 +63,11 @@ mad_div = html.Div([
     html.H5('Adult Mortality:'),
     dcc.Slider(
         id='mad-slider',
-        min=0.5,
-        max=1,
+        min=0,
+        max=0.5,
         step=0.01,
-        value=0.75,
-        marks=get_marks(0, 100 + 1, 5, 100)
+        value=0.15,
+        marks=get_marks(0, 100+1, 5, 100)
     )
 ])
 
@@ -75,11 +75,11 @@ mat_div = html.Div([
     html.H5('Mating Reduction:'),
     dcc.Slider(
         id='mat-slider',
-        min=0.5,
-        max=1,
+        min=0,
+        max=0.5,
         step=0.01,
-        value=0.75,
-        marks=get_marks(0, 100 + 1, 5, 100)
+        value=0.1,
+        marks=get_marks(0, 100+1, 5, 100)
     )
 ])
 
