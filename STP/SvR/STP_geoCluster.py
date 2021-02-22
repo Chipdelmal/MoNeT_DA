@@ -2,22 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import STP_functions as fun
-import STP_plots as plo
 import seaborn as sns
+import matplotlib.pyplot as plt
+import MoNeT_MGDrivE as monet
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.cluster import KMeans
 import compress_pickle as pkl
 import STP_aux as aux
+import STP_plots as plo
+import STP_functions as fun
 
 
-(USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-# (USR, REL, CLS) = ('dsk', '106', 30)
-
+if monet.isNotebook():
+    (USR, REL, CLS) = ('dsk', '505', 20)
+else:
+    (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 ###############################################################################
 # Selecting Paths
 ###############################################################################
@@ -31,14 +33,17 @@ if REL == '265':
     PTH_PTS = PTH_ROT + 'cluster_1/'
     filename = 'stp_cluster_sites_pop_v5_fixed.csv'
     kernelName = 'kernel_cluster_v5.csv'
+    notAccessible = {51, 216, 239, 241, 244}
 elif REL == '106':
     PTH_PTS = PTH_ROT + 'cluster_2/'
     filename = 'stp_cluster_sites_pop_01_v5_fixed.csv'
     kernelName = 'kernel_cluster_01_v5.csv'
+    notAccessible = {32, 99, 102}
 elif REL == '505':
     PTH_PTS = PTH_ROT + 'regular/'
     filename = 'stp_all_sites_pop_v5_fixed.csv'
     kernelName = 'kernel_1_1029.csv'
+    notAccessible = {81, 360, 400, 405, 419}
 ###############################################################################
 # ID clusters
 ###############################################################################
@@ -48,12 +53,20 @@ kmeans = KMeans(n_clusters=CLS, random_state=7415341).fit(df)
 df['clst'] = kmeans.labels_
 ids = [i for i in range(df.shape[0])]
 df['id'] = ids
+# Blacklist -------------------------------------------------------------------
+(clstLst, clstNum) = (list(df['clst']), len(set(kmeans.labels_)))
+count = 0
+for (i, nid) in enumerate(clstLst):
+    if i in notAccessible:
+        clstLst[i] = count+clstNum
+        count = count + 1
+df['clst'] = clstLst
 ###############################################################################
 # Export
 ###############################################################################
 # df.to_csv(PTH_PTS+'clusters.csv')
 # sns.scatterplot(data=df, x="lon", y="lat", style="clst")
-clstIDs = list(sorted(set(kmeans.labels_)))
+clstIDs = list(sorted(set(df['clst'])))
 centroid = []
 groupings = []
 for clstID in clstIDs:
@@ -108,7 +121,7 @@ mH.scatter(
     alpha=.5, marker='x', s=[5],
     color='#233090', zorder=3
 )
-for i in range(CLS):
+for i in range(CLS+len(notAccessible)):
     (x, y) = mH(centroid[i][0], centroid[i][1])
     ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
 fun.quickSaveFig(PTH_PTS + 'clusters.png', fig, dpi=1000)

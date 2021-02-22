@@ -23,7 +23,7 @@ import STP_plots as pts
 import STP_functions as fun
 
 
-(PTH, LND) = ('/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/', 0)
+(PTH, LND) = ('/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/', 2)
 COLORS = pts.COLORS
 BASE_MAP = False
 ###############################################################################
@@ -59,7 +59,7 @@ longlats = points[['lon', 'lat']]
 np.fill_diagonal(psi, 0)
 pIn = np.sum(psi.T, axis=0)
 # print('ProbIn: {}'.format(pIn))
-# print('No access: {}'.format(list(np.where(pIn == 0)[0])))
+print('No access: {}'.format(list(np.where(pIn == 0)[0])))
 psiN = normalize(psi, axis=1, norm='l2')
 # (fig, ax) = pts.plotMatrix(psiN)
 # fun.quickSave(fig, ax, PT_IMG, 'transitions.png', dpi=2000)
