@@ -78,7 +78,7 @@ print(monet.CBBL, end='\r')
 ###########################################################################
 # print(idTuples)
 (xpNumC, xpId) = (0, idTuples[0])
-for (xpNumC, xpId) in enumerate(idTuples):
+for (xpNumC, xpId) in enumerate(((16, 18, 100, 0), )):  # enumerate(idTuples):
     xpNumCS = str(xpNumC+1).zfill(4)
     print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
     #######################################################################
@@ -100,7 +100,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     # Plot the response surface -------------------------------------------
     (fig, ax) = plt.subplots(figsize=(8, 7))
     # Experiment points, contour lines, response surface
-    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
+    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=1.5, alpha=.25, marker='.')
     # cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # Figure Modifiers ----------------------------------------------------

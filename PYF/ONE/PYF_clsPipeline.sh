@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# argv1: USR
+# argv2: LND
+
 MTR="WOP"
 VT_SPLIT="0.25"
 KFOLD="10"

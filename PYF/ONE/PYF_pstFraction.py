@@ -59,6 +59,9 @@ for (i, rnIt) in enumerate(ren):
     # #####################################################################
     # Load data
     # #####################################################################
+    # if len({len(baseFiles), len(meanFiles), len(traceFiles)}) > 1:
+    #     print('ERROR IN EXPERIMENT SET {}'.format(meanPat))
+    #     continue
     expNum = len(meanFiles)
     for pIx in range(expNum):
         (bFile, mFile, tFile) = (baseFiles[pIx], meanFiles[pIx], traceFiles[pIx])
