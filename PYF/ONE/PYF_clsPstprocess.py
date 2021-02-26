@@ -39,17 +39,18 @@ rf = load(PTH_MOD)
 # Probes
 #   ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat']
 ###############################################################################
-inProbe = [[20, 12, 2, .05, .15]]
+inProbe = [[16, 8, .1, .5, .5]]
 # Classify and get probs ------------------------------------------------------
 i=0
 className = rf.predict(inProbe)
 pred = rf.predict_log_proba(inProbe)
-predStr = ['{:.3f}'.format(j) for j in pred[i]]
-print('* Class: {} {}'.format(className[i], predStr))
 # Interpretations -------------------------------------------------------------
 (prediction, biases, contributions) = ti.predict(rf, np.asarray(inProbe))
 print("* Instance: {}".format(inProbe[i]))
+predLog = ['{:.3f}'.format(100*j) for j in pred[i]]
+predProb= ['{:.3f}'.format(j) for j in prediction[i]]
+print('* Class: {} {}'.format(className[i], predProb))
 print("* Bias (trainset mean): {}".format(biases[i]))
 for c, feature in zip(contributions[0], FEATS):
-    ptest = '{:.3f}'.format(max(c)).zfill(3)
+    ptest = '{:.4f}'.format(c[className[i]]).zfill(3)
     print('\t{}: {}'.format(feature, ptest))
