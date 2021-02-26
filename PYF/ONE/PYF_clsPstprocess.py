@@ -1,6 +1,7 @@
 
 import sys
 import numpy as np
+import pandas as pd
 from os import path
 from datetime import datetime
 from joblib import dump, load
@@ -24,22 +25,22 @@ ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 )
 PT_IMG = PT_IMG + 'pstModel/'
 monet.makeFolder(PT_IMG)
-tS = datetime.now()
-monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF ClsPreprocess ')
-
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
-PTH_MOD = path.join(
-    PT_MOD, ID_MTR[0:-8]+'_RF.joblib'
-)
+PTH_MOD = path.join(PT_MOD, ID_MTR[0:-8]+'_RF.joblib')
+
 ###############################################################################
-# Load Model
+# Load Model/Dataset
 ###############################################################################
 rf = load(PTH_MOD)
+df = pd.read_csv(path.join(PT_MTR, ID_MTR))
+# Get variables ranges (entries) ----------------------------------------------
+indepRanges = [sorted(list(df[j].unique())) for j in FEATS]
+varRanges = {k: ran for (k, ran) in zip(FEATS, indepRanges)}
 ###############################################################################
 # Probes
 #   ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat']
 ###############################################################################
-inProbe = [[16, 8, .1, .5, .5]]
+inProbe = [[16, 10, 1, .5, .5]]
 # Classify and get probs ------------------------------------------------------
 i=0
 className = rf.predict(inProbe)
@@ -48,9 +49,11 @@ pred = rf.predict_log_proba(inProbe)
 (prediction, biases, contributions) = ti.predict(rf, np.asarray(inProbe))
 print("* Instance: {}".format(inProbe[i]))
 predLog = ['{:.3f}'.format(100*j) for j in pred[i]]
-predProb= ['{:.3f}'.format(j) for j in prediction[i]]
+predProb = ['{:.3f}'.format(j) for j in prediction[i]]
 print('* Class: {} {}'.format(className[i], predProb))
 print("* Bias (trainset mean): {}".format(biases[i]))
-for c, feature in zip(contributions[0], FEATS):
+for (c, feature) in zip(contributions[0], FEATS):
     ptest = '{:.4f}'.format(c[className[i]]).zfill(3)
     print('\t{}: {}'.format(feature, ptest))
+# Prediction SA ---------------------------------------------------------------
+rankCenter = [j[className[i]] for j in contributions[0]]
