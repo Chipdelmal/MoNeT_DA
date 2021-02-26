@@ -78,7 +78,7 @@ print(monet.CBBL, end='\r')
 ###########################################################################
 # print(idTuples)
 (xpNumC, xpId) = (0, idTuples[0])
-for (xpNumC, xpId) in enumerate(((16, 18, 100, 0), )):  # enumerate(idTuples):
+for (xpNumC, xpId) in enumerate(idTuples):
     xpNumCS = str(xpNumC+1).zfill(4)
     print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
     #######################################################################

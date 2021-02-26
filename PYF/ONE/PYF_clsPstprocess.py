@@ -1,10 +1,11 @@
 
 import sys
+import numpy as np
 from os import path
 from datetime import datetime
 from joblib import dump, load
 import MoNeT_MGDrivE as monet
-import numpy as np
+from treeinterpreter import treeinterpreter as ti
 import PYF_aux as aux
 
 
@@ -38,9 +39,17 @@ rf = load(PTH_MOD)
 # Probes
 #   ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat']
 ###############################################################################
-print('* Testing...')
-inProbe = [[20, 20, 1, .15, .15]]
+inProbe = [[20, 12, 2, .05, .15]]
+# Classify and get probs ------------------------------------------------------
+i=0
 className = rf.predict(inProbe)
 pred = rf.predict_log_proba(inProbe)
-print('\t* Class [{}]'.format(className))
-print('\t* Log-probs {}'.format(pred))
+predStr = ['{:.3f}'.format(j) for j in pred[i]]
+print('* Class: {} {}'.format(className[i], predStr))
+# Interpretations -------------------------------------------------------------
+(prediction, biases, contributions) = ti.predict(rf, np.asarray(inProbe))
+print("* Instance: {}".format(inProbe[i]))
+print("* Bias (trainset mean): {}".format(biases[i]))
+for c, feature in zip(contributions[0], FEATS):
+    ptest = '{:.3f}'.format(max(c)).zfill(3)
+    print('\t{}: {}'.format(feature, ptest))
