@@ -27,12 +27,11 @@ PT_IMG = PT_IMG + 'pstModel/'
 monet.makeFolder(PT_IMG)
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 PTH_MOD = path.join(PT_MOD, ID_MTR[0:-8]+'_RF.joblib')
-
 ###############################################################################
 # Load Model/Dataset
 ###############################################################################
 rf = load(PTH_MOD)
-df = pd.read_csv(path.join(PT_MTR, ID_MTR))
+df = pd.read_csv(path.join(PT_MTR, 'CLN_'+ID_MTR))
 # Get variables ranges (entries) ----------------------------------------------
 indepRanges = [sorted(list(df[j].unique())) for j in FEATS]
 varRanges = {k: ran for (k, ran) in zip(FEATS, indepRanges)}
@@ -40,7 +39,7 @@ varRanges = {k: ran for (k, ran) in zip(FEATS, indepRanges)}
 # Probes
 #   ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat']
 ###############################################################################
-inProbe = [[16, 10, 1, .5, .5]]
+inProbe = [[16, 18, .83, 0, 0]]
 # Classify and get probs ------------------------------------------------------
 i=0
 className = rf.predict(inProbe)
@@ -51,9 +50,23 @@ print("* Instance: {}".format(inProbe[i]))
 predLog = ['{:.3f}'.format(100*j) for j in pred[i]]
 predProb = ['{:.3f}'.format(j) for j in prediction[i]]
 print('* Class: {} {}'.format(className[i], predProb))
-print("* Bias (trainset mean): {}".format(biases[i]))
 for (c, feature) in zip(contributions[0], FEATS):
     ptest = '{:.4f}'.format(c[className[i]]).zfill(3)
     print('\t{}: {}'.format(feature, ptest))
-# Prediction SA ---------------------------------------------------------------
-rankCenter = [j[className[i]] for j in contributions[0]]
+###############################################################################
+# Prediction SA
+###############################################################################
+SMP = 100
+rankCenter = [abs(j[className[i]]) for j in contributions[0]]
+rankHIx = rankCenter.index(max(rankCenter))
+rankFeat = FEATS[rankHIx]
+deviation = np.std(np.asarray(df[rankFeat]))
+sdP = sorted(list(np.random.normal(inProbe[i][rankHIx], deviation/10, size=SMP)))
+# Perturb variable ------------------------------------------------------------
+inCpy = []
+for r in range(SMP):
+    inCpy.append(inProbe[i][:])
+for (r, row) in enumerate(inCpy):
+    row[rankHIx] = sdP[r]
+(prediction, biases, contributions) = ti.predict(rf, np.asarray(inCpy))
+prediction
