@@ -39,7 +39,7 @@ varRanges = {k: ran for (k, ran) in zip(FEATS, indepRanges)}
 # Probes
 #   ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat']
 ###############################################################################
-inProbe = [[16, 7, 2, 0, 0]]
+inProbe = [[16, 10, 2, 0, 0]]
 # Classify and get probs ------------------------------------------------------
 i=0
 className = rf.predict(inProbe)
@@ -78,6 +78,6 @@ preds = list(zip(
     [max(j) for j in prediction]
 ))
 # Print summary ---------------------------------------------------------------
-print('* SA {} {}'.format(rankFeat, ctrVal))
+print('* SA [{}: {}]'.format(rankFeat, ctrVal))
 for j in preds:
     print('\t{:.3f} - Class: {} - Prob: {:.3f}'.format(j[0], j[1], j[2]))

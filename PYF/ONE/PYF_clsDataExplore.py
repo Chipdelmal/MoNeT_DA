@@ -42,7 +42,7 @@ df = pd.DataFrame(x_scaled, columns=cols)
 # Load Dataset
 ###############################################################################
 fig = px.scatter_3d(
-    df, x='i_mad', y='i_mat', z='i_res',
+    df, x='i_mad', y='i_mat', z='i_ren',
     color='0.1', opacity=1
 )
 fig.show()
