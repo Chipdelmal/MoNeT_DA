@@ -27,14 +27,14 @@ else:
 # Setup analysis
 ###############################################################################
 if FIG == 'A':
-    (HD_IND, MOI) = (['i_ren', 'i_res'], 'WOP')
+    (HD_IND, MOI) = (['i_ren', 'i_res'], 'POE')
     (xRan, yRan) = ((10, 24), (0, 2))
     cmap = monet.cmapM
 elif FIG == 'B':
-    (HD_IND, MOI) = (['i_mad', 'i_mat'], 'WOP')
-    (xRan, yRan) = ((0, .5), (0, .5))
+    (HD_IND, MOI) = (['i_mad', 'i_mat'], 'POE')
+    (xRan, yRan) = ((0, .50), (0, .50))
     cmap = monet.cmapC
-(scalers, HD_DEP, _, _) = aux.selectDepVars(MOI, AOI)
+(scalers, HD_DEP, _, _) = aux.selectDepVars(MOI, AOI, FIG=FIG)
 (ngdx, ngdy) = (5000, 5000)
 (lvls, mthd, xSca, ySca) = (
         list(np.arange(-.05, 1.05, .1)),
@@ -124,6 +124,9 @@ for (xpNumC, xpId) in enumerate(idTuples):
     # ax.axes.yaxis.set_ticklabels([], minor=True)
     ax.grid(which='both', axis='y', lw=.1, alpha=0.1, color=(0, 0, 0))
     ax.grid(which='minor', axis='x', lw=.1, alpha=0.1, color=(0, 0, 0))
+    plt.tick_params(
+        which='both', bottom=False, top=False,  left=False, right=False
+    )
     # Limits
     plt.xlim(xRan[0], xRan[1])
     plt.ylim(yRan[0], yRan[1])

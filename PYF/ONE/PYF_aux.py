@@ -33,7 +33,7 @@ def selectPath(USR, LND):
 # #############################################################################
 # Dependent Variables for Heatmaps
 # #############################################################################
-def selectDepVars(MOI, AOI):
+def selectDepVars(MOI, AOI, FIG='A'):
     # Select ranges and dependent variable-------------------------------------
     if (MOI == 'WOP') or (MOI == 'TTI') or (MOI == 'TTO'):
         scalers = [100, 100, round(1800)]
@@ -44,6 +44,12 @@ def selectDepVars(MOI, AOI):
     elif (MOI == 'MNX'):
         scalers = [1, 100, 1]
         (HD_DEP, IND_RAN) = ('min', 7)
+    elif (MOI == 'POE'):
+        if FIG == 'A':
+            scalers = [1, 100, 1]
+        else:
+            scalers = [100, 100, 1]
+        (HD_DEP, IND_RAN) = ('POE', 1)
     # Color Mapping -----------------------------------------------------------
     if AOI == 'HLT':
         cmap = monet.cmapC

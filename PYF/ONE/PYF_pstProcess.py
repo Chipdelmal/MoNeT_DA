@@ -10,7 +10,7 @@ import PYF_land as lnd
 from datetime import datetime
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
-
+import PYF_functions as fun
 
 if monet.isNotebook():
     (USR, DRV, AOI, LND, QNT) = ('dsk', 'PGS', 'HLT', 'PAN', '75')
@@ -31,7 +31,7 @@ mlr = True
         ('i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat', 'i_grp'),
         (1, 2, 3, 4, 5, 7)
     )
-outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX')
+outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE')
 ###############################################################################
 # Setting up paths
 ###############################################################################
@@ -63,16 +63,20 @@ fPaths = sorted(glob(PT_OUT+ptrn))
 (fNum, digs) = monet.lenAndDigits(fPaths)
 qnt = float(int(QNT)/100)
 # Setup dataframes ------------------------------------------------------------
-outDFs = monet.initDFsForDA(fPaths, header, thiS, thoS, thwS, tapS)
-(ttiDF, ttoDF, wopDF, tapDF, rapDF) = outDFs
+outDFs = fun.initDFsForDA(fPaths, header, thiS, thoS, thwS, tapS)
+(ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF) = outDFs
 ###############################################################################
 # Iterate through experiments
 ###############################################################################
 fmtStr = '{}+ File: {}/{}'
+# (i, fPath) = (0, fPaths[0])
 for (i, fPath) in enumerate(fPaths):
     repRto = np.load(fPath)
     (reps, days) = repRto.shape
-    print(fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), end='\r')
+    print(
+        fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND)
+        , end='\r'
+    )
     #######################################################################
     # Calculate Metrics
     #######################################################################
@@ -83,6 +87,7 @@ for (i, fPath) in enumerate(fPaths):
         )
     (minS, maxS, _, _) = monet.calcMinMax(repRto)
     rapS = monet.getRatioAtTime(repRto, tapS)
+    poe = fun.calcPOE(repRto)
     #######################################################################
     # Calculate Quantiles
     #######################################################################
@@ -96,7 +101,8 @@ for (i, fPath) in enumerate(fPaths):
     # Update in Dataframes
     #######################################################################
     xpid = aux.getXpId(fPath, xpidIx)
-    updates = [xpid+i for i in (ttiSQ, ttoSQ, wopSQ, rapSQ, list(mniSQ)+list(mnxSQ))]
+    vals = (ttiSQ, ttoSQ, wopSQ, rapSQ, list(mniSQ)+list(mnxSQ), list(poe))
+    updates = [xpid+i for i in vals]
     for df in zip(outDFs, updates):
         df[0].iloc[i] = df[1]
     #######################################################################
@@ -125,3 +131,4 @@ if mlr:
         lbl = outLabels[i]
         pth = PT_MTR+AOI+'_'+lbl+'_'+QNT+'_mlr.bz'
         pkl.dump(dict, pth, compression='bz2')
+

@@ -15,9 +15,15 @@ SHT = [
     'Generation_4', 'Generation_5', 'Generation_6', 
     'Key'
 ]
+# COLS = (
+#     ('#2614ed', 'v'), ('#ff006e', 'o'), ('#8338ec', '*'), ('#ffe83d', '+'),
+#     ('#22a5f1', 'X'), ('#45d40c', '2'), ('#f00fbf', 'p'), ('#000000', 's')
+# )
 COLS = (
-    ('#2614ed', 'v'), ('#ff006e', 'o'), ('#8338ec', '*'), ('#ffe83d', '+'),
-    ('#22a5f1', 'X'), ('#45d40c', '2'), ('#f00fbf', 'p'), ('#000000', 's')
+    ('#45d40c', 's', 1), 
+    ('#ff006e', 'o', 1), ('#C703FC', 'v', 1), 
+    ('#9a92f7', '*', 1), ('#7367f4', '+', 1), ('#5446F1', 'X', 1), 
+    ('#4333F0', '2', 1), ('#2614ed', 'p', 1)
 )
 ###############################################################################
 # Load data
@@ -47,7 +53,7 @@ for i in range(8):
 
     for j in dSeries:
         plt.plot(range(1, shp[1]+1), j, 
-            alpha=.4, lw=2,
+            alpha=.7, lw=1,
             color=COLS[i][0]# , marker=COLS[i][1]
         )
 plt.vlines(
@@ -56,7 +62,7 @@ plt.vlines(
 )
 plt.hlines(
     np.arange(0, 1, .25), 1, 6, 
-    alpha=.25, lw=.2, ls='--'
+    alpha=.25, lw=.25, ls='--'
 )
 # ax.set_xticks([])
 # ax.set_yticks([])

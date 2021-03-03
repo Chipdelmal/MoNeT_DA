@@ -86,6 +86,6 @@ for (i, repFile) in enumerate(repFiles):
     STYLE['aspect'] = monet.scaleAspect(.15, STYLE)
     monet.exportTracesPlot(
             repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG, 
-            vLines=[tti, tto], wop=wop,
-            wopPrint=False
+            vLines=[0, 0],   # [tti, tto], 
+            wop=wop, wopPrint=False
         )
