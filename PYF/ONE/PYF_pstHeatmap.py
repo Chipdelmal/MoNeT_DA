@@ -37,8 +37,8 @@ elif FIG == 'B':
 (scalers, HD_DEP, _, _) = aux.selectDepVars(MOI, AOI, FIG=FIG)
 (ngdx, ngdy) = (5000, 5000)
 (lvls, mthd, xSca, ySca) = (
-        list(np.arange(-.05, 1.05, .1)),
-        'cubic', 'linear', 'linear'
+        list(np.arange(.50, 1, .05)),
+        'linear', 'linear', 'linear'
     )
 # Patch scalers for experiment id ---------------------------------------------
 sclr = [scalers[0], scalers[1], scalers[2]]
@@ -78,7 +78,8 @@ print(monet.CBBL, end='\r')
 ###########################################################################
 # print(idTuples)
 (xpNumC, xpId) = (0, idTuples[0])
-for (xpNumC, xpId) in enumerate(idTuples):
+# for (xpNumC, xpId) in enumerate(idTuples):
+for (xpNumC, xpId) in enumerate([(16, 18, 100, 0)]):
     xpNumCS = str(xpNumC+1).zfill(4)
     print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
     #######################################################################
