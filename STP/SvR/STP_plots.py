@@ -90,8 +90,8 @@ def plotMap(
         llcrnrlon=BLNG[0], urcrnrlon=BLNG[1],
     )
     if drawCoasts:
-        mH.drawcoastlines(color=COLORS[0], linewidth=2, zorder=-2)
-        mH.drawcoastlines(color=COLORS[3], linewidth=.25, zorder=-1)
+        mH.drawcoastlines(color=COLORS[0], linewidth=5, zorder=-2)
+        mH.drawcoastlines(color=COLORS[3], linewidth=.5, zorder=-1)
         mL.drawcoastlines(color=COLORS[4], linewidth=15, zorder=-3)
     # Lo-Res Basemap ----------------------------------------------------------
     mH.scatter(
