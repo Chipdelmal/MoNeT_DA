@@ -2,8 +2,6 @@
 
 Use of pgSIT technology on the [Onetahi](https://www.google.com/maps/place/Onetahi/@-17.0186371,-149.5998375,15z/data=!3m1!4b1!4m5!3m4!1s0x7690a7143905d5c1:0x428e6a6b59c3505c!8m2!3d-17.0188865!4d-149.5916056) island of the Tetiaroa atoll in French Polynesia.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Od2OibI8cfE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
-
 Data sources and sims:
 
 * [MGDrivE sim (scripts to generate datasets)](https://github.com/Chipdelmal/MGDrivE/tree/master/Main/pyf)
@@ -54,6 +52,6 @@ Go to `http://127.0.0.1:8050/`
 
 ## Outputs
 
-![](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/PYF_panel.png) <br><br>
+[![](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/PYF_panel.png)](https://youtu.be/h2L1HiNjqj8) <br><br>
 
 ![](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/PYF_cages.png)
