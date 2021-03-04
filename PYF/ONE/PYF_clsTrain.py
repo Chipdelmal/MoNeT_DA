@@ -52,7 +52,7 @@ for label in OUT_THS:
         ['i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat'],
         [label]
     )
-    (TREES, DEPTH) = (30, 15)
+    (TREES, DEPTH) = (30, 6)
     ID_MTR = ['CLN_HLT_{}_{}_qnt.csv'.format(MTR, i) for i in QNTS]
     ###########################################################################
     # Load and inspect dataset
