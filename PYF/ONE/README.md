@@ -34,7 +34,12 @@ Summary statistic files follow this naming convention:
 
 * `AOI_MOI_QNT_qnt.csv`
 
-Where the main **AOI** was **HLT** (presence of mosquitoes).
+Where the main **AOI** was **HLT** (presence of mosquitoes) and the outputs (labels) are:
+
+* **TTI, TTO, WOP**: Fraction's threshold for the metric to be true
+* **RAP**: Fraction of present genotypes at given points (days) of the simulation
+* **POE**: Probability of eliminating mosquitoes given the stochastic runs
+* **MNX**: Min/Max and days at which these are achieved
 
 ## Data Analysis Scripts
 
@@ -50,7 +55,7 @@ After running the [ML pipeline](./PYF_clsPipeline.sh), load the dashboard with:
 
 Go to `http://127.0.0.1:8050/`
 
-## Outputs
+<hr>
 
 [![](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/PYF_panel.png)](https://youtu.be/h2L1HiNjqj8) <br><br>
 

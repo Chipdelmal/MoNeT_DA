@@ -38,7 +38,19 @@ which launches the following scripts in order:
 1. [STP_clsPreprocess](./STP_clsPreprocess.py)
 1. [STP_clsTrain](./STP_clsTrain.py)
 
+Summary datasets are named as follows:
+
+* `D_SEX_AOI_MOI_QNT_qnt.csv`: Experiment set for each of sexes combinations in the releases.
+* `Full_AOI_MOI_QNT_qnt`: Collated dataset with sexes variable added as column.
+* `CLN_AOI_MOI_QNT_qnt`: Collated dataset with sexes variables one-hot encoded.
+
+For the **AOI** definitions, look at the []().
 
 ##  ASTMH Poster
 
 * [STP_cmprReleasesASTMH](./deprecated/STP_cmprReleasesASTMH.py)
+
+<hr>
+
+![](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/STP_PanelB.png)
+![](https://raw.githubusercontent.com/Chipdelmal/MoNeT/master/docs/media/STP_panelA.png)
