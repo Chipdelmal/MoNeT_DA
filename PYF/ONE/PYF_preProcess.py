@@ -13,7 +13,7 @@ if monet.isNotebook():
 else:
     (USR, DRV, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 ###############################################################################
-(FMT, OVW, JOB, MF) = ('bz2', True, 40, (True, True))
+(FMT, OVW, JOB, MF) = ('bz2', True, 25, (True, True))
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 if AOI == 'HLT':
