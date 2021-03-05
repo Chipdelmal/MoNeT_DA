@@ -13,8 +13,8 @@ Data sources and sims:
 Folders and files follow this naming convention:
 
 * `E_pop_ren_res_mad_mat`
-  * `pop`: Population size (male and female) per node
-  * `ren`: Number of weekly releases (x100)
+  * `pop`: Population size (male and female) per node (x1)
+  * `ren`: Number of weekly releases (x1)
   * `res`: Release size (fraction of the stable population x100)
   * `mad`: Adult lifespan reduction (x100)
   * `mat`: Male mating reduction (x100)
