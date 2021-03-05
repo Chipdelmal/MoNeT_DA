@@ -1,4 +1,4 @@
-# MoNeT2: Mosquito Networks Taskforce
+# MoNeT: Mosquito Networks Taskforce
 
 Codebase for the analysis on spatiotemporal analysis of gene drives realistic geographical settings. Designed to work in tandem with [MGDrivE](https://marshalllab.github.io/MGDrivE/) to provide the backbone of the data analysis pipelines.
 
