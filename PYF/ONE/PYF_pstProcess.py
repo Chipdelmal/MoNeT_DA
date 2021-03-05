@@ -13,7 +13,7 @@ import MoNeT_MGDrivE as monet
 import PYF_functions as fun
 
 if monet.isNotebook():
-    (USR, DRV, AOI, LND, QNT) = ('dsk', 'PGS', 'HLT', 'PAN', '50')
+    (USR, DRV, AOI, LND, QNT) = ('dsk', 'PGS', 'HLT', 'PAN', '90')
 else:
     (USR, DRV, AOI, LND, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]

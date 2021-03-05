@@ -32,7 +32,7 @@ monet.printExperimentHead(PT_DTA, PT_IMG, tS, 'PYF ClsExplore ')
 # Load Dataset
 ###############################################################################
 df = pd.read_csv(path.join(PT_MTR, ID_MTR))
-df['i_mos'] = (np.asarray(df['i_ren']) * np.asarray(df['i_res']))
+df['i_mos'] = (np.asarray(df['i_ren']) * np.asarray(df['i_ren']))
 cols = list(df.columns)
 x = df.values #returns a numpy array
 min_max_scaler = preprocessing.MinMaxScaler()

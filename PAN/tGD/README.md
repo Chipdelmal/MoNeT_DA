@@ -1,110 +1,39 @@
 # tGD Drive-out
 
-Scripts for the new idea for tGD
+Expanding upon the ideas presented on: ["A transcomplementing gene drive provides a flexible platform for laboratory investigation and potential field deployment"](https://www.researchgate.net/publication/338653394_A_transcomplementing_gene_drive_provides_a_flexible_platform_for_laboratory_investigation_and_potential_field_deployment)
+## Experiment Nomenclature
 
-```bash
-scp -rp lab:/RAID5/marshallShare/tGD/images/ '~/Desktop/tGD/images/'
-```
+Folders and files follow this naming convention:
 
-## DOWNLOAD
+* `E_hnf_cac_frc_hrt_ren_res`
+  * `hnf`: Homozygous non-functional cost @ Cas9 locus (x1000)
+  * `cac`: Cas9 allele cost (x100)
+  * `frc`: Functional resistant cost @ gRNA locus (x100)
+  * `hrt`: Homing rate (x100)
+  * `ren`: Number of weekly releases (x1)
+  * `res`: Size of releases (x1000)
 
-Download PREPROCESS folders:
+For the breakdown of the **AOI** sets, look at the gene definitions:
 
-```bash
-python tGD_dwdDta.py linkedDrive PREPROCESS *HLT*_rep.bz
-python tGD_dwdDta.py splitDrive PREPROCESS *HLT*_rep.bz
-python tGD_dwdDta.py tGD PREPROCESS *HLT*_rep.bz
-```
+* [ClvR](./tGD_gene_clvr.py)
+* [Linked Drive](./tGD_gene_linked.py)
+* [Split Drive](./tGD_gene_split.py)
+* [tGD](./tGD_gene_tGD.py)
 
-Download POSTPROCESS folders:
+Exported metrics (**MOI**) for the drive are:
 
-```bash
-python tGD_dwdDta.py linkedDrive POSTPROCESS *.csv
-python tGD_dwdDta.py splitDrive POSTPROCESS *csv
-python tGD_dwdDta.py tGD POSTPROCESS *.csv
-```
+* **WOP**: Total sum of time below the threshold
+* **TTI**: First break below the threshold
+* **TTO**: Last break below the threshold
+* **RAP**: Fraction of the population with the genes at given points of time
+* **MNX**: Minimum and maximum of genes in the population
 
-Download IMAGES folders:
+Summary statistic files follow this naming convention:
 
-```bash
-python tGD_dwdDta.py linkedDrive imgPst *Q90.png
-python tGD_dwdDta.py splitDrive imgPst *Q90.png
-python tGD_dwdDta.py tGD imgPst *Q90.png
-```
+* `AOI_MOI_QNT_qnt.csv`
 
-Download HEATMAPS:
+Where the main **AOI** was **HLT** (presence of mosquitoes) and the outputs (labels) are:
 
-```bash
-python tGD_dwdDta.py linkedDrive imgPst/ren_hnf None
-python tGD_dwdDta.py splitDrive imgPst/ren_hnf None
-python tGD_dwdDta.py tGD imgPst/ren_hnf None
-```
-
-
-## WIPE
-
-Wipe PREPROCESS folders:
-
-```bash
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/000/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/001/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/005/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/010/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/100/PREPROCESS;
-
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/000/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/001/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/005/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/010/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/100/PREPROCESS;
-
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/000/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/001/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/005/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/010/PREPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/100/PREPROCESS;
-```
-
-Wipe img folders:
-
-```bash
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/000/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/001/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/005/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/010/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/100/img;
-
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/000/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/001/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/005/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/010/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/100/img;
-
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/000/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/001/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/005/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/010/img;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/100/img;
-```
-
-Wipe PostProcess folders:
-
-```bash
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/000/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/001/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/005/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/010/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/linkedDrive/100/POSTPROCESS;
-
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/000/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/001/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/005/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/010/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/splitDrive/100/POSTPROCESS;
-
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/000/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/001/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/005/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/010/POSTPROCESS;
-rm -R /RAID5/marshallShare/tGD/fullSweep/tGD/100/POSTPROCESS;
-```
+* **TTI, TTO, WOP**: Fraction's threshold for the metric to be true
+* **RAP**: Fraction of present genotypes at given points (days) of the simulation
+* **MNX**: Min/Max and days at which these are achieved
