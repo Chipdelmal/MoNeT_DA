@@ -1,4 +1,4 @@
-# MoNeT2: Mosquito Networks Taskforce
+# MoNeT: Mosquito Networks Taskforce
 
 Codebase for the analysis on spatiotemporal analysis of gene drives realistic geographical settings. Designed to work in tandem with [MGDrivE](https://marshalllab.github.io/MGDrivE/) to provide the backbone of the data analysis pipelines.
 
@@ -16,13 +16,16 @@ Follow our [youtube playlist](https://www.youtube.com/watch?v=sZXuUtToszw&list=P
 
 ## Structure
 
-Analyses scripts are saved in a geographic structure, adhering as much to 3-letter country codes.
+Analyses scripts are saved in a geographic structure, adhering as much as possible to 3-letter country codes.
 
 * [AUS](./AUS): Australia
 * [PAN](./PAN): Panmictic or simple spatial topologies (lines, grids)
+  * [tGD](./PAN/tGD): Second iteration of the tGD
   * [YDR](./PAN/YDR): Y-Linked Drive
+  * [v2](./PAN/v2): Plots for the MGDrivE2 paper
 * [PYF](./PYF): French Polynesia 
 * [STP](./STP): São Tomé and Príncipe
+ * [SvR](./STP/SvR): Suppression versus replacement (both: panmictic and spatial)
 
 
 ![electronic mosquito](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/mosquito.png)

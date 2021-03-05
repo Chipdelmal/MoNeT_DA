@@ -13,7 +13,7 @@ import MoNeT_MGDrivE as monet
 import PYF_functions as fun
 
 if monet.isNotebook():
-    (USR, DRV, AOI, LND, QNT) = ('dsk', 'PGS', 'HLT', 'PAN', '75')
+    (USR, DRV, AOI, LND, QNT) = ('dsk', 'PGS', 'HLT', 'PAN', '50')
 else:
     (USR, DRV, AOI, LND, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -63,7 +63,7 @@ fPaths = sorted(glob(PT_OUT+ptrn))
 (fNum, digs) = monet.lenAndDigits(fPaths)
 qnt = float(int(QNT)/100)
 # Setup dataframes ------------------------------------------------------------
-outDFs = fun.initDFsForDA(fPaths, header, thiS, thoS, thwS, tapS)
+outDFs = monet.initDFsForDA(fPaths, header, thiS, thoS, thwS, tapS, POE=True)
 (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF) = outDFs
 ###############################################################################
 # Iterate through experiments
