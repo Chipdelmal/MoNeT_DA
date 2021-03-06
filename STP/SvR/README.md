@@ -23,6 +23,39 @@ This should auto-run the factorial and place the results in the RAID5 drive. Aft
 1. Run [STP_preVideo.sh](./STP_preVideo.sh) for desired videos (probably HLT)
 1. Run [STP_pstProcess.sh](./STP_pstProcess.sh) for HLT, WLD, TRS post process
 
+
+##  Experiments Nomenclature
+
+Folders and files follow this naming convention:
+
+* `E_rer_ren_rsg_fic_gsv`
+  * `rer`: Release ratio (x1e8)
+  * `ren`: Number of weekly releases (x1)
+  * `rsg`: In and out of frame resistance generation (x1e8)
+  * `fic`: Trans-gene fitness cost (x1e8)
+  * `gsv`: Genetic standing variation (x1e8)
+
+
+For the breakdown of the **AOI** sets, look at the gene definitions [STP](./STP_gene_LDR.py).
+
+Exported metrics (**MOI**) for the drive are:
+
+* **WOP**: Total sum of time below the threshold
+* **TTI**: First break below the threshold
+* **TTO**: Last break below the threshold
+* **RAP**: Fraction of the population with the genes at given points of time
+* **MNX**: Minimum and maximum of genes in the population
+
+Summary statistic files follow this naming convention:
+
+* `AOI_MOI_QNT_qnt.csv`
+
+Where the main **AOI** was **HLT** (presence of mosquitoes) and the outputs (labels) are:
+
+* **TTI, TTO, WOP**: Fraction's threshold for the metric to be true
+* **RAP**: Fraction of present genotypes at given points (days) of the simulation
+* **MNX**: Min/Max and days at which these are achieved
+
 ##  Classifier
 
 To put all the data through the ML classification pipeline, run:
