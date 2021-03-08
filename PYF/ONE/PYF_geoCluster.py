@@ -33,7 +33,6 @@ else:
     PTH_ROT = '/home/chipdelmal/Documents/WorkSims/PYF/Onetahi/GEO/'
 PTH_PTS = PTH_ROT
 filename = 'Onetahi.csv'
-# kernelName = 'kernel_cluster_v5.csv'
 SHPFS = ('bh400kc3500', 'Onetahi')
 (COLORS, DPI) = (plo.COLORS, 500)
 ###############################################################################

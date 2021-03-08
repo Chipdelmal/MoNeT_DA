@@ -32,7 +32,7 @@ BASE_MAP = False
 if LND==0:
     # 265
     fldr = 'cluster_1'
-    fname = ('kernel_cluster_v5.csv', 'stp_cluster_sites_pop_v5_fixed.csv')
+    fname = ('kernel_cluster_v6b.csv', 'stp_cluster_sites_pop_v5_fixed.csv')
 elif LND==1:
     # 106
     fldr = 'cluster_2'

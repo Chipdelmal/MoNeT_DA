@@ -17,7 +17,7 @@ import STP_functions as fun
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('dsk', '505', 30)
+    (USR, REL, CLS) = ('dsk', '265', 30)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 ###############################################################################
@@ -32,8 +32,8 @@ else:
 if REL == '265':
     PTH_PTS = PTH_ROT + 'cluster_1/'
     filename = 'stp_cluster_sites_pop_v5_fixed.csv'
-    kernelName = 'kernel_cluster_v5.csv'
-    notAccessible = {51, 216, 239, 241, 244}
+    kernelName = 'kernel_cluster_v6a.csv'
+    notAccessible = {51, 239}
 elif REL == '106':
     PTH_PTS = PTH_ROT + 'cluster_2/'
     filename = 'stp_cluster_sites_pop_01_v5_fixed.csv'
