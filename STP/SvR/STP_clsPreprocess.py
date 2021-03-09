@@ -9,18 +9,26 @@ import pandas as pd
 import MoNeT_MGDrivE as monet
 from sklearn.preprocessing import LabelBinarizer
 
-
-(MTR, QNT) = (sys.argv[1], sys.argv[2])
-# (MTR, QNT) = ('WOP', '50')
+if monet.isNotebook():
+    (MTR, QNT) = ('TTO', '90')
+else:
+    (MTR, QNT) = (sys.argv[1], sys.argv[2])
 ###############################################################################
 # Setup constants (user input)
 ###############################################################################
-OPRAN = ((0, 1), (1, 2), (2, 3), (3, 4), (4, 10))
+if MTR == 'WOP':
+    OPRAN = ((0, 1), (1, 2), (2, 3), (3, 4), (4, 15))
+elif MTR == 'TTI':
+    OPRAN = ((0, .25), (.25, .5), (.5, .75), (.75, 1), (1, 15))
+elif MTR == 'TTO':
+    OPRAN = ((0, 2), (2, 4), (4, 6), (6, 9), (9, 15))
+# Sex categories --------------------------------------------------------------
 SEX_CATS = {
     'male': (0, 'i_smx'), 
     'gravidFemale': (1, 'i_sgv'), 
     'nonGravidFemale': (2, 'i_sgn')
 }
+# Data types ------------------------------------------------------------------
 (DTA_ITYPES, DTA_OTYPES) = (
     {
         'i_ren': 'int8', 'i_smx': np.bool_,

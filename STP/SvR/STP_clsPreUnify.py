@@ -11,8 +11,10 @@ import STP_dataAnalysis as da
 import matplotlib.pyplot as plt
 
 
-(MTR, QNT) = (sys.argv[1], sys.argv[2])
-# (MTR,  QNT) = ('WOP', '85')
+if monet.isNotebook():
+    (MTR,  QNT) = ('MNX', '90')
+else:
+    (MTR, QNT) = (sys.argv[1], sys.argv[2])
 (ERR, OVW) = (False, True)
 ID_MTR = 'HLT_{}_{}_qnt.csv'.format(MTR, QNT)
 EXPS = ('male', 'gravidFemale', 'nonGravidFemale')

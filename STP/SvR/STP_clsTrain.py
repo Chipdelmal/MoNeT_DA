@@ -16,11 +16,12 @@ import MoNeT_MGDrivE as monet
 from contextlib import redirect_stdout
 
 
-
-(MTR, THS, VT_SPLIT, KFOLD) = (
-    sys.argv[1], sys.argv[2], float(sys.argv[3]), int(sys.argv[4])
-)
-# (MTR, THS) = ('WOP', '0.1')
+if monet.isNotebook():
+    (MTR, THS, VT_SPLIT, KFOLD) = ('WOP', '0.5', '0.5', '50')
+else:
+    (MTR, THS, VT_SPLIT, KFOLD) = (
+        sys.argv[1], sys.argv[2], float(sys.argv[3]), int(sys.argv[4])
+    )
 QNTS = ['50', '70', '75', '85', '90', '95']
 OUT_THS = ['0.05', '0.1', '0.25', '0.5']
 for label in OUT_THS:

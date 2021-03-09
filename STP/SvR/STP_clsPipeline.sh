@@ -1,12 +1,16 @@
 #!/bin/bash
 
+# MTR="WOP"
+# THS="0.5"
+# VT_SPLIT="0.3"
+# KFOLD="50"
 
-MTR="WOP"
-THS="0.5"
-VT_SPLIT="0.5"
+MTR=$1
+THS=$2
+VT_SPLIT="0.3"
 KFOLD="50"
 
-declare -a quantiles=("50" "70" "75" "85" "90" "95")
+declare -a quantiles=("50" "75" "90")
 for QNT in ${quantiles[@]}; do
    python STP_clsPreUnify.py $MTR $QNT
    python STP_clsPreprocess.py $MTR $QNT
