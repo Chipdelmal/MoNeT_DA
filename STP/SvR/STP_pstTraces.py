@@ -14,8 +14,10 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-(USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
-# (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', '106', 'SPA')
+if monet.isNotebook():
+    (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', 'gravidFemale', 'PAN')
+else:
+    (USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
 (SKP, THS, QNT, OVW, FZ) = (False, '0.1', '75', True, True)
 tStable = 90
 
@@ -36,8 +38,12 @@ monet.printExperimentHead(PT_ROT, PT_PRE, tS, 'UCIMI PstTraces '+AOI)
 # Load postprocessed files
 ###########################################################################
 pstPat = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
-pstFiles = [pstPat.format(i) for i in ('TTI', 'TTO', 'WOP', 'MNX', 'RAP')]
-(dfTTI, dfTTO, dfWOP, dfMNX, _) = [pd.read_csv(i) for i in pstFiles]
+pstFiles = [
+    pstPat.format(i) for i in ('TTI', 'TTO', 'WOP', 'MNX', 'RAP', 'POE', 'CPT')
+]
+(dfTTI, dfTTO, dfWOP, dfMNX, dfRAP, dfPOE, dfCPT) = [
+    pd.read_csv(i) for i in pstFiles
+]
 ###########################################################################
 # Load preprocessed files lists
 ###########################################################################
@@ -45,7 +51,7 @@ pstFiles = [pstPat.format(i) for i in ('TTI', 'TTO', 'WOP', 'MNX', 'RAP')]
 if FZ:
     fltrPattern = PT_PRE+'*_00_*'+AOI+'*srp*'
 repFiles = monet.getFilteredFiles(fltrPattern, globPattern)
-# print(repFiles)
+repFiles.reverse()
 ###########################################################################
 # Iterate through experiments
 ###########################################################################
@@ -59,16 +65,26 @@ for (i, repFile) in enumerate(repFiles):
             pkl.load(repFile),
             fun.getXpId(repFile, (1, 2, 3, 4, 5, 7))
         )
-    xpRow = [da.filterDFWithID(i, xpid) for i in (dfTTI, dfTTO, dfWOP, dfMNX)]
+    xpRow = [
+        da.filterDFWithID(i, xpid) for i in (
+            dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT
+        )
+    ]
     (tti, tto, wop) = [float(row[THS]) for row in xpRow[:3]]
-    (mnf, mnd) = (float(xpRow[3]['min']), float(xpRow[3]['minx']))
+    (mnf, mnd, poe, cpt) = (
+        float(xpRow[3]['min']), float(xpRow[3]['minx']), 
+        float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
+    )
     # Traces ------------------------------------------------------------------
     pop = repDta['landscapes'][0][tStable][-1]
-    STYLE['yRange'] = (0,  pop+pop*.2)
+    STYLE['yRange'] = (0,  pop+pop*1.25)
     if AOI == 'ECO':
         STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     plot.exportTracesPlot(
-            repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-            vLines=[tti, tto, mnd], hLines=[mnf*pop], wop=wop
-        )
+        repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
+        vLines=[tti, tto, mnd], hLines=[mnf*pop], 
+        wop=wop, wopPrint=True, 
+        cpt=cpt, cptPrint=True,
+        poe=poe, poePrint=True
+    )

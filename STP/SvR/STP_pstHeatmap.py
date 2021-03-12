@@ -37,7 +37,7 @@ monet.makeFolder(PT_IMG)
 PT_IMG = PT_IMG+'-'.join(HD_IND)+'/'
 monet.makeFolder(PT_IMG)
 tS = datetime.now()
-aux.printExperimentHead(PT_ROT, PT_IMG, PT_MTR, tS, 'Heatmap '+AOI)
+monet.printExperimentHead(PT_ROT, PT_IMG, PT_MTR, tS, 'Heatmap '+AOI)
 ###########################################################################
 # Analyses
 ###########################################################################
