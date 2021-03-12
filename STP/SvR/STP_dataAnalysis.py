@@ -66,3 +66,45 @@ def geneCountsToFractions(popCountsArray):
 def aggCentroids(AGG_lonlats):
     centroids = [(np.mean(i[:, 0]), np.mean(i[:, 1])) for i in AGG_lonlats]
     return np.asarray(centroids)
+
+
+
+
+def initDFsForDA(
+            fPaths, header, thiS, thoS, thwS, ttpS,
+            peak=['min', 'minx', 'max', 'maxx'],
+            POE=False, poe=['POE', 'POF'],
+            CPT=False, cpt=['CPT']
+        ):
+    fNum = len(fPaths)
+    if (POE and not CPT):
+        heads = [list(header)+i for i in (thiS, thoS, thwS, ttpS, peak, poe)]
+    elif (CPT and not POE): 
+        heads = [list(header)+i for i in (thiS, thoS, thwS, ttpS, peak, cpt)]
+    elif (POE and CPT):
+        heads = [
+            list(header)+i for i in (thiS, thoS, thwS, ttpS, peak, poe, cpt)
+        ]
+    else:
+        heads = [list(header)+i for i in (thiS, thoS, thwS, ttpS, peak)]
+    DFEmpty = [pd.DataFrame(int(0), index=range(fNum), columns=h) for h in heads]
+    return DFEmpty
+
+
+def calcPOE(repRto, finalDay=-1, thresholds=(.025, .975)):
+    (reps, days) = repRto.shape
+    if finalDay == -1:
+        fD = -1
+    else:
+        fD = finalDay
+    fR = [rep[fD] for rep in repRto]
+    (loTh, hiTh) = (
+        [j < thresholds[0] for j in fR],
+        [j > thresholds[1] for j in fR]
+    )
+    (pLo, pHi) = (sum(loTh)/reps, sum(hiTh)/reps)
+    return (pLo, pHi)
+
+
+def calcCPT(repRto):
+    return [np.sum(i)/repRto.shape[1] for i in repRto]

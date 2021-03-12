@@ -30,7 +30,7 @@ rf = load(PTH_MOD)
 # Probes
 #   ['i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic']
 ###############################################################################
-inProbe = [[.1, 1, 5, .5, 1e-3, .001]]
+inProbe = [[True, False, False, .1, 1, 5, .5, 1e-3, .001]]
 # Classify and get probs ------------------------------------------------------
 i=0
 className = rf.predict(inProbe)

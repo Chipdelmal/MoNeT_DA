@@ -6,14 +6,16 @@ import numpy as np
 from glob import glob
 import STP_aux as aux
 import STP_functions as fun
-# import STP_dataProcess as da
+import STP_dataAnalysis as da
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-(USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-# (USR, AOI, REL, LND) = ('dsk', 'HLT', 'gravidFemale', 'PAN')
+if monet.isNotebook():
+    (USR, AOI, REL, LND) = ('dsk', 'HLT', 'gravidFemale', 'PAN')
+else:
+    (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 (DRV, QNT, mlr) = ('LDR', '75', True)
 (thiS, thoS, thwS, tapS) = (
         [.05, .10, .25, .50, .75, .90, .95],
@@ -26,7 +28,7 @@ import compress_pickle as pkl
         ('i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv', 'i_grp'),
         (1, 2, 3, 4, 5, 7)
     )
-outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX')
+outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT')
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 ###############################################################################
 # Setup schemes
@@ -39,19 +41,21 @@ DFOPths = [pth.format(z) for z in outLabels]
 # Setup experiments IDs -------------------------------------------------------
 uids = fun.getExperimentsIDSets(PT_OUT, skip=-1)
 (rer, ren, rsg, fic, gsv, aoi, grp) = uids[1:]
-(xpDict, smryDicts) = ({}, ({}, {}, {}, {}, {}))
+(xpDict, smryDicts) = ({}, ({}, {}, {}, {}, {}, {}, {}))
 # Get experiment files --------------------------------------------------------
 ptrn = aux.XP_NPAT.format('*', '*', '*', '*', '*', AOI, '*', 'rto', 'npy')
 fPaths = sorted(glob(PT_OUT+ptrn))
 (fNum, digs) = monet.lenAndDigits(fPaths)
 qnt = float(int(QNT)/100)
 # Setup dataframes ------------------------------------------------------------
-outDFs = monet.initDFsForDA(fPaths, header, thiS, thoS, thwS, tapS)
-(ttiDF, ttoDF, wopDF, tapDF, rapDF) = outDFs
+outDFs = da.initDFsForDA(
+    fPaths, header, thiS, thoS, thwS, tapS, POE=True, CPT=True
+)
 ###############################################################################
 # Iterate through experiments
 ###############################################################################
 fmtStr = '{}+ File: {}/{}'
+(i, fPath) = (0, fPaths[0])
 for (i, fPath) in enumerate(fPaths):
     repRto = np.load(fPath)
     (reps, days) = repRto.shape
@@ -66,6 +70,8 @@ for (i, fPath) in enumerate(fPaths):
         )
     (minS, maxS, _, _) = monet.calcMinMax(repRto)
     rapS = monet.getRatioAtTime(repRto, tapS)
+    poe = da.calcPOE(repRto)
+    cpt = da.calcCPT(repRto)
     #######################################################################
     # Calculate Quantiles
     #######################################################################
@@ -75,11 +81,17 @@ for (i, fPath) in enumerate(fPaths):
     rapSQ = [np.nanquantile(rap, qnt) for rap in rapS]
     mniSQ = (np.nanquantile(minS[0], qnt), np.nanquantile(minS[1], qnt))
     mnxSQ = (np.nanquantile(maxS[0], qnt), np.nanquantile(maxS[1], 1-qnt))
+    cptSQ = (np.nanquantile(cpt, qnt))
     #######################################################################
     # Update in Dataframes
     #######################################################################
     xpid = fun.getXpId(fPath, xpidIx)
-    updates = [xpid+i for i in (ttiSQ, ttoSQ, wopSQ, rapSQ, list(mniSQ)+list(mnxSQ))]
+    updates = [
+        xpid+i for i in (
+                ttiSQ, ttoSQ, wopSQ, rapSQ, 
+                list(mniSQ)+list(mnxSQ), list(poe), [cptSQ]
+            )
+    ]
     for df in zip(outDFs, updates):
         df[0].iloc[i] = df[1]
     #######################################################################
@@ -94,7 +106,9 @@ for (i, fPath) in enumerate(fPaths):
                 {
                     'mnl': minS[0], 'mnd': minS[1],
                     'mxl': maxS[0], 'mxd': maxS[1]
-                }
+                },
+                {'POE': poe},
+                {'CPT': cpt}
             ]
         for dct in zip(smryDicts, outDict):
             dct[0][tuple(xpid)] = dct[1]
