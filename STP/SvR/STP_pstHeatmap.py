@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 
 
 # (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, AOI, REL, LND, MOI) = ('dsk', 'HLT', 'gravidFemale', 'PAN', 'CPT')
+(USR, AOI, REL, LND, MOI) = ('dsk', 'HLT', 'gravidFemale', 'PAN', 'DER')
 (DRV, FMT, QNT, OVW) = ('LDR', 'bz2', '75', True)
 # Select surface variables ----------------------------------------------------
 HD_IND = ['i_ren', 'i_fic']
