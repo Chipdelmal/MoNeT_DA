@@ -3,6 +3,7 @@
 
 import sys
 import warnings
+import numpy as np
 import STP_aux as aux
 import STP_functions as fun
 from itertools import product
@@ -13,14 +14,14 @@ warnings.filterwarnings("ignore")
 
 
 # (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, AOI, REL, LND, MOI) = ('dsk', 'HLT', 'gravidFemale', 'PAN', 'DER')
+(USR, AOI, REL, LND, MOI) = ('dsk', 'HLT', 'gravidFemale', 'PAN', 'CPT')
 (DRV, FMT, QNT, OVW) = ('LDR', 'bz2', '75', True)
 # Select surface variables ----------------------------------------------------
 HD_IND = ['i_ren', 'i_fic']
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (5000, 5000)
 (lvls, mthd, xSca, ySca) = (
-        [-.1, 0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1, 1.1],
+        np.arange(-.05, 1.05, 0.1),
         'linear', 'linear', 'linear'
     )
 xRan = (1E-8, 1E-1)
@@ -83,12 +84,12 @@ for (xpNumC, xpId) in enumerate(idTuples):
     (fig, ax) = plt.subplots(figsize=(8, 7))
     # Experiment points, contour lines, response surface
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=1, alpha=.5)
+    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # Figure Modifiers ----------------------------------------------------
     # cs.cmap.set_over('#000000')
     sz = fig.get_size_inches()[0]
-    # ax.set(xscale=xSca, yscale="linear")
+    ax.set(xscale=xSca, yscale=ySca)
     # Colorbar
     cbar = fig.colorbar(cs)
     cbar.ax.get_yaxis().labelpad = 25
@@ -107,7 +108,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     ax.grid(which='both', axis='y', lw=.1, alpha=0.1, color=(0, 0, 0))
     ax.grid(which='minor', axis='x', lw=.1, alpha=0.1, color=(0, 0, 0))
     # Limits
-    # plt.xlim(a[0], a[1])
+    # plt.xlim(a[0]/sclr[0], a[1]/sclr[1])
     # plt.ylim(b[0], b[1])
     # Title
     xpStr = [

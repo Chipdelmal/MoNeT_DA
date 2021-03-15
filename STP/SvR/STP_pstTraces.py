@@ -18,7 +18,7 @@ if monet.isNotebook():
     (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', 'gravidFemale', 'PAN')
 else:
     (USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
-(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '75', True, True)
+(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '90', True, True)
 tStable = 90
 
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
@@ -77,7 +77,7 @@ for (i, repFile) in enumerate(repFiles):
     )
     # Traces ------------------------------------------------------------------
     pop = repDta['landscapes'][0][tStable][-1]
-    STYLE['yRange'] = (0,  pop+pop*1.25)
+    STYLE['yRange'] = (0,  pop+pop*.5)
     if AOI == 'ECO':
         STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)

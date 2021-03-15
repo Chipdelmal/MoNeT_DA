@@ -13,10 +13,12 @@ import compress_pickle as pkl
 from itertools import groupby
 
 if monet.isNotebook():
-    (USR, AOI, REL, LND) = ('dsk', 'HLT', 'gravidFemale', 'PAN')
+    (USR, AOI, REL, LND, QNT) = ('dsk', 'HLT', 'gravidFemale', 'PAN', '75')
 else:
-    (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(DRV, QNT, mlr) = ('LDR', '75', True)
+    (USR, AOI, REL, LND, QNT) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    )
+(DRV, QNT, mlr) = ('LDR', True)
 (thiS, thoS, thwS, tapS) = (
         [.05, .10, .25, .50, .75, .90, .95],
         [.05, .10, .25, .50, .75, .90, .95],
