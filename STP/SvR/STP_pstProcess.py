@@ -10,7 +10,7 @@ import STP_dataAnalysis as da
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
-
+from itertools import groupby
 
 if monet.isNotebook():
     (USR, AOI, REL, LND) = ('dsk', 'HLT', 'gravidFemale', 'PAN')
@@ -55,11 +55,14 @@ outDFs = da.initDFsForDA(
 # Iterate through experiments
 ###############################################################################
 fmtStr = '{}+ File: {}/{}'
-(i, fPath) = (0, fPaths[0])
+(i, fPath) = (0, fPaths[-1])
 for (i, fPath) in enumerate(fPaths):
     repRto = np.load(fPath)
     (reps, days) = repRto.shape
-    print(fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), end='\r')
+    print(
+        fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), 
+        end='\r'
+    )
     #######################################################################
     # Calculate Metrics
     #######################################################################
@@ -72,6 +75,7 @@ for (i, fPath) in enumerate(fPaths):
     rapS = monet.getRatioAtTime(repRto, tapS)
     poe = da.calcPOE(repRto)
     cpt = da.calcCPT(repRto)
+    der = da.calcDER(repRto, smoothing=10, magnitude=0.1)
     #######################################################################
     # Calculate Quantiles
     #######################################################################
@@ -82,6 +86,7 @@ for (i, fPath) in enumerate(fPaths):
     mniSQ = (np.nanquantile(minS[0], qnt), np.nanquantile(minS[1], qnt))
     mnxSQ = (np.nanquantile(maxS[0], qnt), np.nanquantile(maxS[1], 1-qnt))
     cptSQ = (np.nanquantile(cpt, qnt))
+    derSQ = (np.nanquantile(der, qnt))
     #######################################################################
     # Update in Dataframes
     #######################################################################
@@ -122,3 +127,8 @@ if mlr:
         lbl = outLabels[i]
         pth = PT_MTR+AOI+'_'+lbl+'_'+QNT+'_mlr.bz'
         pkl.dump(dict, pth, compression='bz2')
+
+
+
+
+

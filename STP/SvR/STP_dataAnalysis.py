@@ -108,3 +108,24 @@ def calcPOE(repRto, finalDay=-1, thresholds=(.025, .975)):
 
 def calcCPT(repRto):
     return [np.sum(i)/repRto.shape[1] for i in repRto]
+
+
+def moving_average(x, w):
+    return np.convolve(x, np.ones(w), 'full') / w
+
+
+def smoothDerivative(tSeries, smoothing=10):
+    smooth = moving_average(tSeries, smoothing)
+    gradient = np.gradient(smooth)
+    return gradient
+
+
+def popDerivative(tSeries, smoothing=10, magnitude=.01):
+    gradient = smoothDerivative(tSeries, smoothing)
+    zero_crossings = np.where(np.diff(np.sign(gradient)))[0]
+    mag = [True if abs(x) > magnitude else False for x in gradient]
+    return sum([a & b for (a,b) in zip(mag, zero_crossings)])
+
+
+def calcDER(repRto, smoothing=10, magnitude=.01):
+    return [popDerivative(i, smoothing, magnitude) for i in repRto]
