@@ -28,7 +28,7 @@ else:
         ('i_rer', 'i_ren', 'i_rsg', 'i_fic', 'i_gsv', 'i_grp'),
         (1, 2, 3, 4, 5, 7)
     )
-outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT')
+outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER')
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
 ###############################################################################
 # Setup schemes

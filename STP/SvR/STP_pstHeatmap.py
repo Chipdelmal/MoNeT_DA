@@ -13,8 +13,8 @@ warnings.filterwarnings("ignore")
 
 
 # (USR, AOI, REL, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(USR, AOI, REL, LND, MOI) = ('dsk', 'HLT', 'mixed', 'PAN', 'WOP')
-(DRV, FMT, QNT, OVW) = ('LDR', 'bz2', '50', True)
+(USR, AOI, REL, LND, MOI) = ('dsk', 'HLT', 'gravidFemale', 'PAN', 'CPT')
+(DRV, FMT, QNT, OVW) = ('LDR', 'bz2', '75', True)
 # Select surface variables ----------------------------------------------------
 HD_IND = ['i_ren', 'i_fic']
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
@@ -37,7 +37,7 @@ monet.makeFolder(PT_IMG)
 PT_IMG = PT_IMG+'-'.join(HD_IND)+'/'
 monet.makeFolder(PT_IMG)
 tS = datetime.now()
-monet.printExperimentHead(PT_ROT, PT_IMG, PT_MTR, tS, 'Heatmap '+AOI)
+monet.printExperimentHead(PT_MTR, PT_IMG, tS, 'Heatmap '+AOI)
 ###########################################################################
 # Analyses
 ###########################################################################
@@ -53,6 +53,7 @@ hdFree = [col for col in headerInd if col not in HD_IND]
 # Get the unique IDs of the experiments
 uniqueIds = [uniqueValues.get(head) for head in hdFree]
 idTuples = list(product(*uniqueIds))
+idTuples.reverse()
 # Loop here xpId = idTuples[0]
 xpNum = len(idTuples)
 xpNumS = str(xpNum).zfill(4)
@@ -60,6 +61,7 @@ print(monet.CBBL, end='\r')
 ###########################################################################
 # Analyzes
 ###########################################################################
+(xpNumC, xpId) = (0, idTuples[0])
 for (xpNumC, xpId) in enumerate(idTuples):
     xpNumCS = str(xpNumC+1).zfill(4)
     print('* Exporting {}/{}'.format(xpNumCS, xpNumS), end='\r')
@@ -105,7 +107,7 @@ for (xpNumC, xpId) in enumerate(idTuples):
     ax.grid(which='both', axis='y', lw=.1, alpha=0.1, color=(0, 0, 0))
     ax.grid(which='minor', axis='x', lw=.1, alpha=0.1, color=(0, 0, 0))
     # Limits
-    # plt.xlim(xRan[0], xRan[1])
+    # plt.xlim(a[0], a[1])
     # plt.ylim(b[0], b[1])
     # Title
     xpStr = [

@@ -49,6 +49,12 @@ def selectDepVars(MOI, AOI):
     elif (MOI == 'MNX'):
         scalers = [1, 100, 1]
         (HD_DEP, IND_RAN) = ('min', 7)
+    elif (MOI == 'POE'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('POE', 1) 
+    elif (MOI == 'CPT'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('CPT', 1) 
     # Color Mapping -----------------------------------------------------------
     if AOI == 'HLT':
         cmap = monet.cmapC
