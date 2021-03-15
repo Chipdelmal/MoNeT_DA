@@ -74,7 +74,7 @@ def initDFsForDA(
             fPaths, header, thiS, thoS, thwS, ttpS,
             peak=['min', 'minx', 'max', 'maxx'],
             POE=False, poe=['POE', 'POF'],
-            CPT=False, cpt=['CPT']
+            CPT=False, cpt=['CPT'], der=['DER']
         ):
     fNum = len(fPaths)
     if (POE and not CPT):
@@ -83,7 +83,9 @@ def initDFsForDA(
         heads = [list(header)+i for i in (thiS, thoS, thwS, ttpS, peak, cpt)]
     elif (POE and CPT):
         heads = [
-            list(header)+i for i in (thiS, thoS, thwS, ttpS, peak, poe, cpt)
+            list(header)+i for i in (
+                thiS, thoS, thwS, ttpS, peak, poe, cpt, der
+            )
         ]
     else:
         heads = [list(header)+i for i in (thiS, thoS, thwS, ttpS, peak)]

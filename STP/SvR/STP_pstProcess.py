@@ -94,7 +94,7 @@ for (i, fPath) in enumerate(fPaths):
     updates = [
         xpid+i for i in (
                 ttiSQ, ttoSQ, wopSQ, rapSQ, 
-                list(mniSQ)+list(mnxSQ), list(poe), [cptSQ]
+                list(mniSQ)+list(mnxSQ), list(poe), [cptSQ], [derSQ]
             )
     ]
     for df in zip(outDFs, updates):
@@ -113,7 +113,8 @@ for (i, fPath) in enumerate(fPaths):
                     'mxl': maxS[0], 'mxd': maxS[1]
                 },
                 {'POE': poe},
-                {'CPT': cpt}
+                {'CPT': cpt},
+                {'DER': der}
             ]
         for dct in zip(smryDicts, outDict):
             dct[0][tuple(xpid)] = dct[1]
