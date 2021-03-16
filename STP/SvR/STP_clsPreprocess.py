@@ -10,7 +10,7 @@ import MoNeT_MGDrivE as monet
 from sklearn.preprocessing import LabelBinarizer
 
 if monet.isNotebook():
-    (MTR, QNT) = ('TTO', '90')
+    (MTR, QNT) = ('CPT', '50')
 else:
     (MTR, QNT) = (sys.argv[1], sys.argv[2])
 ###############################################################################
@@ -22,6 +22,8 @@ elif MTR == 'TTI':
     OPRAN = ((0, .15), (.15, .25), (.25, .5), (.5, 3), (3, 15))
 elif MTR == 'TTO':
     OPRAN = ((0, 2), (2, 4), (4, 6), (6, 9), (9, 15))
+elif MTR == 'CPT':
+    OPRAN = ((0, .2), (.2 , .4), (.4, .6), (.6, .8), (.8, 1))
 # Sex categories --------------------------------------------------------------
 SEX_CATS = {
     'male': (0, 'i_smx'), 

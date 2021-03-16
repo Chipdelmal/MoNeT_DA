@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 
 
 if monet.isNotebook():
-    (MTR, QNT) = ('WOP', '90')
+    (MTR, QNT) = ('CPT', '50')
 else:
     (MTR, QNT) = (sys.argv[1], sys.argv[2])
 (FEATS, LABLS) = (
