@@ -4,7 +4,7 @@ import numpy as np
 from treeinterpreter import treeinterpreter as ti
 
 
-(MTR, QNT, JOBS) = ('WOP', '90', 4)
+(MTR, QNT, JOBS) = ('WOP', '50', 4)
 (FEATS, LABLS) = (
     [
         'i_smx', 'i_sgv', 'i_sgn',

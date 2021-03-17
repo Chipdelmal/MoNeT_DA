@@ -18,7 +18,7 @@ else:
     (USR, AOI, REL, LND, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-(DRV, QNT, mlr) = ('LDR', True)
+(DRV, mlr) = ('LDR', True)
 (thiS, thoS, thwS, tapS) = (
         [.05, .10, .25, .50, .75, .90, .95],
         [.05, .10, .25, .50, .75, .90, .95],
@@ -50,7 +50,7 @@ fPaths = sorted(glob(PT_OUT+ptrn))
 (fNum, digs) = monet.lenAndDigits(fPaths)
 qnt = float(int(QNT)/100)
 # Setup dataframes ------------------------------------------------------------
-outDFs = da.initDFsForDA(
+outDFs = monet.initDFsForDA(
     fPaths, header, thiS, thoS, thwS, tapS, POE=True, CPT=True
 )
 ###############################################################################
@@ -75,9 +75,9 @@ for (i, fPath) in enumerate(fPaths):
         )
     (minS, maxS, _, _) = monet.calcMinMax(repRto)
     rapS = monet.getRatioAtTime(repRto, tapS)
-    poe = da.calcPOE(repRto)
-    cpt = da.calcCPT(repRto)
-    der = da.calcDER(repRto, smoothing=10, magnitude=0.1)
+    poe = monet.calcPOE(repRto)
+    cpt = monet.calcCPT(repRto)
+    der = monet.calcDER(repRto, smoothing=10, magnitude=0.1)
     #######################################################################
     # Calculate Quantiles
     #######################################################################

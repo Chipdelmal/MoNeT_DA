@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 
 if monet.isNotebook():
-    (MTR,  QNT) = ('MNX', '90')
+    (MTR,  QNT) = ('CPT', '50')
 else:
     (MTR, QNT) = (sys.argv[1], sys.argv[2])
 (ERR, OVW) = (False, True)
