@@ -4,13 +4,13 @@ import numpy as np
 from treeinterpreter import treeinterpreter as ti
 
 
-(MTR, QNT, JOBS) = ('WOP', '50', 4)
+(MTR, QNT, JOBS) = ('CPT', '50', 4)
 (FEATS, LABLS) = (
     [
         'i_smx', 'i_sgv', 'i_sgn',
         'i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic'
     ],
-    ['0.1']
+    ['0.5']
 )
 ###############################################################################
 # Create directories structure
@@ -28,9 +28,12 @@ PTH_MOD = PT_MOD+ID_MTR[4:-10]+str(int(float(LABLS[0])*100))+'_RF.joblib'
 rf = load(PTH_MOD)
 ###############################################################################
 # Probes
-#   ['i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic']
+#   'i_smx', 'i_sgv', 'i_sgn', 'i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic'
 ###############################################################################
-inProbe = [[True, False, False, .1, 1, 5, .5, 1e-3, .001]]
+(smx, sgv, sgn) = (True, False, False)
+(rer, ren) = (1, 1)
+(rsg, gsv, fic) = (0, .0001, 0.75)
+inProbe = [[smx, sgv, sgn, rsg, rer, ren, int(QNT), gsv, fic]]
 # Classify and get probs ------------------------------------------------------
 i=0
 className = rf.predict(inProbe)
