@@ -17,7 +17,7 @@ from contextlib import redirect_stdout
 
 
 if monet.isNotebook():
-    (MTR, THS, VT_SPLIT, KFOLD, QNT) = ('CPT', '0.5', '0.5', '50', '50')
+    (MTR, THS, VT_SPLIT, KFOLD, QNT) = ('WOP', '0.5', '0.5', '50', '50')
 else:
     (MTR, THS, VT_SPLIT, KFOLD, QNT) = (
         sys.argv[1], sys.argv[2], float(sys.argv[3]), 
@@ -113,7 +113,7 @@ for label in OUT_THS:
     report = metrics.classification_report(VAL_Y, PRD_Y)
     confusionMat = metrics.plot_confusion_matrix(
         rf, VAL_X, VAL_Y, 
-        display_labels=list(range(len(set(TRN_Y[MTR])))),
+        display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
         cmap=cm.Blues, normalize=None
     )
     featImportance = list(rf.feature_importances_)

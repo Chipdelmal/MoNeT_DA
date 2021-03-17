@@ -10,7 +10,7 @@ THS=$2
 VT_SPLIT="0.3"
 KFOLD="50"
 
-declare -a quantiles=("50")
+declare -a quantiles=("50" "75" "90")
 for QNT in ${quantiles[@]}; do
    python STP_clsPreUnify.py $MTR $QNT
    python STP_clsPreprocess.py $MTR $QNT
