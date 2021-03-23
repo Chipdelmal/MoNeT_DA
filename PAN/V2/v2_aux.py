@@ -35,8 +35,8 @@ def exportTracesPlot(
     figArr = monet.plotNodeTraces(tS, STYLE)
     axTemp = figArr[0].get_axes()[0]
     axTemp.set_aspect(aspect=STYLE["aspect"])
-    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
-    axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
+    # axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+    # axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
     axTemp.axes.xaxis.set_ticklabels([])
     axTemp.axes.yaxis.set_ticklabels([])
     axTemp.axes.xaxis.set_visible(False)
@@ -86,6 +86,9 @@ def exportTracesPlot(
             transform=axTemp.transAxes,
             color='#00000055', fontsize=15
         )
+
+    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+    axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
 
     axTemp.tick_params(color=(0, 0, 0, 0.5))
     figArr[0].savefig(

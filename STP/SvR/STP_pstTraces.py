@@ -18,7 +18,7 @@ if monet.isNotebook():
     (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', 'mixed', 'PAN')
 else:
     (USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
-(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '50', True, True)
+(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '75', True, True)
 tStable = 90
 
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
