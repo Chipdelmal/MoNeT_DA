@@ -50,7 +50,7 @@ monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'V2 PreTraces ' + AOI)
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
         "width": 1.25, "alpha": .15, "dpi": 1500, "legend": True,
-        "aspect": .25, "colors": CLR, "xRange": [(365*1.5), (365*6)],
+        "aspect": .25, "colors": CLR, "xRange": [(365*1), (365*5)],
         "yRange": (-0, 1)
     }
 if AOI == 'ECO':
@@ -79,7 +79,7 @@ for i in range(0, xpNum):
         np.asarray([aux.zeroDivide(i, j.T[-1]) for i in j.T]).T for j in repDta['landscapes']
     ]
     fractionData = {'genotypes': repDta['genotypes'], 'landscapes': balPop}
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.5, STYLE)
     # Export plots --------------------------------------------------------
     aux.exportTracesPlot(
         fractionData, name, STYLE, PT_IMG, wopPrint=False,
@@ -107,10 +107,10 @@ if AOI == 'HLT':
     (fig, ax) = plt.subplots(figsize=(10, 5.5), sharex=True)
     STYLE = {
         "width": 2, "alpha": .5, "dpi": 1500, "legend": True,
-        "aspect": .25, "xRange": [(365*1.5), (365*6)],
+        "aspect": .25, "xRange": [(365*1), (365*5)],
         "yRange": (0, 1)
     }
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.5, STYLE)
     colors = ('#3772ffEF', )
     ax.plot(range(0, len(infct)), infct, lw=STYLE['width'], ls='-', color=colors[0])
     ax.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])

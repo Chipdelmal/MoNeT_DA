@@ -17,7 +17,7 @@ import STP_functions as fun
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('dsk', '265', 2)
+    (USR, REL, CLS) = ('dsk', '265', 30)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 ###############################################################################

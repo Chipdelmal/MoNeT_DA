@@ -30,3 +30,11 @@ def selectPath(USR, DRV, EXP):
     fldrList = [PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR]
     [monet.makeFolder(i) for i in fldrList]
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
+
+
+# #############################################################################
+# Paths and Names
+# #############################################################################
+def splitExpNames(PATH_OUT, ext='bz'):
+    out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
+    return sorted(list(set(out)))

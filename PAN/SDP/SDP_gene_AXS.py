@@ -81,4 +81,4 @@ def driveParameters(TYPE, popSize):
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*AXS_WLD)
         yRange = popSize
-    return (aggD, yRange, 'autosomal')
+    return (aggD, yRange, 'autosomalXShredder')
