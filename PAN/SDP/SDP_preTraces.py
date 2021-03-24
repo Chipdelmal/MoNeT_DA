@@ -22,7 +22,7 @@ EXPS = ('000', '001', '010')
 exp = EXPS[0]
 for exp in EXPS:
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=25000), lnd.landSelector()
+        drv.driveSelector(DRV, AOI, popSize=25e3), lnd.landSelector()
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
@@ -31,7 +31,7 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_DTA, PT_PRE, tS, 
+        PT_PRE, PT_IMG, tS, 
         'Pretraces {} [{}]'.format(DRV, AOI)
     )
     ###########################################################################
@@ -39,8 +39,8 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .5, "alpha": .75, "dpi": 300, "legend": True,
-            "aspect": .25, "colors": CLR, "xRange": [0, (365*5)],
+            "width": .75, "alpha": .75, "dpi": 300, "legend": True,
+            "aspect": .25, "colors": CLR, "xRange": [0, (365*2.5)],
             "yRange": YRAN
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
