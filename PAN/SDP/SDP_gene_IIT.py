@@ -5,8 +5,8 @@ import MoNeT_MGDrivE as monet
 ###############################################################################
 # https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-Wolbachia.R
 ###############################################################################
-genotypes = ('WW', 'Ww', 'ww')
-locus = (0, 1)
+genotypes = ('W', 'w')
+locus = (0, )
 
 ###############################################################################
 # Ecology genotype counts
