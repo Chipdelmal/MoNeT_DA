@@ -9,7 +9,7 @@ import SDP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('dsk', 'CRS', 'HLT')
+    (USR, DRV, AOI) = ('dsk', 'IIT', 'HLT')
     (OVW, JOB) = (True, 4)
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -24,6 +24,7 @@ if AOI == 'HLT':
 ###############################################################################
 # Experiments loop
 ###############################################################################
+exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
     # Setting up paths

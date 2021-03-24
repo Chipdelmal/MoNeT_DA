@@ -10,12 +10,12 @@ import SDP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('dsk', 'CRS', 'HLT')
+    (USR, DRV, AOI) = ('dsk', 'IIT', 'ECO')
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 ###############################################################################
 EXPS = ('000', '001', '010')
-FZ = True
+(FZ, FLTR) = (True, ['*', '*', '*', '00', '*', AOI, '*', '{}', 'bz'])
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
@@ -50,12 +50,15 @@ for exp in EXPS:
     tyTag = ('sum', 'srp')
     (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
     if FZ:
-        fltrPattern = PT_PRE+'*_00_*'+AOI+'*'+'{}'+'*'
-    fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
+        fltrPattern = aux.XP_PTRN.format(*FLTR)
+    fLists = monet.getFilteredTupledFiles(
+        PT_PRE+fltrPattern, globPattern, tyTag
+    )
     ###########################################################################
     # Process files
     ###########################################################################
     (xpNum, digs) = monet.lenAndDigits(fLists)
+    i = 0
     for i in range(0, xpNum):
         monet.printProgress(i+1, xpNum, digs)
         (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
@@ -65,5 +68,5 @@ for exp in EXPS:
         cl = [i[:-2]+'cc' for i in CLR]
     # Export gene legend ------------------------------------------------------
     monet.exportGeneLegend(
-            sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
-        )
+        sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
+    )
