@@ -1,11 +1,12 @@
 
 import sys
+from datetime import datetime
+from joblib import Parallel, delayed
+import MoNeT_MGDrivE as monet
 import SDP_aux as aux
 import SDP_gene as drv
 import SDP_land as lnd
-from datetime import datetime
-import MoNeT_MGDrivE as monet
-from joblib import Parallel, delayed
+
 
 if monet.isNotebook():
     (USR, DRV, AOI) = ('dsk', 'CRS', 'HLT')
@@ -25,7 +26,7 @@ if AOI == 'HLT':
 ###############################################################################
 for exp in EXPS:
     ###########################################################################
-    # Setting up paths and style
+    # Setting up paths
     ###########################################################################
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=11000), lnd.landSelector()
@@ -50,7 +51,7 @@ for exp in EXPS:
     outNames = aux.splitExpNames(PT_OUT)
     outExpNames = set(outNames)
     ###########################################################################
-    # Analyze data
+    # Process data
     ###########################################################################
     Parallel(n_jobs=1)(
         delayed(monet.preProcess)(
