@@ -10,7 +10,7 @@ import MoNeT_MGDrivE as monet
 from sklearn.preprocessing import LabelBinarizer
 
 if monet.isNotebook():
-    (MTR, QNT) = ('TTO', '90')
+    (MTR, QNT) = ('POE', '50')
 else:
     (MTR, QNT) = (sys.argv[1], sys.argv[2])
 ###############################################################################
@@ -22,6 +22,10 @@ elif MTR == 'TTI':
     OPRAN = ((0, .15), (.15, .25), (.25, .5), (.5, 3), (3, 15))
 elif MTR == 'TTO':
     OPRAN = ((0, 2), (2, 4), (4, 6), (6, 9), (9, 15))
+elif (MTR == 'CPT'):
+    OPRAN = ((0, .2), (.2, .4), (.4, .6), (.6 , .8), (.8, 1.5))
+elif (MTR == 'POE'):
+    OPRAN = ((0, .35), (.35 , .65), (.65, 1.5))
 # Sex categories --------------------------------------------------------------
 SEX_CATS = {
     'male': (0, 'i_smx'), 
@@ -60,7 +64,10 @@ fltr = [all(i) for i in zip(*filterRules)]
 DTA_RAW = DTA_RAW[fltr]
 DTA_RAW = DTA_RAW.drop(['i_grp'], axis=1)
 DTA_COLS = list(DTA_RAW.columns)
-LBS = list(filter(lambda v: match('0.*', v), DTA_COLS))
+if (MTR == 'CPT') or (MTR == 'POE'):
+    LBS = [MTR]
+else:
+    LBS = list(filter(lambda v: match('0.*', v), DTA_COLS))
 # Clean dataset for modification ----------------------------------------------
 DTA_CLN = DTA_RAW.copy()
 ###############################################################################
@@ -88,9 +95,12 @@ DTA_CLN['i_qnt'] = [QNT] * DTA_CLN.shape[0]
 ###############################################################################
 for ths in LBS:
     grpMtr = np.asarray(DTA_CLN[ths])
-    groupBools = [
-        [i[0]*365 <= feat < i[1]*365 for i in OPRAN] for feat in grpMtr
-    ]
+    if (MTR == 'CPT') or (MTR == 'POE'):
+        groupBools = [[i[0] <= feat < i[1] for i in OPRAN] for feat in grpMtr]
+    else:
+        groupBools = [
+            [i[0]*365 <= feat < i[1]*365 for i in OPRAN] for feat in grpMtr
+        ]
     groupIx = [i.index(True) for i in groupBools]
     DTA_CLN[ths] = groupIx
 ###############################################################################

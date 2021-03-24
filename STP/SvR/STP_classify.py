@@ -8,7 +8,7 @@ def labelTranslate(className):
         label = "High"
     elif className == 4:
         label = "Permanent"
-    return label
+    return str(className)
 
 def sexTranslate(sexValue):
     sexes = [True, False, False]

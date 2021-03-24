@@ -13,16 +13,15 @@ import plotly.graph_objects as go
 
 
 if monet.isNotebook():
-    (MTR, QNT) = ('WOP', '90')
+    (MTR, QNT) = ('CPT', '50')
+    LABLS = ['CPT']
 else:
     (MTR, QNT) = (sys.argv[1], sys.argv[2])
-(FEATS, LABLS) = (
-    [
+    LABLS = ['0.5']
+FEATS = [
         'i_smx', 'i_sgv', 'i_sgn',
         'i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic'
-    ],
-    ['0.5']
-)
+    ]   
 ###############################################################################
 # Create directories structure
 ###############################################################################
@@ -32,7 +31,10 @@ PT_ROT = '/home/chipdelmal/Documents/WorkSims/STP/PAN/'
     PT_ROT+'img/', PT_ROT+'MODELS/', PT_ROT+'SUMMARY/'
 )
 ID_MTR = 'CLN_HLT_{}_{}_qnt.csv'.format(MTR, QNT)
-PTH_MOD = PT_MOD+ID_MTR[4:-10]+str(int(float(LABLS[0])*100))+'_RF.joblib'
+if MTR == 'CPT':
+    PTH_MOD = PT_MOD+ID_MTR[0][4:-8]+'_RF.joblib'
+else:
+    PTH_MOD = PT_MOD+ID_MTR[4:-10]+str(int(float(LABLS[0])*100))+'_RF.joblib'
 ###############################################################################
 # Load Dataset
 ###############################################################################

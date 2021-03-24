@@ -17,13 +17,17 @@ from contextlib import redirect_stdout
 
 
 if monet.isNotebook():
-    (MTR, THS, VT_SPLIT, KFOLD) = ('WOP', '0.5', '0.5', '50')
+    (MTR, THS, VT_SPLIT, KFOLD, QNT) = ('WOP', '0.5', '0.5', '50', '50')
 else:
-    (MTR, THS, VT_SPLIT, KFOLD) = (
-        sys.argv[1], sys.argv[2], float(sys.argv[3]), int(sys.argv[4])
+    (MTR, THS, VT_SPLIT, KFOLD, QNT) = (
+        sys.argv[1], sys.argv[2], float(sys.argv[3]), 
+        int(sys.argv[4]), sys.argv[5]
     )
-QNTS = ['50', '75', '90']
-OUT_THS = ['0.05', '0.1', '0.25', '0.5']
+QNTS = [QNT]
+if (MTR == 'CPT') or (MTR == 'POE'):
+    OUT_THS = [MTR]
+else:
+    OUT_THS = ['0.05', '0.1', '0.25', '0.5']
 for label in OUT_THS:
     ###############################################################################
     # Setup constants (user input)
@@ -52,14 +56,24 @@ for label in OUT_THS:
     DTA_RAW = pd.concat([pd.read_csv(path.join(PT_OUT, i)) for i in ID_MTR])
     tS = datetime.now()
     monet.printExperimentHead(PT_OUT, PT_MOD, tS, 'UCIMI ML-Class Train '+MTR)
-    DTA_TYPES = {
-        'i_smx': np.bool_, 'i_sgv': np.bool_, 'i_sgn': np.bool_,
-        'i_rsg': 'float64', 'i_rer': 'float64',
-        'i_qnt': 'int8',
-        'i_gsv': 'float64', 'i_fic': 'float64',
-        'i_ren': 'int8', '0.95': 'int8', '0.9':  'int8', '0.75': 'int8',
-        '0.5':  'int8', '0.25': 'int8', '0.1':  'int8', '0.05': 'int8',
-    }
+    if (MTR == 'CPT') or (MTR == 'POE'):
+        DTA_TYPES = {
+            'i_smx': np.bool_, 'i_sgv': np.bool_, 'i_sgn': np.bool_,
+            'i_rsg': 'float64', 'i_rer': 'float64',
+            'i_qnt': 'int8',
+            'i_gsv': 'float64', 'i_fic': 'float64',
+            'i_ren': 'int8',
+            MTR: 'int8'
+        }
+    else:
+        DTA_TYPES = {
+            'i_smx': np.bool_, 'i_sgv': np.bool_, 'i_sgn': np.bool_,
+            'i_rsg': 'float64', 'i_rer': 'float64',
+            'i_qnt': 'int8',
+            'i_gsv': 'float64', 'i_fic': 'float64',
+            'i_ren': 'int8', '0.95': 'int8', '0.9':  'int8', '0.75': 'int8',
+            '0.5':  'int8', '0.25': 'int8', '0.1':  'int8', '0.05': 'int8',
+        }
     DTA_CLN = DTA_RAW.astype(DTA_TYPES)
     DTA_LEN = DTA_CLN.shape[0]
     correlation = DTA_CLN.corr(method='spearman')[LABLS][:len(FEATS)]
@@ -69,7 +83,7 @@ for label in OUT_THS:
     (inputs, outputs) = (DTA_CLN[FEATS], DTA_CLN[LABLS])
     (TRN_X, VAL_X, TRN_Y, VAL_Y) = train_test_split(
         inputs, outputs, 
-        test_size=VT_SPLIT, stratify=outputs
+        test_size=float(VT_SPLIT), stratify=outputs
     )
     (TRN_L, VAL_L) = [i.shape[0] for i in (TRN_X, VAL_X)]
     ###############################################################################
@@ -83,8 +97,8 @@ for label in OUT_THS:
     )
     # K-fold training -------------------------------------------------------------
     kScores = cross_val_score(
-        rf, TRN_X, TRN_Y.values.ravel(), 
-        cv=KFOLD, scoring=metrics.make_scorer(metrics.f1_score, average='weighted')
+        rf, TRN_X, TRN_Y.values.ravel(), cv=int(KFOLD), 
+        scoring=metrics.make_scorer(metrics.f1_score, average='weighted')
     )
     # Final training --------------------------------------------------------------
     rf.fit(TRN_X, TRN_Y.values.ravel())
@@ -99,14 +113,17 @@ for label in OUT_THS:
     report = metrics.classification_report(VAL_Y, PRD_Y)
     confusionMat = metrics.plot_confusion_matrix(
         rf, VAL_X, VAL_Y, 
-        display_labels=['None', 'Low', 'Mid', 'High', 'Permanent'],
+        display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
         cmap=cm.Blues, normalize=None
     )
     featImportance = list(rf.feature_importances_)
     ###############################################################################
     # Statistics & Model Export
     ###############################################################################
-    strMod = PT_MOD+ID_MTR[0][4:-10]+str(int(float(LABLS[0])*100)).zfill(2)
+    if (MTR == 'CPT') or (MTR == 'POE'):
+        strMod = PT_MOD+ID_MTR[0][4:-8]
+    else:
+        strMod = PT_MOD+ID_MTR[0][4:-10]+str(int(float(LABLS[0])*100)).zfill(2)
     plt.savefig(strMod+'_RF.jpg', dpi=300)
     dump(rf, strMod+'_RF.joblib')
     with open(strMod+'_RF.txt', 'w') as f:

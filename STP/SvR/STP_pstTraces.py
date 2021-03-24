@@ -15,10 +15,10 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', 'gravidFemale', 'PAN')
+    (USR, DRV, AOI, REL, LND) = ('dsk', 'LDR', 'HLT', 'mixed', 'PAN')
 else:
     (USR, DRV, AOI, REL, LND) = (sys.argv[1], 'LDR', sys.argv[2], sys.argv[3], sys.argv[4])
-(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '90', True, True)
+(SKP, THS, QNT, OVW, FZ) = (False, '0.1', '75', True, True)
 tStable = 90
 
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, REL)
@@ -76,6 +76,8 @@ for (i, repFile) in enumerate(repFiles):
         float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
     )
     # Traces ------------------------------------------------------------------
+    if LND == 'PAN':
+        tStable=0
     pop = repDta['landscapes'][0][tStable][-1]
     STYLE['yRange'] = (0,  pop+pop*.5)
     if AOI == 'ECO':

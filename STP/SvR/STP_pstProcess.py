@@ -50,7 +50,7 @@ fPaths = sorted(glob(PT_OUT+ptrn))
 (fNum, digs) = monet.lenAndDigits(fPaths)
 qnt = float(int(QNT)/100)
 # Setup dataframes ------------------------------------------------------------
-outDFs = da.initDFsForDA(
+outDFs = monet.initDFsForDA(
     fPaths, header, thiS, thoS, thwS, tapS, POE=True, CPT=True
 )
 ###############################################################################
@@ -75,9 +75,9 @@ for (i, fPath) in enumerate(fPaths):
         )
     (minS, maxS, _, _) = monet.calcMinMax(repRto)
     rapS = monet.getRatioAtTime(repRto, tapS)
-    poe = da.calcPOE(repRto)
-    cpt = da.calcCPT(repRto)
-    der = da.calcDER(repRto, smoothing=10, magnitude=0.1)
+    poe = monet.calcPOE(repRto)
+    cpt = monet.calcCPT(repRto)
+    der = monet.calcDER(repRto, smoothing=10, magnitude=0.1)
     #######################################################################
     # Calculate Quantiles
     #######################################################################
