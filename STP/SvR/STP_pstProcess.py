@@ -18,7 +18,7 @@ else:
     (USR, AOI, REL, LND, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-(DRV, QNT, mlr) = ('LDR', True)
+(DRV, mlr) = ('LDR', True)
 (thiS, thoS, thwS, tapS) = (
         [.05, .10, .25, .50, .75, .90, .95],
         [.05, .10, .25, .50, .75, .90, .95],
