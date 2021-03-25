@@ -10,6 +10,30 @@ XP_PTRN = 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 
 
 # #############################################################################
+# Names and patterns
+# #############################################################################
+def splitExpNames(PATH_OUT, ext='bz'):
+    out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
+    return sorted(list(set(out)))
+
+
+def patternForReleases(ren, AOI, ftype):
+    strPat = XP_PTRN.format('*', '*', '*', ren, '*', AOI, '*', ftype, 'bz')
+    return strPat
+
+
+def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
+    filesList = glob(PATH_EXP+'E*')
+    fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
+    splitFilenames = [re.split('_|-', i)[:skip] for i in fileNames]
+    ids = []
+    for c in range(len(splitFilenames[0])):
+        colSet = set([i[c] for i in splitFilenames])
+        ids.append(sorted(list(colSet)))
+    return ids
+
+
+# #############################################################################
 # Paths and Style
 # #############################################################################
 def selectPath(USR, DRV, EXP):
@@ -30,11 +54,3 @@ def selectPath(USR, DRV, EXP):
     fldrList = [PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR]
     [monet.makeFolder(i) for i in fldrList]
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
-
-
-# #############################################################################
-# Paths and Names
-# #############################################################################
-def splitExpNames(PATH_OUT, ext='bz'):
-    out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
-    return sorted(list(set(out)))

@@ -7,11 +7,11 @@ Folders and files follow this naming convention:
 * `E_par_csa_csb_ren_res`
   * `par`: Parameters set
   * `csa`: Fitness cost A 
-    * SD/CRISPR: Cas9
-    * Others: male mating
+    * `SD/CRISPR`: Cas9
+    * `Others`: male mating
   * `csb`: Fitness cost B
-    * SD/CRISPR: gRNA
-    * Others: lifespan
+    * `SD/CRISPR`: gRNA
+    * `Others`: lifespan
   * `ren`: Number of releases
   * `res`: Size of releases
 
