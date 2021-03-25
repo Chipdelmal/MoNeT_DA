@@ -39,8 +39,7 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_DTA, PT_PRE, tS, 
-        'Preprocess {} [{}]'.format(DRV, AOI)
+        PT_DTA, PT_PRE, tS, 'SDP Preprocess {} [{}]'.format(DRV, AOI)
     )
     ###########################################################################
     # Load folders
@@ -49,7 +48,7 @@ for exp in EXPS:
         PT_DTA, mean='ANALYZED/', reps='TRACES/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-    outNames = aux.splitExpNames(PT_OUT)
+    outNames = monet.splitExpNames(PT_OUT)
     outExpNames = set(outNames)
     ###########################################################################
     # Process data
