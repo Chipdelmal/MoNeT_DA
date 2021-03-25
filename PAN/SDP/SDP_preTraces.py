@@ -28,6 +28,8 @@ for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, fldr, exp
     )
+    PT_IMG = PT_IMG + 'preTraces/'
+    monet.makeFolder(PT_IMG)
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(

@@ -28,10 +28,10 @@ mlr = True
 EXPS = ('000', '001', '010')
 ###############################################################################
 (header, xpidIx) = (
-        ('i_pop', 'i_ren', 'i_res', 'i_mad', 'i_mat', 'i_grp'),
+        ('i_par', 'i_csa', 'i_csb', 'i_ren', 'i_res', 'i_grp'),
         (1, 2, 3, 4, 5, 7)
     )
-outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE')
+outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER')
 ###############################################################################
 # Load landscape and drive
 ###############################################################################
@@ -51,7 +51,9 @@ for exp in EXPS:
         USR, fldr, exp
     )
     tS = datetime.now()
-    monet.printExperimentHead(PT_PRE, PT_OUT, tS, 'SDP PstProcess '+AOI)
+    monet.printExperimentHead(
+        PT_OUT, PT_MTR, tS, 'SDP PstProcess {} [{}]'.format(DRV, AOI)
+    )
     ###########################################################################
     # Setup schemes
     ###########################################################################
@@ -60,15 +62,17 @@ for exp in EXPS:
     # Setup experiments IDs ---------------------------------------------------
     uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
     (par, csa, csb, ren, res, aoi, grp) = uids[1:]
-    (xpDict, smryDicts) = ({}, ({}, {}, {}, {}, {}))
+    (xpDict, smryDicts) = ({}, ({}, {}, {}, {}, {}, {}, {}))
     # Get experiment files ----------------------------------------------------
     ptrn = aux.XP_PTRN.format('*', '*', '*', '*', '*', AOI, '*', 'rto', 'npy')
     fPaths = sorted(glob(PT_OUT+ptrn))
     (fNum, digs) = monet.lenAndDigits(fPaths)
     qnt = float(int(QNT)/100)
     # Setup dataframes --------------------------------------------------------
-    outDFs = monet.initDFsForDA(fPaths, header, thiS, thoS, thwS, tapS, POE=True)
-    (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF) = outDFs
+    outDFs = monet.initDFsForDA(
+        fPaths, header, thiS, thoS, thwS, tapS, POE=True, CPT=True
+    )
+    (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF, derDF) = outDFs
     ###########################################################################
     # Iterate through experiments
     ###########################################################################
@@ -92,6 +96,8 @@ for exp in EXPS:
         (minS, maxS, _, _) = monet.calcMinMax(repRto)
         rapS = monet.getRatioAtTime(repRto, tapS)
         poe = monet.calcPOE(repRto)
+        cpt = monet.calcCPT(repRto)
+        der = monet.calcDER(repRto, smoothing=10, magnitude=0.1)
         #######################################################################
         # Calculate Quantiles
         #######################################################################
@@ -101,12 +107,18 @@ for exp in EXPS:
         rapSQ = [np.nanquantile(rap, qnt) for rap in rapS]
         mniSQ = (np.nanquantile(minS[0], qnt), np.nanquantile(minS[1], qnt))
         mnxSQ = (np.nanquantile(maxS[0], qnt), np.nanquantile(maxS[1], 1-qnt))
+        cptSQ = (np.nanquantile(cpt, qnt))
+        derSQ = (np.nanquantile(der, qnt))
         #######################################################################
         # Update in Dataframes
         #######################################################################
         xpid = monet.getXpId(fPath, xpidIx)
-        vals = (ttiSQ, ttoSQ, wopSQ, rapSQ, list(mniSQ)+list(mnxSQ), list(poe))
-        updates = [xpid+i for i in vals]
+        updates = [
+            xpid+i for i in (
+                    ttiSQ, ttoSQ, wopSQ, rapSQ, 
+                    list(mniSQ)+list(mnxSQ), list(poe), [cptSQ], [derSQ]
+                )
+        ]
         for df in zip(outDFs, updates):
             df[0].iloc[i] = df[1]
         #######################################################################
@@ -121,7 +133,10 @@ for exp in EXPS:
                     {
                         'mnl': minS[0], 'mnd': minS[1],
                         'mxl': maxS[0], 'mxd': maxS[1]
-                    }
+                    },
+                    {'POE': poe},
+                    {'CPT': cpt},
+                    {'DER': der}
                 ]
             for dct in zip(smryDicts, outDict):
                 dct[0][tuple(xpid)] = dct[1]

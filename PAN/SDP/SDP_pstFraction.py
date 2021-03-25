@@ -31,7 +31,9 @@ for exp in EXPS:
         USR, fldr, exp
     )
     tS = datetime.now()
-    monet.printExperimentHead(PT_PRE, PT_OUT, tS, 'SDP PstFraction '+AOI)
+    monet.printExperimentHead(
+        PT_PRE, PT_OUT, tS, 'SDP PstFraction {} [{}]'.format(DRV, AOI)
+    )
     ###############################################################################
     # Setting up paths and style
     ###############################################################################
