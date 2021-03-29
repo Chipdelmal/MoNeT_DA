@@ -11,9 +11,10 @@ from datetime import datetime
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 
-
-# (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
-(USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+if monet.isNotebook():
+    (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
+else:
+    (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 (FMT, OVW) = ('bz2', True)
 (gIx, hIx) = (1, 0)
 ###############################################################################

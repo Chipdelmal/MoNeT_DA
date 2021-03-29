@@ -14,6 +14,13 @@ import MoNeT_MGDrivE as monet
 )
 
 
+def getXPPattern(SET):
+    if SET == 'homing':
+        return XP_HOM
+    else:
+        return XP_SHR
+
+
 def patternForReleases(SET, ren, AOI, ftype):
     if SET == 'homing':
         patList = ['*','*','*','*','*','*','*','*','*',ren,AOI,'*',ftype,'bz']
