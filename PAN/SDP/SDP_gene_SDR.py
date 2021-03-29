@@ -14,7 +14,7 @@ genotypes = (
     'PRWR','MRWR','WBWR','PBWR','MBWR','MRPR','PRWB','MBPR','MRWB','MRPB','WBWB',
     'PBWB','MBWB','MBPB'
 )
-(locusA, locusB, locusF) = ((0, 1), (2, 3), (0, 1, 2, 3))
+(locusA, locusB, locusF) = ((0, 2), (1, 3), (0, 1, 2, 3))
 
 ###############################################################################
 # Ecology genotype counts

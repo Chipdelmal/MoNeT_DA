@@ -5,15 +5,15 @@ import MoNeT_MGDrivE as monet
 ###############################################################################
 # https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-RIDL.R
 ###############################################################################
-genotypes = ('AA', 'Aa', 'aa')
+genotypes = ('WW', 'Ww', 'ww')
 locus = (0, 1)
 
 ###############################################################################
 # Ecology genotype counts
 ###############################################################################
 ECO_DICT = OrderedDict((
-    ('A', (('A', locus), )),
-    ('a', (('a', locus), ))
+    ('A', (('W', locus), )),
+    ('a', (('w', locus), ))
 ))
 SIT_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
@@ -21,8 +21,8 @@ SIT_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 # Health genotype counts
 ###############################################################################
 HLT_DICT = OrderedDict((
-    ('H*', (('A', locus), )),
-    ('O-', (('a', locus), ))
+    ('H*', (('W', locus), )),
+    ('O-', (('w', locus), ))
 ))
 SIT_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
@@ -30,8 +30,8 @@ SIT_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 # Trash genotype counts
 ###############################################################################
 TRS_DICT = OrderedDict((
-    ('H*', (('A', locus), )),
-    ('O-', (('a', locus), ))
+    ('H*', (('W', locus), )),
+    ('O-', (('w', locus), ))
 ))
 SIT_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
@@ -39,8 +39,8 @@ SIT_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 # Wild genotype counts
 ###############################################################################
 WLD_DICT = OrderedDict((
-    ('O*', (('A', locus), )),
-    ('W-', (('a', locus), ))
+    ('O*', (('W', locus), )),
+    ('W-', (('w', locus), ))
 ))
 SIT_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
 
