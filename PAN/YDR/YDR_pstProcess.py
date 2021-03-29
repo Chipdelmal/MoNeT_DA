@@ -59,6 +59,7 @@ outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER')
     drv.driveSelector(DRV, AOI, popSize=25e3), lnd.landSelector('SPA')
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+xpPat = aux.getXPPattern(SET)
 ###############################################################################
 # Iterate through experiments
 ###############################################################################
@@ -72,7 +73,7 @@ for exp in EXPS:
     )
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_OUT, PT_MTR, tS, 'SDP PstProcess {} [{}]'.format(DRV, AOI)
+        PT_OUT, PT_MTR, tS, 'YDR PstProcess {} [{}]'.format(DRV, AOI)
     )
     ###########################################################################
     # Setup schemes
@@ -83,7 +84,6 @@ for exp in EXPS:
     uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
     (xpDict, smryDicts) = ({}, ({}, {}, {}, {}, {}, {}, {}))
     # Get experiment files ----------------------------------------------------
-    xpPat = aux.getXPPattern(SET)
     ptrn = xpPat.format(*fmt)
     fPaths = sorted(glob(PT_OUT+ptrn))
     (fNum, digs) = monet.lenAndDigits(fPaths)

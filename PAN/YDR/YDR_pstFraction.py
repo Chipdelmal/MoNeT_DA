@@ -34,7 +34,7 @@ for EXP in EXPS:
         USR, SET, fldr, EXP
     )
     tS = datetime.now()
-    monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'PstFraction '+AOI)
+    monet.printExperimentHead(PT_DTA, PT_OUT, tS, 'YDR PstFraction '+AOI)
     # #########################################################################
     # Base experiments
     #   These are the experiments without any releases (for fractions)

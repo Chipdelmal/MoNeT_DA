@@ -8,34 +8,46 @@ from glob import glob
 from datetime import datetime
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
-import SDP_aux as aux
-import SDP_gene as drv
-import SDP_land as lnd
+import YDR_aux as aux
+import YDR_gene as drv
+import YDR_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('dsk', 'CRS', 'HLT', '50', '0.1')
+    (USR, SET, DRV, AOI, QNT, THS) = (
+        'dsk', 'homing', 'ASD', 'HLT', '50', '0.5'
+    )
 else:
-    (USR, DRV, AOI, QNT, THS) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    (USR, SET, DRV, AOI, QNT, THS) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], 
+        sys.argv[4], sys.argv[5], sys.argv[6]
     )
 ###############################################################################
 mtrs = ('TTI', 'TTO', 'WOP', 'MNX', 'RAP', 'POE', 'CPT')
-EXPS = ('000', '001', '010')
-(tStable, FZ, FLTR) = (
-    0, True, 
-    ['*', '*', '*', '00', '*', AOI, '*', '{}', 'bz']
-)
+EXPS = ('000', '002', '004', '006', '008')
+(tStable, FZ) = (0, True)
+if SET=='homing':
+    FLTR = [
+        '*', '*', '*', '*', '*', '*', '*', '*', '*', '00', AOI, '*', '{}', 'bz'
+    ]
+    XP_ID = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12)
+else:
+    FLTR = ['*', '*', '*', '*', '*', '*', '*', '00', AOI, '*', '{}', 'bz']
+    XP_ID = (1, 2, 3, 4, 5, 6, 7, 8, 10)
+xpPat = aux.getXPPattern(SET)
+###############################################################################
+exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
     # Load landscape and drive
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=25e3), lnd.landSelector()
+        drv.driveSelector(DRV, AOI, popSize=25e3), lnd.landSelector('SPA')
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+    xpPat = aux.getXPPattern(SET)
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, fldr, exp
+        USR, SET, fldr, exp
     )
     PT_IMG = PT_IMG + 'pstTraces/'
     monet.makeFolder(PT_IMG)
@@ -68,7 +80,7 @@ for exp in EXPS:
     ###########################################################################
     (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
     if FZ:
-        fltrPattern = aux.XP_PTRN.format(*FLTR).format('srp')
+        fltrPattern = xpPat.format(*FLTR).format('srp')
     repFiles = monet.getFilteredFiles(
         PT_PRE+fltrPattern, globPattern.format('srp')
     )
@@ -83,10 +95,10 @@ for exp in EXPS:
         print(fmtStr.format(monet.CBBL, padi, fNum, monet.CEND), end='\r')
         (repDta, xpid) = (
                 pkl.load(repFile),
-                monet.getXpId(repFile, (1, 2, 3, 4, 5, 7))
+                monet.getXpId(repFile, XP_ID)
             )
         xpRow = [
-            monet.filterDFWithID(i, xpid) for i in (
+            monet.filterDFWithID(i, xpid, max=len(XP_ID)) for i in (
                 dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT
             )
         ]
