@@ -8,11 +8,26 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 # Constants
 # #############################################################################
-XP_PTRN = 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}'
-EXPS = ('000', '001', '010')
+(XP_ID, XP_PTRN, EXPS) = (
+    'SDP', 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}',
+    ('000', '001', '010')
+)
+(POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*2.5), True, 0)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
-(POP_SIZE, XRAN) = (25e3, (0, 365*2.5))
-FZ = True
+(DATA_NAMES, DATA_HEAD, MLR) = (
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
+    (
+        ('i_par', 1), ('i_csa', 2), ('i_csb', 3), 
+        ('i_ren', 4), ('i_res', 5), ('i_grp', 7)
+    ),
+    False
+)
+(THI, THO, THW, TAP) = (
+        [.05, .10, .25, .50, .75, .90, .95],
+        [.05, .10, .25, .50, .75, .90, .95],
+        [.05, .10, .25, .50, .75, .90, .95],
+        [int((i+1)*365-1) for i in range(5)]
+    )
 
 # #############################################################################
 # Names and patterns
@@ -22,8 +37,8 @@ def splitExpNames(PATH_OUT, ext='bz'):
     return sorted(list(set(out)))
 
 
-def patternForReleases(ren, AOI, ftype):
-    strPat = XP_PTRN.format('*', '*', '*', ren, '*', AOI, '*', ftype, 'bz')
+def patternForReleases(ren, AOI, ftype, ext='bz'):
+    strPat = XP_PTRN.format('*', '*', '*', ren, '*', AOI, '*', ftype, ext)
     return strPat
 
 

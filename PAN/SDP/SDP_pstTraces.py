@@ -14,18 +14,14 @@ import SDP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('dsk', 'CRS', 'HLT', '50', '0.1')
+    (USR, DRV, AOI, QNT, THS) = ('dsk', 'CRS', 'HLT', '50', '0.5')
 else:
     (USR, DRV, AOI, QNT, THS) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
 ###############################################################################
-mtrs = ('TTI', 'TTO', 'WOP', 'MNX', 'RAP', 'POE', 'CPT')
-EXPS = ('000', '001', '010')
-(tStable, FZ, FLTR) = (
-    0, True, 
-    ['*', '*', '*', '00', '*', AOI, '*', '{}', 'bz']
-)
+(header, xpidIx) = list(zip(*aux.DATA_HEAD))
+EXPS = aux.EXPS
 for exp in EXPS:
     ###########################################################################
     # Load landscape and drive
@@ -42,7 +38,7 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_PRE, PT_OUT, tS, 'SDP PstTraces {} [{}]'.format(DRV, AOI)
+        PT_PRE, PT_OUT, tS, aux.XP_ID+' PstTraces {} [{}]'.format(DRV, AOI)
     )
     ###########################################################################
     # Style 
@@ -59,16 +55,16 @@ for exp in EXPS:
     ###########################################################################
     ###########################################################################
     pstPat = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
-    pstFiles = [pstPat.format(i) for i in mtrs]
-    (dfTTI, dfTTO, dfWOP, dfMNX, dfRAP, dfPOE, dfCPT) = [
+    pstFiles = [pstPat.format(i) for i in aux.DATA_NAMES]
+    (dfTTI, dfTTO, dfWOP, dfRAP, dfMNX, dfPOE, dfCPT, dfDER) = [
         pd.read_csv(i) for i in pstFiles
     ]
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################
     (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
-    if FZ:
-        fltrPattern = aux.XP_PTRN.format(*FLTR).format('srp')
+    if aux.FZ:
+        fltrPattern = aux.patternForReleases('00', AOI, 'srp')
     repFiles = monet.getFilteredFiles(
         PT_PRE+fltrPattern, globPattern.format('srp')
     )
@@ -83,7 +79,7 @@ for exp in EXPS:
         print(fmtStr.format(monet.CBBL, padi, fNum, monet.CEND), end='\r')
         (repDta, xpid) = (
                 pkl.load(repFile),
-                monet.getXpId(repFile, (1, 2, 3, 4, 5, 7))
+                monet.getXpId(repFile, xpidIx)
             )
         xpRow = [
             monet.filterDFWithID(i, xpid) for i in (
@@ -96,7 +92,7 @@ for exp in EXPS:
             float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
         )
         # Traces ------------------------------------------------------------------
-        pop = repDta['landscapes'][0][tStable][-1]
+        pop = repDta['landscapes'][0][aux.STABLE_T][-1]
         STYLE['yRange'] = (0,  pop+pop*.5)
         STYLE['aspect'] = monet.scaleAspect(1, STYLE)
         monet.exportTracesPlot(

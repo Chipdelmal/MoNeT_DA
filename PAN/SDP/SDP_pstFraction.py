@@ -17,22 +17,19 @@ if monet.isNotebook():
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 ###############################################################################
-(gIx, hIx) = (1, 0)
-EXPS = ('000', '001', '010')
-###############################################################################
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=25e3), lnd.landSelector()
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), lnd.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 ###############################################################################
-exp = EXPS[0]
+EXPS = aux.EXPS
 for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, fldr, exp
     )
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_PRE, PT_OUT, tS, 'SDP PstFraction {} [{}]'.format(DRV, AOI)
+        PT_PRE, PT_OUT, tS, aux.XP_ID+' PstFraction {} [{}]'.format(DRV, AOI)
     )
     ###############################################################################
     # Setting up paths and style
@@ -70,5 +67,5 @@ for exp in EXPS:
             # Process data
             # #################################################################
             fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
-            repsRatios = monet.getPopRepsRatios(base, trace, gIx)
+            repsRatios = monet.getPopRepsRatios(base, trace, 1)
             np.save(fName, repsRatios)
