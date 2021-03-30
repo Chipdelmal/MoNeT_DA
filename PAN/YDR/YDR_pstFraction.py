@@ -15,28 +15,25 @@ if monet.isNotebook():
     (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-(FMT, OVW) = ('bz2', True)
-(gIx, hIx) = (1, 0)
 ###############################################################################
-EXPS = ('000', '002', '004', '006', '008')
-# Homing or shredder pattern-matching -----------------------------------------
 XP_NPAT = aux.XP_HOM
 if SET == 'homing':
     XP_NPAT = aux.XP_SHR
 ###############################################################################
-for EXP in EXPS:
+EXPS = aux.EXPS
+for exp in EXPS:
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=11000),
         lnd.landSelector('SPA')
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, SET, fldr, EXP
+        USR, SET, fldr, exp
     )
     tS = datetime.now()
     monet.printExperimentHead(
         PT_DTA, PT_OUT, tS, 
-        'YDR PstFraction {} [{}]'.format(DRV, AOI)
+        aux.XP_ID+' PstFraction {} [{}]'.format(DRV, AOI)
     )
     # #########################################################################
     # Base experiments
@@ -72,5 +69,5 @@ for EXP in EXPS:
             # Process data
             # #################################################################
             fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
-            repsRatios = monet.getPopRepsRatios(base, trace, gIx)
+            repsRatios = monet.getPopRepsRatios(base, trace, 1)
             np.save(fName, repsRatios)
