@@ -5,9 +5,14 @@ import pandas as pd
 from glob import glob
 import MoNeT_MGDrivE as monet
 
-
+# #############################################################################
+# Constants
+# #############################################################################
 XP_PTRN = 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}'
-
+EXPS = ('000', '001', '010')
+(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
+(POP_SIZE, XRAN) = (25e3, (0, 365*2.5))
+FZ = True
 
 # #############################################################################
 # Names and patterns

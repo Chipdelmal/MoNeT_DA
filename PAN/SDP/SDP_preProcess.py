@@ -15,22 +15,19 @@ else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
     (OVW, JOB) = (True, 8)
 ###############################################################################
-EXPS = ('000', '001', '010')
-(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
-# Male/Female counts ----------------------------------------------------------
 MF = (True, True)
 if AOI == 'HLT':
     MF = (False, True)
 ###############################################################################
 # Experiments loop
 ###############################################################################
-exp = EXPS[0]
+EXPS = aux.EXPS
 for exp in EXPS:
     ###########################################################################
     # Setting up paths
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=11000), lnd.landSelector()
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), lnd.landSelector()
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
@@ -59,7 +56,8 @@ for exp in EXPS:
                 analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
                 outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
                 MF=MF, cmpr='bz2', nodeDigits=nodeDigits,
-                SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP
+                SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
+                REP=aux.REP, SRP=aux.SRP
         ) for exIx in range(0, expNum)
     )
 

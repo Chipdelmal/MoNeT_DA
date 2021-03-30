@@ -36,7 +36,9 @@ for EXP in EXPS:
     )
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
-    monet.printExperimentHead(PT_DTA, PT_PRE, tS, 'Preprocess ' + AOI)
+    monet.printExperimentHead(
+        PT_DTA, PT_PRE, tS, 'Preprocess {}[{}]'.format(DRV, AOI)
+    )
     ###########################################################################
     # Load folders
     ###########################################################################

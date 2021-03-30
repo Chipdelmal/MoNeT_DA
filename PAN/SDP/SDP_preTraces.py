@@ -14,15 +14,12 @@ if monet.isNotebook():
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 ###############################################################################
-EXPS = ('000', '001', '010')
-(FZ, FLTR) = (True, ['*', '*', '*', '00', '*', AOI, '*', '{}', 'bz'])
-###############################################################################
 # Setting up paths and style
 ###############################################################################
-exp = EXPS[0]
+EXPS = aux.EXPS
 for exp in EXPS:
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=25e3), lnd.landSelector()
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), lnd.landSelector()
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
@@ -41,8 +38,7 @@ for exp in EXPS:
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
             "width": .75, "alpha": .75, "dpi": 300, "legend": True,
-            "aspect": .25, "colors": CLR, "xRange": [0, (365*2.5)],
-            "yRange": YRAN
+            "aspect": .25, "colors": CLR, "xRange": aux.XRAN, 'yRange': YRAN
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     ###########################################################################
@@ -50,8 +46,8 @@ for exp in EXPS:
     ###########################################################################
     tyTag = ('sum', 'srp')
     (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
-    if FZ:
-        fltrPattern = aux.XP_PTRN.format(*FLTR)
+    if aux.FZ:
+        fltrPattern = aux.patternForReleases('00', AOI, '*')
     fLists = monet.getFilteredTupledFiles(
         PT_PRE+fltrPattern, globPattern, tyTag
     )
