@@ -10,34 +10,32 @@ from joblib import Parallel, delayed
 
 if monet.isNotebook():
     (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
-    JOB = 4
+    (OVW, JOB) = (True, 4)
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-    JOB = 8
-(FMT, OVW) = ('bz2', True)
-(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
+    (OVW, JOB) = (True, 8)
 ###############################################################################
-EXPS = ('000', '002', '004', '006', '008')
 MF = (True, True)
 if AOI == 'HLT':
     MF = (False, True)
 ###############################################################################
+EXPS = aux.EXPS
 for EXP in EXPS:
     ###########################################################################
     # Setting up paths and style
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=11000), lnd.landSelector('SPA')
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), 
+        lnd.landSelector('SPA')
     )
-    gene = drive.get('gDict')
-    fldr = drive.get('folder')
+    (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, SET, fldr, EXP
     )
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_DTA, PT_PRE, tS, 'Preprocess {}[{}]'.format(DRV, AOI)
+        PT_DTA, PT_PRE, tS, aux.XP_ID+' Preprocess {}[{}]'.format(DRV, AOI)
     )
     ###########################################################################
     # Load folders
@@ -56,7 +54,8 @@ for EXP in EXPS:
                 exIx, expNum, expDirsMean, expDirsTrac, gene,
                 analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
                 outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
-                MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
-                SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP
+                MF=MF, cmpr='bz2', nodeDigits=nodeDigits,
+                SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
+                REP=aux.REP, SRP=aux.SRP
         ) for exIx in range(0, expNum)
     )

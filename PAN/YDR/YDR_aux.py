@@ -7,13 +7,32 @@ import pandas as pd
 from glob import glob
 import MoNeT_MGDrivE as monet
 
-
+XP_ID = 'YDR'
 (XP_HOM, XP_SHR) = (
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
     'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
+(POP_SIZE, XRAN, FZ, STABLE_T) = (11e3, (0, 365*10), True, 0)
+EXPS = ('000', '002', '004', '006', '008')
+(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
+(DATA_NAMES, DATA_HEAD, MLR) = (
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
+    (
+        ('i_par', 1), ('i_csa', 2), ('i_csb', 3), 
+        ('i_ren', 4), ('i_res', 5), ('i_grp', 7)
+    ),
+    False
+)
+(THI, THO, THW, TAP) = (
+        [.05, .10, .25, .50, .75, .90, .95],
+        [.05, .10, .25, .50, .75, .90, .95],
+        [.05, .10, .25, .50, .75, .90, .95],
+        [int((i+1)*365-1) for i in range(5)]
+    )
 
-
+# #############################################################################
+# Paths and Style
+# #############################################################################
 def getXPPattern(SET):
     if SET == 'homing':
         return XP_HOM
