@@ -23,26 +23,18 @@ else:
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
 ###############################################################################
-mtrs = ('TTI', 'TTO', 'WOP', 'MNX', 'RAP', 'POE', 'CPT')
-EXPS = ('000', '002', '004', '006', '008')
-(tStable, FZ) = (0, True)
-if SET=='homing':
-    FLTR = [
-        '*', '*', '*', '*', '*', '*', '*', '*', '*', '00', AOI, '*', '{}', 'bz'
-    ]
-    XP_ID = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12)
-else:
-    FLTR = ['*', '*', '*', '*', '*', '*', '*', '00', AOI, '*', '{}', 'bz']
-    XP_ID = (1, 2, 3, 4, 5, 6, 7, 8, 10)
+(header, xpidIx) = list(zip(*aux.getSummaryHeader(SET)))
 xpPat = aux.getXPPattern(SET)
 ###############################################################################
+EXPS = aux.EXPS
 exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
     # Load landscape and drive
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=25e3), lnd.landSelector('SPA')
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), 
+        lnd.landSelector('SPA')
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     xpPat = aux.getXPPattern(SET)
@@ -62,8 +54,7 @@ for exp in EXPS:
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
             "width": .75, "alpha": .75, "dpi": 300, "legend": True,
-            "aspect": .25, "colors": CLR, "xRange": [0, (365*2.5)],
-            "yRange": YRAN
+            "aspect": .25, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     ###########################################################################
@@ -71,16 +62,16 @@ for exp in EXPS:
     ###########################################################################
     ###########################################################################
     pstPat = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
-    pstFiles = [pstPat.format(i) for i in mtrs]
-    (dfTTI, dfTTO, dfWOP, dfMNX, dfRAP, dfPOE, dfCPT) = [
+    pstFiles = [pstPat.format(i) for i in aux.DATA_NAMES]
+    (dfTTI, dfTTO, dfWOP, dfRAP, dfMNX, dfPOE, dfCPT, dfDER) = [
         pd.read_csv(i) for i in pstFiles
     ]
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################
     (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
-    if FZ:
-        fltrPattern = xpPat.format(*FLTR).format('srp')
+    if aux.FZ:
+        fltrPattern = aux.patternForReleases(SET, '00', AOI, 'srp', ext='bz')
     repFiles = monet.getFilteredFiles(
         PT_PRE+fltrPattern, globPattern.format('srp')
     )
@@ -95,10 +86,10 @@ for exp in EXPS:
         print(fmtStr.format(monet.CBBL, padi, fNum, monet.CEND), end='\r')
         (repDta, xpid) = (
                 pkl.load(repFile),
-                monet.getXpId(repFile, XP_ID)
+                monet.getXpId(repFile, xpidIx)
             )
         xpRow = [
-            monet.filterDFWithID(i, xpid, max=len(XP_ID)) for i in (
+            monet.filterDFWithID(i, xpid, max=len(xpidIx)) for i in (
                 dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT
             )
         ]
@@ -108,7 +99,7 @@ for exp in EXPS:
             float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
         )
         # Traces ------------------------------------------------------------------
-        pop = repDta['landscapes'][0][tStable][-1]
+        pop = repDta['landscapes'][0][aux.STABLE_T][-1]
         STYLE['yRange'] = (0,  pop+pop*.5)
         STYLE['aspect'] = monet.scaleAspect(1, STYLE)
         monet.exportTracesPlot(

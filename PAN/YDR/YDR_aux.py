@@ -15,13 +15,8 @@ XP_ID = 'YDR'
 (POP_SIZE, XRAN, FZ, STABLE_T) = (22e3, (0, (365*10)/3), True, 0)
 EXPS = ('000', '002', '004', '006', '008')
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
-(DATA_NAMES, DATA_HEAD, MLR) = (
-    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
-    (
-        ('i_par', 1), ('i_csa', 2), ('i_csb', 3), 
-        ('i_ren', 4), ('i_res', 5), ('i_grp', 7)
-    ),
-    False
+(DATA_NAMES, MLR) = (
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), False
 )
 (THI, THO, THW, TAP) = (
         [.05, .10, .25, .50, .75, .90, .95],
@@ -31,7 +26,7 @@ EXPS = ('000', '002', '004', '006', '008')
     )
 
 # #############################################################################
-# Paths and Style
+# Experiment-Specific Path Functions
 # #############################################################################
 def getXPPattern(SET):
     if SET == 'homing':
@@ -40,13 +35,29 @@ def getXPPattern(SET):
         return XP_SHR
 
 
-def patternForReleases(SET, ren, AOI, ftype):
+def patternForReleases(SET, ren, AOI, ftype, ext='bz'):
     if SET == 'homing':
-        patList = ['*','*','*','*','*','*','*','*','*',ren,AOI,'*',ftype,'bz']
+        patList = ['*','*','*','*','*','*','*','*','*',ren,AOI,'*',ftype,ext]
         return XP_HOM.format(*patList)
     else:
-        patList = ['*','*','*','*','*','*','*',ren,AOI,'*',ftype,'bz']
+        patList = ['*','*','*','*','*','*','*',ren,AOI,'*',ftype,ext]
         return XP_SHR.format(*patList)
+
+
+def getSummaryHeader(SET):
+    if SET == 'homing':
+        DATA_HEAD = (
+            ('i_mcl', 1), ('i_fcl', 2), ('i_mhr', 3), ('i_fhr', 4), 
+            ('i_res', 5), ('i_cac', 6), ('i_gac', 7), ('i_bac', 8), 
+            ('i_ref', 9), ('i_ren', 10), ('i_grp', 12)
+        )
+    else:
+        DATA_HEAD = (
+            ('i_mcl', 1), ('i_fcl', 2), ('i_mrs', 3), ('i_frs', 4), 
+            ('i_atc', 5), ('i_rac', 6), ('i_ref', 7), ('i_ren', 8), 
+            ('i_grp', 10)    
+        )
+    return DATA_HEAD
 
 
 # #############################################################################
