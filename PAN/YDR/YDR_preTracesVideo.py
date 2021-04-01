@@ -95,7 +95,6 @@ for exp in EXPS:
             '-vcodec', 'libx264',
             '-preset', 'veryslow',
             '-crf', '15',
-            '-report',
             '-pix_fmt', 'yuv420p',
             outPath
         ])
