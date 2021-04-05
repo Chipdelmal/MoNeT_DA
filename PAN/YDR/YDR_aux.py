@@ -19,7 +19,7 @@ XP_ID = 'YDR'
 EXPS = ('000', '002', '004', '006', '008')
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, MLR) = (
-    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), False
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), True
 )
 (THI, THO, THW, TAP) = (
         [.05, .10, .25, .50, .75, .90, .95],
@@ -28,7 +28,7 @@ EXPS = ('000', '002', '004', '006', '008')
         [int((i+1)*365-1) for i in range(5)]
     )
 FRATE = 30
-(JOB_DSK, JOB_SRV) = (4, 8)
+(JOB_DSK, JOB_SRV) = (8, 8)
 
 # #############################################################################
 # Experiment-Specific Path Functions
@@ -144,42 +144,3 @@ def getStyle(colors, aspectR, xRange, yRange):
     return style
 
 
-# #############################################################################
-# Parallel Pre-Traces
-# #############################################################################
-def exportPstTracesPlotWrapper(
-        exIx, repFiles, xpidIx, 
-        dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
-        STABLE_T, THS, QNT, STYLE, PT_IMG, 
-        xpsNum=0, digs=3, popScaler=1.5, aspect=1,
-        wopPrint=True, cptPrint=True, poePrint=True
-    ):
-    padi = str(exIx+1).zfill(digs)
-    fmtStr = '{}+ File: {}/{}'
-    print(fmtStr.format(monet.CBBL, padi, len(repFiles), monet.CEND), end='\r')
-    repFile = repFiles[exIx]
-    (repDta, xpid) = (
-            pkl.load(repFile), monet.getXpId(repFile, xpidIx)
-        )
-    xpRow = [
-        monet.filterDFWithID(j, xpid, max=len(xpidIx)) for j in (
-            dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT
-        )
-    ]
-    (tti, tto, wop) = [float(row[THS]) for row in xpRow[:3]]
-    (mnf, mnd, poe, cpt) = (
-        float(xpRow[3]['min']), float(xpRow[3]['minx']), 
-        float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
-    )
-    # Traces ------------------------------------------------------------------
-    pop = repDta['landscapes'][0][STABLE_T][-1]
-    STYLE['yRange'] = (0,  pop*popScaler)
-    STYLE['aspect'] = monet.scaleAspect(aspect, STYLE)
-    monet.exportTracesPlot(
-        repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-        vLines=[tti, tto, mnd], hLines=[mnf*pop], 
-        wop=wop, wopPrint=wopPrint, 
-        cpt=cpt, cptPrint=cptPrint,
-        poe=poe, poePrint=poePrint
-    )
-    return True

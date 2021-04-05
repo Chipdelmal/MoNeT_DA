@@ -78,7 +78,7 @@ for exp in EXPS:
     uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
     (xpDict, smryDicts) = ({}, len(aux.DATA_NAMES)*[{}])
     # Get experiment files ----------------------------------------------------
-    ptrn = aux.patternForReleases('*', '*', 'HLT', 'rto', ext='npy')
+    ptrn = aux.patternForReleases('*', '*', AOI, 'rto', ext='npy')
     fPaths = sorted(glob(PT_OUT+ptrn))
     (fNum, digs) = monet.lenAndDigits(fPaths)
     qnt = float(int(QNT)/100)

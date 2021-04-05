@@ -12,7 +12,7 @@ import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 
 if monet.isNotebook():
-    (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
+    (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'TRS')
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 ###############################################################################
@@ -21,6 +21,7 @@ if SET == 'homing':
     XP_NPAT = aux.XP_SHR
 ###############################################################################
 EXPS = aux.EXPS
+exp = EXPS[0]
 for exp in EXPS:
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=11000),
