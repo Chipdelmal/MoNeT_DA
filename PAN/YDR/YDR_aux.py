@@ -18,8 +18,10 @@ XP_ID = 'YDR'
 (POP_SIZE, XRAN, FZ, STABLE_T) = (22e3, (0, (365*10)/3), True, 0)
 EXPS = ('000', '002', '004', '006', '008')
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
-(DATA_NAMES, MLR) = (
-    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), True
+(DATA_NAMES, DATA_PRE, DATA_PST, MLR) = (
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), 
+    ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD'),
+    True
 )
 (THI, THO, THW, TAP) = (
         [.05, .10, .25, .50, .75, .90, .95],

@@ -13,6 +13,7 @@ if monet.isNotebook():
 else:
     (USR, SET, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
 (AOI, EXPS) = (aux.DATA_PST, aux.EXPS)
+exp = EXPS[0]
 for exp in EXPS:
     # #########################################################################
     # Setup paths and drive
@@ -22,13 +23,13 @@ for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, SET, fldr, exp
     )
-    (PT_IMG_I, PT_IMG_O) = (PT_IMG + 'preTraces/', PT_IMG + 'preGrids/')
+    (PT_IMG_I, PT_IMG_O) = (PT_IMG + 'pstTraces/', PT_IMG + 'pstGrids/')
     monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
     monet.printExperimentHead(PT_IMG_I, PT_IMG_O, tS, 'Grids ')
     # Get files ---------------------------------------------------------------
     NODE_NUM = len(land)
-    imgLists = [glob('{}*{}*{}*.png'.format(PT_IMG_I, i, '*')) for i in AOI]
+    imgLists = [glob('{}E_*{}*{}*.png'.format(PT_IMG_I, i, '*')) for i in AOI]
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
     imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:-1]
     # #########################################################################
