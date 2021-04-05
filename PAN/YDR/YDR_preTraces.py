@@ -60,7 +60,7 @@ for exp in EXPS:
     # Process files
     ###########################################################################
     Parallel(n_jobs=JOB)(
-        delayed(monet.exportTracesPlotWrapper)(
+        delayed(monet.exportPreTracesPlotWrapper)(
             exIx, fLists, STYLE, PT_IMG
         ) for exIx in range(0, len(fLists))
     )
