@@ -5,7 +5,10 @@ import matplotlib
 import pandas as pd
 # import numpy as np
 from glob import glob
+from os import path
 import MoNeT_MGDrivE as monet
+import compress_pickle as pkl
+
 
 XP_ID = 'YDR'
 (XP_HOM, XP_SHR) = (
@@ -25,6 +28,7 @@ EXPS = ('000', '002', '004', '006', '008')
         [int((i+1)*365-1) for i in range(5)]
     )
 FRATE = 30
+(JOB_DSK, JOB_SRV) = (4, 8)
 
 # #############################################################################
 # Experiment-Specific Path Functions
@@ -139,3 +143,15 @@ def getStyle(colors, aspectR, xRange, yRange):
     style['aspect'] = monet.scaleAspect(aspectR, style)
     return style
 
+
+# #############################################################################
+# Parallel Pre-Traces
+# #############################################################################
+def exportTracesPlotWrapper(i, fLists, STYLE, PT_IMG):
+    (xpNum, digs) = monet.lenAndDigits(fLists)
+    monet.printProgress(i+1, xpNum, digs)
+    (_, repDta) = [pkl.load(file) for file in (fLists[i])]
+    name = path.splitext(fLists[i][0].split('/')[-1])[0][:-4]
+    # Export plots --------------------------------------------------------
+    monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
+    return True

@@ -7,13 +7,18 @@ import YDR_aux as aux
 import YDR_gene as drv
 import YDR_land as lnd
 from datetime import datetime
+from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
+
 if monet.isNotebook():
     (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
+    JOB = aux.JOB_DSK
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    JOB = aux.JOB_SRV
+
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
@@ -54,16 +59,16 @@ for exp in EXPS:
     ###########################################################################
     # Process files
     ###########################################################################
-    (xpNum, digs) = monet.lenAndDigits(fLists)
-    for i in range(0, xpNum):
-        monet.printProgress(i+1, xpNum, digs)
-        (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
-        name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
-        # Export plots --------------------------------------------------------
-        monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
-        cl = [i[:-2]+'cc' for i in CLR]
+    Parallel(n_jobs=JOB)(
+        delayed(monet.exportTracesPlotWrapper)(
+            exIx, fLists, STYLE, PT_IMG
+        ) for exIx in range(0, len(fLists))
+    )
     # Export gene legend ------------------------------------------------------
+    sumDta = pkl.load(fLists[-1][0])
+    cl = [i[:-2]+'cc' for i in CLR]
     monet.exportGeneLegend(
-            sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
-        )
-    tE = datetime.now()
+        sumDta['genotypes'], cl, 
+        PT_IMG+'/legend_{}.png'.format(AOI), 500
+    )
+

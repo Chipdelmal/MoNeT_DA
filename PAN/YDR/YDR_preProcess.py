@@ -10,10 +10,10 @@ from joblib import Parallel, delayed
 
 if monet.isNotebook():
     (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
-    (OVW, JOB) = (True, 4)
+    (OVW, JOB) = (True, aux.JOB_DSK)
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-    (OVW, JOB) = (True, 8)
+    (OVW, JOB) = (True, aux.JOB_SRV)
 ###############################################################################
 MF = (True, True)
 if AOI == 'HLT':
@@ -59,3 +59,4 @@ for EXP in EXPS:
                 REP=aux.REP, SRP=aux.SRP
         ) for exIx in range(0, expNum)
     )
+

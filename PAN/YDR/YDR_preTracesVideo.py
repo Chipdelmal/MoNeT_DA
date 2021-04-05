@@ -15,16 +15,19 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
+    (USR, SET, DRV, AOI, EXP) = (
+        'dsk', 'homing', 'ASD', 'HLT', 'E_099_099_027_096_000_007_011_011_010_04'
+    )
     JOBS = 4
 else:
-    (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    (USR, SET, DRV, AOI, EXP) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    )
     JOBS = 8
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
 EXPS = aux.EXPS
-exp=EXPS[0]
 for exp in EXPS:
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
@@ -50,23 +53,14 @@ for exp in EXPS:
         PT_PRE, PT_IMG, tS, aux.XP_ID+' PreTraces {} [{}]'.format(DRV, AOI)
     )
     ###########################################################################
-    # Load preprocessed files lists
-    ###########################################################################
-    tyTag = ('sum', 'srp')
-    (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
-    if aux.FZ:
-        fltrPattern = PT_PRE + aux.patternForReleases('homing', '00', AOI, '*')
-    fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
-    fLists.reverse()
-    ###########################################################################
     # Process files
     ###########################################################################
+    fLists = glob(PT_PRE+EXP+'*'+AOI+'*srp.bz')
     (xpNum, digs) = monet.lenAndDigits(fLists)
-    i = 0
     for i in range(0, xpNum):
         monet.printProgress(i+1, xpNum, digs)
-        (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
-        name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
+        repDta = pkl.load(fLists[i])
+        name = fLists[i].split('/')[-1].split('/')[-1].split('.')[0][:-4]
         framesPth = PT_IMG + 'videoCache'
         monet.makeFolder(framesPth)
         print('* ' + name, end='\r')

@@ -14,7 +14,7 @@ from joblib import Parallel, delayed
 
 if monet.isNotebook():
     (USR, DRV, AOI, LND, EXP) = (
-        'dsk', 'PGS', 'HLT', 'PAN', 'E_016_024_100_000_000-HLT'
+        'dsk', 'PGS', 'HLT', 'PAN', 'E_016_024_100_000_000'
     )
     JOBS = 4
 else:
@@ -51,7 +51,7 @@ monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'PYF PreTraces ' + AOI)
 ###############################################################################
 # Process files
 ###############################################################################
-fLists = glob(PT_PRE+EXP+'*srp.bz')
+fLists = glob(PT_PRE+EXP+'*'+AOI+'*srp.bz')
 (xpNum, digs) = monet.lenAndDigits(fLists)
 i=0
 for i in range(0, len(fLists)):
