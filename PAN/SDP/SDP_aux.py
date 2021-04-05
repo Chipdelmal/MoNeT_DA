@@ -14,8 +14,9 @@ import MoNeT_MGDrivE as monet
 )
 (POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*2.5), True, 0)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
-(DATA_NAMES, DATA_HEAD, MLR) = (
+(DATA_NAMES, DATA_PRE, DATA_PST, DATA_HEAD, MLR) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
+    ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD'),
     (
         ('i_par', 1), ('i_csa', 2), ('i_csb', 3), 
         ('i_ren', 4), ('i_res', 5), ('i_grp', 7)
