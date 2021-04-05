@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # argv1: User
-
+# argv2: THS
 
 bash ./YDR_pstTraces.sh $1 ASD $2
 bash ./YDR_pstTraces.sh $1 XSD $2
