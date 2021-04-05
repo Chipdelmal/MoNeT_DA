@@ -147,11 +147,39 @@ def getStyle(colors, aspectR, xRange, yRange):
 # #############################################################################
 # Parallel Pre-Traces
 # #############################################################################
-def exportTracesPlotWrapper(i, fLists, STYLE, PT_IMG):
-    (xpNum, digs) = monet.lenAndDigits(fLists)
-    monet.printProgress(i+1, xpNum, digs)
-    (_, repDta) = [pkl.load(file) for file in (fLists[i])]
-    name = path.splitext(fLists[i][0].split('/')[-1])[0][:-4]
-    # Export plots --------------------------------------------------------
-    monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
+def exportPstTracesPlotWrapper(
+        exIx, repFiles, xpidIx, 
+        dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
+        STABLE_T, THS, QNT, STYLE, PT_IMG, 
+        xpsNum=0, digs=3, popScaler=1.5, aspect=1,
+        wopPrint=True, cptPrint=True, poePrint=True
+    ):
+    padi = str(exIx+1).zfill(digs)
+    fmtStr = '{}+ File: {}/{}'
+    print(fmtStr.format(monet.CBBL, padi, len(repFiles), monet.CEND), end='\r')
+    repFile = repFiles[exIx]
+    (repDta, xpid) = (
+            pkl.load(repFile), monet.getXpId(repFile, xpidIx)
+        )
+    xpRow = [
+        monet.filterDFWithID(j, xpid, max=len(xpidIx)) for j in (
+            dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT
+        )
+    ]
+    (tti, tto, wop) = [float(row[THS]) for row in xpRow[:3]]
+    (mnf, mnd, poe, cpt) = (
+        float(xpRow[3]['min']), float(xpRow[3]['minx']), 
+        float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
+    )
+    # Traces ------------------------------------------------------------------
+    pop = repDta['landscapes'][0][STABLE_T][-1]
+    STYLE['yRange'] = (0,  pop*popScaler)
+    STYLE['aspect'] = monet.scaleAspect(aspect, STYLE)
+    monet.exportTracesPlot(
+        repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
+        vLines=[tti, tto, mnd], hLines=[mnf*pop], 
+        wop=wop, wopPrint=wopPrint, 
+        cpt=cpt, cptPrint=cptPrint,
+        poe=poe, poePrint=poePrint
+    )
     return True

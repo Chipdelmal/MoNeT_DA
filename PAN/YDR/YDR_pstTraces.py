@@ -8,6 +8,7 @@ from glob import glob
 from datetime import datetime
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
+from joblib import Parallel, delayed
 import YDR_aux as aux
 import YDR_gene as drv
 import YDR_land as lnd
@@ -17,11 +18,13 @@ if monet.isNotebook():
     (USR, SET, DRV, AOI, QNT, THS) = (
         'dsk', 'homing', 'ASD', 'HLT', '50', '0.5'
     )
+    JOB = aux.JOB_DSK
 else:
     (USR, SET, DRV, AOI, QNT, THS) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
+    JOB = aux.JOB_SRV
 ###############################################################################
 (header, xpidIx) = list(zip(*aux.getSummaryHeader(SET)))
 xpPat = aux.getXPPattern(SET)
@@ -46,7 +49,7 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_PRE, PT_OUT, tS, 'SDP PstTraces {} [{}]'.format(DRV, AOI)
+        PT_PRE, PT_IMG, tS, 'SDP PstTraces {} [{}]'.format(DRV, AOI)
     )
     ###########################################################################
     # Style 
@@ -79,33 +82,17 @@ for exp in EXPS:
     # Iterate through experiments
     ###########################################################################
     (fNum, digs) = monet.lenAndDigits(repFiles)
-    fmtStr = '{}+ File: {}/{}'
-    (i, repFile) = (0, repFiles[0])
-    for (i, repFile) in enumerate(repFiles):
-        padi = str(i+1).zfill(digs)
-        print(fmtStr.format(monet.CBBL, padi, fNum, monet.CEND), end='\r')
-        (repDta, xpid) = (
-                pkl.load(repFile),
-                monet.getXpId(repFile, xpidIx)
-            )
-        xpRow = [
-            monet.filterDFWithID(i, xpid, max=len(xpidIx)) for i in (
-                dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT
-            )
-        ]
-        (tti, tto, wop) = [float(row[THS]) for row in xpRow[:3]]
-        (mnf, mnd, poe, cpt) = (
-            float(xpRow[3]['min']), float(xpRow[3]['minx']), 
-            float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
-        )
-        # Traces ------------------------------------------------------------------
-        pop = repDta['landscapes'][0][aux.STABLE_T][-1]
-        STYLE['yRange'] = (0,  pop+pop*.5)
-        STYLE['aspect'] = monet.scaleAspect(1, STYLE)
-        monet.exportTracesPlot(
-            repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-            vLines=[tti, tto, mnd], hLines=[mnf*pop], 
-            wop=wop, wopPrint=True, 
-            cpt=cpt, cptPrint=True,
-            poe=poe, poePrint=True
-        )
+    Parallel(n_jobs=JOB)(
+        delayed(monet.exportPstTracesPlotWrapper)(
+        exIx, repFiles, xpidIx,
+        dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
+        aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
+        digs=digs, popScaler=1.5, aspect=1
+        ) for exIx in range(0, len(repFiles))
+    )
+    # Export gene legend ------------------------------------------------------
+    repDta = pkl.load(repFiles[-1])
+    monet.exportGeneLegend(
+        repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+        PT_IMG+'/legend_{}.png'.format(AOI), 500
+    )
