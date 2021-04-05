@@ -59,16 +59,16 @@ for exp in EXPS:
     ###########################################################################
     # Process files
     ###########################################################################
+    (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPreTracesPlotWrapper)(
-            exIx, fLists, STYLE, PT_IMG
+            exIx, fLists, STYLE, PT_IMG, xpNum=xpNum, digs=digs
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------
     sumDta = pkl.load(fLists[-1][0])
-    cl = [i[:-2]+'cc' for i in CLR]
     monet.exportGeneLegend(
-        sumDta['genotypes'], cl, 
+        sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
         PT_IMG+'/legend_{}.png'.format(AOI), 500
     )
 
