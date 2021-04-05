@@ -17,7 +17,7 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         colors = monet.COLEN
     elif TYPE == 'HLT':
         colors = monet.COLHN
-        colors = colors[-1:] + colors[:-1]
+        # colors = colors[-1:] + colors[:-1]
     elif TYPE == 'TRS':
         colors = monet.COLTN
     elif TYPE == 'WLD':

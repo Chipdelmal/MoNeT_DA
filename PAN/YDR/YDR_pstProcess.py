@@ -20,15 +20,8 @@ else:
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
 ###############################################################################
-mlr = True
-(thiS, thoS, thwS, tapS) = (
-        [.05, .10, .25, .50, .75, .90, .95],
-        [.05, .10, .25, .50, .75, .90, .95],
-        [.05, .10, .25, .50, .75, .90, .95],
-        [int((i+1)*365-1) for i in range(5)]
-    )
-EXPS = ('000', '002', '004', '006', '008')
-###############################################################################
+(header, xpidIx) = list(zip(*aux.getSummaryHeader(SET)))
+
 if SET == 'homing':
     (header, xpidIx) = (
             (
@@ -63,6 +56,7 @@ xpPat = aux.getXPPattern(SET)
 ###############################################################################
 # Iterate through experiments
 ###############################################################################
+EXPS = aux.EXPS
 exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
@@ -79,18 +73,20 @@ for exp in EXPS:
     # Setup schemes
     ###########################################################################
     pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
-    DFOPths = [pth.format(z) for z in outLabels]
+    DFOPths = [pth.format(z) for z in aux.DATA_NAMES]
     # Setup experiments IDs ---------------------------------------------------
     uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
-    (xpDict, smryDicts) = ({}, ({}, {}, {}, {}, {}, {}, {}))
+    (xpDict, smryDicts) = ({}, len(aux.DATA_NAMES)*[{}])
     # Get experiment files ----------------------------------------------------
-    ptrn = xpPat.format(*fmt)
+    ptrn = aux.patternForReleases('*', '*', 'HLT', 'rto', ext='npy')
     fPaths = sorted(glob(PT_OUT+ptrn))
     (fNum, digs) = monet.lenAndDigits(fPaths)
     qnt = float(int(QNT)/100)
     # Setup dataframes --------------------------------------------------------
     outDFs = monet.initDFsForDA(
-        fPaths, header, thiS, thoS, thwS, tapS, POE=True, CPT=True
+        fPaths, header, 
+        aux.THI, aux.THO, aux.THW, aux.TAP, 
+        POE=True, CPT=True
     )
     (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF, derDF) = outDFs
     ###########################################################################
@@ -109,12 +105,12 @@ for exp in EXPS:
         # Calculate Metrics
         #######################################################################
         (ttiS, ttoS, wopS) = (
-                monet.calcTTI(repRto, thiS),
-                monet.calcTTO(repRto, thoS),
-                monet.calcWOP(repRto, thwS)
+                monet.calcTTI(repRto, aux.THI),
+                monet.calcTTO(repRto, aux.THO),
+                monet.calcWOP(repRto, aux.THW)
             )
         (minS, maxS, _, _) = monet.calcMinMax(repRto)
-        rapS = monet.getRatioAtTime(repRto, tapS)
+        rapS = monet.getRatioAtTime(repRto, aux.TAP)
         poe = monet.calcPOE(repRto)
         cpt = monet.calcCPT(repRto)
         der = monet.calcDER(repRto, smoothing=10, magnitude=0.1)
@@ -144,12 +140,12 @@ for exp in EXPS:
         #######################################################################
         # Update in Dictionaries
         #######################################################################
-        if mlr:
+        if aux.MLR:
             outDict = [
-                    {int(i[0]*100): i[1] for i in zip(thiS, ttiS)},
-                    {int(i[0]*100): i[1] for i in zip(thoS, ttoS)},
-                    {int(i[0]*100): i[1] for i in zip(thwS, wopS)},
-                    {int(i[0]*100): i[1] for i in zip(tapS, rapS)},
+                    {int(i[0]*100): i[1] for i in zip(aux.THI, ttiS)},
+                    {int(i[0]*100): i[1] for i in zip(aux.THO, ttoS)},
+                    {int(i[0]*100): i[1] for i in zip(aux.THW, wopS)},
+                    {int(i[0]*100): i[1] for i in zip(aux.TAP, rapS)},
                     {
                         'mnl': minS[0], 'mnd': minS[1],
                         'mxl': maxS[0], 'mxd': maxS[1]
@@ -165,7 +161,7 @@ for exp in EXPS:
     ###########################################################################
     for df in zip(outDFs, DFOPths):
         df[0].to_csv(df[1], index=False)
-    if mlr:
+    if aux.MLR:
         for (i, dict) in enumerate(smryDicts):
             lbl = outLabels[i]
             pth = PT_MTR+AOI+'_'+lbl+'_'+QNT+'_mlr.bz'

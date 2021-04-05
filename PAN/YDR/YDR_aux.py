@@ -5,23 +5,21 @@ import matplotlib
 import pandas as pd
 # import numpy as np
 from glob import glob
+from os import path
 import MoNeT_MGDrivE as monet
+import compress_pickle as pkl
+
 
 XP_ID = 'YDR'
 (XP_HOM, XP_SHR) = (
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
     'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
-(POP_SIZE, XRAN, FZ, STABLE_T) = (11e3, (0, 365*10), True, 0)
+(POP_SIZE, XRAN, FZ, STABLE_T) = (22e3, (0, (365*10)/3), True, 0)
 EXPS = ('000', '002', '004', '006', '008')
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
-(DATA_NAMES, DATA_HEAD, MLR) = (
-    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
-    (
-        ('i_par', 1), ('i_csa', 2), ('i_csb', 3), 
-        ('i_ren', 4), ('i_res', 5), ('i_grp', 7)
-    ),
-    False
+(DATA_NAMES, MLR) = (
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), False
 )
 (THI, THO, THW, TAP) = (
         [.05, .10, .25, .50, .75, .90, .95],
@@ -29,9 +27,11 @@ EXPS = ('000', '002', '004', '006', '008')
         [.05, .10, .25, .50, .75, .90, .95],
         [int((i+1)*365-1) for i in range(5)]
     )
+FRATE = 30
+(JOB_DSK, JOB_SRV) = (4, 8)
 
 # #############################################################################
-# Paths and Style
+# Experiment-Specific Path Functions
 # #############################################################################
 def getXPPattern(SET):
     if SET == 'homing':
@@ -40,13 +40,29 @@ def getXPPattern(SET):
         return XP_SHR
 
 
-def patternForReleases(SET, ren, AOI, ftype):
+def patternForReleases(SET, ren, AOI, ftype, ext='bz'):
     if SET == 'homing':
-        patList = ['*','*','*','*','*','*','*','*','*',ren,AOI,'*',ftype,'bz']
+        patList = ['*','*','*','*','*','*','*','*','*',ren,AOI,'*',ftype,ext]
         return XP_HOM.format(*patList)
     else:
-        patList = ['*','*','*','*','*','*','*',ren,AOI,'*',ftype,'bz']
+        patList = ['*','*','*','*','*','*','*',ren,AOI,'*',ftype,ext]
         return XP_SHR.format(*patList)
+
+
+def getSummaryHeader(SET):
+    if SET == 'homing':
+        DATA_HEAD = (
+            ('i_mcl', 1), ('i_fcl', 2), ('i_mhr', 3), ('i_fhr', 4), 
+            ('i_res', 5), ('i_cac', 6), ('i_gac', 7), ('i_bac', 8), 
+            ('i_ref', 9), ('i_ren', 10), ('i_grp', 12)
+        )
+    else:
+        DATA_HEAD = (
+            ('i_mcl', 1), ('i_fcl', 2), ('i_mrs', 3), ('i_frs', 4), 
+            ('i_atc', 5), ('i_rac', 6), ('i_ref', 7), ('i_ren', 8), 
+            ('i_grp', 10)    
+        )
+    return DATA_HEAD
 
 
 # #############################################################################
@@ -127,3 +143,15 @@ def getStyle(colors, aspectR, xRange, yRange):
     style['aspect'] = monet.scaleAspect(aspectR, style)
     return style
 
+
+# #############################################################################
+# Parallel Pre-Traces
+# #############################################################################
+def exportTracesPlotWrapper(i, fLists, STYLE, PT_IMG):
+    (xpNum, digs) = monet.lenAndDigits(fLists)
+    monet.printProgress(i+1, xpNum, digs)
+    (_, repDta) = [pkl.load(file) for file in (fLists[i])]
+    name = path.splitext(fLists[i][0].split('/')[-1])[0][:-4]
+    # Export plots --------------------------------------------------------
+    monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
+    return True

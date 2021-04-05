@@ -7,27 +7,31 @@ import YDR_aux as aux
 import YDR_gene as drv
 import YDR_land as lnd
 from datetime import datetime
+from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
+
 if monet.isNotebook():
     (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
+    JOB = aux.JOB_DSK
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-###############################################################################
-(FMT, SKP, FZ) = ('bz2', False, False)
-EXPS = ('000', '002', '004', '006', '008')
+    JOB = aux.JOB_SRV
+
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
-for EXP in EXPS:
+EXPS = aux.EXPS
+exp=EXPS[0]
+for exp in EXPS:
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=22000),
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
         lnd.landSelector('SPA')
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, SET, fldr, EXP
+        USR, SET, fldr, exp
     )
     PT_IMG = PT_IMG + 'preTraces/'
     monet.makeFolder(PT_IMG)
@@ -37,33 +41,34 @@ for EXP in EXPS:
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
             "width": .3, "alpha": .5, "dpi": 300, "legend": True,
-            "aspect": .25, "colors": CLR, "xRange": [0, (365*10)/3],
-            "yRange": YRAN
+            "aspect": .25, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()
-    monet.printExperimentHead(PT_PRE, PT_IMG, tS, 'PreTraces ' + AOI)
+    monet.printExperimentHead(
+        PT_PRE, PT_IMG, tS, aux.XP_ID+' PreTraces {} [{}]'.format(DRV, AOI)
+    )
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################
     tyTag = ('sum', 'srp')
     (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
-    if FZ:
-        fltrPattern = PT_PRE+'*_00_*'+AOI+'*'+'{}'+'*'
+    if aux.FZ:
+        fltrPattern = PT_PRE + aux.patternForReleases('homing', '00', AOI, '*')
     fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
     ###########################################################################
     # Process files
     ###########################################################################
-    (xpNum, digs) = monet.lenAndDigits(fLists)
-    for i in range(0, xpNum):
-        monet.printProgress(i+1, xpNum, digs)
-        (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
-        name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
-        # Export plots --------------------------------------------------------
-        monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, wopPrint=False)
-        cl = [i[:-2]+'cc' for i in CLR]
+    Parallel(n_jobs=JOB)(
+        delayed(monet.exportTracesPlotWrapper)(
+            exIx, fLists, STYLE, PT_IMG
+        ) for exIx in range(0, len(fLists))
+    )
     # Export gene legend ------------------------------------------------------
+    sumDta = pkl.load(fLists[-1][0])
+    cl = [i[:-2]+'cc' for i in CLR]
     monet.exportGeneLegend(
-            sumDta['genotypes'], cl, PT_IMG+'/legend_{}.png'.format(AOI), 500
-        )
-    tE = datetime.now()
+        sumDta['genotypes'], cl, 
+        PT_IMG+'/legend_{}.png'.format(AOI), 500
+    )
+
