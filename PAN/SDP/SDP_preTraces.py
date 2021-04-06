@@ -34,7 +34,7 @@ for exp in EXPS:
     tS = datetime.now()
     monet.printExperimentHead(
         PT_PRE, PT_IMG, tS, 
-        aux.XP_ID+' Pretraces [{}:{}:{}]'.format(DRV, exp, AOI)
+        aux.XP_ID+' PreTraces [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
     # Style 

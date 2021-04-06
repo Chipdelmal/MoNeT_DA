@@ -22,5 +22,5 @@ For the breakdown of the **AOI** sets, look at the gene definitions:
 * [(IIT) Wolbachia](./SDP_gene_IIT.py)
 * [(PGS) pgSIT](./SDP_gene_PGS.py)
 * [(FSR) fsRIDL](./SDP_gene_FSR.py)
-* [(AXR) Autosomal X-Shredder](./SDP_gene_AXR.py)
+* [(AXR) Autosomal X-Shredder](./SDP_gene_AXS.py)
 * [(SIT) Sterile Insect Technique](./SDP_gene_SIT.py)

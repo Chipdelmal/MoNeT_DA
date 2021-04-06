@@ -29,7 +29,8 @@ for exp in EXPS:
     )
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_PRE, PT_OUT, tS, aux.XP_ID+' PstFraction {} [{}]'.format(DRV, AOI)
+        PT_PRE, PT_OUT, tS, 
+        aux.XP_ID+'  PstFraction [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###############################################################################
     # Setting up paths and style

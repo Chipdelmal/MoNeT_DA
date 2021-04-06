@@ -6,16 +6,8 @@
 
 
 QNT="75"
-python SDP_pstTraces.py $1 $2 HLT 50 $3
-python SDP_pstTraces.py $1 $2 WLD 50 $3
-python SDP_pstTraces.py $1 $2 TRS 50 $3
+python SDP_pstTraces.py $1 $2 HLT $QNT $3
+python SDP_pstTraces.py $1 $2 WLD $QNT $3
+python SDP_pstTraces.py $1 $2 TRS $QNT $3
 
-python SDP_pstTraces.py $1 $2 HLT 75 $3
-python SDP_pstTraces.py $1 $2 WLD 75 $3
-python SDP_pstTraces.py $1 $2 TRS 75 $3
-
-python SDP_pstTraces.py $1 $2 HLT 90 $3
-python SDP_pstTraces.py $1 $2 WLD 90 $3
-python SDP_pstTraces.py $1 $2 TRS 90 $3
-
-bash ./SDP_pstGrids.sh $1 $QNT
+python SDP_pstGrids.py $1 $2 $QNT
