@@ -11,4 +11,4 @@ bash ./SDP_preTraces.sh $1 FSR
 bash ./SDP_preTraces.sh $1 AXS
 bash ./SDP_preTraces.sh $1 SIT
 
-bash ./SDP_preGrids.sh $1
+bash ./SDP_preGridsSet.sh $1

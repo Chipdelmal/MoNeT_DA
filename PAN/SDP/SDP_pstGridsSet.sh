@@ -2,7 +2,7 @@
 
 # argv1: User
 
-QNT="50"
+QNT="75"
 
 python SDP_pstGrids.py $1 SDR $QNT
 python SDP_pstGrids.py $1 CRS $QNT
@@ -12,3 +12,4 @@ python SDP_pstGrids.py $1 PGS $QNT
 python SDP_pstGrids.py $1 FSR $QNT
 python SDP_pstGrids.py $1 AXS $QNT
 python SDP_pstGrids.py $1 SIT $QNT
+
