@@ -5,7 +5,7 @@
 
 expSet=$(./YDR_selector.sh $2)
 
-QNT="50"
+QNT="75"
 python YDR_pstProcess.py $1 $expSet $2 HLT $QNT
 python YDR_pstProcess.py $1 $expSet $2 TRS $QNT
 python YDR_pstProcess.py $1 $expSet $2 WLD $QNT

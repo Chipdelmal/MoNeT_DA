@@ -62,7 +62,7 @@ for exp in EXPS:
     (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPreTracesPlotWrapper)(
-            exIx, fLists, STYLE, PT_IMG, xpNum=xpNum, digs=digs
+            exIx, fLists, STYLE, PT_IMG, xpNum=xpNum, digs=digs, border=True
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------
