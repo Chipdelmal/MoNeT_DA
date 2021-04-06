@@ -33,7 +33,8 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_PRE, PT_IMG, tS, aux.XP_ID+' Pretraces {} [{}]'.format(DRV, AOI)
+        PT_PRE, PT_IMG, tS, 
+        aux.XP_ID+' Pretraces [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
     # Style 
@@ -60,7 +61,8 @@ for exp in EXPS:
     (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPreTracesPlotWrapper)(
-            exIx, fLists, STYLE, PT_IMG, xpNum=xpNum, digs=digs, border=True
+            exIx, fLists, STYLE, PT_IMG, 
+            xpNum=xpNum, digs=digs, border=True
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------

@@ -14,4 +14,4 @@ bash ./SDP_pstTraces.sh $1 FSR $2
 bash ./SDP_pstTraces.sh $1 AXS $2
 bash ./SDP_pstTraces.sh $1 SIT $2
 
-bash ./SDP_pstGridsSet.sh $1
+# bash ./SDP_pstGridsSet.sh $1

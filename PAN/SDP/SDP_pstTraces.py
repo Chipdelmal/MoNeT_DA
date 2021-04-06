@@ -41,7 +41,8 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_OUT, PT_IMG, tS, aux.XP_ID+' PstTraces {} [{}]'.format(DRV, AOI)
+        PT_OUT, PT_IMG, tS, 
+        aux.XP_ID+' PstTraces [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
     # Style 
@@ -79,7 +80,7 @@ for exp in EXPS:
         exIx, repFiles, xpidIx,
         dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
         aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
-        digs=digs, popScaler=1.5, aspect=1
+        digs=digs, popScaler=1.5, aspect=1, border=True
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------

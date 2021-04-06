@@ -10,4 +10,6 @@ python YDR_pstTraces.py $1 $expSet $2 HLT $QNT $3
 python YDR_pstTraces.py $1 $expSet $2 WLD $QNT $3
 python YDR_pstTraces.py $1 $expSet $2 TRS $QNT $3
 
-bash ./YDR_pstTraces.sh $1 $2
+python YDR_pstGrids.py $1 $expSet $2 $QNT
+
+# bash ./YDR_preGrids.sh $1 $2

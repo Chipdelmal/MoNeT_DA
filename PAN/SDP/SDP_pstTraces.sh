@@ -18,4 +18,4 @@ python SDP_pstTraces.py $1 $2 HLT 90 $3
 python SDP_pstTraces.py $1 $2 WLD 90 $3
 python SDP_pstTraces.py $1 $2 TRS 90 $3
 
-bash ./SDP_pstGridsSet.sh $1 $QNT
+bash ./SDP_pstGrids.sh $1 $QNT
