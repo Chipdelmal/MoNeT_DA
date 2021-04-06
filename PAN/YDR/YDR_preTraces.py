@@ -46,7 +46,8 @@ for exp in EXPS:
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_PRE, PT_IMG, tS, aux.XP_ID+' PreTraces {} [{}]'.format(DRV, AOI)
+        PT_PRE, PT_IMG, tS, 
+        aux.XP_ID+' PreTraces [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
     # Load preprocessed files lists
@@ -62,7 +63,9 @@ for exp in EXPS:
     (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPreTracesPlotWrapper)(
-            exIx, fLists, STYLE, PT_IMG, xpNum=xpNum, digs=digs, border=True
+            exIx, fLists, STYLE, PT_IMG, 
+            xpNum=xpNum, digs=digs, 
+            border=True, borderColor='#8184a7AA', borderWidth=2
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------

@@ -26,7 +26,7 @@ for exp in EXPS:
     monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_IMG_I, PT_IMG_O, tS, 'PreGrids {}'.format(DRV)
+        PT_IMG_I, PT_IMG_O, tS, aux.XP_ID+' PreGrids [{}:{}]'.format(DRV, exp)
     )
     # Get files ---------------------------------------------------------------
     NODE_NUM = len(land)
@@ -40,6 +40,5 @@ for exp in EXPS:
     for (i, chunk) in enumerate(imgChunks):
         monet.printProgress(i+1, xpNum, digs)
         expGrid = vconcat([hconcat([imread(i) for i in j]) for j in chunk])
-        # [[imread(i).shape for i in j] for j in chunk]
         fName = chunk[0][0].split('/')[-1].split('-')[0]
         imwrite(PT_IMG_O + fName + '.png', expGrid)

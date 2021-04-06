@@ -20,7 +20,7 @@ if AOI == 'HLT':
     MF = (False, True)
 ###############################################################################
 EXPS = aux.EXPS
-for EXP in EXPS:
+for exp in EXPS:
     ###########################################################################
     # Setting up paths and style
     ###########################################################################
@@ -30,12 +30,13 @@ for EXP in EXPS:
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, SET, fldr, EXP
+        USR, SET, fldr, exp
     )
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_DTA, PT_PRE, tS, aux.XP_ID+' PreProcess {} [{}]'.format(DRV, AOI)
+        PT_DTA, PT_PRE, tS, 
+        aux.XP_ID+' PreProcess [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
     # Load folders

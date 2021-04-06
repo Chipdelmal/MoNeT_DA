@@ -67,7 +67,8 @@ for exp in EXPS:
     )
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_OUT, PT_MTR, tS, 'YDR PstProcess {} [{}]'.format(DRV, AOI)
+        PT_OUT, PT_MTR, tS, 
+        aux.XP_ID+' PstProcess [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
     # Setup schemes
