@@ -8,19 +8,18 @@ declare -a SHR=("autosomal" "yLinked" "CRISPR")
 BASE_DA="/RAID5/marshallShare/yLinked"
 BASE_DS="/RAID0/yLinked"
 
-# BASE_DA="/home/chipdelmal/Desktop/yDrive"
-# BASE_DS="./yDrive"
-
 # Go through shredding drives folders -----------------------------------------
 mkdir -p "$BASE_DA/shredder/"
 for fldr in ${SHR[@]};do
     mkdir -p "$BASE_DA/shredder/$fldr"
     for exp in ${EXPS[@]};do
         # Create links
-        src="$BASE_DS/shredderg/$fldr/$exp"
+        src="$BASE_DS/shredder/$fldr/$exp"
         dst="$BASE_DA/shredder/$fldr/$exp"
-        ln -s "$src/ANALYZED" "$dst/ANALYZED"
-        ln -s "$src/TRACES" "$dst/TRACES"
+	mkdir -p $dst
+        # ln -s "$src/ANALYZED" "$dst/ANALYZED"
+        ln -s "$src/TRACE" "$dst/TRACE"
+	# unlink "$dst/TRACES"
     done
 done
 
