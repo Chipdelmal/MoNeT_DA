@@ -7,3 +7,4 @@
 # bash ./YDR_preProcess.sh $1 YSD
 bash ./YDR_preProcess.sh $1 AXS
 bash ./YDR_preProcess.sh $1 YXS
+bash ./YDR_preProcess.sh $1 CRS

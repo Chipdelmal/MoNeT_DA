@@ -4,6 +4,7 @@ import YDR_gene_XSD as XSD
 import YDR_gene_YSD as YSD
 import YDR_gene_AXS as AXS
 import YDR_gene_YXS as YXS
+import YDR_gene_CRS as CRS
 import MoNeT_MGDrivE as monet
 
 
@@ -26,6 +27,9 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
         (aggD, yRange, folder) = AXS.driveParameters(TYPE, popSize)
     # Autosomal Y-Shredder ----------------------------------------------------
     if DRIVE == 'YXS':
+        (aggD, yRange, folder) = YXS.driveParameters(TYPE, popSize)
+    # CRISPR ------------------------------------------------------------------
+    if DRIVE == 'CRS':
         (aggD, yRange, folder) = YXS.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':

@@ -8,7 +8,7 @@
 * [YSD: Y-Linked Split-Drive](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-SplitDriveY.R)
 * [ASD: Autosomal X-Shredder](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-ShredderMF.R)
 * [YXS: Y-Linked X-Shredder](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-ShredderY.R)
-
+* [CRS: CRISPR](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-CRISPR2MF.R)
 ## Scripts
 
 Add your USR id to the [YDR_aux](./YDR_aux.py) file to run the scripts.
