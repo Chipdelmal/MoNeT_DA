@@ -2,7 +2,7 @@
 
 declare -a EXPS=("000" "002" "004" "006" "008")
 declare -a HMS=("autosomal" "xLinked" "yLinked")
-declare -a SHR=("autosomal" "yLinked")
+declare -a SHR=("autosomal" "yLinked" "CRISPR")
 
 # Data analysis root (DA) and data source root (DS)
 BASE_DA="/RAID5/marshallShare/yLinked"
