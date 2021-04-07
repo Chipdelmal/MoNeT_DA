@@ -49,7 +49,8 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_OUT, PT_IMG, tS, 'SDP PstTraces [{}:{}:{}]'.format(DRV, exp, AOI)
+        PT_OUT, PT_IMG, tS, 
+        aux.XP_ID+' PstProcess [{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
     # Style 
