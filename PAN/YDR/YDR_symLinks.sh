@@ -9,30 +9,32 @@ BASE_DA="/RAID5/marshallShare/yLinked"
 BASE_DS="/RAID0/yLinked"
 
 # Go through shredding drives folders -----------------------------------------
-mkdir -p "$BASE_DA/shredder/"
+# mkdir -p "$BASE_DA/shredder/"
+# for fldr in ${SHR[@]};do
+#     mkdir -p "$BASE_DA/shredder/$fldr"
+#     for exp in ${EXPS[@]};do
+#         # Create links
+#         src="$BASE_DS/shredder/$fldr/$exp"
+#         dst="$BASE_DA/shredder/$fldr/$exp"
+# 	      mkdir -p $dst
+#         ln -s "$src/ANALYZED" "$dst/ANALYZED"
+#         ln -s "$src/TRACE" "$dst/TRACE"
+# 	# unlink "$dst/TRACES"
+#     done
+# done
+
+# Go through shredding drives folders -----------------------------------------
+mkdir -p "$BASE_DA/homing/"
 for fldr in ${SHR[@]};do
-    mkdir -p "$BASE_DA/shredder/$fldr"
+    mkdir -p "$BASE_DA/homing/$fldr"
     for exp in ${EXPS[@]};do
         # Create links
-        src="$BASE_DS/shredder/$fldr/$exp"
-        dst="$BASE_DA/shredder/$fldr/$exp"
-	mkdir -p $dst
-        # ln -s "$src/ANALYZED" "$dst/ANALYZED"
+        src="$BASE_DS/homing/$fldr/$exp"
+        dst="$BASE_DA/homing/$fldr/$exp"
+	    mkdir -p $dst
+        ln -s "$src/ANALYZED" "$dst/ANALYZED"
         ln -s "$src/TRACE" "$dst/TRACE"
 	# unlink "$dst/TRACES"
     done
 done
-
-# Go through homing drives folders --------------------------------------------
-# mkdir -p "$BASE_DA/homing/"
-# for fldr in ${HMS[@]};do
-#     mkdir -p "$BASE_DA/homing/$fldr"
-#     for exp in ${EXPS[@]};do
-#         # Create links
-#         src="$BASE_DS/homing/$fldr/$exp"
-#         dst="$BASE_DA/homing/$fldr/$exp"
-#         ln -s "$src/ANALYZED" "$dst/ANALYZED"
-#         ln -s "$src/TRACES" "$dst/TRACES"
-#     done
-# done
 
