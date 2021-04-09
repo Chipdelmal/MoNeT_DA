@@ -45,7 +45,7 @@ for exp in EXPS:
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-    outNames = aux.splitExpNames(PT_OUT)
+    outNames = aux.splitExpNames(PT_PRE)
     outExpNames = set(outNames)
     ###########################################################################
     # Analyze data

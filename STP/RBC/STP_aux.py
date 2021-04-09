@@ -8,12 +8,12 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 # Constants
 # #############################################################################
-(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (25e3, (0, int(365*1)), True, 0, True)
-(XP_ID, EXPS, XP_PTRN) = (
-    'STP', ('PAN', ),
-    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
+(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (1.25e6, (0, int(365*1)), True, 0, True)
+(XP_ID, DRV, XP_PTRN) = (
+    'STP', 'LDR', 
+    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
-(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
+(SUM, AGG, SPA, REP, SRP, OVW) = (True, False, False, False, True, True)
 (DATA_NAMES, DATA_PRE, DATA_PST, DATA_HEAD) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD'),
@@ -30,7 +30,6 @@ import MoNeT_MGDrivE as monet
     [int((i+1)*365-1) for i in range(XRAN[1])]
 )
 (JOB_DSK, JOB_SRV) = (4, 8)
-DRV = 'LDR'
 
 # #############################################################################
 # Names and patterns
@@ -41,7 +40,11 @@ def splitExpNames(PATH_OUT, ext='bz'):
 
 
 def patternForReleases(ren, AOI, ftype, ext='bz'):
-    strPat = XP_PTRN.format('*', '*', '*', ren, '*', AOI, '*', ftype, ext)
+    strPat = XP_PTRN.format(
+        '*', ren, '*', '*', '*', 
+        '*', '*', '*', '*', '*', 
+        AOI, '*', ftype, ext
+    )
     return strPat
 
 

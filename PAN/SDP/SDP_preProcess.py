@@ -46,12 +46,12 @@ for exp in EXPS:
         PT_DTA, mean='ANALYZED/', reps='TRACES/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-    outNames = monet.splitExpNames(PT_OUT)
+    outNames = monet.splitExpNames(PT_PRE)
     outExpNames = set(outNames)
     ###########################################################################
     # Process data
     ###########################################################################
-    Parallel(n_jobs=1)(
+    Parallel(n_jobs=JOB)(
         delayed(monet.preProcess)(
                 exIx, expNum, expDirsMean, expDirsTrac, gene,
                 analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
