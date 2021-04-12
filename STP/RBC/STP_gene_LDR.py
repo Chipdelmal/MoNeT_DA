@@ -5,7 +5,6 @@ import MoNeT_MGDrivE as monet
 ###############################################################################
 # https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_main.R
 ###############################################################################
-
 genotypes = ('WW', 'WH', 'WR', 'WB', 'HH', 'HR', 'HB', 'RR', 'RB', 'BB')
 locus = (0, 1)
 

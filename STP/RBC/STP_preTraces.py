@@ -13,7 +13,7 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, AOI, EXP, LND) = ('dsk', 'HLT', 'PAN', 'PAN')
+    (USR, AOI, EXP, LND) = ('dsk', 'ECO', 'PAN', 'PAN')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, EXP, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -36,7 +36,7 @@ monet.makeFolder(PT_IMG)
 ###########################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-        "width": .3, "alpha": .75, "dpi": 100, "legend": True,
+        "width": .2, "alpha": .5, "dpi": 300, "legend": True,
         "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
     }
 tS = datetime.now()

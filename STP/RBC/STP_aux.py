@@ -9,8 +9,8 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (1.25e6, (0, int(365*1)), True, 0, True)
-(XP_ID, DRV, XP_PTRN) = (
-    'STP', 'LDR', 
+(XP_ID, DRV, OVW, XP_PTRN,) = (
+    'STP', 'LDR', True,
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
 (SUM, AGG, SPA, REP, SRP, OVW) = (True, False, False, False, True, True)
@@ -29,7 +29,7 @@ import MoNeT_MGDrivE as monet
     [.05, .10, .25, .50, .75, .90, .95],
     [int((i+1)*365-1) for i in range(XRAN[1])]
 )
-(JOB_DSK, JOB_SRV) = (4, 8)
+(JOB_DSK, JOB_SRV) = (6, 8)
 
 # #############################################################################
 # Names and patterns

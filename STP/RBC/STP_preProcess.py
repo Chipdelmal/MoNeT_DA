@@ -10,7 +10,7 @@ import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
 if monet.isNotebook():
-    (USR, AOI, EXP, LND) = ('dsk', 'HLT', 'PAN', 'PAN')
+    (USR, AOI, EXP, LND) = ('dsk', 'ECO', 'PAN', 'PAN')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, EXP, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

@@ -13,7 +13,7 @@ EXPS = ('000', '002', '004', '006', '008')
 # Paths
 ###############################################################################
 (LAB_BASE, DSK_BASE) = (
-    'lab:/RAID5/marshallShare/yLinked/',
+    'lab:/RAID5/marshallShare/yLinked/img/',
     '/home/chipdelmal/Documents/WorkSims/YDR/'
 )
 # Create structure in local computer ------------------------------------------
