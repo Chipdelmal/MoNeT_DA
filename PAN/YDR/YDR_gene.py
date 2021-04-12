@@ -30,7 +30,7 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
         (aggD, yRange, folder) = YXS.driveParameters(TYPE, popSize)
     # CRISPR ------------------------------------------------------------------
     if DRIVE == 'CRS':
-        (aggD, yRange, folder) = YXS.driveParameters(TYPE, popSize)
+        (aggD, yRange, folder) = CRS.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN

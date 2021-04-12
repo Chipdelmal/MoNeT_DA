@@ -9,7 +9,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
+    (USR, SET, DRV, AOI) = ('dsk', 'homing', 'CRS', 'HLT')
     (OVW, JOB) = (True, aux.JOB_DSK)
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -45,7 +45,7 @@ for exp in EXPS:
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-    outNames = aux.splitExpNames(PT_OUT)
+    outNames = aux.splitExpNames(PT_PRE)
     outExpNames = set(outNames)
     ###########################################################################
     # Analyze data
@@ -55,9 +55,7 @@ for exp in EXPS:
                 exIx, expNum, expDirsMean, expDirsTrac, gene,
                 analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
                 outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
-                MF=MF, cmpr='bz2', nodeDigits=nodeDigits,
-                SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
-                REP=aux.REP, SRP=aux.SRP
+                MF=MF, cmpr='bz2', nodeDigits=nodeDigits
         ) for exIx in range(0, expNum)
     )
 
