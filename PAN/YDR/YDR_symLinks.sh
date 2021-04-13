@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -a EXPS=("000" "002" "004" "006" "008")
-declare -a HMS=("xLinked")# "yLinked" "autosomal")
+declare -a HMS=("xLinked" "yLinked" "autosomal")
 declare -a SHR=("autosomal" "yLinked" "CRISPR")
 
 # Data analysis root (DA) and data source root (DS)
