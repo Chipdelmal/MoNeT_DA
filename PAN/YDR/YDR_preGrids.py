@@ -12,7 +12,8 @@ if monet.isNotebook():
     (USR, SET, DRV) = ('dsk', 'homing', 'ASD')
 else:
     (USR, SET, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
-(AOI, EXPS) = (aux.DATA_PST, aux.EXPS)
+(AOI, EXPS) = (aux.DATA_PRE, aux.EXPS)
+exp = EXPS[0]
 for exp in EXPS:
     # #########################################################################
     # Setup paths and drive
