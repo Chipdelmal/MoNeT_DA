@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -a EXPS=("000" "002" "004" "006" "008")
-declare -a HMS=("autosomal" "xLinked" "yLinked")
+declare -a HMS=("xLinked")# "yLinked" "autosomal")
 declare -a SHR=("autosomal" "yLinked" "CRISPR")
 
 # Data analysis root (DA) and data source root (DS)
@@ -25,7 +25,7 @@ BASE_DS="/RAID0/yLinked"
 
 # Go through shredding drives folders -----------------------------------------
 mkdir -p "$BASE_DA/homing/"
-for fldr in ${SHR[@]};do
+for fldr in ${HMS[@]};do
     mkdir -p "$BASE_DA/homing/$fldr"
     for exp in ${EXPS[@]};do
         # Create links

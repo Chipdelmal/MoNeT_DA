@@ -28,7 +28,7 @@ geneFldr = drv.driveSelector(DRV, 'ECO').get('folder')
 CPY_STR = 'scp -r {} {}'
 (i, exp) = (0, EXPS[0])
 for (i, exp) in enumerate(EXPS):
-    if IMG:
+    if IMG=="True":
         (PT_WRK_S, PT_WRK_T) = [
             path.join(i, exp, 'img') for i in (PT_DRV_S, PT_DRV_T)
         ]        
@@ -37,6 +37,7 @@ for (i, exp) in enumerate(EXPS):
     else:
         (PT_WRK_S, PT_WRK_T) = [path.join(i, exp) for i in (PT_DRV_S, PT_DRV_T)]
         (PT_S, PT_T) = [path.join(i, SUB) for i in (PT_WRK_S, PT_WRK_T)]
+        PT_T = path.split(PT_T)[0]
     [monet.makeFolder(i) for i in (PT_WRK_T, PT_T)]
     cmd = CPY_STR.format(PT_S , PT_T)
     print('* Downloading {} part {}/{}... '.format(DRV, i+1, len(EXPS)))

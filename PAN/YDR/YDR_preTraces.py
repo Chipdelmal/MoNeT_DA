@@ -13,7 +13,7 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, SET, DRV, AOI) = ('dsk', 'homing', 'ASD', 'HLT')
+    (USR, SET, DRV, AOI) = ('dsk', 'shredder', 'YXS', 'ECO')
     JOB = aux.JOB_DSK
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -74,4 +74,5 @@ for exp in EXPS:
         sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
         PT_IMG+'/legend_{}.png'.format(AOI), 500
     )
+
 
