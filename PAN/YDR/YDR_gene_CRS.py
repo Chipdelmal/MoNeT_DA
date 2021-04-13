@@ -57,14 +57,14 @@ CRS_WLD = monet.geneFrequencies(WLD_DICT, genotypes)
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*CRS_ECO)
-        yRange = popSize*2
+        yRange = popSize
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*CRS_HLT)
-        yRange = popSize/2
+        yRange = popSize
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(*CRS_TRS)
-        yRange = popSize
+        yRange = popSize*2
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*CRS_WLD)
-        yRange = popSize
+        yRange = popSize*2
     return (aggD, yRange, 'CRISPR')
