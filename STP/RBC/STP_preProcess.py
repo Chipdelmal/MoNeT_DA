@@ -10,48 +10,53 @@ import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 
 if monet.isNotebook():
-    (USR, AOI, EXP, LND) = ('dsk', 'ECO', 'PAN', 'PAN')
+    (USR, AOI, LND) = ('dsk', 'ECO', 'PAN')
     JOB = aux.JOB_DSK
 else:
-    (USR, AOI, EXP, LND) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
     JOB = aux.JOB_SRV
-###########################################################################
-# Setting up paths
-###########################################################################
-(drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
-    lnd.landSelector(EXP, LND)
-)
-(gene, fldr) = (drive.get('gDict'), drive.get('folder'))
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-    USR, EXP, LND
-)
-# Time and head -----------------------------------------------------------
-tS = datetime.now()
-monet.printExperimentHead(
-    PT_DTA, PT_PRE, tS, 
-    '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, aux.DRV, EXP, AOI)
-)
-###########################################################################
-# Load folders
-###########################################################################
-(expDirsMean, expDirsTrac) = monet.getExpPaths(
-    PT_DTA, mean='ANALYZED/', reps='TRACES/'
-)
-(expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-outNames = monet.splitExpNames(PT_PRE)
-outExpNames = set(outNames)
-###########################################################################
-# Process data
-###########################################################################
-Parallel(n_jobs=JOB)(
-    delayed(monet.preProcess)(
-        exIx, expNum, expDirsMean, expDirsTrac, gene,
-        analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-        outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=aux.OVW,
-        MF=drv.maleFemaleSelector(AOI),
-        cmpr='bz2', nodeDigits=nodeDigits,
-        SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
-        REP=aux.REP, SRP=aux.SRP
-    ) for exIx in range(0, expNum)
-)
+###############################################################################
+# Processing loop
+###############################################################################
+EXPS = aux.getExps(LND)
+for exp in EXPS:
+    ###########################################################################
+    # Setting up paths
+    ###########################################################################
+    (drive, land) = (
+        drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+        lnd.landSelector(exp, LND)
+    )
+    (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+    (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
+        USR, exp, LND
+    )
+    # Time and head -----------------------------------------------------------
+    tS = datetime.now()
+    monet.printExperimentHead(
+        PT_DTA, PT_PRE, tS, 
+        '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, aux.DRV, exp, AOI)
+    )
+    ###########################################################################
+    # Load folders
+    ###########################################################################
+    (expDirsMean, expDirsTrac) = monet.getExpPaths(
+        PT_DTA, mean='ANALYZED/', reps='TRACE/'
+    )
+    (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
+    outNames = monet.splitExpNames(PT_PRE)
+    outExpNames = set(outNames)
+    ###########################################################################
+    # Process data
+    ###########################################################################
+    Parallel(n_jobs=JOB)(
+        delayed(monet.preProcess)(
+            exIx, expNum, expDirsMean, expDirsTrac, gene,
+            analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
+            outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=aux.OVW,
+            MF=drv.maleFemaleSelector(AOI),
+            cmpr='bz2', nodeDigits=nodeDigits,
+            SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
+            REP=aux.REP, SRP=aux.SRP
+        ) for exIx in range(0, expNum)
+    )

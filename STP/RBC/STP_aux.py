@@ -7,11 +7,12 @@ import MoNeT_MGDrivE as monet
 
 # #############################################################################
 # Constants
+# pop=1.25e6
 # #############################################################################
-(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (1.25e6, (0, int(365*1)), True, 0, True)
-(XP_ID, DRV, OVW, XP_PTRN,) = (
+(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.25, (0, int(365*1)), True, 0, True)
+(XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR', True,
-    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
+    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP, OVW) = (True, False, False, False, True, True)
 (DATA_NAMES, DATA_PRE, DATA_PST, DATA_HEAD) = (
@@ -29,16 +30,21 @@ import MoNeT_MGDrivE as monet
     [.05, .10, .25, .50, .75, .90, .95],
     [int((i+1)*365-1) for i in range(XRAN[1])]
 )
-(JOB_DSK, JOB_SRV) = (6, 8)
+(JOB_DSK, JOB_SRV) = (4, 8)
+
+
+# #############################################################################
+# Experiments
+# #############################################################################
+def getExps(LND):
+    if LND=='PAN':
+        return ('000', '001', '002', '004', '006', '008')
+    else:
+        return ('265_S', '265_P')
 
 # #############################################################################
 # Names and patterns
 # #############################################################################
-def splitExpNames(PATH_OUT, ext='bz'):
-    out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
-    return sorted(list(set(out)))
-
-
 def patternForReleases(ren, AOI, ftype, ext='bz'):
     strPat = XP_PTRN.format(
         '*', ren, '*', '*', '*', 
@@ -46,6 +52,11 @@ def patternForReleases(ren, AOI, ftype, ext='bz'):
         AOI, '*', ftype, ext
     )
     return strPat
+    
+
+def splitExpNames(PATH_OUT, ext='bz'):
+    out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
+    return sorted(list(set(out)))
 
 
 def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
@@ -64,10 +75,10 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def selectPath(USR, EXP, LND):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/STP/{}/{}/'.format(EXP, LND)
+        PATH_ROOT = '/RAID5/marshallShare/STP/{}/{}/'.format(LND, EXP)
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP/{}/{}/'.format(
-            EXP, LND
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP_Grid/{}/{}/'.format(
+            LND, EXP
         )
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
@@ -78,3 +89,5 @@ def selectPath(USR, EXP, LND):
     fldrList = [PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR]
     [monet.makeFolder(i) for i in fldrList]
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
+
+
