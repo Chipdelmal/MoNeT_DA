@@ -1,0 +1,20 @@
+#!/bin/bash
+
+declare -a EXPS=("000" "001" "002")
+
+# Data analysis root (DA) and data source root (DS) ---------------------------
+BASE_DA="/RAID5/marshallShare/STP_Grid/PAN"
+BASE_DS="/RAID0/STP_Grid/PAN"
+
+# Go through shredding drives folders -----------------------------------------
+mkdir -p "$BASE_DA"
+for exp in ${EXPS[@]};do
+    # Create links
+    src="$BASE_DS/$exp"
+    dst="$BASE_DA/$exp"
+    mkdir -p $dst
+    ln -s "$src/ANALYZED" "$dst/ANALYZED"
+    ln -s "$src/TRACE" "$dst/TRACE"
+done
+
+
