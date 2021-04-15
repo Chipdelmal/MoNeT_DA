@@ -64,9 +64,8 @@ for exp in EXPS:
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPreTracesPlotWrapper)(
             exIx, fLists, STYLE, PT_IMG, 
-            xpNum=xpNum, digs=digs, 
-            border=True, borderColor='#8184a7AA', borderWidth=2, 
-            autoAspect=True, popScaler=5
+            xpNum=xpNum, digs=digs, autoAspect=True,
+            border=True, borderColor='#8184a7AA', borderWidth=2
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------

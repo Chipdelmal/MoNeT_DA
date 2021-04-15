@@ -9,7 +9,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # pop=1.25e6
 # #############################################################################
-(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.5, (0, int(365*1)), True, 0, True)
+(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.5/2, (0, int(365*7.5)), True, 0, True)
 (XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR', False,
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
@@ -28,7 +28,7 @@ import MoNeT_MGDrivE as monet
     [.05, .10, .25, .50, .75, .90, .95],
     [.05, .10, .25, .50, .75, .90, .95],
     [.05, .10, .25, .50, .75, .90, .95],
-    [int((i+1)*365-1) for i in range(XRAN[1])]
+    [int(i) for i in range(0, XRAN[1], int(XRAN[1]/10))]
 )
 (JOB_DSK, JOB_SRV) = (4, 8)
 

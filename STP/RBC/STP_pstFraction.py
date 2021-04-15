@@ -13,16 +13,16 @@ import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk', 'ECO', 'PAN')
+    (USR, AOI, LND) = ('dsk', 'HLT', 'PAN')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
     JOB = aux.JOB_SRV
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
-exp = EXPS[0]
 ###############################################################################
 # Processing loop
 ###############################################################################
+exp = EXPS[0]
 for exp in EXPS:
     # #########################################################################
     # Setup paths and drive
@@ -35,11 +35,9 @@ for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, exp, LND
     )
-    (PT_IMG_I, PT_IMG_O) = (PT_IMG+'preTraces/', PT_IMG+'preGrids/')
-    monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_IMG_I, PT_IMG_O, tS, aux.XP_ID+' PstFraction [{}:{}]'.format(DRV, exp)
+        PT_PRE, PT_OUT, tS, aux.XP_ID+' PstFraction [{}:{}]'.format(DRV, exp)
     )
     # #########################################################################
     # Base experiments
@@ -56,6 +54,7 @@ for exp in EXPS:
     #   srp: Garbage data aggregated into one node
     # #########################################################################
     (xpNum, digs) = monet.lenAndDigits(ren)
+    (i, rnIt) = (0, '10')
     for (i, rnIt) in enumerate(ren):
         monet.printProgress(i+1, xpNum, digs)
         # Mean data (Analyzed) ------------------------------------------------
@@ -68,6 +67,7 @@ for exp in EXPS:
         # Load data
         # #####################################################################
         expNum = len(meanFiles)
+        pIx = 0
         for pIx in range(expNum):
             (bFile, mFile, tFile) = (
                 baseFiles[pIx], meanFiles[pIx], traceFiles[pIx]
@@ -80,4 +80,7 @@ for exp in EXPS:
             # #################################################################
             fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
             repsRatios = monet.getPopRepsRatios(base, trace, 1)
+            for i in repsRatios:
+                for t in range(0, 5):
+                    i[t] = 1
             np.save(fName, repsRatios)
