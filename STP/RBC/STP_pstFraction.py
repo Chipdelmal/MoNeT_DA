@@ -13,7 +13,7 @@ import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk', 'ECO', 'PAN')
+    (USR, AOI, LND) = ('dsk', 'HLT', 'PAN')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -35,11 +35,9 @@ for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, exp, LND
     )
-    (PT_IMG_I, PT_IMG_O) = (PT_IMG+'preTraces/', PT_IMG+'preGrids/')
-    monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_IMG_I, PT_IMG_O, tS, aux.XP_ID+' PstFraction [{}:{}]'.format(DRV, exp)
+        PT_PRE, PT_OUT, tS, aux.XP_ID+' PstFraction [{}:{}]'.format(DRV, exp)
     )
     # #########################################################################
     # Base experiments

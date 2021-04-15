@@ -2,7 +2,7 @@
 
 # argv1: Imageset folder
 
-declare -a EXPS=("000" "001" "002")
+declare -a EXPS=("000" "001")
 
 # Data analysis root (server DA) and data destiny (local DS) ------------------
 BASE_DA="/RAID5/marshallShare/STP_Grid/PAN/"
