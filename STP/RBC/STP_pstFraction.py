@@ -28,7 +28,7 @@ for exp in EXPS:
     # Setup paths and drive
     # #########################################################################
     (drive, land) = (
-        drv.driveSelector(aux.DRV, AOI[0], popSize=aux.POP_SIZE),
+        drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
         lnd.landSelector(exp, LND)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
@@ -46,7 +46,7 @@ for exp in EXPS:
     #   These are the experiments without any releases (for fractions)
     # #########################################################################
     # Get releases number set -------------------------------------------------
-    ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[-3]
+    ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[2]
     # Get base experiments pattern --------------------------------------------
     basePat = aux.patternForReleases(aux.NO_REL_PAT, AOI, 'sum')
     baseFiles = sorted(glob(PT_PRE+basePat))

@@ -12,7 +12,7 @@ import STP_gene as drv
 import STP_land as lnd
 
 if monet.isNotebook():
-    (USR, AOI, LND, QNT) = ('dsk', 'ECO', 'PAN', '50')
+    (USR, AOI, LND, QNT) = ('dsk', 'HLT', 'PAN', '50')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -28,7 +28,7 @@ for exp in EXPS:
     # Load landscape and drive
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(aux.DRV, AOI[0], popSize=aux.POP_SIZE),
+        drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
         lnd.landSelector(exp, LND)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
@@ -38,8 +38,6 @@ for exp in EXPS:
     ###########################################################################
     # Setting up paths
     ###########################################################################
-    (PT_IMG_I, PT_IMG_O) = (PT_IMG+'preTraces/', PT_IMG+'preGrids/')
-    monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
     monet.printExperimentHead(
         PT_OUT, PT_MTR, tS, 

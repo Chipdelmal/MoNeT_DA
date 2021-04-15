@@ -38,7 +38,7 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 def getExps(LND):
     if LND=='PAN':
-        return ('000', '001', '002', '004', '006', '008')
+        return ('000', '001', '002')
     else:
         return ('265_S', '265_P')
 
@@ -52,7 +52,7 @@ def patternForReleases(ren, AOI, ftype, ext='bz'):
         AOI, '*', ftype, ext
     )
     return strPat
-    
+
 
 def splitExpNames(PATH_OUT, ext='bz'):
     out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
