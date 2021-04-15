@@ -9,9 +9,9 @@ import MoNeT_MGDrivE as monet
 # Constants
 # pop=1.25e6
 # #############################################################################
-(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.25, (0, int(365*1)), True, 0, True)
+(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.5, (0, int(365*1)), True, 0, True)
 (XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
-    'STP', 'LDR', True,
+    'STP', 'LDR', False,
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP, OVW) = (True, False, False, False, True, True)
@@ -38,7 +38,7 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 def getExps(LND):
     if LND=='PAN':
-        return ('000', '001', '002')
+        return ('000000', '000010')
     else:
         return ('265_S', '265_P')
 
@@ -75,7 +75,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def selectPath(USR, EXP, LND):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/STP/{}/{}/'.format(LND, EXP)
+        PATH_ROOT = '/RAID5/marshallShare/STP_Grid/{}/{}/'.format(LND, EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP_Grid/{}/{}/'.format(
             LND, EXP
