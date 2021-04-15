@@ -42,7 +42,7 @@ for exp in EXPS:
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
             "width": .5, "alpha": .5, "dpi": 300, "legend": True,
-            "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
+            "aspect": .5, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     tS = datetime.now()
     monet.printExperimentHead(
@@ -64,9 +64,8 @@ for exp in EXPS:
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPreTracesPlotWrapper)(
             exIx, fLists, STYLE, PT_IMG, 
-            xpNum=xpNum, digs=digs, 
-            border=True, borderColor='#8184a7AA', borderWidth=2, 
-            autoAspect=True, popScaler=5
+            xpNum=xpNum, digs=digs, autoAspect=True,
+            border=True, borderColor='#8184a7AA', borderWidth=2
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------

@@ -19,10 +19,10 @@ else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
     JOB = aux.JOB_SRV
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
-exp = EXPS[0]
 ###############################################################################
 # Processing loop
 ###############################################################################
+exp = EXPS[0]
 for exp in EXPS:
     # #########################################################################
     # Setup paths and drive
@@ -54,6 +54,7 @@ for exp in EXPS:
     #   srp: Garbage data aggregated into one node
     # #########################################################################
     (xpNum, digs) = monet.lenAndDigits(ren)
+    (i, rnIt) = (0, '10')
     for (i, rnIt) in enumerate(ren):
         monet.printProgress(i+1, xpNum, digs)
         # Mean data (Analyzed) ------------------------------------------------
@@ -66,6 +67,7 @@ for exp in EXPS:
         # Load data
         # #####################################################################
         expNum = len(meanFiles)
+        pIx = 0
         for pIx in range(expNum):
             (bFile, mFile, tFile) = (
                 baseFiles[pIx], meanFiles[pIx], traceFiles[pIx]
@@ -78,4 +80,7 @@ for exp in EXPS:
             # #################################################################
             fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
             repsRatios = monet.getPopRepsRatios(base, trace, 1)
+            for i in repsRatios:
+                for t in range(0, 5):
+                    i[t] = 1
             np.save(fName, repsRatios)

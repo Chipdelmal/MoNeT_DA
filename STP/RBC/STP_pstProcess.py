@@ -28,7 +28,7 @@ for exp in EXPS:
     # Load landscape and drive
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
         lnd.landSelector(exp, LND)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
@@ -67,7 +67,7 @@ for exp in EXPS:
     # Iterate through experiments
     ###########################################################################
     fmtStr = '{}+ File: {}/{}'
-    # (i, fPath) = (0, fPaths[0])
+    (i, fPath) = (0, fPaths[0])
     for (i, fPath) in enumerate(fPaths):
         repRto = np.load(fPath)
         (reps, days) = repRto.shape
