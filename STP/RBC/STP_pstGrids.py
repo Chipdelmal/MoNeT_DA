@@ -29,6 +29,7 @@ for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, exp, LND
     )
+    PT_IMG_P = PT_IMG+'preTraces/'
     (PT_IMG_I, PT_IMG_O) = (PT_IMG+'pstTraces/', PT_IMG+'pstGrids/')
     monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
@@ -38,7 +39,12 @@ for exp in EXPS:
     )
     # Get files ---------------------------------------------------------------
     NODE_NUM = len(land)
+    imgListPre = glob('{}*{}*{}*.png'.format(PT_IMG_P, 'ECO', '*'))
     imgLists = [glob('{}*{}*{}*.png'.format(PT_IMG_I, i, '*')) for i in AOI]
+    if len(imgListPre) == len(imgLists[0]):
+        imgLists.append(imgListPre)
+        for i in range(len(imgListPre)):
+            imgLists = imgLists[-1:] + imgLists[:-1]
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
     imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:-1]
     # #########################################################################
@@ -50,3 +56,5 @@ for exp in EXPS:
         expGrid = vconcat([hconcat([imread(i) for i in j]) for j in chunk])
         fName = chunk[0][0].split('/')[-1].split('-')[0]
         imwrite(PT_IMG_O + fName + '.png', expGrid)
+
+
