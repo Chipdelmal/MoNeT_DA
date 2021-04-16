@@ -37,7 +37,8 @@ for exp in EXPS:
     )
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_PRE, PT_OUT, tS, aux.XP_ID+' PstFraction [{}:{}]'.format(DRV, exp)
+        PT_PRE, PT_OUT, tS, 
+        aux.XP_ID+' PstFraction [{}:{}:{}]'.format(aux.DRV, exp, AOI)
     )
     # #########################################################################
     # Base experiments
@@ -80,7 +81,7 @@ for exp in EXPS:
             # #################################################################
             fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
             repsRatios = monet.getPopRepsRatios(base, trace, 1)
-            for i in repsRatios:
-                for t in range(0, 5):
-                    i[t] = 1
+            # for i in repsRatios:
+            #     for t in range(0, 5):
+            #         i[t] = 1
             np.save(fName, repsRatios)

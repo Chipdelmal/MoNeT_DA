@@ -1,5 +1,8 @@
 #!/bin/bash
 
-./STP_symlinks.sh
-./STP_preProcess.sh srv PAN
-./STP_preTraces.sh srv PAN
+# argv1: User
+# argv2: Land
+
+./STP_pstFraction.sh $1 $2
+./STP_pstProcess.sh $1 $2
+./STP_pstTraces.sh $1 $2

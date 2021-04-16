@@ -9,7 +9,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # pop=1.25e6
 # #############################################################################
-(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.5/2, (0, int(365*7.5)), True, 0, True)
+(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.5/2, (0, int(365*5)), True, 0, True)
 (XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR', False,
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
