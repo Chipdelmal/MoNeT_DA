@@ -38,7 +38,7 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 def getExps(LND):
     if LND=='PAN':
-        return ('000000', '000010')
+        return ('000000', '000001')
     else:
         return ('265_S', '265_P')
 
