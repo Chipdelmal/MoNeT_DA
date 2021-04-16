@@ -1,10 +1,10 @@
 #!/bin/bash
 
-declare -a EXPS=("000000" "000010")
+# declare -a EXPS=("000000" "000010")
 
 # Data analysis root (DA) and data source root (DS) ---------------------------
 BASE_DA="/RAID5/marshallShare/STP_Grid/PAN"
-BASE_DS="/RAID0/STP_Grid/PAN"
+BASE_DS="/RAID0/STP_Grid/PAN/"
 
 # Go through shredding drives folders -----------------------------------------
 mkdir -p "$BASE_DA"
