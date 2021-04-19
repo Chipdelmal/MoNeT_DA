@@ -48,7 +48,7 @@ for exp in EXPS:
     DFOPths = [pth.format(z) for z in aux.DATA_NAMES]
     # Setup experiments IDs ---------------------------------------------------
     uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
-    (xpDict, smryDicts) = ({}, len(aux.DATA_NAMES)*[{}])
+    (xpDict, smryDicts) = ({}, [{} for _ in range(len(aux.DATA_NAMES))])
     # Get experiment files ----------------------------------------------------
     ptrn = aux.patternForReleases('*', AOI, 'rto', 'npy')
     fPaths = sorted(glob(PT_OUT+ptrn))
