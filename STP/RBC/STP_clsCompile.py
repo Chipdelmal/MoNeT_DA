@@ -53,6 +53,13 @@ dfMerged.to_csv(
     path.join(PT_OUT, 'RAW_'+path.split(fName[0])[-1]), 
     index=False
 )
+# Scaling ---------------------------------------------------------------------
+for keyLabel in inLabels:
+    dfMerged[keyLabel] = (dfMerged[keyLabel]/aux.DATA_SCA[keyLabel])
+dfMerged.to_csv(
+    path.join(PT_OUT, 'SCA_'+path.split(fName[0])[-1]), 
+    index=False
+)
 ###############################################################################
 # Load MLR dataset
 ###############################################################################
