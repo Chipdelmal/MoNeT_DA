@@ -23,9 +23,9 @@ import MoNeT_MGDrivE as monet
         ('i_hrm', 9), ('i_hrt', 10), ('i_grp', 12)
     ),
     {
-        'i_sex': 1  , 'i_ren': 1e4, 'i_res': 1e4, 'i_rsg': 1e8,
-        'i_gsv': 1e8, 'i_fcf': 1e8, 'i_mfm': 1e4, 'i_mft': 1e4,
-        'i_hrm': 1e4, 'i_hrt': 1e8, 'i_grp': 1,   'i_mig': 1e5
+        'i_sex': 1  , 'i_ren': 1e3, 'i_res': 1e3, 'i_rsg': 1e7,
+        'i_gsv': 1e7, 'i_fcf': 1e7, 'i_mfm': 1e3, 'i_mft': 1e3,
+        'i_hrm': 1e3, 'i_hrt': 1e7, 'i_grp': 1,   'i_mig': 1e5
     }
 )
 (THI, THO, THW, TAP) = (
