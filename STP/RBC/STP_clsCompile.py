@@ -69,3 +69,10 @@ dfMerged.to_csv(
 # keys = list(probe.keys())
 # {tuple(j): probe[j]['CPT'] for j in keys}
 # probe[keys[5]]
+
+
+# https://stats.stackexchange.com/questions/288273/partial-correlation-in-panda-dataframe-python
+import pingouin as pg
+df = pg.read_dataset('partial_corr')
+
+pg.pairwise_corr(dfMerged, method='pearson')
