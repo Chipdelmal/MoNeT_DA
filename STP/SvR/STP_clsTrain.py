@@ -2,9 +2,11 @@
 import sys
 from os import path
 from datetime import datetime
+from contextlib import redirect_stdout
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import rfpimp as rfp
 from joblib import dump
 from matplotlib.pyplot import cm
 from sklearn import metrics
@@ -13,11 +15,10 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.decomposition import PCA
 import MoNeT_MGDrivE as monet
-from contextlib import redirect_stdout
 
 
 if monet.isNotebook():
-    (MTR, THS, VT_SPLIT, KFOLD, QNT) = ('WOP', '0.5', '0.5', '50', '50')
+    (MTR, THS, VT_SPLIT, KFOLD, QNT) = ('CPT', '0.5', '0.5', '50', '50')
 else:
     (MTR, THS, VT_SPLIT, KFOLD, QNT) = (
         sys.argv[1], sys.argv[2], float(sys.argv[3]), 
@@ -28,6 +29,7 @@ if (MTR == 'CPT') or (MTR == 'POE'):
     OUT_THS = [MTR]
 else:
     OUT_THS = ['0.05', '0.1', '0.25', '0.5']
+label = OUT_THS[0]
 for label in OUT_THS:
     ###############################################################################
     # Setup constants (user input)
@@ -41,7 +43,7 @@ for label in OUT_THS:
         [label]
     )
     # (VT_SPLIT, KFOLD) = (.5, 20)
-    (TREES, DEPTH) = (30, 15)
+    (TREES, DEPTH) = (50, 15)
     ###############################################################################
     # Create directories structure
     ###############################################################################
@@ -117,6 +119,10 @@ for label in OUT_THS:
         cmap=cm.Blues, normalize=None
     )
     featImportance = list(rf.feature_importances_)
+    impDC = rfp.oob_dropcol_importances(rf, TRN_X, TRN_Y.values.ravel())
+    impDCD = impDC.to_dict()['Importance']
+    impPM = rfp.importances(rf, TRN_X, TRN_Y)
+    impPMD = impPM.to_dict()['Importance']
     ###############################################################################
     # Statistics & Model Export
     ###############################################################################
@@ -134,12 +140,14 @@ for label in OUT_THS:
             print('* Validation Accuracy: {:.2f}'.format(accuracy))
             print('* Validation F1: {:.2f} ({:.2f}/{:.2f})'.format(f1, precision, recall))
             print('* Jaccard: {:.2f}'.format(jaccard))
-            print('* Features importance & correlation')
+            print('* Features Importance & Correlation')
             for i in zip(FEATS, featImportance, correlation[LABLS[0]]):
                 print('\t* {}: {:.3f}, {:.3f}'.format(*i))
+            print('* Drop-Cols & Permutation Features Importance')
+            for i in FEATS:
+                print('\t* {}: {:.3f}, {:.3f}'.format(i, impDCD[i], impPMD[i]))
             print('* Class report: ')
             print(report)
-
 
 ###############################################################################
 # PCA Tests
