@@ -2,7 +2,7 @@
 
 # argv1: Folder in base dir
 
-declare -a EXPS=("000000" "000001")
+declare -a EXPS=("000000" "000010")
 
 # Data analysis root (server DA) and data destiny (local DS) ------------------
 BASE_DA="/RAID5/marshallShare/STP_Grid/PAN"

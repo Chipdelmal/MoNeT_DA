@@ -1,18 +1,24 @@
 
 
 import sys
-from glob import glob
-from datetime import datetime
 from os import path
 from re import match
+from glob import glob
+from datetime import datetime
 import numpy as np
 import pandas as pd
+import pingouin as pg
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
+from SALib.analyze import sobol
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 
+# https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
+# https://github.com/parrt/random-forest-importances
+# https://explained.ai/rf-importance/index.html
+# https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')
@@ -37,38 +43,35 @@ PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
-# Flatten CSVs
+# Read CSV
 ###############################################################################
-fName = [glob('{}/*{}*{}*.csv'.format(i, AOI, MTR))[0] for i in PT_SUMS]
-dfList = [pd.read_csv(i, sep=',') for i in fName]
-for (df, exp) in zip(dfList, EXPS):
-    df['i_mig'] = [int(exp)]*df.shape[0]
-dfMerged = pd.concat(dfList)
-# Sorting columns -------------------------------------------------------------
-outLabels = [x for x in list(dfMerged.columns) if len(x.split('_')) <= 1]
-inLabels = [i[0] for i in aux.DATA_HEAD]
-inLabels.append('i_mig')
-dfMerged = dfMerged.reindex(inLabels+outLabels, axis=1)
-dfMerged.to_csv(
-    path.join(PT_OUT, 'RAW_'+path.split(fName[0])[-1]), 
-    index=False
-)
-# Scaling ---------------------------------------------------------------------
-for keyLabel in inLabels:
-    dfMerged[keyLabel] = (dfMerged[keyLabel]/aux.DATA_SCA[keyLabel])
-dfMerged.to_csv(
-    path.join(PT_OUT, 'SCA_'+path.split(fName[0])[-1]), 
-    index=False
+df = pd.read_csv(
+    path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, MTR, QNT))
 )
 ###############################################################################
-# Load MLR dataset
+# Read CSV
 ###############################################################################
-# i = PT_SUMS[0]
-# fName = glob('{}/*{}*{}*.bz'.format(i, AOI, MTR))[0]
-# probe = pkl.load(fName)
-# keys = list(probe.keys())
-# {tuple(j): probe[j]['CPT'] for j in keys}
-# probe[keys[5]]
 
 
-# https://stats.stackexchange.com/questions/288273/partial-correlation-in-panda-dataframe-python
+from SALib.sample import saltelli
+from SALib.analyze import sobol
+
+def ET(X):
+    # column 0 = C, column 1 = R, column 2 = t
+    return(0.0031*X[:,0]*(X[:,1]+209)*(X[:,2]*(X[:,2]+15))**-1)
+
+problem = {'num_vars': 3,
+           'names': ['C', 'R', 't'],
+           'bounds': [[10, 100],
+                     [3, 7],
+                     [-10, 30]]
+           }
+
+# Generate samples
+param_values = saltelli.sample(problem, 1000, calc_second_order=True)
+
+# Run model (example)
+Y = ET(param_values)
+
+# Perform analysis
+Si = sobol.analyze(problem, Y, print_to_console=True)
