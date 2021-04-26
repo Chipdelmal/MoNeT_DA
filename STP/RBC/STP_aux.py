@@ -29,7 +29,7 @@ import MoNeT_MGDrivE as monet
     [.05, .10, .25, .50, .75, .90, .95],
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/10))]
 )
-(JOB_DSK, JOB_SRV) = (4, 8)
+(JOB_DSK, JOB_SRV) = (4, 20)
 
 
 # #############################################################################
@@ -37,7 +37,7 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 def getExps(LND):
     if LND=='PAN':
-        return ('000000', '000001')
+        return ('000000', '000010')
     else:
         return ('265_S', '265_P')
 
