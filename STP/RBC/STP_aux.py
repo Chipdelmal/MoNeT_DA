@@ -42,11 +42,13 @@ import MoNeT_MGDrivE as monet
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/10))]
 )
 # ML --------------------------------------------------------------------------
+THS = '0.1'
+(TREES, DEPTH, KFOLD) = (50, 15, 10)
 DATA_TYPE = {
+    'i_sex': np.int8,
     'i_sxm': np.bool_,  'i_sxg': np.bool_,  'i_sxn': np.bool_,
-    'i_ren': np.intc,   'i_res': np.double, 'i_rsg': np.double,
-    'i_gsv': np.double,
-    'i_fcf': np.double,
+    'i_ren': np.intc,   'i_res': np.double, 
+    'i_rsg': np.double, 'i_gsv': np.double, 'i_fcf': np.double,
     'i_mfm': np.double, 'i_mft': np.double,
     'i_hrm': np.double, 'i_hrt': np.double,
     'i_grp': np.intc,   'i_mig': np.double

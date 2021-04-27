@@ -15,10 +15,10 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'TTI')
     JOB = aux.JOB_DSK
 else:
-    (USR, LND, QNT) = (
+    (USR, LND, AOI, QNT, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
     JOB = aux.JOB_SRV
@@ -36,6 +36,12 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+# Time and head --------------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_ROT, PT_OUT, tS, 
+    '{} ClsCompile [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, MTR)
+)
 ###############################################################################
 # Flatten CSVs
 ###############################################################################
@@ -56,19 +62,9 @@ dfMerged.to_csv(
 # Scaling ---------------------------------------------------------------------
 for keyLabel in inLabels:
     dfMerged[keyLabel] = (dfMerged[keyLabel]/aux.DATA_SCA[keyLabel])
+typesDict = {k: aux.DATA_TYPE[k] for k in dfMerged.columns if k[0]=='i'}
+dfMerged = dfMerged.astype(typesDict)
 dfMerged.to_csv(
     path.join(PT_OUT, 'SCA_'+path.split(fName[0])[-1]), 
     index=False
 )
-###############################################################################
-# Load MLR dataset
-###############################################################################
-# i = PT_SUMS[0]
-# fName = glob('{}/*{}*{}*.bz'.format(i, AOI, MTR))[0]
-# probe = pkl.load(fName)
-# keys = list(probe.keys())
-# {tuple(j): probe[j]['CPT'] for j in keys}
-# probe[keys[5]]
-
-
-# https://stats.stackexchange.com/questions/288273/partial-correlation-in-panda-dataframe-python

@@ -32,6 +32,7 @@ else:
     VT_SPLIT = sys.argv[6]
     JOB = aux.JOB_SRV
 EXPS = aux.getExps(LND)
+(TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
 ###############################################################################
 # Paths
 ###############################################################################
@@ -79,7 +80,6 @@ f.show()
 ###############################################################################
 # Training Model
 ###############################################################################
-(TREES, DEPTH, KFOLD) = (50, 15, 10)
 rf = RandomForestClassifier(
     n_estimators=TREES, max_depth=DEPTH, criterion='entropy',
     min_samples_split=5, min_samples_leaf=50,
@@ -92,6 +92,7 @@ kScores = cross_val_score(
     cv=int(KFOLD), 
     scoring=metrics.make_scorer(metrics.f1_score, average='weighted')
 )
+outLabels = set(list(TRN_Y.values.ravel()))
 # Final training --------------------------------------------------------------
 rf.fit(TRN_X, TRN_Y.values.ravel())
 PRD_Y = rf.predict(VAL_X)
@@ -114,7 +115,3 @@ impDC = rfp.oob_dropcol_importances(rf, TRN_X, TRN_Y.values.ravel())
 impDCD = impDC.to_dict()['Importance']
 impPM = rfp.importances(rf, TRN_X, TRN_Y)
 impPMD = impPM.to_dict()['Importance']
-
-featImportance
-
-set(list(TRN_Y.values.ravel()))
