@@ -1,6 +1,7 @@
 
 import re
 import matplotlib
+import numpy as np
 import pandas as pd
 from glob import glob
 import MoNeT_MGDrivE as monet
@@ -8,22 +9,28 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 # Constants
 # #############################################################################
-(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (2e6*1.5/2, (0, int(365*5)), True, 0, True)
+(JOB_DSK, JOB_SRV) = (4, 8)
+(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
+    2e6*1.5/2, (0, int(365*5)), True, 0, True
+)
 (XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR', False,
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP, OVW) = (True, False, False, False, True, True)
-(DATA_NAMES, DATA_PRE, DATA_PST, DATA_HEAD, DATA_SCA) = (
+(DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
-    ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD'),
+    ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
+)
+# Data Analysis ---------------------------------------------------------------
+(DATA_HEAD, DATA_SCA) = (
     (
         ('i_sex', 1), ('i_ren', 2), ('i_res', 3), ('i_rsg', 4),
         ('i_gsv', 5), ('i_fcf', 6), ('i_mfm', 7), ('i_mft', 8),
         ('i_hrm', 9), ('i_hrt', 10), ('i_grp', 12)
     ),
     {
-        'i_sex': 1  , 'i_ren': 1e3, 'i_res': 1e3, 'i_rsg': 1e7,
+        'i_sex': 1  , 'i_ren': 1e0, 'i_res': 1e3, 'i_rsg': 1e7,
         'i_gsv': 1e7, 'i_fcf': 1e7, 'i_mfm': 1e3, 'i_mft': 1e3,
         'i_hrm': 1e3, 'i_hrt': 1e7, 'i_grp': 1,   'i_mig': 1e5
     }
@@ -34,9 +41,22 @@ import MoNeT_MGDrivE as monet
     [.05, .10, .25, .50, .75, .90, .95],
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/10))]
 )
-(JOB_DSK, JOB_SRV) = (4, 8)
-
-
+# ML --------------------------------------------------------------------------
+DATA_TYPE = {
+    'i_sxm': np.bool_,  'i_sxg': np.bool_,  'i_sxn': np.bool_,
+    'i_ren': np.intc,   'i_res': np.double, 'i_rsg': np.double,
+    'i_gsv': np.double,
+    'i_fcf': np.double,
+    'i_mfm': np.double, 'i_mft': np.double,
+    'i_hrm': np.double, 'i_hrt': np.double,
+    'i_grp': np.intc,   'i_mig': np.double
+}
+SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
+(deltaF, deltaT) = (.2, 50)
+(ML_FRC_CATS, ML_WOP_CATS) = (
+    np.arange(0, 1+deltaF*2, deltaF),
+    np.arange(0, 1+deltaF*2, deltaF)
+)
 # #############################################################################
 # Experiments
 # #############################################################################
