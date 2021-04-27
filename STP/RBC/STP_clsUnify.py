@@ -7,6 +7,7 @@ from os import path
 from re import match
 import numpy as np
 import pandas as pd
+from functools import reduce
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
@@ -15,7 +16,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'TTI')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'WOP')
     JOB = aux.JOB_DSK
 else:
     (USR, LND, AOI, QNT, MTR) = (
@@ -40,42 +41,26 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} ClsCompile [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, MTR)
+    '{} ClsUnify [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
 )
 ###############################################################################
-# Flatten CSVs
+# Merge Dataframes
 ###############################################################################
-fName = [glob('{}/*{}*{}*.csv'.format(i, AOI, MTR))[0] for i in PT_SUMS]
-dfList = [pd.read_csv(i, sep=',') for i in fName]
-for (df, exp) in zip(dfList, EXPS):
-    df['i_mig'] = [int(exp)]*df.shape[0]
-dfMerged = pd.concat(dfList)
-# Sorting columns -------------------------------------------------------------
-outLabels = [x for x in list(dfMerged.columns) if len(x.split('_')) <= 1]
-inLabels = [i[0] for i in aux.DATA_HEAD]
-inLabels.append('i_mig')
-dfMerged = dfMerged.reindex(inLabels+outLabels, axis=1)
-dfMerged.to_csv(
-    path.join(PT_OUT, 'RAW_'+path.split(fName[0])[-1]), 
-    index=False
-)
-# Scaling ---------------------------------------------------------------------
-for keyLabel in inLabels:
-    dfMerged[keyLabel] = (dfMerged[keyLabel]/aux.DATA_SCA[keyLabel])
-typesDict = {k: aux.DATA_TYPE[k] for k in dfMerged.columns if k[0]=='i'}
-dfMerged = dfMerged.astype(typesDict)
-dfMerged.to_csv(
-    path.join(PT_OUT, 'SCA_'+path.split(fName[0])[-1]), 
-    index=False
-)
+dataFrames = []
+for mtr in ['TTI', 'TTO', 'WOP']:
+    pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
+    dta = pd.read_csv(pth)
+    dataCols = [k for k in dta.columns if k[0]=='i']+[aux.THS]
+    dta = dta[dataCols]
+    dta = dta.rename(columns={aux.THS: mtr})
+    dataFrames.append(dta)
+for mtr in ['POE', 'CPT']:
+    pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
+    dta = pd.read_csv(pth)
+    dataFrames.append(dta)
+fullDataframe = reduce(lambda x, y: pd.merge(x, y, ), dataFrames)
 ###############################################################################
-# Load MLR dataset
+# Export
 ###############################################################################
-# i = PT_SUMS[0]
-# MTR = 'CPT'
-# fName = glob('{}/*{}*{}*.bz'.format(i, AOI, MTR))[0]
-# probe = pkl.load(fName)
-# keys = list(probe.keys())
-# data = []
-# for j in keys:
-#     data.extend([list(j)+[d] for d in probe[j]['CPT']])
+fNameOut = 'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100))
+fullDataframe.to_csv(path.join(PT_OUT, fNameOut), index=False)

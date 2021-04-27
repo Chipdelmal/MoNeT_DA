@@ -55,9 +55,11 @@ DATA_TYPE = {
 }
 SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 (deltaF, deltaT) = (.2, 50)
-(ML_FRC_CATS, ML_WOP_CATS) = (
-    np.arange(0, 1+deltaF*2, deltaF),
-    np.arange(0, 1+deltaF*2, deltaF)
+(ML_FRC_CATS, ML_WOP_CATS, ML_TTI_CATS, ML_TTO_CATS) = (
+    np.arange(0-deltaF, 1+deltaF*2, deltaF),
+    np.arange(-10, 365*12, 365),
+    np.arange(-10, 365*12, 365),
+    np.arange(-10, 365*12, 365)
 )
 # #############################################################################
 # Experiments

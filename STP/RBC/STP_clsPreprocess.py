@@ -16,7 +16,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')
+    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '90')
     JOB = aux.JOB_DSK
 else:
     (USR, LND, QNT) = (
@@ -27,9 +27,10 @@ EXPS = aux.getExps(LND)
 ###############################################################################
 # Paths
 ###############################################################################
-(fName_I, fName_O) = (
-    'SCA_{}_{}_{}_qnt.csv'.format(AOI, MTR, QNT),
-    'CLN_{}_{}_{}_qnt.csv'.format(AOI, MTR, QNT)
+(fName_I, fName_R, fName_C) = (
+    'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
 )
 (drive, land) = (
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
@@ -51,17 +52,25 @@ dfRaw = pd.read_csv(path.join(PT_OUT, fName_I))
 oneHotSex = LabelBinarizer().fit_transform(dfRaw.i_sex)
 oneHotSexDF = pd.DataFrame(oneHotSex, columns=aux.SEX_CATS)
 dfClean = pd.concat([oneHotSexDF, dfRaw.drop('i_sex', axis=1)], axis=1)
-dfClean = dfClean.astype(aux.DATA_TYPE)
+dfClean.to_csv(path.join(PT_OUT, fName_R), index=False)
 ###############################################################################
-# Categorize output
+# Categorize outputs
 ###############################################################################
 dfCat = dfClean.copy()
-dfCat[MTR] = pd.cut(
-    dfClean[MTR],
-    bins=aux.ML_FRC_CATS,
-    labels=list(range(len(aux.ML_FRC_CATS)-1))
-)
+for mtr in ['POE', 'POF', 'CPT']:
+    dfCat[mtr] = pd.cut(
+        dfClean[mtr],
+        bins=aux.ML_FRC_CATS,
+        labels=list(range(len(aux.ML_FRC_CATS)-1))
+    )
+tCats = (aux.ML_WOP_CATS, aux.ML_TTI_CATS, aux.ML_TTO_CATS)
+for (mtr, ran) in zip(('WOP', 'TTI', 'TTO'), tCats):
+    dfCat[mtr] = pd.cut(
+        dfClean[mtr],
+        bins=ran,
+        labels=list(range(len(ran)-1))
+    )
 ###############################################################################
 # Export output
 ###############################################################################
-dfCat.to_csv(path.join(PT_OUT, fName_O), index=False)
+dfCat.to_csv(path.join(PT_OUT, fName_C), index=False)
