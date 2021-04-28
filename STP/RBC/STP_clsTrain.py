@@ -20,6 +20,10 @@ import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 
+# https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
+# https://github.com/parrt/random-forest-importances
+# https://explained.ai/rf-importance/index.html
+# https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')

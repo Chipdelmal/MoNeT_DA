@@ -15,10 +15,6 @@ import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 
-# https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
-# https://github.com/parrt/random-forest-importances
-# https://explained.ai/rf-importance/index.html
-# https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')
@@ -45,15 +41,30 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
 # Read CSV
 ###############################################################################
-DATA = pd.read_csv(
-    path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, MTR, QNT))
+(fName_I, fName_R, fName_C) = (
+    'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
 )
+DATA = pd.read_csv(path.join(PT_OUT, fName_R))
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
+renLim = (1, 20)
+cptLim = .5
+(ttiLim, wopLim) = (120, 2*365)
+# Filter and return dataframe -------------------------------------------------
 fltr = [
-    DATA['i_ren'] > 0, DATA['i_ren'] <= 8, 
-    DATA['CPT'] > 0.5
+    DATA['i_grp'] == 0,
+    DATA['i_ren'] > renLim[0], DATA['i_ren'] <= renLim[1],
+    DATA['CPT'] < cptLim,
+    DATA['WOP'] > wopLim,
+    DATA['TTI'] < ttiLim
 ]
 boolFilter = [all(i) for i in zip(*fltr)]
-DATA[boolFilter]
+daFltrd = DATA[boolFilter]
+###############################################################################
+# Filter Output with Constraints
+###############################################################################
+feats = (i for i in list(daFltrd.columns) if i[0]=='i')
+ranges = {i: sorted(daFltrd[i].unique()) for i in feats}
