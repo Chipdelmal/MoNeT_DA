@@ -42,7 +42,7 @@ import MoNeT_MGDrivE as monet
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/10))]
 )
 # ML --------------------------------------------------------------------------
-THS = '0.1'
+(THS, VT_TRAIN) = ('0.1',  0.3)
 (TREES, DEPTH, KFOLD) = (50, 15, 10)
 DATA_TYPE = {
     'i_sex': np.int8,
@@ -57,9 +57,9 @@ SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 (deltaF, deltaT) = (.2, 50)
 (ML_FRC_CATS, ML_WOP_CATS, ML_TTI_CATS, ML_TTO_CATS) = (
     np.arange(0-deltaF, 1+deltaF*2, deltaF),
-    np.arange(-10, 365*12, 3*365),
-    np.arange(-10, 365*12, 3*365),
-    np.arange(-10, 365*12, 3*365)
+    np.arange(-10, 365*12, 1*365),
+    np.arange(-10, 365*12, 1*365),
+    np.arange(-10, 365*12, 1*365)
 )
 # #############################################################################
 # Experiments

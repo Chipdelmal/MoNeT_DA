@@ -21,6 +21,9 @@ import MoNeT_MGDrivE as monet
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import warnings
+warnings.simplefilter('ignore', FutureWarning)
+warnings.filterwarnings('module') 
 
 # https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
 # https://github.com/parrt/random-forest-importances
@@ -29,13 +32,13 @@ import STP_land as lnd
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')
-    VT_SPLIT = 0.3
+    VT_SPLIT = aux.VT_TRAIN
     JOB = aux.JOB_DSK
 else:
-    (USR, LND, QNT) = (
+    (USR, LND, AOI, QNT, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-    VT_SPLIT = sys.argv[6]
+    VT_SPLIT = aux.VT_TRAIN
     JOB = aux.JOB_SRV
 EXPS = aux.getExps(LND)
 (TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
@@ -52,6 +55,12 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+# Time and head --------------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_ROT, PT_OUT, tS, 
+    '{} ClsTrain[{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, MTR)
+)
 ###############################################################################
 # Read CSV
 ###############################################################################
