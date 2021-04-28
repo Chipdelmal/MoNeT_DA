@@ -9,10 +9,12 @@ import numpy as np
 import pandas as pd
 import rfpimp as rfp
 import seaborn as sns
+from joblib import dump
 from sklearn import metrics
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
+from contextlib import redirect_stdout
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 import MoNeT_MGDrivE as monet
@@ -51,10 +53,15 @@ PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
-# Load DF
+# Read CSV
 ###############################################################################
-fName_I = 'CLN_{}_{}_{}_qnt.csv'.format(AOI, MTR, QNT)
-DATA = pd.read_csv(path.join(PT_OUT, fName_I))
+(fName_I, fName_R, fName_C) = (
+    'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+)
+DATA = pd.read_csv(path.join(PT_OUT, fName_C))
+# Features and labels ---------------------------------------------------------
 COLS = list(DATA.columns)
 (FEATS, LABLS) = (
     [i for i in COLS if i[0]=='i'],
@@ -74,7 +81,7 @@ f.show()
 ###############################################################################
 # Split Train/Test
 ###############################################################################
-(inputs, outputs) = (DATA[FEATS], DATA[LABLS])
+(inputs, outputs) = (DATA[FEATS], DATA[MTR])
 (TRN_X, VAL_X, TRN_Y, VAL_Y) = train_test_split(
     inputs, outputs, 
     test_size=float(VT_SPLIT),
@@ -110,7 +117,7 @@ PRD_Y = rf.predict(VAL_X)
 report = metrics.classification_report(VAL_Y, PRD_Y)
 confusionMat = metrics.plot_confusion_matrix(
     rf, VAL_X, VAL_Y, 
-    display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
+    # display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
     cmap=cm.Blues, normalize=None
 )
 # Features importance ---------------------------------------------------------
@@ -119,3 +126,26 @@ impDC = rfp.oob_dropcol_importances(rf, TRN_X, TRN_Y.values.ravel())
 impDCD = impDC.to_dict()['Importance']
 impPM = rfp.importances(rf, TRN_X, TRN_Y)
 impPMD = impPM.to_dict()['Importance']
+###############################################################################
+# Statistics & Model Export
+###############################################################################
+modelPath = path.join(PT_OUT, fName_C.split('.')[0]+'_'+MTR)
+plt.savefig(modelPath+'_RF.jpg', dpi=300)
+dump(rf, modelPath+'_RF.joblib')
+with open(modelPath+'_RF.txt', 'w') as f:
+    with redirect_stdout(f):
+        print('* Feats Order: {}'.format(FEATS))
+        print('* Train/Validate entries: {}/{} ({})'.format(TRN_L, VAL_L, TRN_L+VAL_L))
+        print('* Cross-validation F1: %0.2f (+/-%0.2f)'%(kScores.mean(), kScores.std()*2))
+        print('* Validation Accuracy: {:.2f}'.format(accuracy))
+        print('* Validation F1: {:.2f} ({:.2f}/{:.2f})'.format(f1, precision, recall))
+        print('* Jaccard: {:.2f}'.format(jaccard))
+        print('* Features Importance & Correlation')
+        for i in zip(FEATS, featImportance, correlation[LABLS[0]]):
+            print('\t* {}: {:.3f}, {:.3f}'.format(*i))
+        print('* Drop-Cols & Permutation Features Importance')
+        for i in FEATS:
+            print('\t* {}: {:.3f}, {:.3f}'.format(i, impDCD[i], impPMD[i]))
+        print('* Class report: ')
+        print(report)
+
