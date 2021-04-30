@@ -4,6 +4,7 @@ import sys
 from os import path
 from re import match
 from glob import glob
+from joblib import dump, load
 from datetime import datetime
 import numpy as np
 import pandas as pd
@@ -48,8 +49,12 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_R))
 ###############################################################################
 # Read ML
 ###############################################################################
-'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'WOP')
-CLS_HLT_90Q_10T_WOP_RF.joblib
+fNameModel = (
+    'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'WOP'),
+    'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'CPT'),
+    'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'TTI')
+)
+mdls = [load(path.join(PT_OUT, i)) for i in fNameModel]
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
