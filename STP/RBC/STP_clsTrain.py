@@ -21,9 +21,7 @@ import MoNeT_MGDrivE as monet
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
-import warnings
-warnings.simplefilter('ignore', FutureWarning)
-warnings.filterwarnings('module') 
+
 
 # https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
 # https://github.com/parrt/random-forest-importances

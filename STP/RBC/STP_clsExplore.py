@@ -7,10 +7,7 @@ from glob import glob
 from datetime import datetime
 import numpy as np
 import pandas as pd
-import pingouin as pg
-import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
-from SALib.analyze import sobol
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
@@ -41,12 +38,18 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
 # Read CSV
 ###############################################################################
+thsStr = str(int(float(aux.THS)*100))
 (fName_I, fName_R, fName_C) = (
-    'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
-    'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
-    'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr),
+    'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr),
+    'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_R))
+###############################################################################
+# Read ML
+###############################################################################
+'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'WOP')
+CLS_HLT_90Q_10T_WOP_RF.joblib
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
@@ -57,6 +60,7 @@ cptLim = .5
 fltr = [
     DATA['i_grp'] == 0,
     DATA['i_ren'] > renLim[0], DATA['i_ren'] <= renLim[1],
+    DATA['i_gsv'] < 1,
     DATA['CPT'] < cptLim,
     DATA['WOP'] > wopLim,
     DATA['TTI'] < ttiLim
@@ -66,5 +70,8 @@ daFltrd = DATA[boolFilter]
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
-feats = (i for i in list(daFltrd.columns) if i[0]=='i')
+feats = [i for i in list(daFltrd.columns) if i[0]=='i']
 ranges = {i: sorted(daFltrd[i].unique()) for i in feats}
+daFltrd
+
+daFltrd[feats]
