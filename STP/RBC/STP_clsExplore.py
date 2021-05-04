@@ -8,6 +8,8 @@ from joblib import dump, load
 from datetime import datetime
 import numpy as np
 import pandas as pd
+import plotly.express as px
+from sklearn import preprocessing
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
 import STP_gene as drv
@@ -15,7 +17,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'POE')
     JOB = aux.JOB_DSK
 else:
     (USR, LND, QNT) = (
@@ -58,25 +60,49 @@ mdls = [load(path.join(PT_OUT, i)) for i in fNameModel]
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
-renLim = (1, 20)
-cptLim = .5
-(ttiLim, wopLim) = (120, 2*365)
+cptLim = (.8, 1.25)
+poeLim = (-1, .1)
+ttiLim = (-10, 20*365)
+ttoLim = (-10, 20*365)
+wopLim = (-10, 20*365)
 # Filter and return dataframe -------------------------------------------------
 fltr = [
-    DATA['i_grp'] == 0,
-    DATA['i_ren'] > renLim[0], DATA['i_ren'] <= renLim[1],
-    DATA['i_gsv'] < 1,
-    DATA['CPT'] < cptLim,
-    DATA['WOP'] > wopLim,
-    DATA['TTI'] < ttiLim
+    cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
+    wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
+    ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
+    ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
+    poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
 ]
 boolFilter = [all(i) for i in zip(*fltr)]
 daFltrd = DATA[boolFilter]
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
-feats = [i for i in list(daFltrd.columns) if i[0]=='i']
+feats = [i for i in list(DATA.columns) if i[0]=='i']
 ranges = {i: sorted(daFltrd[i].unique()) for i in feats}
-daFltrd
+daFltrd.to_excel(
+    path.join(PT_OUT, 'filtered.xls'), index=False, header=DATA.columns
+)
 
-daFltrd[feats]
+
+###############################################################################
+# DataViz
+###############################################################################
+cols = ('i_ren', 'i_res', 'i_fcf', 'i_gsv', MTR)
+x = DATA[[*cols]].values
+min_max_scaler = preprocessing.MinMaxScaler()
+x_scaled = min_max_scaler.fit_transform(x)
+df = pd.DataFrame(x_scaled, columns=cols)
+gsv = list(df['i_gsv'].unique())
+dfFltrd = df[df['i_gsv']==gsv[-2]]
+###############################################################################
+# Load Dataset
+###############################################################################
+fig = px.scatter_3d(
+    dfFltrd, 
+    x='i_ren', y='i_res', z='i_fcf', 
+    color=list(1*np.asarray(dfFltrd[MTR])),
+    size=list(1*np.asarray(dfFltrd[MTR])), 
+    opacity=.2, color_continuous_scale='purples_r'
+)
+fig.show()
