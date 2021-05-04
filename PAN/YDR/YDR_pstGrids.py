@@ -36,7 +36,7 @@ for exp in EXPS:
         glob('{}E_*{}*{}*{}.png'.format(PT_IMG_I, i, '*', QNT)) for i in AOI
     ]
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
-    imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:-1]
+    imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:]
     # #########################################################################
     # Iterate through images
     # #########################################################################
