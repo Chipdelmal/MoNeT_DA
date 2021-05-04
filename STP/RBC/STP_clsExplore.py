@@ -50,7 +50,7 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_R))
 # Read ML
 ###############################################################################
 fNameModel = (
-    'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'WOP'),
+    # 'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'WOP'),
     'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'CPT'),
     'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'TTI')
 )

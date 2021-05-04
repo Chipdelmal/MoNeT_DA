@@ -54,14 +54,11 @@ dfClean.to_csv(path.join(PT_OUT, fName_R), index=False)
 # Categorize outputs
 ###############################################################################
 dfCat = dfClean.copy()
-for mtr in ['POE', 'POF', 'CPT']:
-    dfCat[mtr] = pd.cut(
-        dfClean[mtr],
-        bins=aux.ML_FRC_CATS,
-        labels=list(range(len(aux.ML_FRC_CATS)-1))
-    )
-tCats = (aux.ML_WOP_CATS, aux.ML_TTI_CATS, aux.ML_TTO_CATS)
-for (mtr, ran) in zip(('WOP', 'TTI', 'TTO'), tCats):
+tCats = (
+    aux.ML_CPT_CATS, aux.ML_POE_CATS, aux.ML_POF_CATS,
+    aux.ML_WOP_CATS, aux.ML_TTI_CATS, aux.ML_TTO_CATS
+)
+for (mtr, ran) in zip(('CPT', 'POE', 'POF', 'WOP', 'TTI', 'TTO'), tCats):
     dfCat[mtr] = pd.cut(
         dfClean[mtr],
         bins=ran,

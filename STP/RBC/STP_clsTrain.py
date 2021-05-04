@@ -29,7 +29,7 @@ import STP_land as lnd
 # https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'CPT')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'WOP')
     VT_SPLIT = aux.VT_TRAIN
     JOB = aux.JOB_DSK
 else:
@@ -84,7 +84,7 @@ sns.heatmap(
     cmap=sns.diverging_palette(220, 10, as_cmap=True),
     square=True, ax=ax
 )
-f.show()
+# f.show()
 ###############################################################################
 # Split Train/Test
 ###############################################################################

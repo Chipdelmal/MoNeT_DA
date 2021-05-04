@@ -43,7 +43,7 @@ import MoNeT_MGDrivE as monet
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
-(TREES, DEPTH, KFOLD) = (50, 15, 10)
+(TREES, DEPTH, KFOLD) = (100, 25, 20)
 DATA_TYPE = {
     'i_sex': np.int8,
     'i_sxm': np.bool_,  'i_sxg': np.bool_,  'i_sxn': np.bool_,
@@ -54,12 +54,15 @@ DATA_TYPE = {
     'i_grp': np.intc,   'i_mig': np.double
 }
 SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
-(deltaF, deltaT) = (.2, 50)
-(ML_FRC_CATS, ML_WOP_CATS, ML_TTI_CATS, ML_TTO_CATS) = (
-    np.arange(0-deltaF, 1+deltaF*2, deltaF),
-    np.arange(-10, 365*12, 1*365),
-    np.arange(-10, 365*12, 1*365),
-    np.arange(-10, 365*12, 1*365)
+(ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS) = ( 
+    [-.1, .5, .75,  1.1],
+    [-.1, .5, 1.1],
+    [-.1, .5, 1.1]
+)
+(ML_WOP_CATS, ML_TTI_CATS, ML_TTO_CATS) = (
+    [-10, 365*1, 365*2, 365*11],
+    [-10, 60, 90, 120, 150, 365, 365*11],
+    [-10, 5*365, 365*11]
 )
 # #############################################################################
 # Experiments

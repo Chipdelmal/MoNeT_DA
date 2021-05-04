@@ -54,6 +54,7 @@ outLabels = [x for x in list(dfMerged.columns) if len(x.split('_')) <= 1]
 inLabels = [i[0] for i in aux.DATA_HEAD]
 inLabels.append('i_mig')
 dfMerged = dfMerged.reindex(inLabels+outLabels, axis=1)
+dfMerged = dfMerged[dfMerged['i_grp']==0]
 dfMerged.to_csv(
     path.join(PT_OUT, 'RAW_'+path.split(fName[0])[-1]), 
     index=False
