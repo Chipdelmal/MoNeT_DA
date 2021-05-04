@@ -16,7 +16,8 @@ XP_ID = 'YDR'
     'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
 (POP_SIZE, XRAN, FZ, STABLE_T) = (20e3*1.5, (0, (365*5)), True, 0)
-EXPS = ('000', '002', '004', '006', '008')
+# EXPS = ('000', '002', '004', '006', '008')
+EXPS = ('001', )
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST, MLR) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), 
@@ -30,7 +31,7 @@ EXPS = ('000', '002', '004', '006', '008')
         [int((i+1)*365-1) for i in range(5)]
     )
 FRATE = 30
-(JOB_DSK, JOB_SRV) = (8, 20)
+(JOB_DSK, JOB_SRV) = (8, 40)
 
 # #############################################################################
 # Experiment-Specific Path Functions
@@ -75,6 +76,8 @@ def selectPath(USR, SET, DRV, EXP):
         PATH_ROOT = '/RAID5/marshallShare/yLinked/{}/{}/{}/'.format(SET, DRV, EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/YDR/{}/{}/{}/'.format(SET, DRV, EXP)
+    elif USR == 'srv2':
+        PATH_ROOT = '/RAID5/marshallShare/yLinked2/{}/{}/{}/'.format(SET, DRV, EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )

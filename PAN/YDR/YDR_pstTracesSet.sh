@@ -4,7 +4,7 @@
 # argv2: THS
 
 
-QNT="75"
+QNT="50"
 bash ./YDR_pstTraces.sh $1 ASD $2
 bash ./YDR_pstTraces.sh $1 YSD $2
 bash ./YDR_pstTraces.sh $1 AXS $2
