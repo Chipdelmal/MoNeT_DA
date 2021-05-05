@@ -140,7 +140,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def getStyle(colors, aspectR, xRange, yRange):
     style = {
-            "width": .1, "alpha": .1, "dpi": 500,
+            "width": .1, "alpha": .1, "dpi": 300,
             "legend": True, "aspect": .5,
             "xRange": xRange, "yRange": yRange,
             "colors": colors

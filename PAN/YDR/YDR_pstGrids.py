@@ -23,6 +23,7 @@ for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, SET, fldr, exp
     )
+    PT_IMG_P = PT_IMG+'preTraces/'
     (PT_IMG_I, PT_IMG_O) = (PT_IMG + 'pstTraces/', PT_IMG + 'pstGrids/')
     monet.makeFolder(PT_IMG_O)
     tS = datetime.now()
@@ -32,9 +33,15 @@ for exp in EXPS:
     )
     # Get files ---------------------------------------------------------------
     NODE_NUM = len(land)
+    imgListPre = sorted(glob('{}*E*{}*{}*.png'.format(PT_IMG_P, 'ECO', '*')))
     imgLists = [
-        glob('{}E_*{}*{}*{}.png'.format(PT_IMG_I, i, '*', QNT)) for i in AOI
+        sorted(glob('{}E_*{}*{}*{}.png'.format(PT_IMG_I, i, '*', QNT))) 
+            for i in AOI
     ]
+    if len(imgListPre) == len(imgLists[0]):
+        imgLists.append(imgListPre)
+        for i in range(len(imgListPre)):
+            imgLists = imgLists[-1:] + imgLists[:-1]
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
     imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:]
     # #########################################################################
@@ -43,6 +50,6 @@ for exp in EXPS:
     (xpNum, digs) = monet.lenAndDigits(imgChunks)
     for (i, chunk) in enumerate(imgChunks):
         monet.printProgress(i+1, xpNum, digs)
-        expGrid = vconcat([hconcat([imread(i) for i in j]) for j in chunk])
+        expGrid = vconcat([hconcat([imread(i) for i in sorted(j)]) for j in chunk])
         fName = chunk[0][0].split('/')[-1].split('-')[0] + '-' + QNT
         imwrite(PT_IMG_O + fName + '.png', expGrid)
