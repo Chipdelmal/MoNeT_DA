@@ -40,7 +40,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .2, "alpha": .3, "dpi": 100, "legend": True,
+            "width": .15, "alpha": .2, "dpi": 100, "legend": True,
             "aspect": .25, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
