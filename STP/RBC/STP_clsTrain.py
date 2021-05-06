@@ -28,6 +28,8 @@ import STP_land as lnd
 # https://github.com/parrt/random-forest-importances
 # https://explained.ai/rf-importance/index.html
 # https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
+# https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance_multicollinear.html#sphx-glr-auto-examples-inspection-plot-permutation-importance-multicollinear-py
+# https://pdpbox.readthedocs.io/en/latest/pdp_plot.html
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'POE')

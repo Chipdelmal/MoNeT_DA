@@ -11,10 +11,14 @@ from joblib import dump
 import matplotlib as mpl
 from matplotlib.pyplot import cm
 from sklearn import metrics
+from scipy.stats import spearmanr
+from scipy.cluster import hierarchy
+import matplotlib.gridspec as gridspec
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.inspection import partial_dependence, plot_partial_dependence
+from pdpbox import pdp, get_dataset, info_plots
 from sklearn.decomposition import PCA
 import MoNeT_MGDrivE as monet
 
@@ -40,7 +44,7 @@ for label in OUT_THS:
     (FEATS, LABLS) = (
         [
             'i_smx', 'i_sgv', 'i_sgn',
-            'i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic'
+            'i_rsg', 'i_rer', 'i_ren', 'i_gsv', 'i_fic'
         ],
         [label]
     )
@@ -79,6 +83,7 @@ for label in OUT_THS:
             '0.5':  'int8', '0.25': 'int8', '0.1':  'int8', '0.05': 'int8',
         }
     DTA_CLN = DTA_RAW.astype(DTA_TYPES)
+    DTA_CLN = DTA_CLN.drop(columns=['i_qnt'])
     DTA_LEN = DTA_CLN.shape[0]
     correlation = DTA_CLN.corr(method='spearman')[LABLS][:len(FEATS)]
     if (MTR == 'CPT') or (MTR == 'POE'):
@@ -133,20 +138,54 @@ for label in OUT_THS:
     ###########################################################################
     # Interpretability Plots
     ###########################################################################
-    for target in rf.classes_:
-        display = plot_partial_dependence(
-            rf, TRN_X, FEATS, target=4, 
-            kind='individual', 
-            line_kw={'color': '#ff006e05', 'linewidth': 0.01},
-            n_cols=3, grid_resolution=20, subsample=250
+    # for target in rf.classes_:
+    #     display = plot_partial_dependence(
+    #         rf, TRN_X, FEATS, target=4, 
+    #         kind='individual', 
+    #         line_kw={'color': '#ff006e01', 'linewidth': 0.01},
+    #         n_cols=3, grid_resolution=20, subsample=250
+    #     )
+    #     for ax in display.figure_.get_axes():
+    #         ax.set_ylabel('')
+    #         xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
+    #         yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
+    #         ax.set_aspect(.5*(xDiff / yDiff))
+    #         display.figure_.subplots_adjust(hspace=1)
+    #     display.figure_.savefig(strMod+'_ICE'+'_'+str(target)+'.jpg', dpi=750)
+    for feat in FEATS:
+        isolate = pdp.pdp_isolate(
+            model=rf, dataset=TRN_X, model_features=FEATS, feature=feat
         )
-        for ax in display.figure_.get_axes():
-            ax.set_ylabel('')
+        fig, axes = pdp.pdp_plot(
+            pdp_isolate_out=isolate, feature_name=feat, 
+            center=True, x_quantile=True, plot_pts_dist=False,
+            ncols=len(rf.classes_), plot_lines=True, frac_to_plot=.75
+        )
+        axes['title_ax'].set_visible(False)
+        for ax in axes['pdp_ax']:
+            ax.set_ylim(-1.1, 1.1)
             xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
             yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
-            ax.set_aspect(.5*(xDiff / yDiff))
-            display.figure_.subplots_adjust(hspace=1)
-        display.figure_.savefig(strMod+'_ICE'+'_'+str(target)+'.jpg', dpi=750)
+        fig.subplots_adjust(hspace=2)
+        fig.tight_layout()
+        fig.savefig(
+            strMod+'_ICE'+'_'+feat.split('_')[-1]+'.jpg', 
+            dpi=1000, bbox_inches='tight', pad_inches=0.1
+        )
+    # Dendrogram -------------------------------------------------------------
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+    corr = spearmanr(TRN_X).correlation
+    corr_linkage = hierarchy.ward(corr)
+    dendro = hierarchy.dendrogram(
+        corr_linkage, labels=FEATS, ax=ax1, leaf_rotation=90
+    )
+    dendro_idx = np.arange(0, len(dendro['ivl']))
+    ax2.imshow(corr[dendro['leaves'], :][:, dendro['leaves']])
+    ax2.set_xticks(dendro_idx)
+    ax2.set_yticks(dendro_idx)
+    ax2.set_xticklabels(dendro['ivl'], rotation='vertical')
+    ax2.set_yticklabels(dendro['ivl'])
+    fig.tight_layout()
     ###########################################################################
     # Statistics & Model Export
     ###########################################################################
@@ -175,4 +214,6 @@ for label in OUT_THS:
 # X2D = pca.fit_transform(TRN_X)
 # X2DT = X2D.T
 # plt.scatter(x=X2DT[0], y=X2DT[1])
+
+
 
