@@ -8,11 +8,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import rfpimp as rfp
 from joblib import dump
+import matplotlib as mpl
 from matplotlib.pyplot import cm
 from sklearn import metrics
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+from sklearn.inspection import partial_dependence, plot_partial_dependence
 from sklearn.decomposition import PCA
 import MoNeT_MGDrivE as monet
 
@@ -79,6 +81,10 @@ for label in OUT_THS:
     DTA_CLN = DTA_RAW.astype(DTA_TYPES)
     DTA_LEN = DTA_CLN.shape[0]
     correlation = DTA_CLN.corr(method='spearman')[LABLS][:len(FEATS)]
+    if (MTR == 'CPT') or (MTR == 'POE'):
+        strMod = PT_MOD+ID_MTR[0][4:-8]
+    else:
+        strMod = PT_MOD+ID_MTR[0][4:-10]+str(int(float(LABLS[0])*100)).zfill(2)
     ###############################################################################
     # Split dataset
     ###############################################################################
@@ -118,19 +124,32 @@ for label in OUT_THS:
         display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
         cmap=cm.Blues, normalize=None
     )
+    plt.savefig(strMod+'_RF.jpg', dpi=300)
     featImportance = list(rf.feature_importances_)
     impDC = rfp.oob_dropcol_importances(rf, TRN_X, TRN_Y.values.ravel())
     impDCD = impDC.to_dict()['Importance']
     impPM = rfp.importances(rf, TRN_X, TRN_Y)
     impPMD = impPM.to_dict()['Importance']
-    ###############################################################################
+    ###########################################################################
+    # Interpretability Plots
+    ###########################################################################
+    for target in rf.classes_:
+        display = plot_partial_dependence(
+            rf, TRN_X, FEATS, target=4, 
+            kind='individual', 
+            line_kw={'color': '#ff006e05', 'linewidth': 0.01},
+            n_cols=3, grid_resolution=20, subsample=250
+        )
+        for ax in display.figure_.get_axes():
+            ax.set_ylabel('')
+            xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
+            yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
+            ax.set_aspect(.5*(xDiff / yDiff))
+            display.figure_.subplots_adjust(hspace=1)
+        display.figure_.savefig(strMod+'_ICE'+'_'+str(target)+'.jpg', dpi=750)
+    ###########################################################################
     # Statistics & Model Export
-    ###############################################################################
-    if (MTR == 'CPT') or (MTR == 'POE'):
-        strMod = PT_MOD+ID_MTR[0][4:-8]
-    else:
-        strMod = PT_MOD+ID_MTR[0][4:-10]+str(int(float(LABLS[0])*100)).zfill(2)
-    plt.savefig(strMod+'_RF.jpg', dpi=300)
+    ###########################################################################
     dump(rf, strMod+'_RF.joblib')
     with open(strMod+'_RF.txt', 'w') as f:
         with redirect_stdout(f):

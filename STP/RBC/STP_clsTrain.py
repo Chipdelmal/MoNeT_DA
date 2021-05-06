@@ -15,6 +15,7 @@ import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 from contextlib import redirect_stdout
+from sklearn.inspection import partial_dependence, plot_partial_dependence
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 import MoNeT_MGDrivE as monet
@@ -29,7 +30,7 @@ import STP_land as lnd
 # https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'WOP')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'POE')
     VT_SPLIT = aux.VT_TRAIN
     JOB = aux.JOB_DSK
 else:
@@ -68,6 +69,7 @@ monet.printExperimentHead(
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_C))
+modelPath = path.join(PT_OUT, fName_C.split('.')[0]+'_'+MTR)
 # Features and labels ---------------------------------------------------------
 COLS = list(DATA.columns)
 (FEATS, LABLS) = (
@@ -98,7 +100,7 @@ sns.heatmap(
 ###############################################################################
 # Training Model
 ###############################################################################
-rf = RandomForestClassifier(
+rf = RandomForestClassifier(d
     n_estimators=TREES, max_depth=DEPTH, criterion='entropy',
     min_samples_split=5, min_samples_leaf=50,
     max_features=None, max_leaf_nodes=None,
@@ -127,16 +129,34 @@ confusionMat = metrics.plot_confusion_matrix(
     # display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
     cmap=cm.Blues, normalize=None
 )
+plt.savefig(modelPath+'_RF.jpg', dpi=300)
 # Features importance ---------------------------------------------------------
 featImportance = list(rf.feature_importances_)
 impDC = rfp.oob_dropcol_importances(rf, TRN_X, TRN_Y.values.ravel())
 impDCD = impDC.to_dict()['Importance']
 impPM = rfp.importances(rf, TRN_X, TRN_Y)
 impPMD = impPM.to_dict()['Importance']
+viz = rfp.plot_corr_heatmap(DATA, figsize=(7,5))
+###############################################################################
+# Interpretability Plots
+###############################################################################
+for target in rf.classes_:
+    display = plot_partial_dependence(
+        rf, TRN_X, FEATS, target=4, 
+        kind='individual', 
+        line_kw={'color': '#ff006e05', 'linewidth': 0.01},
+        n_cols=3, grid_resolution=20, subsample=250
+    )
+    for ax in display.figure_.get_axes():
+        ax.set_ylabel('')
+        xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
+        yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
+        ax.set_aspect(.5*(xDiff / yDiff))
+        display.figure_.subplots_adjust(hspace=1)
+    display.figure_.savefig(modelPath+'_ICE'+'_'+str(target)+'.jpg', dpi=750)
 ###############################################################################
 # Statistics & Model Export
 ###############################################################################
-modelPath = path.join(PT_OUT, fName_C.split('.')[0]+'_'+MTR)
 plt.savefig(modelPath+'_RF.jpg', dpi=300)
 dump(rf, modelPath+'_RF.joblib')
 with open(modelPath+'_RF.txt', 'w') as f:
