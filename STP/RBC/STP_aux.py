@@ -14,7 +14,7 @@ import MoNeT_MGDrivE as monet
     2e6*1.5/2, (0, int(365*5)), True, 0, True
 )
 (XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
-    'STP', 'LDR', False,
+    'STP', 'LDR', True,
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP, OVW) = (True, False, False, False, True, True)

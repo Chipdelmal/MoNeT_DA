@@ -138,34 +138,37 @@ for label in OUT_THS:
     ###########################################################################
     # Interpretability Plots
     ###########################################################################
-    # for target in rf.classes_:
-    #     display = plot_partial_dependence(
-    #         rf, TRN_X, FEATS, target=4, 
-    #         kind='individual', 
-    #         line_kw={'color': '#ff006e01', 'linewidth': 0.01},
-    #         n_cols=3, grid_resolution=20, subsample=250
-    #     )
-    #     for ax in display.figure_.get_axes():
-    #         ax.set_ylabel('')
-    #         xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
-    #         yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
-    #         ax.set_aspect(.5*(xDiff / yDiff))
-    #         display.figure_.subplots_adjust(hspace=1)
-    #     display.figure_.savefig(strMod+'_ICE'+'_'+str(target)+'.jpg', dpi=750)
+    feat = FEATS[4]
     for feat in FEATS:
         isolate = pdp.pdp_isolate(
             model=rf, dataset=TRN_X, model_features=FEATS, feature=feat
         )
-        fig, axes = pdp.pdp_plot(
+        fracPlot = 2500
+        (fig, axes) = pdp.pdp_plot(
             pdp_isolate_out=isolate, feature_name=feat, 
-            center=True, x_quantile=True, plot_pts_dist=False,
-            ncols=len(rf.classes_), plot_lines=True, frac_to_plot=.75
+            center=False, x_quantile=True, plot_pts_dist=False,
+            ncols=len(rf.classes_), plot_lines=True, frac_to_plot=fracPlot,
+            plot_params = {
+                'line_cmap': 'Blues',
+                'subtitle_fontsize': 1, 'xticks_rotation': 0,
+                'pdp_linewidth': .5, 'zero_linewidth': 0.1,
+                'pdp_color': '#ff006e', 'pdp_hl_color': '#ff006e',
+                'fill_color': '#ff006e', 'zero_color': '#ff006e',
+                'fill_alpha': 0.25, 'markersize': 0.05,
+            }
         )
         axes['title_ax'].set_visible(False)
         for ax in axes['pdp_ax']:
+            ax.tick_params(axis='both', which='major', labelsize=3)
+            ax.set_xlabel('')
             ax.set_ylim(-1.1, 1.1)
             xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
             yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
+            for (i, trc) in enumerate(ax.get_lines()):
+                if (i<fracPlot):
+                    trc.set_color('#a2d2ff')
+                    trc.set_linewidth(.1)
+                    trc.set_alpha(.2)
         fig.subplots_adjust(hspace=2)
         fig.tight_layout()
         fig.savefig(
@@ -173,19 +176,19 @@ for label in OUT_THS:
             dpi=1000, bbox_inches='tight', pad_inches=0.1
         )
     # Dendrogram -------------------------------------------------------------
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
-    corr = spearmanr(TRN_X).correlation
-    corr_linkage = hierarchy.ward(corr)
-    dendro = hierarchy.dendrogram(
-        corr_linkage, labels=FEATS, ax=ax1, leaf_rotation=90
-    )
-    dendro_idx = np.arange(0, len(dendro['ivl']))
-    ax2.imshow(corr[dendro['leaves'], :][:, dendro['leaves']])
-    ax2.set_xticks(dendro_idx)
-    ax2.set_yticks(dendro_idx)
-    ax2.set_xticklabels(dendro['ivl'], rotation='vertical')
-    ax2.set_yticklabels(dendro['ivl'])
-    fig.tight_layout()
+    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+    # corr = spearmanr(TRN_X).correlation
+    # corr_linkage = hierarchy.ward(corr)
+    # dendro = hierarchy.dendrogram(
+    #     corr_linkage, labels=FEATS, ax=ax1, leaf_rotation=90
+    # )
+    # dendro_idx = np.arange(0, len(dendro['ivl']))
+    # ax2.imshow(corr[dendro['leaves'], :][:, dendro['leaves']])
+    # ax2.set_xticks(dendro_idx)
+    # ax2.set_yticks(dendro_idx)
+    # ax2.set_xticklabels(dendro['ivl'], rotation='vertical')
+    # ax2.set_yticklabels(dendro['ivl'])
+    # fig.tight_layout()
     ###########################################################################
     # Statistics & Model Export
     ###########################################################################
