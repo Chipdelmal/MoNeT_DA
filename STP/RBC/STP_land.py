@@ -6,7 +6,7 @@ import compress_pickle as pkl
 
 def landSelector(EXP, LND):
     if (LND=='PAN'):
-        PAN = ([0], [1])
+        PAN = ([0], )
         return PAN
 
     # if (EXP == '265'):

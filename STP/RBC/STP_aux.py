@@ -9,12 +9,12 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 # Constants
 # #############################################################################
-(JOB_DSK, JOB_SRV) = (4, 8)
+(JOB_DSK, JOB_SRV) = (4, 20)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
     2e6*1.5/2, (0, int(365*5)), True, 0, True
 )
 (XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
-    'STP', 'LDR', False,
+    'STP', 'LDR', True,
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP, OVW) = (True, False, False, False, True, True)
@@ -69,7 +69,7 @@ SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 # #############################################################################
 def getExps(LND):
     if LND=='PAN':
-        return ('000000', '000010')
+        return ('000000', )
     else:
         return ('265_S', '265_P')
 
