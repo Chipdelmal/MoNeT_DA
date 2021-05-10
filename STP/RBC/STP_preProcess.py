@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 from datetime import datetime
 import STP_aux as aux
@@ -8,6 +9,7 @@ import STP_gene as drv
 import STP_land as lnd
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
+# os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
     (USR, AOI, LND) = ('dsk', 'ECO', 'PAN')
@@ -49,7 +51,7 @@ for exp in EXPS:
     ###########################################################################
     # Process data
     ###########################################################################
-    Parallel(n_jobs=JOB)(
+    Parallel(n_jobs=JOB, backend="threading")(
         delayed(monet.preProcess)(
             exIx, expNum, expDirsMean, expDirsTrac, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
