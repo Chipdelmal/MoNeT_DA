@@ -39,21 +39,23 @@ for exp in EXPS:
     )
     # Get files ---------------------------------------------------------------
     NODE_NUM = len(land)
-    imgListPre = glob('{}*{}*{}*.png'.format(PT_IMG_P, 'ECO', '*'))
+    imgListPre = sorted(glob('{}*E*{}*{}*.png'.format(PT_IMG_P, 'ECO', '*')))
     imgLists = [glob('{}*{}*{}*.png'.format(PT_IMG_I, i, '*')) for i in AOI]
     if len(imgListPre) == len(imgLists[0]):
         imgLists.append(imgListPre)
         for i in range(len(imgListPre)):
             imgLists = imgLists[-1:] + imgLists[:-1]
     imgTuples = list(zip(*[sorted(i) for i in imgLists]))
-    imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:-1]
+    imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:]
     # #########################################################################
     # Iterate through images
     # #########################################################################
     (xpNum, digs) = monet.lenAndDigits(imgChunks)
     for (i, chunk) in enumerate(imgChunks):
         monet.printProgress(i+1, xpNum, digs)
-        expGrid = vconcat([hconcat([imread(i) for i in j]) for j in chunk])
+        expGrid = vconcat(
+            [hconcat([imread(i) for i in sorted(j)]) for j in chunk]
+        )
         fName = chunk[0][0].split('/')[-1].split('-')[0]
         imwrite(PT_IMG_O + fName + '.png', expGrid)
 
