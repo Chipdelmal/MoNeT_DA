@@ -6,6 +6,7 @@ from glob import glob
 from joblib import dump, load
 from datetime import datetime
 import numpy as np
+from numpy.lib.arraypad import pad
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -57,33 +58,49 @@ COLS = list(DATA.columns)
 ###############################################################################
 # PDP/ICE Plot 
 ###############################################################################
-sampleRate = 1
-(xVar, yVar) = ('i_ren', 'CPT')
-dataEffect = DATA[DATA['i_ren'] > 0]
-# Get factorials --------------------------------------------------------------
-(inFact, outFact) = (dataEffect[FEATS], dataEffect[yVar])
-# Get levels and factorial combinations without feature -----------------------
-xLvls = sorted(list(inFact[xVar].unique()))
-dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
-# Plot figure -----------------------------------------------------------------
-(fig, ax) = plt.subplots(figsize=(10, 10))
-for i in range(0, dropFeats.shape[0]):
-    entry = dropFeats.iloc[i]
-    if (random.uniform(0, 1) < sampleRate):
-        zipIter = zip(list(entry.keys()), list(entry.values))
-        fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
-        fltr = [all(i) for i in zip(*fltrRaw)]
-        data = dataEffect[fltr][[xVar, yVar]]
-        ax.plot(data[xVar], data[yVar], lw=.0175, color='#4361ee55')
-ax.set_xlim([xLvls[0], xLvls[-1]])
-ax.set_ylim([0, max(outFact)*1.05])
-ax.vlines(0, 0, max(outFact)*1.05, lw=.1, ls='--', color='#000000')
-fig.tight_layout()
-fig.savefig(
-    path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar)),
-    dpi=1000
-)
-plt.close('all')
+(sampleRate, shuffle) = (1, True)
+(xVar, yVar) = ('i_hrt', 'CPT')
+pFeats = ['i_sex', 'i_ren', 'i_res', 'i_rsg', 'i_gsv', 'i_fcf']
+for xVar in pFeats:
+    dataEffect = DATA[(DATA['i_ren'] > 0) & (DATA['i_res'] > 0)]
+    fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
+    # Get factorials --------------------------------------------------------------
+    (inFact, outFact) = (dataEffect[FEATS], dataEffect[yVar])
+    # Get levels and factorial combinations without feature -----------------------
+    xLvls = sorted(list(inFact[xVar].unique()))
+    dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
+    # Plot figure -----------------------------------------------------------------
+    (fig, ax) = plt.subplots(figsize=(10, 10))
+    for i in range(0, dropFeats.shape[0]):
+        entry = dropFeats.iloc[i]
+        if (random.uniform(0, 1) <= sampleRate):
+            zipIter = zip(list(entry.keys()), list(entry.values))
+            fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
+            fltr = [all(i) for i in zip(*fltrRaw)]
+            data = dataEffect[fltr][[xVar, yVar]]
+            if shuffle:
+                yData = [i+np.random.uniform(low=-.01, high=.01) for i in data[yVar]]
+            else:
+                yData = data[yVar]
+            # Plot ----------------------------------------------------------------
+            ax.plot(
+                data[xVar], yData, 
+                lw=.1, color='#4361ee55'
+            )
+    STYLE = {
+        'xRange': [xLvls[0], xLvls[-1]],
+        'yRange': [min(outFact)*.975, max(outFact)*1.025]
+    }
+    ax.set_aspect(monet.scaleAspect(1, STYLE))
+    ax.set_xlim(STYLE['xRange'])
+    ax.set_ylim(STYLE['yRange'])
+    ax.vlines(
+        xLvls, 0, 1, lw=.25, ls='--', color='#000000', 
+        transform = ax.get_xaxis_transform()
+    )
+    fig.tight_layout()
+    fig.savefig(fName, dpi=500, bbox_inches='tight', pad=0)
+    plt.close('all')
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
