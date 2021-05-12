@@ -59,9 +59,19 @@ COLS = list(DATA.columns)
 # PDP/ICE Plot 
 ###############################################################################
 (sampleRate, shuffle) = (1, True)
-(xVar, yVar) = ('i_hrt', 'CPT')
-pFeats = ['i_sex', 'i_ren', 'i_res', 'i_rsg', 'i_gsv', 'i_fcf']
-for xVar in pFeats:
+ans = (
+    ('CPT', 0.01, '#4361ee43'), ('WOP', 0.25, '#ff006e12'), 
+    ('TTI', 0.25, '#be0aff13'), ('TTO', 0.25, '#a1ef7a43'), 
+    ('POE', 0.01, '#23194212')
+)
+pFeats = [
+    ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
+    ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear')
+]
+
+ix = 0
+(yVar, sigma, col) = ans[ix]
+for (xVar, scale) in pFeats:
     dataEffect = DATA[(DATA['i_ren'] > 0) & (DATA['i_res'] > 0)]
     fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
     # Get factorials --------------------------------------------------------------
@@ -79,25 +89,31 @@ for xVar in pFeats:
             fltr = [all(i) for i in zip(*fltrRaw)]
             data = dataEffect[fltr][[xVar, yVar]]
             if shuffle:
-                yData = [i+np.random.uniform(low=-.01, high=.01) for i in data[yVar]]
+                yData = [
+                    i+np.random.uniform(low=-sigma, high=sigma) for i in data[yVar]
+                ]
             else:
                 yData = data[yVar]
             # Plot ----------------------------------------------------------------
-            ax.plot(
-                data[xVar], yData, 
-                lw=.1, color='#4361ee55'
-            )
+            ax.plot(data[xVar], yData, lw=.175, color=col)
+    if scale == 'log':
+        xRan = [xLvls[1], xLvls[-1]]
+    else:
+        xRan = [xLvls[0], xLvls[-1]]
     STYLE = {
-        'xRange': [xLvls[0], xLvls[-1]],
+        'xRange': xRan,
         'yRange': [min(outFact)*.975, max(outFact)*1.025]
     }
     ax.set_aspect(monet.scaleAspect(1, STYLE))
     ax.set_xlim(STYLE['xRange'])
     ax.set_ylim(STYLE['yRange'])
+    ax.set_xscale(scale)
     ax.vlines(
         xLvls, 0, 1, lw=.25, ls='--', color='#000000', 
         transform = ax.get_xaxis_transform()
     )
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20, rotation=90)
     fig.tight_layout()
     fig.savefig(fName, dpi=500, bbox_inches='tight', pad=0)
     plt.close('all')
