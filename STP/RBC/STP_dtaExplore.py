@@ -56,72 +56,34 @@ COLS = list(DATA.columns)
     [i for i in COLS if i[0]!='i']
 )
 ###############################################################################
-# PDP/ICE Plot 
+# DICE Plot 
 ###############################################################################
 (sampleRate, shuffle) = (1, True)
-ans = (
-    ('CPT', 0.01, '#4361ee43'), ('WOP', 0.25, '#ff006e12'), 
-    ('TTI', 0.25, '#be0aff13'), ('TTO', 0.25, '#a1ef7a43'), 
-    ('POE', 0.01, '#23194212')
-)
+ans = aux.DICE_PARS
 pFeats = [
     ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
     ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear')
 ]
-# Iterate through AOI ---------------------------------------------------------
-ix = 0
-(yVar, sigma, col) = ans[ix]
 dataEffect = DATA[
     (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) & 
     (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0)
 ]
-# Get factorials --------------------------------------------------------------
-(xVar, scale) = pFeats[1]
-for (xVar, scale) in pFeats:
-    fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
-    aux.plotDICE(
-        dataEffect, xVar, yVar, FEATS,
-        scale=scale, wiggle=True, sd=sigma, color=col
-    )
-    # # Plot figure -------------------------------------------------------------
-    # (fig, ax) = plt.subplots(figsize=(10, 10))
-    # for i in range(0, dropFeats.shape[0]):
-    #     entry = dropFeats.iloc[i]
-    #     if (random.uniform(0, 1) <= sampleRate):
-    #         zipIter = zip(list(entry.keys()), list(entry.values))
-    #         fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
-    #         fltr = [all(i) for i in zip(*fltrRaw)]
-    #         data = dataEffect[fltr][[xVar, yVar]]
-    #         if shuffle:
-    #             yData = [
-    #                 i+np.random.uniform(low=-sigma, high=sigma) for i in data[yVar]
-    #             ]
-    #         else:
-    #             yData = data[yVar]
-    #         # Plot ------------------------------------------------------------
-    #         ax.plot(data[xVar], yData, lw=.175, color=col)
-    # # Log and linear scales ---------------------------------------------------
-    # if scale == 'log':
-    #     xRan = [xLvls[1], xLvls[-1]]
-    # else:
-    #     xRan = [xLvls[0], xLvls[-1]]
-    # STYLE = {
-    #     'xRange': xRan,
-    #     'yRange': [min(outFact)*.975, max(outFact)*1.025]
-    # }
-    # ax.set_aspect(monet.scaleAspect(1, STYLE))
-    # ax.set_xlim(STYLE['xRange'])
-    # ax.set_ylim(STYLE['yRange'])
-    # ax.set_xscale(scale)
-    # ax.vlines(
-    #     xLvls, 0, 1, lw=.25, ls='--', color='#000000', 
-    #     transform = ax.get_xaxis_transform()
-    # )
-    # plt.xticks(fontsize=20)
-    # plt.yticks(fontsize=20, rotation=90)
-    # fig.tight_layout()
-    fig.savefig(fName, dpi=500, bbox_inches='tight', pad=0)
-    plt.close('all')
+# Iterate through AOI ---------------------------------------------------------
+(yVar, sigma, col) = ans[0]
+for (yVar, sigma, col) in ans:
+    # Get factorials ----------------------------------------------------------
+    (xVar, scale) = pFeats[1]
+    for (xVar, scale) in pFeats:
+        fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
+        (fig, ax) = aux.plotDICE(
+            dataEffect, xVar, yVar, FEATS,
+            scale=scale, wiggle=True, sd=sigma, color=col
+        )
+        fig.savefig(fName, dpi=750, bbox_inches='tight', pad=0)
+        plt.close('all')
+
+
+
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
