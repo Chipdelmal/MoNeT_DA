@@ -147,7 +147,8 @@ for label in OUT_THS:
         (fig, axes) = pdp.pdp_plot(
             pdp_isolate_out=isolate, feature_name=feat, 
             center=False, x_quantile=True, plot_pts_dist=False,
-            ncols=len(rf.classes_), plot_lines=True, frac_to_plot=fracPlot,
+            ncols=len(list(rf.classes_)), plot_lines=True, 
+            frac_to_plot=fracPlot,
             plot_params = {
                 'line_cmap': 'Blues',
                 'subtitle_fontsize': 1, 'xticks_rotation': 0,
@@ -161,7 +162,7 @@ for label in OUT_THS:
         for ax in axes['pdp_ax']:
             ax.tick_params(axis='both', which='major', labelsize=3)
             ax.set_xlabel('')
-            ax.set_ylim(-1.1, 1.1)
+            ax.set_ylim(-0, 1.1)
             xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
             yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
             for (i, trc) in enumerate(ax.get_lines()):
@@ -176,19 +177,19 @@ for label in OUT_THS:
             dpi=1000, bbox_inches='tight', pad_inches=0.1
         )
     # Dendrogram -------------------------------------------------------------
-    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
-    # corr = spearmanr(TRN_X).correlation
-    # corr_linkage = hierarchy.ward(corr)
-    # dendro = hierarchy.dendrogram(
-    #     corr_linkage, labels=FEATS, ax=ax1, leaf_rotation=90
-    # )
-    # dendro_idx = np.arange(0, len(dendro['ivl']))
-    # ax2.imshow(corr[dendro['leaves'], :][:, dendro['leaves']])
-    # ax2.set_xticks(dendro_idx)
-    # ax2.set_yticks(dendro_idx)
-    # ax2.set_xticklabels(dendro['ivl'], rotation='vertical')
-    # ax2.set_yticklabels(dendro['ivl'])
-    # fig.tight_layout()
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+    corr = spearmanr(TRN_X).correlation
+    corr_linkage = hierarchy.ward(corr)
+    dendro = hierarchy.dendrogram(
+        corr_linkage, labels=FEATS, ax=ax1, leaf_rotation=90
+    )
+    dendro_idx = np.arange(0, len(dendro['ivl']))
+    ax2.imshow(corr[dendro['leaves'], :][:, dendro['leaves']])
+    ax2.set_xticks(dendro_idx)
+    ax2.set_yticks(dendro_idx)
+    ax2.set_xticklabels(dendro['ivl'], rotation='vertical')
+    ax2.set_yticklabels(dendro['ivl'])
+    fig.tight_layout()
     ###########################################################################
     # Statistics & Model Export
     ###########################################################################

@@ -7,12 +7,14 @@ from datetime import datetime
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import STP_auxDebug as dbg
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
+from more_itertools import locate
 # os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk', 'ECO', 'PAN')
+    (USR, AOI, LND) = ('dsk', 'HLT', 'PAN')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -21,6 +23,7 @@ else:
 # Processing loop
 ###############################################################################
 EXPS = aux.getExps(LND)
+exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
     # Setting up paths
@@ -46,19 +49,37 @@ for exp in EXPS:
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-    outNames = monet.splitExpNames(PT_PRE)
-    outExpNames = set(outNames)
+    xpIter = list(zip(list(range(0, expNum)), expDirsMean, expDirsTrac))
+    # Check for pre-existing files and skip if needed -------------------------
+    if aux.OVW == False:
+        expIDPreDone = set(monet.splitExpNames(PT_PRE))
+        expIDForProcessing = [i.split('/')[-1] for i in expDirsMean]
+        expsIxList = list(locate(
+            [(i in expIDPreDone) for i in expIDForProcessing], 
+            lambda x: x!=True
+        ))
+        xpIter = [xpIter[i] for i in expsIxList]
     ###########################################################################
     # Process data
     ###########################################################################
-    Parallel(n_jobs=JOB, backend="multiprocessing")(
-        delayed(monet.preProcess)(
-            exIx, expNum, expDirsMean, expDirsTrac, gene,
+    # Parallel(n_jobs=1)( #, require='sharedmem'
+    #     delayed(monet.preProcess)(
+    #         exIx, expNum, expDirsMean, expDirsTrac, gene,
+    #         analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
+    #         outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=aux.OVW,
+    #         MF=drv.maleFemaleSelector(AOI),
+    #         cmpr='bz2', nodeDigits=nodeDigits,
+    #         SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
+    #         REP=aux.REP, SRP=aux.SRP
+    #     ) for exIx in range(0, expNum)
+    #
+    Parallel(n_jobs=JOB)(
+        delayed(dbg.preProcessParallel)(
+            exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-            outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=aux.OVW,
-            MF=drv.maleFemaleSelector(AOI),
+            fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
             cmpr='bz2', nodeDigits=nodeDigits,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP
-        ) for exIx in range(0, expNum)
+        ) for exIx in xpIter
     )

@@ -15,6 +15,7 @@ import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 from contextlib import redirect_stdout
+from pdpbox import pdp, get_dataset, info_plots
 from sklearn.inspection import partial_dependence, plot_partial_dependence
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
@@ -30,9 +31,10 @@ import STP_land as lnd
 # https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
 # https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance_multicollinear.html#sphx-glr-auto-examples-inspection-plot-permutation-importance-multicollinear-py
 # https://pdpbox.readthedocs.io/en/latest/pdp_plot.html
+# https://github.com/blent-ai/ALEPython
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'POE')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'WOP')
     VT_SPLIT = aux.VT_TRAIN
     JOB = aux.JOB_DSK
 else:
@@ -60,7 +62,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} ClsTrain[{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, MTR)
+    '{} ClsTrain [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, MTR)
 )
 ###############################################################################
 # Read CSV
@@ -72,6 +74,7 @@ monet.printExperimentHead(
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_C))
 modelPath = path.join(PT_OUT, fName_C.split('.')[0]+'_'+MTR)
+modelImg = path.join(PT_OUT, 'img', fName_C.split('.')[0]+'_'+MTR)
 # Features and labels ---------------------------------------------------------
 COLS = list(DATA.columns)
 (FEATS, LABLS) = (
@@ -102,7 +105,7 @@ sns.heatmap(
 ###############################################################################
 # Training Model
 ###############################################################################
-rf = RandomForestClassifier(d
+rf = RandomForestClassifier(
     n_estimators=TREES, max_depth=DEPTH, criterion='entropy',
     min_samples_split=5, min_samples_leaf=50,
     max_features=None, max_leaf_nodes=None,
@@ -142,20 +145,43 @@ viz = rfp.plot_corr_heatmap(DATA, figsize=(7,5))
 ###############################################################################
 # Interpretability Plots
 ###############################################################################
-for target in rf.classes_:
-    display = plot_partial_dependence(
-        rf, TRN_X, FEATS, target=4, 
-        kind='individual', 
-        line_kw={'color': '#ff006e05', 'linewidth': 0.01},
-        n_cols=3, grid_resolution=20, subsample=250
+feat = FEATS[3]
+for feat in FEATS:
+    isolate = pdp.pdp_isolate(
+        model=rf, dataset=TRN_X, model_features=FEATS, feature=feat
     )
-    for ax in display.figure_.get_axes():
-        ax.set_ylabel('')
-        xDiff = (ax.get_xlim()[1] - ax.get_xlim()[0])
-        yDiff = (ax.get_ylim()[1] - ax.get_ylim()[0])
-        ax.set_aspect(.5*(xDiff / yDiff))
-        display.figure_.subplots_adjust(hspace=1)
-    display.figure_.savefig(modelPath+'_ICE'+'_'+str(target)+'.jpg', dpi=750)
+    fracPlot = 2500
+    (fig, axes) = pdp.pdp_plot(
+        pdp_isolate_out=isolate, feature_name=feat,
+        center=False, x_quantile=True, plot_pts_dist=False,
+        ncols=len(list(rf.classes_)), plot_lines=True, frac_to_plot=fracPlot,
+        plot_params = {
+            'line_cmap': 'Blues',
+            'subtitle_fontsize': 1, 'xticks_rotation': 0,
+            'pdp_linewidth': .5, 'zero_linewidth': 0.1,
+            'pdp_color': '#ff006e', 'pdp_hl_color': '#ff006e',
+            'fill_color': '#ff006e', 'zero_color': '#ff006e',
+            'fill_alpha': 0.25, 'markersize': 0.05,
+        }
+    )
+    axes['title_ax'].set_visible(False)
+    for ax in axes['pdp_ax']:
+        ax.tick_params(axis='both', which='major', labelsize=3)
+        ax.set_xlabel('')
+        ax.set_ylim(-0, 1.1)
+        xDiff = (ax.get_xlim()[1]-ax.get_xlim()[0])
+        yDiff = (ax.get_ylim()[1]-ax.get_ylim()[0])
+        for (i, trc) in enumerate(ax.get_lines()):
+            if (i<fracPlot):
+                trc.set_color('#a2d2ff')
+                trc.set_linewidth(.1)
+                trc.set_alpha(.2)
+    fig.subplots_adjust(hspace=2)
+    fig.tight_layout()
+    fig.savefig(
+        modelPath+'_ICE'+'_'+feat.split('_')[-1]+'.jpg', 
+        dpi=1000, bbox_inches='tight', pad_inches=0.1
+    )
 ###############################################################################
 # Statistics & Model Export
 ###############################################################################

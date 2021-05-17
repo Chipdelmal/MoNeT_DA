@@ -1,13 +1,14 @@
-
-
 import sys
+import random
 from os import path
 from re import match
 from glob import glob
 from joblib import dump, load
 from datetime import datetime
 import numpy as np
+from numpy.lib.arraypad import pad
 import pandas as pd
+import matplotlib.pyplot as plt
 import plotly.express as px
 from sklearn import preprocessing
 import MoNeT_MGDrivE as monet
@@ -17,7 +18,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'POE')
+    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
     JOB = aux.JOB_DSK
 else:
     (USR, LND, QNT) = (
@@ -47,16 +48,42 @@ thsStr = str(int(float(aux.THS)*100))
     'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr),
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
-DATA = pd.read_csv(path.join(PT_OUT, fName_R))
-###############################################################################
-# Read ML
-###############################################################################
-fNameModel = (
-    # 'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'WOP'),
-    'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'CPT'),
-    'CLS_{}_{}Q_{}T_{}_RF.joblib'.format(AOI, QNT, thsStr, 'TTI')
+DATA = pd.read_csv(path.join(PT_OUT, fName_I))
+# Features and labels ---------------------------------------------------------
+COLS = list(DATA.columns)
+(FEATS, LABLS) = (
+    [i for i in COLS if i[0]=='i'],
+    [i for i in COLS if i[0]!='i']
 )
-mdls = [load(path.join(PT_OUT, i)) for i in fNameModel]
+###############################################################################
+# DICE Plot 
+###############################################################################
+(sampleRate, shuffle) = (1, True)
+ans = aux.DICE_PARS
+pFeats = [
+    ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
+    ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear')
+]
+dataEffect = DATA[
+    (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) & 
+    (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0)
+]
+# Iterate through AOI ---------------------------------------------------------
+(yVar, sigma, col) = ans[0]
+for (yVar, sigma, col) in ans:
+    # Get factorials ----------------------------------------------------------
+    (xVar, scale) = pFeats[1]
+    for (xVar, scale) in pFeats:
+        fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
+        (fig, ax) = aux.plotDICE(
+            dataEffect, xVar, yVar, FEATS,
+            scale=scale, wiggle=True, sd=sigma, color=col
+        )
+        fig.savefig(fName, dpi=750, bbox_inches='tight', pad=0)
+        plt.close('all')
+
+
+
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
@@ -75,32 +102,30 @@ fltr = [
 ]
 boolFilter = [all(i) for i in zip(*fltr)]
 daFltrd = DATA[boolFilter]
-###############################################################################
-# Filter Output with Constraints
-###############################################################################
-feats = [i for i in list(DATA.columns) if i[0]=='i']
-ranges = {i: sorted(daFltrd[i].unique()) for i in feats}
-daFltrd.to_excel(
-    path.join(PT_OUT, 'filtered.xls'), index=False, header=DATA.columns
-)
-###############################################################################
-# DataViz
-###############################################################################
-cols = ('i_ren', 'i_res', 'i_fcf', 'i_gsv', MTR)
-x = DATA[[*cols]].values
+daFltrd
+
+
+cols = ('i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic', LABLS[0])
+x = df[[*cols]].values
 min_max_scaler = preprocessing.MinMaxScaler()
 x_scaled = min_max_scaler.fit_transform(x)
 df = pd.DataFrame(x_scaled, columns=cols)
 gsv = list(df['i_gsv'].unique())
-dfFltrd = df[df['i_gsv']==gsv[-2]]
+dfFltrd = df[df['i_gsv']==gsv[-1]]
 ###############################################################################
 # Load Dataset
 ###############################################################################
 fig = px.scatter_3d(
     dfFltrd, 
-    x='i_ren', y='i_res', z='i_fcf', 
-    color=list(1*np.asarray(dfFltrd[MTR])),
-    size=list(1*np.asarray(dfFltrd[MTR])), 
-    opacity=.2, color_continuous_scale='purples_r'
+    x='i_rer', y='i_ren', z='i_fic', 
+    size=list(1*np.asarray(dfFltrd['i_rsg'])),
+    color=LABLS[0], 
+    opacity=.25, color_continuous_scale='purples_r'
+)
+fig.update_traces(
+    marker=dict(
+        # size=2, 
+        line=dict(width=0, color=(0,0,0,0))
+    )
 )
 fig.show()
