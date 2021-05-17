@@ -62,7 +62,7 @@ for exp in EXPS:
     ###########################################################################
     # Process data
     ###########################################################################
-    # Parallel(n_jobs=1)(
+    # Parallel(n_jobs=1)( #, require='sharedmem'
     #     delayed(monet.preProcess)(
     #         exIx, expNum, expDirsMean, expDirsTrac, gene,
     #         analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
@@ -73,9 +73,7 @@ for exp in EXPS:
     #         REP=aux.REP, SRP=aux.SRP
     #     ) for exIx in range(0, expNum)
     # 
-    # list(xpIter)[0]
-    # top = 5000
-    Parallel(n_jobs=8)( #, require='sharedmem')(
+    Parallel(n_jobs=JOB)(
         delayed(dbg.preProcessParallel)(
             exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
