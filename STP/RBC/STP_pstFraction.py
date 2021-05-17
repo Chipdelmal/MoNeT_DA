@@ -10,6 +10,7 @@ import STP_land as lnd
 from datetime import datetime
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
+from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
@@ -69,19 +70,22 @@ for exp in EXPS:
         # #####################################################################
         expNum = len(meanFiles)
         pIx = 0
-        for pIx in range(expNum):
-            (bFile, mFile, tFile) = (
-                baseFiles[pIx], meanFiles[pIx], traceFiles[pIx]
-            )
-            (base, mean, trace) = [
-                pkl.load(file) for file in (bFile, mFile, tFile)
-            ]
-            # #################################################################
-            # Process data
-            # #################################################################
-            fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
-            repsRatios = monet.getPopRepsRatios(base, trace, 1)
-            # for i in repsRatios:
-            #     for t in range(0, 5):
-            #         i[t] = 1
-            np.save(fName, repsRatios)
+        # for pIx in range(expNum):
+        #     (bFile, mFile, tFile) = (
+        #         baseFiles[pIx], meanFiles[pIx], traceFiles[pIx]
+        #     )
+        #     (base, mean, trace) = [
+        #         pkl.load(file) for file in (bFile, mFile, tFile)
+        #     ]
+        #     # #################################################################
+        #     # Process data
+        #     # #################################################################
+        #     fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
+        #     repsRatios = monet.getPopRepsRatios(base, trace, 1)
+        #     np.save(fName, repsRatios)
+        Parallel(n_jobs=JOB)(
+            delayed(dbg.pstFractionParallel)(
+                pIx, PT_OUT,
+                baseFiles, meanFiles, traceFiles
+            ) for pIx in range(expNum)
+        )
