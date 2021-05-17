@@ -11,7 +11,7 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 (JOB_DSK, JOB_SRV) = (4, 40)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
-    2e6*1.5/2, (0, int(365*5)), True, 0, True
+    2e6*1.5/2, (0, int(365*5)), True, 0, False
 )
 (XP_ID, DRV, OVW, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR', True,

@@ -51,7 +51,7 @@ for exp in EXPS:
     ###########################################################################
     # Process data
     ###########################################################################
-    Parallel(n_jobs=JOB, backend="threading")(
+    Parallel(n_jobs=JOB, backend="multiprocessing")(
         delayed(monet.preProcess)(
             exIx, expNum, expDirsMean, expDirsTrac, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
