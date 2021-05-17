@@ -15,21 +15,20 @@ def preProcessLandscape(
         pathMean, sexFilenameIdentifiers=sexFilenameIdentifiers
     )
     filesList = [monet.filterFilesByIndex(files, ix) for ix in nodesAggLst]
-    print(filesList)
     landReps = None
-    # if REP or SRP:
-    #     landReps = monet.loadAndAggregateLandscapeDataRepetitions(
-    #             dirsTraces, drive, MF[0], MF[1],
-    #             sexFilenameIdentifiers=sexFilenameIdentifiers
-    #         )
-    # for (nodeAggIx, pop) in enumerate(filesList):
-    #     fName = fNameFmt + str(nodeAggIx).zfill(nodeDigits)
-    #     preProcessSubLandscape(
-    #                 pop, landReps, fName, drive,
-    #                 nodesAggLst, nodeAggIx,
-    #                 MF=MF, cmpr=cmpr,
-    #                 SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
-    #             )
+    if REP or SRP:
+        landReps = monet.loadAndAggregateLandscapeDataRepetitions(
+                dirsTraces, drive, MF[0], MF[1],
+                sexFilenameIdentifiers=sexFilenameIdentifiers
+            )
+    for (nodeAggIx, pop) in enumerate(filesList):
+        fName = fNameFmt + str(nodeAggIx).zfill(nodeDigits)
+        monet.preProcessSubLandscape(
+                    pop, landReps, fName, drive,
+                    nodesAggLst, nodeAggIx,
+                    MF=MF, cmpr=cmpr,
+                    SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
+                )
     # return None
 
 

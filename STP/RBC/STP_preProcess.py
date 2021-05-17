@@ -57,7 +57,7 @@ for exp in EXPS:
         expIDForProcessing = [i.split('/')[-1] for i in expDirsMean]
         expsIxList = list(locate(
             [(i in expIDPreDone) for i in expIDForProcessing], 
-            lambda x: x != True
+            lambda x: x!=True
         ))
     ###########################################################################
     # Process data
@@ -72,14 +72,17 @@ for exp in EXPS:
     #         SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
     #         REP=aux.REP, SRP=aux.SRP
     #     ) for exIx in range(0, expNum)
-    # )
-    Parallel(n_jobs=1)(
+    # 
+    xpIter = list(zip(list(range(0, expNum)), expDirsMean, expDirsTrac))
+    list(xpIter)[0]
+    top = 5000
+    Parallel(n_jobs=8)( #, require='sharedmem')(
         delayed(dbg.preProcessParallel)(
-            exIx, expNum, expDirsMean, expDirsTrac, gene,
+            exIx, expNum, expDirsMean[:top], expDirsTrac[:top], gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
             fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
             cmpr='bz2', nodeDigits=nodeDigits,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP
-        ) for exIx in expsIxList[:1]
+        ) for exIx in expsIxList[:top]
     )
