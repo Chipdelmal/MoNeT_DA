@@ -62,13 +62,23 @@ for exp in EXPS:
         # Mean data (Analyzed) ------------------------------------------------
         meanPat = aux.patternForReleases(rnIt, AOI, 'sum')
         meanFiles = sorted(glob(PT_PRE+meanPat))
+        expNum = len(meanFiles)
         # Repetitions data (Garbage) ------------------------------------------
         tracePat = aux.patternForReleases(rnIt, AOI, 'srp')
         traceFiles = sorted(glob(PT_PRE+tracePat))
+        # Filter existing if needed -------------------------------------------
+        if aux.OVW:
+            expsIxList = range(expNum)
+        else:
+            expIDPstDone = set(monet.splitExpNames(PT_OUT, ext='npy'))
+            expIDForProcessing = [i.split('/')[-1] for i in meanFiles]
+            expsIxList = list(locate(
+                [(i in expIDPstDone) for i in expIDForProcessing], 
+                lambda x: x != True
+            ))
         # #####################################################################
-        # Load data
+        # Process data
         # #####################################################################
-        expNum = len(meanFiles)
         pIx = 0
         # for pIx in range(expNum):
         #     (bFile, mFile, tFile) = (
@@ -87,5 +97,5 @@ for exp in EXPS:
             delayed(dbg.pstFractionParallel)(
                 pIx, PT_OUT,
                 baseFiles, meanFiles, traceFiles
-            ) for pIx in range(expNum)
+            ) for pIx in expsIxList
         )

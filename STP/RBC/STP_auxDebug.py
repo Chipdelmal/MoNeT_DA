@@ -1,5 +1,6 @@
 
 import numpy as np
+import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 
 def preProcessLandscape(
@@ -60,9 +61,7 @@ def pstFractionParallel(
     ):
     # Load data ---------------------------------------------------------------
     (bFile, mFile, tFile) = (baseFiles[pIx], meanFiles[pIx], traceFiles[pIx])
-    (base, mean, trace) = [
-        pkl.load(file) for file in (bFile, mFile, tFile)
-    ]
+    (base, mean, trace) = [pkl.load(file) for file in (bFile, mFile, tFile)]
     # Process data ------------------------------------------------------------
     fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
     repsRatios = monet.getPopRepsRatios(base, trace, 1)

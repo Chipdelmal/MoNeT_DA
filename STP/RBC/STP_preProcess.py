@@ -53,8 +53,7 @@ for exp in EXPS:
     if aux.OVW:
         expsIxList = list(range(0, expNum))
     else:
-        outNames = monet.splitExpNames(PT_PRE)
-        expIDPreDone = set(outNames)
+        expIDPreDone = set(monet.splitExpNames(PT_PRE))
         expIDForProcessing = [i.split('/')[-1] for i in expDirsMean]
         expsIxList = list(locate(
             [(i in expIDPreDone) for i in expIDForProcessing], 
