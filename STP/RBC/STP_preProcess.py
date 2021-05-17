@@ -67,20 +67,6 @@ for exp in EXPS:
     ###########################################################################
     # Process data
     ###########################################################################
-<<<<<<< HEAD
-=======
-    # Parallel(n_jobs=1)( #, require='sharedmem'
-    #     delayed(monet.preProcess)(
-    #         exIx, expNum, expDirsMean, expDirsTrac, gene,
-    #         analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-    #         outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=aux.OVW,
-    #         MF=drv.maleFemaleSelector(AOI),
-    #         cmpr='bz2', nodeDigits=nodeDigits,
-    #         SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
-    #         REP=aux.REP, SRP=aux.SRP
-    #     ) for exIx in range(0, expNum)
-    #
->>>>>>> 207a32569b87ee9a527bb10eea1b880eb41a11b4
     Parallel(n_jobs=JOB)(
         delayed(dbg.preProcessParallel)(
             exIx, expNum, gene,
