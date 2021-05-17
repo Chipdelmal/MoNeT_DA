@@ -33,15 +33,16 @@ def preProcessLandscape(
 
 
 def preProcessParallel(
-            exIx, expNum, expDirsMean, expDirsTrac,
+            exIx, expNum,
             drive, analysisOI='HLT', prePath='./',
             nodesAggLst=[[0]], fNameFmt='{}/{}-{}_',
             MF=(True, True), cmpr='bz2', nodeDigits=4,
             SUM=True, AGG=False, SPA=False, REP=False, SRP=True,
             sexFilenameIdentifiers={"male": "M_", "female": "F_"}
         ):
-    monet.printProgress(exIx+1, expNum, nodeDigits)
-    (pathMean, pathTraces) = (expDirsMean[exIx], expDirsTrac[exIx]+'/')
+    (ix, expDirsMean, expDirsTrac) = exIx
+    monet.printProgress(ix+1, expNum, nodeDigits)
+    (pathMean, pathTraces) = (expDirsMean, expDirsTrac+'/')
     expName = pathMean.split('/')[-1]
     fNameFmt = '{}/{}-{}_'.format(prePath, expName, analysisOI)
     preProcessLandscape(

@@ -49,20 +49,20 @@ for exp in EXPS:
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
+    xpIter = list(zip(list(range(0, expNum)), expDirsMean, expDirsTrac))
     # Check for pre-existing files and skip if needed -------------------------
-    if aux.OVW:
-        expsIxList = list(range(0, expNum))
-    else:
+    if aux.OVW == False:
         expIDPreDone = set(monet.splitExpNames(PT_PRE))
         expIDForProcessing = [i.split('/')[-1] for i in expDirsMean]
         expsIxList = list(locate(
             [(i in expIDPreDone) for i in expIDForProcessing], 
             lambda x: x!=True
         ))
+        xpIter = [xpIter[i] for i in expsIxList]
     ###########################################################################
     # Process data
     ###########################################################################
-    # Parallel(n_jobs=JOB, backend="threading")(
+    # Parallel(n_jobs=1)(
     #     delayed(monet.preProcess)(
     #         exIx, expNum, expDirsMean, expDirsTrac, gene,
     #         analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
@@ -73,16 +73,15 @@ for exp in EXPS:
     #         REP=aux.REP, SRP=aux.SRP
     #     ) for exIx in range(0, expNum)
     # 
-    xpIter = list(zip(list(range(0, expNum)), expDirsMean, expDirsTrac))
-    list(xpIter)[0]
-    top = 5000
+    # list(xpIter)[0]
+    # top = 5000
     Parallel(n_jobs=8)( #, require='sharedmem')(
         delayed(dbg.preProcessParallel)(
-            exIx, expNum, expDirsMean[:top], expDirsTrac[:top], gene,
+            exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
             fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
             cmpr='bz2', nodeDigits=nodeDigits,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP
-        ) for exIx in expsIxList[:top]
+        ) for exIx in xpIter
     )
