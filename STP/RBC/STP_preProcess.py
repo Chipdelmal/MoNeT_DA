@@ -45,6 +45,8 @@ for exp in EXPS:
     ###########################################################################
     # Load folders
     ###########################################################################
+    fmtStr = '{}* Create files list...{}'
+    print(fmtStr.format(monet.CBBL, monet.CEND), end='\r')
     (expDirsMean, expDirsTrac) = monet.getExpPaths(
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
@@ -64,6 +66,7 @@ for exp in EXPS:
             lambda x: x!=True
         ))
         expIter = [xpIter[i] for i in expsIxList]
+    sys.stdout.write("\033[K")
     ###########################################################################
     # Process data
     ###########################################################################

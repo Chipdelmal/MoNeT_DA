@@ -61,7 +61,7 @@ for exp in EXPS:
     fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
     expNum = len(fLists)
     # Arrange file tuples -----------------------------------------------------
-    expIter = list(zip(list(range(expNum)), fLists))
+    expIter = list(zip(list(range(expNum, 0, -1)), fLists))
     expIter.reverse()
     # NEEDS OVW FITLERING!!!!!!!!!! -------------------------------------------
     ###########################################################################

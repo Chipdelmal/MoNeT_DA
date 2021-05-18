@@ -96,20 +96,3 @@ for exp in EXPS:
                 baseFiles, meanFiles, traceFiles
             ) for exIx in expIter
         )
-        # #####################################################################
-        # Legacy Code
-        # #####################################################################
-        # pIx = 0
-        # for pIx in range(expNum):
-        #     (bFile, mFile, tFile) = (
-        #         baseFiles[pIx], meanFiles[pIx], traceFiles[pIx]
-        #     )
-        #     (base, mean, trace) = [
-        #         pkl.load(file) for file in (bFile, mFile, tFile)
-        #     ]
-        #     # #################################################################
-        #     # Process data
-        #     # #################################################################
-        #     fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
-        #     repsRatios = monet.getPopRepsRatios(base, trace, 1)
-        #     np.save(fName, repsRatios)

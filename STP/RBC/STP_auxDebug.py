@@ -49,13 +49,43 @@ def exportPreTracesParallel(
     )
     return None
 
+
+###############################################################################
+# PstTraces Updates
+###############################################################################
+def exportPstTracesParallel(
+        exIx, expsNum,
+        STABLE_T, THS, QNT, STYLE, PT_IMG, 
+        border=True, borderColor='#322E2D', borderWidth=1, 
+        labelPos=(.7, .9), xpsNum=0, digs=3, 
+        autoAspect=False, popScaler=1,
+        wopPrint=True, cptPrint=True, poePrint=True,
+    ):
+    (ix, repFile, tti, tto, wop, mnf, mnd, poe, cpt) = exIx
+    repDta = pkl.load(repFile)
+    # Print to terminal -------------------------------------------------------
+    padi = str(ix+1).zfill(digs)
+    fmtStr = '{}+ File: {}/{}'
+    print(fmtStr.format(monet.CBBL, padi, expsNum, monet.CEND), end='\r')
+    # Traces ------------------------------------------------------------------
+    pop = repDta['landscapes'][0][STABLE_T][-1]
+    # STYLE['yRange'] = (0,  pop*popScaler)
+    monet.exportTracesPlot(
+        repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
+        vLines=[tti, tto, mnd], hLines=[mnf*pop], labelPos=labelPos, 
+        border=border, borderColor=borderColor, borderWidth=borderWidth,
+        autoAspect=autoAspect, popScaler=1,
+        wop=wop, wopPrint=wopPrint, 
+        cpt=cpt, cptPrint=cptPrint,
+        poe=poe, poePrint=poePrint
+    )
+    return None
+
+
 ###############################################################################
 # PstFraction Updates
 ###############################################################################
-def pstFractionParallel(
-            exIx, PT_OUT,
-            baseFiles, meanFiles, traceFiles
-        ):
+def pstFractionParallel(exIx, PT_OUT, baseFiles, meanFiles, traceFiles):
     (_, bFile, mFile, tFile) = exIx
     # Load data ---------------------------------------------------------------
     (base, trace) = [pkl.load(file) for file in (bFile, tFile)]
