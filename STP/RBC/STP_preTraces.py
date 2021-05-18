@@ -43,7 +43,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .5, "alpha": .5, "dpi": 300, "legend": True,
+            "width": .5, "alpha": .5, "dpi": 100, "legend": True,
             "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     tS = datetime.now()
@@ -62,6 +62,7 @@ for exp in EXPS:
     expNum = len(fLists)
     # Arrange file tuples -----------------------------------------------------
     expIter = list(zip(list(range(expNum)), fLists))
+    expIter.reverse()
     ###########################################################################
     # Process files
     ###########################################################################
