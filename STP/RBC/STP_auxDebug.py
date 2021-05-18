@@ -53,12 +53,12 @@ def exportPreTracesParallel(
 # PstFraction Updates
 ###############################################################################
 def pstFractionParallel(
-            pIx, PT_OUT,
+            exIx, PT_OUT,
             baseFiles, meanFiles, traceFiles
         ):
+    (_, bFile, mFile, tFile) = exIx
     # Load data ---------------------------------------------------------------
-    (bFile, mFile, tFile) = (baseFiles[pIx], meanFiles[pIx], traceFiles[pIx])
-    (base, mean, trace) = [pkl.load(file) for file in (bFile, mFile, tFile)]
+    (base, trace) = [pkl.load(file) for file in (bFile, tFile)]
     # Process data ------------------------------------------------------------
     fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
     repsRatios = monet.getPopRepsRatios(base, trace, 1)

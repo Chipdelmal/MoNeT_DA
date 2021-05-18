@@ -7,9 +7,11 @@ from glob import glob
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import STP_auxDebug as dbg
 from datetime import datetime
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
+from more_itertools import locate
 from joblib import Parallel, delayed
 
 
@@ -50,13 +52,14 @@ for exp in EXPS:
     # Get base experiments pattern --------------------------------------------
     basePat = aux.patternForReleases(aux.NO_REL_PAT, AOI, 'sum')
     baseFiles = sorted(glob(PT_PRE+basePat))
+    baseFNum = len(baseFiles)
     # #########################################################################
     # Probe experiments
     #   sum: Analyzed data aggregated into one node
     #   srp: Garbage data aggregated into one node
     # #########################################################################
     (xpNum, digs) = monet.lenAndDigits(ren)
-    (i, rnIt) = (0, '10')
+    (i, rnIt) = (0, '00')
     for (i, rnIt) in enumerate(ren):
         monet.printProgress(i+1, xpNum, digs)
         # Mean data (Analyzed) ------------------------------------------------
@@ -66,20 +69,37 @@ for exp in EXPS:
         # Repetitions data (Garbage) ------------------------------------------
         tracePat = aux.patternForReleases(rnIt, AOI, 'srp')
         traceFiles = sorted(glob(PT_PRE+tracePat))
+        # Create experiments iterator list ------------------------------------
+        expIter = list(zip(
+            list(range(expNum)), baseFiles, meanFiles, traceFiles
+        ))
+        # Check for potential miss-matches in experiments folders -------------
+        (meanFNum, tracFNum) = (len(meanFiles), len(traceFiles))
+        if (meanFNum!=tracFNum) or (baseFNum!=meanFNum) or (baseFNum!=tracFNum):
+            errorString = 'Unequal experiments folders lengths ({}/{}/{})'
+            sys.exit(errorString.format(baseFNum, meanFNum, tracFNum)) 
         # Filter existing if needed -------------------------------------------
-        if aux.OVW:
-            expsIxList = range(expNum)
-        else:
-            expIDPstDone = set(monet.splitExpNames(PT_OUT, ext='npy'))
-            expIDForProcessing = [i.split('/')[-1] for i in meanFiles]
+        if aux.OVW == False:
+            expIDPreDone = set(monet.splitExpNames(PT_OUT, ext='npy'))
+            expIDForProcessing = [i.split('/')[-1][:-14] for i in meanFiles]
             expsIxList = list(locate(
-                [(i in expIDPstDone) for i in expIDForProcessing], 
-                lambda x: x != True
+                [(i in expIDPreDone) for i in expIDForProcessing], 
+                lambda x: x!=True
             ))
+            expIter = [expIter[i] for i in expsIxList]
         # #####################################################################
         # Process data
         # #####################################################################
-        pIx = 0
+        Parallel(n_jobs=JOB)(
+            delayed(dbg.pstFractionParallel)(
+                exIx, PT_OUT,
+                baseFiles, meanFiles, traceFiles
+            ) for exIx in expIter
+        )
+        # #####################################################################
+        # Legacy Code
+        # #####################################################################
+        # pIx = 0
         # for pIx in range(expNum):
         #     (bFile, mFile, tFile) = (
         #         baseFiles[pIx], meanFiles[pIx], traceFiles[pIx]
@@ -93,9 +113,3 @@ for exp in EXPS:
         #     fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
         #     repsRatios = monet.getPopRepsRatios(base, trace, 1)
         #     np.save(fName, repsRatios)
-        Parallel(n_jobs=JOB)(
-            delayed(dbg.pstFractionParallel)(
-                pIx, PT_OUT,
-                baseFiles, meanFiles, traceFiles
-            ) for pIx in expsIxList
-        )
