@@ -62,7 +62,7 @@ for exp in EXPS:
         aux.THI, aux.THO, aux.THW, aux.TAP, 
         POE=True, CPT=True
     )
-    (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF, derDF) = outDFs
+    (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF, _) = outDFs
     ###########################################################################
     # Iterate through experiments
     ###########################################################################
@@ -87,7 +87,7 @@ for exp in EXPS:
         rapS = monet.getRatioAtTime(repRto, aux.TAP)
         poe = monet.calcPOE(repRto)
         cpt = monet.calcCPT(repRto)
-        der = monet.calcDER(repRto, smoothing=10, magnitude=0.1)
+        # der = monet.calcDER(repRto, smoothing=10, magnitude=0.1)
         #######################################################################
         # Calculate Quantiles
         #######################################################################
@@ -98,7 +98,6 @@ for exp in EXPS:
         mniSQ = (np.nanquantile(minS[0], qnt), np.nanquantile(minS[1], qnt))
         mnxSQ = (np.nanquantile(maxS[0], qnt), np.nanquantile(maxS[1], 1-qnt))
         cptSQ = (np.nanquantile(cpt, qnt))
-        derSQ = (np.nanquantile(der, qnt))
         #######################################################################
         # Update in Dataframes
         #######################################################################
@@ -106,7 +105,7 @@ for exp in EXPS:
         updates = [
             xpid+i for i in (
                     ttiSQ, ttoSQ, wopSQ, rapSQ, 
-                    list(mniSQ)+list(mnxSQ), list(poe), [cptSQ], [derSQ]
+                    list(mniSQ)+list(mnxSQ), list(poe), [cptSQ]
                 )
         ]
         for df in zip(outDFs, updates):
@@ -124,7 +123,7 @@ for exp in EXPS:
                         'mnl': minS[0], 'mnd': minS[1],
                         'mxl': maxS[0], 'mxd': maxS[1]
                     },
-                    {'POE': poe}, {'CPT': cpt}, {'DER': der}
+                    {'POE': poe}, {'CPT': cpt}
                 ]
             for dct in zip(smryDicts, outDict):
                 dct[0][tuple(xpid)] = dct[1]
