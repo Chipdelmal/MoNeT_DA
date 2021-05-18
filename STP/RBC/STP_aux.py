@@ -14,8 +14,8 @@ import MoNeT_MGDrivE as monet
 OVW = True
 (JOB_DSK, JOB_SRV) = (2, 20)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
-    25000*3, # 2e6*1.5/2, 
-    (0, 10*int(365)), 
+    25000*2, # 2e6*1.5/2, 
+    (0, 5*int(365)), 
     True, 0, False
 )
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
