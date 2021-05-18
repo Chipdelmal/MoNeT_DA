@@ -49,7 +49,7 @@ for exp in EXPS:
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
-    expIter = list(zip(list(range(0, expNum)), expDirsMean, expDirsTrac))
+    expIter = list(zip(list(range(expNum)), expDirsMean, expDirsTrac))
     # Check for potential miss-matches in experiments folders -----------------
     (meanFNum, tracFNum) = (len(expDirsMean), len(expDirsTrac))
     if (meanFNum != tracFNum):

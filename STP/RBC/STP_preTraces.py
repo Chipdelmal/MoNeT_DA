@@ -7,6 +7,7 @@ from datetime import datetime
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import STP_auxDebug as dbg
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 import compress_pickle as pkl
@@ -22,7 +23,7 @@ else:
 # Processing loop
 ###############################################################################
 EXPS = aux.getExps(LND)
-exp = EXPS
+exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
     # Setting up paths
@@ -58,16 +59,19 @@ for exp in EXPS:
     if aux.FZ:
         fltrPattern = PT_PRE + aux.patternForReleases('00', AOI, '*')
     fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
+    expNum = len(fLists)
+    # Arrange file tuples -----------------------------------------------------
+    expIter = list(zip(list(range(expNum)), fLists))
     ###########################################################################
     # Process files
     ###########################################################################
     (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
-        delayed(monet.exportPreTracesPlotWrapper)(
-            exIx, fLists, STYLE, PT_IMG, 
+        delayed(dbg.exportPreTracesParallel)(
+            exIx, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, autoAspect=True,
             border=True, borderColor='#8184a7AA', borderWidth=2
-        ) for exIx in range(0, len(fLists))
+        ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------
     sumDta = pkl.load(fLists[-1][0])

@@ -1,37 +1,13 @@
 
 import numpy as np
+from os import path
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 
-def preProcessLandscape(
-            pathMean, pathTraces, expName, drive, prePath='./',
-            nodesAggLst=[[0]], analysisOI='HLT', fNameFmt='{}/{}-{}_',
-            MF=(True, True), cmpr='bz2', nodeDigits=4,
-            SUM=True, AGG=True, SPA=True, REP=True, SRP=True,
-            sexFilenameIdentifiers={"male": "M_", "female": "F_"}
-        ):
-    dirsTraces = monet.listDirectoriesWithPathWithinAPath(pathTraces)
-    files = monet.readExperimentFilenames(
-        pathMean, sexFilenameIdentifiers=sexFilenameIdentifiers
-    )
-    filesList = [monet.filterFilesByIndex(files, ix) for ix in nodesAggLst]
-    landReps = None
-    if REP or SRP:
-        landReps = monet.loadAndAggregateLandscapeDataRepetitions(
-                dirsTraces, drive, MF[0], MF[1],
-                sexFilenameIdentifiers=sexFilenameIdentifiers
-            )
-    for (nodeAggIx, pop) in enumerate(filesList):
-        fName = fNameFmt + str(nodeAggIx).zfill(nodeDigits)
-        monet.preProcessSubLandscape(
-                    pop, landReps, fName, drive,
-                    nodesAggLst, nodeAggIx,
-                    MF=MF, cmpr=cmpr,
-                    SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
-                )
-    # return None
 
-
+###############################################################################
+# PreProcess Updates
+###############################################################################
 def preProcessParallel(
             exIx, expNum,
             drive, analysisOI='HLT', prePath='./',
@@ -45,20 +21,41 @@ def preProcessParallel(
     (pathMean, pathTraces) = (expDirsMean, expDirsTrac+'/')
     expName = pathMean.split('/')[-1]
     fNameFmt = '{}/{}-{}_'.format(prePath, expName, analysisOI)
-    preProcessLandscape(
+    monet.preProcessLandscape(
         pathMean, pathTraces, expName, drive, prePath,
         analysisOI=analysisOI, nodesAggLst=nodesAggLst,
         fNameFmt=fNameFmt, MF=MF, cmpr=cmpr, nodeDigits=nodeDigits,
         SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
         sexFilenameIdentifiers=sexFilenameIdentifiers
     )
-    # return None
+    return None
 
 
+###############################################################################
+# PreTraces Updates
+###############################################################################
+def exportPreTracesParallel(
+            exIx, STYLE, PT_IMG,
+            border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
+            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1
+        ):
+    monet.printProgress(exIx[0], xpNum, digs)
+    repFilePath = exIx[1][1]
+    repDta = pkl.load(repFilePath)
+    name = path.splitext(repFilePath.split('/')[-1])[0][:-4]
+    monet.exportTracesPlot(
+        repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
+        border=border, borderColor=borderColor, borderWidth=borderWidth
+    )
+    return None
+
+###############################################################################
+# PstFraction Updates
+###############################################################################
 def pstFractionParallel(
-        pIx, PT_OUT,
-        baseFiles, meanFiles, traceFiles
-    ):
+            pIx, PT_OUT,
+            baseFiles, meanFiles, traceFiles
+        ):
     # Load data ---------------------------------------------------------------
     (bFile, mFile, tFile) = (baseFiles[pIx], meanFiles[pIx], traceFiles[pIx])
     (base, mean, trace) = [pkl.load(file) for file in (bFile, mFile, tFile)]
@@ -66,3 +63,4 @@ def pstFractionParallel(
     fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
     repsRatios = monet.getPopRepsRatios(base, trace, 1)
     np.save(fName, repsRatios)
+    return None
