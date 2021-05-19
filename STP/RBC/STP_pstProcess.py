@@ -20,6 +20,7 @@ else:
     (USR, AOI, LND, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     JOB = aux.JOB_SRV
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
+DF_SORT = ['TTI', 'TTO', 'WOP', 'RAP', 'MIN', 'POE', 'CPT']
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -65,6 +66,7 @@ for exp in EXPS:
         POE=True, CPT=True
     )
     (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF, _) = outDFs
+    outDFs = (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF)
     ###########################################################################
     # Iterate through experiments
     ###########################################################################
@@ -72,7 +74,7 @@ for exp in EXPS:
     (i, fPath) = (0, fPaths[0])
     for (i, fPath) in enumerate(fPaths):
         repRto = np.load(fPath)
-        (reps, days) = repRto.shape
+        # (reps, days) = repRto.shape
         print(
             fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), 
             end='\r'
@@ -83,42 +85,18 @@ for exp in EXPS:
         mtrsReps = dbg.calcMetrics(
             repRto, thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP
         )
-        # (ttiS, ttoS, wopS) = (
-        #         monet.calcTTI(repRto, aux.THI),
-        #         monet.calcTTO(repRto, aux.THO),
-        #         monet.calcWOP(repRto, aux.THW)
-        #     )
-        # (minS, maxS, _, _) = monet.calcMinMax(repRto)
-        # rapS = monet.getRatioAtTime(repRto, aux.TAP)
-        # poe = monet.calcPOE(repRto)
-        # cpt = monet.calcCPT(repRto)
         #######################################################################
         # Calculate Quantiles
         #######################################################################
-        ttiSQ = [np.nanquantile(tti, qnt) for tti in mtrsReps['tti']]
-        ttoSQ = [np.nanquantile(tto, 1-qnt) for tto in mtrsReps['tto']]
-        wopSQ = [np.nanquantile(wop, 1-qnt) for wop in mtrsReps['wop']]
-        rapSQ = [np.nanquantile(rap, qnt) for rap in mtrsReps['rap']]
-        mniSQ = (
-            np.nanquantile(mtrsReps['min'][0], qnt), 
-            np.nanquantile(mtrsReps['min'][1], qnt)
-        )
-        mnxSQ = (
-            np.nanquantile(mtrsReps['max'][0], qnt), 
-            np.nanquantile(mtrsReps['max'][1], 1-qnt)
-        )
-        cptSQ = (np.nanquantile(mtrsReps['cpt'], qnt))
-        poeSQ = mtrsReps['poe']
+        mtrsQnt = dbg.calcMtrQnts(mtrsReps, qnt)
         #######################################################################
         # Update in Dataframes
         #######################################################################
-        xpid = monet.getXpId(fPath, xpidIx)
-        updates = [
-            xpid+i for i in (
-                    ttiSQ, ttoSQ, wopSQ, rapSQ, 
-                    list(mniSQ)+list(mnxSQ), list(poeSQ), [cptSQ]
-                )
-        ]
+        (xpid, mtrs) = (
+            monet.getXpId(fPath, xpidIx),
+            [mtrsQnt[k] for k in DF_SORT]
+        )
+        updates = [xpid+i for i in mtrs]
         for df in zip(outDFs, updates):
             df[0].iloc[i] = df[1]
         #######################################################################

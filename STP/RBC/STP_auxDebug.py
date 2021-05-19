@@ -106,21 +106,42 @@ def calcMetrics(
     ):
     (minS, maxS, _, _) = monet.calcMinMax(repRto)
     mtrRep = {
-        'tti': monet.calcTTI(repRto, thi),
-        'tto': monet.calcTTO(repRto, tho),
-        'wop': monet.calcWOP(repRto, thw),
-        'min': minS,
-        'max': maxS,
-        'rap': monet.getRatioAtTime(repRto, tap),
-        'poe': monet.calcPOE(repRto, finalDay=finalDay, thresholds=thp),
-        'cpt': monet.calcCPT(repRto)
+        'TTI': monet.calcTTI(repRto, thi),
+        'TTO': monet.calcTTO(repRto, tho),
+        'WOP': monet.calcWOP(repRto, thw),
+        'MIN': minS,
+        'MAX': maxS,
+        'RAP': monet.getRatioAtTime(repRto, tap),
+        'POE': monet.calcPOE(repRto, finalDay=finalDay, thresholds=thp),
+        'CPT': monet.calcCPT(repRto)
     }
     return mtrRep
 
 
 
-def calcMtrQnts(mtrsDict):
-    ttiSQ = [np.nanquantile(tti, qnt) for tti in mtrsDict['tti']]
-    ttoSQ = [np.nanquantile(tto, 1-qnt) for tto in mtrsDict['tto']]
-    wopSQ = [np.nanquantile(wop, 1-qnt) for wop in mtrsDict['wop']]
-    rapSQ = [np.nanquantile(rap, qnt) for rap in rapS]
+def calcMtrQnts(mtrsReps, qnt=0.5):
+    ttiSQ = [np.nanquantile(tti, qnt) for tti in mtrsReps['TTI']]
+    ttoSQ = [np.nanquantile(tto, 1-qnt) for tto in mtrsReps['TTO']]
+    wopSQ = [np.nanquantile(wop, 1-qnt) for wop in mtrsReps['WOP']]
+    rapSQ = [np.nanquantile(rap, qnt) for rap in mtrsReps['RAP']]
+    mniSQ = (
+        np.nanquantile(mtrsReps['MIN'][0], qnt), 
+        np.nanquantile(mtrsReps['MIN'][1], qnt)
+    )
+    mnxSQ = (
+        np.nanquantile(mtrsReps['MAX'][0], qnt), 
+        np.nanquantile(mtrsReps['MAX'][1], 1-qnt)
+    )
+    cptSQ = (np.nanquantile(mtrsReps['CPT'], qnt))
+    poeSQ = [mtrsReps['POE']]
+    # Setup return dictionary -------------------------------------------------
+    mtrQnt = {
+        'TTI': ttiSQ,
+        'TTO': ttoSQ,
+        'WOP': wopSQ,
+        'RAP': rapSQ,
+        'MIN': list(mniSQ)+list(mnxSQ),
+        'POE': list(poeSQ[0]),
+        'CPT': [cptSQ]
+    }
+    return mtrQnt
