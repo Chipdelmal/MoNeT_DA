@@ -11,17 +11,19 @@ import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 import STP_auxDebug as dbg
+from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
     (USR, AOI, LND, QNT) = ('dsk', 'HLT', 'PAN', '50')
     JOB = aux.JOB_DSK
+    CHUNKS = JOB
 else:
     (USR, AOI, LND, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     JOB = aux.JOB_SRV
+    CHUNKS = JOB
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
 DF_SORT = ['TTI', 'TTO', 'WOP', 'RAP', 'MIN', 'POE', 'CPT']
-CHUNKS = JOB
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -51,54 +53,75 @@ for exp in EXPS:
     # Setup schemes
     ###########################################################################
     # pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
-    # pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt'+'-pt_{}.csv'
+    pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt'
     DFOPths = [pth.format(z) for z in aux.DATA_NAMES]
     # Setup experiments IDs ---------------------------------------------------
     uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
     # Get experiment files ----------------------------------------------------
     ptrn = aux.patternForReleases('*', AOI, 'rto', 'npy')
     fPaths = sorted(glob(PT_OUT+ptrn))
-    (fNum, digs) = monet.lenAndDigits(fPaths)
     qnt = float(int(QNT)/100)
-    # Setup dataframes --------------------------------------------------------
-    outDFs = monet.initDFsForDA(
-        fPaths, header, 
-        aux.THI, aux.THO, aux.THW, aux.TAP, POE=True, CPT=True
-    )[:-1]
     ###########################################################################
-    # Iterate through experiments
+    # Divide fPaths in chunks
     ###########################################################################
-    fmtStr = '{}+ File: {}/{}'
-    (i, fPath) = (0, fPaths[0])
-    for (i, fPath) in enumerate(fPaths):
-        repRto = np.load(fPath)
-        print(
-            fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), 
-            end='\r'
-        )
-        #######################################################################
-        # Calculate Metrics
-        #######################################################################
-        mtrsReps = dbg.calcMetrics(
-            repRto, thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP
-        )
-        #######################################################################
-        # Calculate Quantiles
-        #######################################################################
-        mtrsQnt = dbg.calcMtrQnts(mtrsReps, qnt)
-        #######################################################################
-        # Update in Dataframes
-        #######################################################################
-        (xpid, mtrs) = (
-            monet.getXpId(fPath, xpidIx),
-            [mtrsQnt[k] for k in DF_SORT]
-        )
-        updates = [xpid+i for i in mtrs]
-        for (df, entry) in zip(outDFs, updates):
-            df.iloc[i] = entry
-    ###########################################################################
-    # Export Data
-    ###########################################################################
-    for (df, pth) in zip(outDFs, DFOPths):
-        df.to_csv(pth, index=False)
+    fPathsChunks = list(dbg.chunks(fPaths, CHUNKS))
+    dfPaths = [
+        [pth+'-pt_'+str(ix).zfill(2)+'.csv' 
+        for pth in DFOPths] for ix in range(CHUNKS)
+    ]
+    expIter = list(zip(dfPaths, fPathsChunks))
+    # dbg.pstProcessParallel(
+    #     expIter[0], header, xpidIx, qnt=qnt, 
+    #     thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP, thp=(.025, .975)
+    # )
+    Parallel(n_jobs=JOB)(
+        delayed(dbg.pstProcessParallel)(
+            exIx, header, xpidIx, qnt=qnt, 
+            thi=aux.THI, tho=aux.THO, thw=aux.THW, 
+            tap=aux.TAP, thp=(.025, .975)
+        ) for exIx in expIter
+    )
+
+
+    # # Setup dataframes --------------------------------------------------------
+    # outDFs = monet.initDFsForDA(
+    #     fPaths, header, 
+    #     aux.THI, aux.THO, aux.THW, aux.TAP, POE=True, CPT=True
+    # )[:-1]
+    # ###########################################################################
+    # # Iterate through experiments
+    # ###########################################################################
+    # fmtStr = '{}+ File: {}/{}'
+    # (i, fPath) = (0, fPaths[0])
+    # for (i, fPath) in enumerate(fPaths):
+    #     repRto = np.load(fPath)
+    #     print(
+    #         fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), 
+    #         end='\r'
+    #     )
+    #     #######################################################################
+    #     # Calculate Metrics
+    #     #######################################################################
+    #     mtrsReps = dbg.calcMetrics(
+    #         repRto, thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP
+    #     )
+    #     #######################################################################
+    #     # Calculate Quantiles
+    #     #######################################################################
+    #     mtrsQnt = dbg.calcMtrQnts(mtrsReps, qnt)
+    #     #######################################################################
+    #     # Update in Dataframes
+    #     #######################################################################
+    #     (xpid, mtrs) = (
+    #         monet.getXpId(fPath, xpidIx),
+    #         [mtrsQnt[k] for k in DF_SORT]
+    #     )
+    #     updates = [xpid+i for i in mtrs]
+    #     for (df, entry) in zip(outDFs, updates):
+    #         df.iloc[i] = entry
+    # ###########################################################################
+    # # Export Data
+    # ###########################################################################
+    # for (df, pth) in zip(outDFs, DFOPths):
+    #     df.to_csv(pth, index=False)
 

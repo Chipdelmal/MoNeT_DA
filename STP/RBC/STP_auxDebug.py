@@ -148,17 +148,19 @@ def calcMtrQnts(mtrsReps, qnt=0.5):
 
 
 def pstProcessParallel(
-        expIter, xpidIx, outPaths, 
+        exIx, header, xpidIx,
         thi=.25, tho=.25, thw=.25, tap=50, thp=(.025, .975),
-        finalDay=-1, qnt=0.5,
+        finalDay=-1, qnt=0.5, POE=True, CPT=True,
         DF_SORT=['TTI', 'TTO', 'WOP', 'RAP', 'MIN', 'POE', 'CPT']
     ):
+    (outPaths, fPaths) = exIx
+    (fNum, digs) = monet.lenAndDigits(fPaths)
     ###########################################################################
     # Setup dataframes
     ###########################################################################
     outDFs = monet.initDFsForDA(
         fPaths, header, 
-        aux.THI, aux.THO, aux.THW, aux.TAP, POE=True, CPT=True
+        thi, tho, thw, tap, POE=POE, CPT=CPT
     )[:-1]
     ###########################################################################
     # Iterate through experiments
@@ -174,9 +176,7 @@ def pstProcessParallel(
         #######################################################################
         # Calculate Metrics
         #######################################################################
-        mtrsReps = calcMetrics(
-            repRto, thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP
-        )
+        mtrsReps = calcMetrics(repRto, thi=thi, tho=tho, thw=thw, tap=tap)
         #######################################################################
         # Calculate Quantiles
         #######################################################################
@@ -194,8 +194,8 @@ def pstProcessParallel(
     ###########################################################################
     # Export Data
     ###########################################################################
-    for (df, pth) in zip(outDFs, DFOPths):
-        df.to_csv(outPaths, index=False)
+    for (df, pth) in zip(outDFs, outPaths):
+        df.to_csv(pth, index=False)
 
 ###############################################################################
 # Auxiliary
