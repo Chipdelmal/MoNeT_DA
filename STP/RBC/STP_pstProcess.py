@@ -10,6 +10,8 @@ import MoNeT_MGDrivE as monet
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import STP_auxDebug as dbg
+
 
 if monet.isNotebook():
     (USR, AOI, LND, QNT) = ('dsk', 'HLT', 'PAN', '50')
@@ -78,26 +80,35 @@ for exp in EXPS:
         #######################################################################
         # Calculate Metrics
         #######################################################################
-        (ttiS, ttoS, wopS) = (
-                monet.calcTTI(repRto, aux.THI),
-                monet.calcTTO(repRto, aux.THO),
-                monet.calcWOP(repRto, aux.THW)
-            )
-        (minS, maxS, _, _) = monet.calcMinMax(repRto)
-        rapS = monet.getRatioAtTime(repRto, aux.TAP)
-        poe = monet.calcPOE(repRto)
-        cpt = monet.calcCPT(repRto)
-        # der = monet.calcDER(repRto, smoothing=10, magnitude=0.1)
+        mtrsReps = dbg.calcMetrics(
+            repRto, thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP
+        )
+        # (ttiS, ttoS, wopS) = (
+        #         monet.calcTTI(repRto, aux.THI),
+        #         monet.calcTTO(repRto, aux.THO),
+        #         monet.calcWOP(repRto, aux.THW)
+        #     )
+        # (minS, maxS, _, _) = monet.calcMinMax(repRto)
+        # rapS = monet.getRatioAtTime(repRto, aux.TAP)
+        # poe = monet.calcPOE(repRto)
+        # cpt = monet.calcCPT(repRto)
         #######################################################################
         # Calculate Quantiles
         #######################################################################
-        ttiSQ = [np.nanquantile(tti, qnt) for tti in ttiS]
-        ttoSQ = [np.nanquantile(tto, 1-qnt) for tto in ttoS]
-        wopSQ = [np.nanquantile(wop, 1-qnt) for wop in wopS]
-        rapSQ = [np.nanquantile(rap, qnt) for rap in rapS]
-        mniSQ = (np.nanquantile(minS[0], qnt), np.nanquantile(minS[1], qnt))
-        mnxSQ = (np.nanquantile(maxS[0], qnt), np.nanquantile(maxS[1], 1-qnt))
-        cptSQ = (np.nanquantile(cpt, qnt))
+        ttiSQ = [np.nanquantile(tti, qnt) for tti in mtrsReps['tti']]
+        ttoSQ = [np.nanquantile(tto, 1-qnt) for tto in mtrsReps['tto']]
+        wopSQ = [np.nanquantile(wop, 1-qnt) for wop in mtrsReps['wop']]
+        rapSQ = [np.nanquantile(rap, qnt) for rap in mtrsReps['rap']]
+        mniSQ = (
+            np.nanquantile(mtrsReps['min'][0], qnt), 
+            np.nanquantile(mtrsReps['min'][1], qnt)
+        )
+        mnxSQ = (
+            np.nanquantile(mtrsReps['max'][0], qnt), 
+            np.nanquantile(mtrsReps['max'][1], 1-qnt)
+        )
+        cptSQ = (np.nanquantile(mtrsReps['cpt'], qnt))
+        poeSQ = mtrsReps['poe']
         #######################################################################
         # Update in Dataframes
         #######################################################################
@@ -105,7 +116,7 @@ for exp in EXPS:
         updates = [
             xpid+i for i in (
                     ttiSQ, ttoSQ, wopSQ, rapSQ, 
-                    list(mniSQ)+list(mnxSQ), list(poe), [cptSQ]
+                    list(mniSQ)+list(mnxSQ), list(poeSQ), [cptSQ]
                 )
         ]
         for df in zip(outDFs, updates):

@@ -98,16 +98,19 @@ for exp in EXPS:
                 float(xpRow[3]['min']), float(xpRow[3]['minx']), 
                 float(xpRow[4]['POE']), float(xpRow[5]['CPT'])
             )
-            expsIter[i] = (i, repFile, tti, tto, wop, mnf, mnd, poe, cpt)
+            expsIter[i] = (
+                expsNum-i, repFile, tti, tto, wop, mnf, mnd, poe, cpt
+            )
         pkl.dump(expsIter, path.join(PT_MTR, tpsName))
         sys.stdout.write("\033[K")
     else:
         expsIter = pkl.load(path.join(PT_MTR, tpsName))
+    expsIter.reverse()
     ###########################################################################
     # Iterate through experiments
     ###########################################################################
     (fNum, digs) = monet.lenAndDigits(repFiles)
-    Parallel(n_jobs=JOB)(
+    Parallel(n_jobs=1)(
         delayed(dbg.exportPstTracesParallel)(
             exIx, expsNum,
             aux.STABLE_T, THS, QNT, STYLE, PT_IMG, 

@@ -94,3 +94,33 @@ def pstFractionParallel(exIx, PT_OUT, baseFiles, meanFiles, traceFiles):
     repsRatios = monet.getPopRepsRatios(base, trace, 1)
     np.save(fName, repsRatios)
     return None
+
+
+###############################################################################
+# PstProcess Updates
+###############################################################################
+def calcMetrics(
+        repRto,
+        thi=.25, tho=.25, thw=.25, tap=50, thp=(.025, .975),
+        finalDay=-1
+    ):
+    (minS, maxS, _, _) = monet.calcMinMax(repRto)
+    mtrRep = {
+        'tti': monet.calcTTI(repRto, thi),
+        'tto': monet.calcTTO(repRto, tho),
+        'wop': monet.calcWOP(repRto, thw),
+        'min': minS,
+        'max': maxS,
+        'rap': monet.getRatioAtTime(repRto, tap),
+        'poe': monet.calcPOE(repRto, finalDay=finalDay, thresholds=thp),
+        'cpt': monet.calcCPT(repRto)
+    }
+    return mtrRep
+
+
+
+def calcMtrQnts(mtrsDict):
+    ttiSQ = [np.nanquantile(tti, qnt) for tti in mtrsDict['tti']]
+    ttoSQ = [np.nanquantile(tto, 1-qnt) for tto in mtrsDict['tto']]
+    wopSQ = [np.nanquantile(wop, 1-qnt) for wop in mtrsDict['wop']]
+    rapSQ = [np.nanquantile(rap, qnt) for rap in rapS]
