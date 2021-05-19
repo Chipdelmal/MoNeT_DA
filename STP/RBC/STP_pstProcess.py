@@ -21,6 +21,7 @@ else:
     JOB = aux.JOB_SRV
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
 DF_SORT = ['TTI', 'TTO', 'WOP', 'RAP', 'MIN', 'POE', 'CPT']
+CHUNKS = JOB
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -49,11 +50,11 @@ for exp in EXPS:
     ###########################################################################
     # Setup schemes
     ###########################################################################
-    pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
+    # pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
+    # pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt'+'-pt_{}.csv'
     DFOPths = [pth.format(z) for z in aux.DATA_NAMES]
     # Setup experiments IDs ---------------------------------------------------
     uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
-    (xpDict, smryDicts) = ({}, [{} for _ in range(len(aux.DATA_NAMES))])
     # Get experiment files ----------------------------------------------------
     ptrn = aux.patternForReleases('*', AOI, 'rto', 'npy')
     fPaths = sorted(glob(PT_OUT+ptrn))
@@ -62,11 +63,8 @@ for exp in EXPS:
     # Setup dataframes --------------------------------------------------------
     outDFs = monet.initDFsForDA(
         fPaths, header, 
-        aux.THI, aux.THO, aux.THW, aux.TAP, 
-        POE=True, CPT=True
-    )
-    (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF, _) = outDFs
-    outDFs = (ttiDF, ttoDF, wopDF, tapDF, rapDF, poeDF, cptDF)
+        aux.THI, aux.THO, aux.THW, aux.TAP, POE=True, CPT=True
+    )[:-1]
     ###########################################################################
     # Iterate through experiments
     ###########################################################################
@@ -74,7 +72,6 @@ for exp in EXPS:
     (i, fPath) = (0, fPaths[0])
     for (i, fPath) in enumerate(fPaths):
         repRto = np.load(fPath)
-        # (reps, days) = repRto.shape
         print(
             fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), 
             end='\r'
@@ -97,33 +94,11 @@ for exp in EXPS:
             [mtrsQnt[k] for k in DF_SORT]
         )
         updates = [xpid+i for i in mtrs]
-        for df in zip(outDFs, updates):
-            df[0].iloc[i] = df[1]
-        #######################################################################
-        # Update in Dictionaries
-        #######################################################################
-        if aux.MLR:
-            outDict = [
-                    {int(i[0]*100): i[1] for i in zip(aux.THI, ttiS)},
-                    {int(i[0]*100): i[1] for i in zip(aux.THO, ttoS)},
-                    {int(i[0]*100): i[1] for i in zip(aux.THW, wopS)},
-                    {int(i[0]*100): i[1] for i in zip(aux.TAP, rapS)},
-                    {
-                        'mnl': minS[0], 'mnd': minS[1],
-                        'mxl': maxS[0], 'mxd': maxS[1]
-                    },
-                    {'POE': poe}, {'CPT': cpt}
-                ]
-            for dct in zip(smryDicts, outDict):
-                dct[0][tuple(xpid)] = dct[1]
+        for (df, entry) in zip(outDFs, updates):
+            df.iloc[i] = entry
     ###########################################################################
     # Export Data
     ###########################################################################
-    for df in zip(outDFs, DFOPths):
-        df[0].to_csv(df[1], index=False)
-    if aux.MLR:
-        for (i, dicts) in enumerate(smryDicts):
-            lbl = aux.DATA_NAMES[i]
-            pth = PT_MTR+AOI+'_'+lbl+'_'+QNT+'_mlr.bz'
-            pkl.dump(dicts, pth, compression='bz2')
+    for (df, pth) in zip(outDFs, DFOPths):
+        df.to_csv(pth, index=False)
 

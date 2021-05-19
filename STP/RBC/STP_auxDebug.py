@@ -145,3 +145,63 @@ def calcMtrQnts(mtrsReps, qnt=0.5):
         'CPT': [cptSQ]
     }
     return mtrQnt
+
+
+def pstProcessParallel(
+        expIter, xpidIx, outPaths, 
+        thi=.25, tho=.25, thw=.25, tap=50, thp=(.025, .975),
+        finalDay=-1, qnt=0.5,
+        DF_SORT=['TTI', 'TTO', 'WOP', 'RAP', 'MIN', 'POE', 'CPT']
+    ):
+    ###########################################################################
+    # Setup dataframes
+    ###########################################################################
+    outDFs = monet.initDFsForDA(
+        fPaths, header, 
+        aux.THI, aux.THO, aux.THW, aux.TAP, POE=True, CPT=True
+    )[:-1]
+    ###########################################################################
+    # Iterate through experiments
+    ###########################################################################
+    fmtStr = '{}+ File: {}/{}'
+    (i, fPath) = (0, fPaths[0])
+    for (i, fPath) in enumerate(fPaths):
+        repRto = np.load(fPath)
+        print(
+            fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND), 
+            end='\r'
+        )
+        #######################################################################
+        # Calculate Metrics
+        #######################################################################
+        mtrsReps = calcMetrics(
+            repRto, thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP
+        )
+        #######################################################################
+        # Calculate Quantiles
+        #######################################################################
+        mtrsQnt = calcMtrQnts(mtrsReps, qnt)
+        #######################################################################
+        # Update in Dataframes
+        #######################################################################
+        (xpid, mtrs) = (
+            monet.getXpId(fPath, xpidIx),
+            [mtrsQnt[k] for k in DF_SORT]
+        )
+        updates = [xpid+i for i in mtrs]
+        for (df, entry) in zip(outDFs, updates):
+            df.iloc[i] = entry
+    ###########################################################################
+    # Export Data
+    ###########################################################################
+    for (df, pth) in zip(outDFs, DFOPths):
+        df.to_csv(outPaths, index=False)
+
+###############################################################################
+# Auxiliary
+###############################################################################
+def chunks(l, n):
+    (d, r) = divmod(len(l), n)
+    for i in range(n):
+        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
+        yield l[si:si+(d+1 if i < r else d)]
