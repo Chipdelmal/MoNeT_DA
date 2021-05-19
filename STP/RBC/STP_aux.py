@@ -12,7 +12,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 OVW = False
-(JOB_DSK, JOB_SRV) = (2, 4)
+(JOB_DSK, JOB_SRV) = (4, 4)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
     25000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 

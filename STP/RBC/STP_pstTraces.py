@@ -110,7 +110,7 @@ for exp in EXPS:
     # Iterate through experiments
     ###########################################################################
     (fNum, digs) = monet.lenAndDigits(repFiles)
-    Parallel(n_jobs=1)(
+    Parallel(n_jobs=JOB)(
         delayed(dbg.exportPstTracesParallel)(
             exIx, expsNum,
             aux.STABLE_T, THS, QNT, STYLE, PT_IMG, 

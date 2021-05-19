@@ -3,6 +3,7 @@
 
 import sys
 import numpy as np
+import pandas as pd
 from glob import glob
 from datetime import datetime
 import compress_pickle as pkl
@@ -70,10 +71,6 @@ for exp in EXPS:
         for pth in DFOPths] for ix in range(CHUNKS)
     ]
     expIter = list(zip(dfPaths, fPathsChunks))
-    # dbg.pstProcessParallel(
-    #     expIter[0], header, xpidIx, qnt=qnt, 
-    #     thi=aux.THI, tho=aux.THO, thw=aux.THW, tap=aux.TAP, thp=(.025, .975)
-    # )
     Parallel(n_jobs=JOB)(
         delayed(dbg.pstProcessParallel)(
             exIx, header, xpidIx, qnt=qnt, 
@@ -81,7 +78,15 @@ for exp in EXPS:
             tap=aux.TAP, thp=(.025, .975)
         ) for exIx in expIter
     )
-
+###############################################################################
+# Merge dataframes chunks
+###############################################################################
+dfPathsPieces = list(zip(*dfPaths))[:-1]
+for dfPathsSet in dfPathsPieces:
+    dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
+    # Write combined dataframe ------------------------------------------------
+    fName = dfPathsSet[0].split('-')[0]+'.csv'
+    dfFull.to_csv(fName, index=False)
 
     # # Setup dataframes --------------------------------------------------------
     # outDFs = monet.initDFsForDA(
