@@ -73,9 +73,18 @@ dataEffect = DATA[
 dataSample = dataEffect # dataEffect.sample(int(sampleRate*dataEffect.shape[0]))
 # Iterate through AOI ---------------------------------------------------------
 (yVar, sigma, col) = ans[0]
-for (yVar, sigma, col) in ans:
+for (yVar, sigma, col) in ans[:]:
+    Parallel(n_jobs=JOB)(
+        delayed(dbg.exportDICEParallel)(
+            AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
+            scale=scale, wiggle=False, sd=sigma, color=col, 
+            sampleRate=sampleRate
+        ) for (xVar, scale) in pFeats
+    )
+
+# for (yVar, sigma, col) in ans:
     # Get factorials ----------------------------------------------------------
-    (xVar, scale) = pFeats[1]
+    # (xVar, scale) = pFeats[1]
     # for (xVar, scale) in pFeats[:]:
     #     print('* Processing [{}:{}:{}]'.format(AOI, yVar, xVar), end='\r')
     #     fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
@@ -86,13 +95,7 @@ for (yVar, sigma, col) in ans:
     #     )
     #     fig.savefig(fName, dpi=500, bbox_inches='tight', pad=0)
     #     plt.close('all')
-    for (yVar, sigma, col) in ans[:]:
-        Parallel(n_jobs=JOB)(
-            delayed(dbg.exportDICEParallel)(
-                AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
-                scale=scale, wiggle=False, sd=sigma, color=col, sampleRate=sampleRate
-            ) for (xVar, scale) in pFeats
-        )
+
 
 
 # ###############################################################################
