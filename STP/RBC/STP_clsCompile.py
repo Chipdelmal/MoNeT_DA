@@ -14,7 +14,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'TTI')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'CPT')
     JOB = aux.JOB_DSK
 else:
     (USR, LND, AOI, QNT, MTR) = (
