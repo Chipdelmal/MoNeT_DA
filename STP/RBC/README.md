@@ -4,29 +4,29 @@
 
 ### Inputs
 
-* 'sex': released mosquitos sex
-  * 'sxm': male
-  * 'sxg': gravid female
-  * 'sxn': non-gravid female  
-* 'ren': releases number
-* 'res': releases size
-* 'rsg': resistance generation
-* 'gsv': genetic standing variation
-* 'fcf': fertility fitness cost
-* 'mfm': mating fitness homozygous
-* 'mft': mating fitness heterozygous
-* 'hrm': homing rate male
-* 'hrt': homing rate female
+* `sex`: released mosquitos sex
+  * `sxm`: male
+  * `sxg`: gravid female
+  * `sxn`: non-gravid female  
+* `ren`: releases number
+* `res`: releases size
+* `rsg`: resistance generation
+* `gsv`: genetic standing variation
+* `fcf`: fertility fitness cost
+* `mfm`: mating fitness homozygous
+* `mft`: mating fitness heterozygous
+* `hrm`: homing rate male
+* `hrt`: homing rate female
 
 ### Outputs
 
-* 'CPT': Cumulative fraction of mosquitoes divided by time
-* 'TTI': Time to introgression
-* 'TTO': Time to outrogression
-* 'WOP': Window of protection
-* 'POE': Probability of elimination/fixation
-* 'MIN': Minimum of mosquitoes
-* 'RAP': Fraction of mosquites at timepoint
+* `CPT`: Cumulative fraction of mosquitoes divided by time
+* `TTI`: Time to introgression
+* `TTO`: Time to outrogression
+* `WOP`: Window of protection
+* `POE`: Probability of elimination/fixation
+* `MIN`: Minimum of mosquitoes
+* `RAP`: Fraction of mosquites at timepoint
 
 ## Pipelines
 
