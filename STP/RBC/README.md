@@ -1,6 +1,6 @@
 #   São Tomé and Príncipe
 
-## Variables Keys
+## Variables Key
 
 ### Inputs
 
@@ -30,7 +30,7 @@
 
 ## Pipelines
 
-### Panmictic Experiments (two nodes)
+### Panmictic Experiments (one node)
 
 To run the **pre** end of the DA (*run on server only*):
 
@@ -58,12 +58,12 @@ For the **pst** DA:
 ```
 
 
-## Sources
+## Some References
 
-* https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
 * https://github.com/parrt/random-forest-importances
 * https://explained.ai/rf-importance/index.html
 * https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
 * https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance_multicollinear.html#sphx-glr-auto-examples-inspection-plot-permutation-importance-multicollinear-py
 * https://pdpbox.readthedocs.io/en/latest/pdp_plot.html
 * https://github.com/blent-ai/ALEPython
+* https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e

@@ -91,21 +91,6 @@ for (yVar, sigma, col) in ans[:]:
         ) for (xVar, scale) in pFeats
     )
 
-# for (yVar, sigma, col) in ans:
-    # Get factorials ----------------------------------------------------------
-    # (xVar, scale) = pFeats[1]
-    # for (xVar, scale) in pFeats[:]:
-    #     print('* Processing [{}:{}:{}]'.format(AOI, yVar, xVar), end='\r')
-    #     fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
-    #     (fig, ax) = dbg.plotDICE(
-    #         dataSample, xVar, yVar, FEATS, lw=0.1,
-    #         scale=scale, wiggle=False, sd=sigma, color=col,
-    #         sampleRate=sampleRate
-    #     )
-    #     fig.savefig(fName, dpi=500, bbox_inches='tight', pad=0)
-    #     plt.close('all')
-
-
 
 # ###############################################################################
 # # Filter Output with Constraints
