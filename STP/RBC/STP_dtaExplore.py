@@ -87,30 +87,29 @@ for (yVar, sigma, col) in ans[:]:
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
             scale=scale, wiggle=True, sd=sigma, color=col, 
-            sampleRate=sampleRate, lw=0.075
+            sampleRate=sampleRate, lw=0.1
         ) for (xVar, scale) in pFeats
     )
 
-
-# ###############################################################################
-# # Filter Output with Constraints
-# ###############################################################################
-# cptLim = (.8, 1.25)
-# poeLim = (-1, .1)
-# ttiLim = (-10, 20*365)
-# ttoLim = (-10, 20*365)
-# wopLim = (-10, 20*365)
-# # Filter and return dataframe -------------------------------------------------
-# fltr = [
-#     cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
-#     wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
-#     ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
-#     ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
-#     poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
-# ]
-# boolFilter = [all(i) for i in zip(*fltr)]
-# daFltrd = DATA[boolFilter]
-# daFltrd
+###############################################################################
+# Filter Output with Constraints
+###############################################################################
+cptLim = (-1, .25)
+poeLim = (-1, .1)
+ttiLim = (-10, 20*365)
+ttoLim = (-10, 20*365)
+wopLim = (-10, 20*365)
+# Filter and return dataframe -------------------------------------------------
+fltr = [
+    cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
+    wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
+    ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
+    ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
+    poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
+]
+boolFilter = [all(i) for i in zip(*fltr)]
+daFltrd = DATA[boolFilter]
+daFltrd
 
 
 # cols = ('i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic', LABLS[0])
