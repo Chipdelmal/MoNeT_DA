@@ -21,16 +21,19 @@ import STP_auxDebug as dbg
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
-    JOB = aux.JOB_DSK
 else:
     (USR, LND, AOI, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
     )
+# Setup number of cores -------------------------------------------------------
+if USR=='dsk':
+    JOB = aux.JOB_DSK
+else:
     JOB = aux.JOB_SRV
-EXPS = aux.getExps(LND)
 ###############################################################################
 # Paths
 ###############################################################################
+EXPS = aux.getExps(LND)
 (drive, land) = (
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
@@ -57,6 +60,12 @@ COLS = list(DATA.columns)
     [i for i in COLS if i[0]=='i'],
     [i for i in COLS if i[0]!='i']
 )
+# Time and head --------------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_SUMS, PT_IMG, tS, 
+    '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
+)
 ###############################################################################
 # DICE Plot 
 ###############################################################################
@@ -77,7 +86,7 @@ for (yVar, sigma, col) in ans[:]:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
-            scale=scale, wiggle=False, sd=sigma, color=col, 
+            scale=scale, wiggle=True, sd=sigma, color=col, 
             sampleRate=sampleRate
         ) for (xVar, scale) in pFeats
     )

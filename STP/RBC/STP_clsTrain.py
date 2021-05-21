@@ -25,26 +25,21 @@ import STP_gene as drv
 import STP_land as lnd
 
 
-# https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
-# https://github.com/parrt/random-forest-importances
-# https://explained.ai/rf-importance/index.html
-# https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
-# https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance_multicollinear.html#sphx-glr-auto-examples-inspection-plot-permutation-importance-multicollinear-py
-# https://pdpbox.readthedocs.io/en/latest/pdp_plot.html
-# https://github.com/blent-ai/ALEPython
-
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'WOP')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'POE')
     VT_SPLIT = aux.VT_TRAIN
-    JOB = aux.JOB_DSK
 else:
     (USR, LND, AOI, QNT, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
     VT_SPLIT = aux.VT_TRAIN
-    JOB = aux.JOB_SRV
 EXPS = aux.getExps(LND)
 (TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
+# Setup number of cores -------------------------------------------------------
+if USR=='dsk':
+    JOB = aux.JOB_DSK
+else:
+    JOB = aux.JOB_SRV
 ###############################################################################
 # Paths
 ###############################################################################
@@ -85,7 +80,7 @@ COLS = list(DATA.columns)
 # Pre-Analysis
 ###############################################################################
 correlation = DATA.corr(method='spearman')
-f, ax = plt.subplots(figsize=(10, 8))
+(f, ax) = plt.subplots(figsize=(10, 8))
 sns.heatmap(
     correlation, mask=np.zeros_like(correlation, dtype=np.bool), 
     cmap=sns.diverging_palette(220, 10, as_cmap=True),

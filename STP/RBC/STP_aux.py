@@ -7,11 +7,12 @@ import pandas as pd
 from glob import glob
 import MoNeT_MGDrivE as monet
 
+
 # #############################################################################
 # Constants
 # #############################################################################
 OVW = False
-(JOB_DSK, JOB_SRV) = (4, 4)
+(JOB_DSK, JOB_SRV) = (5, 20)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
     25000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 
@@ -51,7 +52,7 @@ DICE_PARS = (
     ('POE', 0.01, '#23194212')
 )
 # ML --------------------------------------------------------------------------
-(THS, VT_TRAIN) = ('0.5',  0.3)
+(THS, VT_TRAIN) = ('0.1',  0.3)
 (TREES, DEPTH, KFOLD) = (100, 25, 20)
 DATA_TYPE = {
     'i_sex': np.int8,
