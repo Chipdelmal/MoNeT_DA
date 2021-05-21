@@ -253,13 +253,13 @@ def plotDICE(
 
 
 def exportDICEParallel(
-        AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
+        AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500, lw=0.175,
         scale='linear', wiggle=False, sd=0.1, color='blue', sampleRate=0.5
     ):
     print('* Processing [{}:{}:{}]'.format(AOI, yVar, xVar), end='\r')
     fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
     (fig, ax) = plotDICE(
-        dataSample, xVar, yVar, FEATS, lw=0.1,
+        dataSample, xVar, yVar, FEATS, lw=lw,
         scale=scale, wiggle=wiggle, sd=sd, color=color,
         sampleRate=sampleRate
     )

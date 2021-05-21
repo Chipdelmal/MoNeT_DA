@@ -69,7 +69,7 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot 
 ###############################################################################
-(sampleRate, shuffle) = (0.075, True)
+(sampleRate, shuffle) = (0.1, True)
 ans = aux.DICE_PARS
 pFeats = [
     ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
@@ -87,7 +87,7 @@ for (yVar, sigma, col) in ans[:]:
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
             scale=scale, wiggle=True, sd=sigma, color=col, 
-            sampleRate=sampleRate
+            sampleRate=sampleRate, lw=0.075
         ) for (xVar, scale) in pFeats
     )
 
