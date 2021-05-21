@@ -55,7 +55,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .5, "alpha": .5, "dpi": 300, "legend": True,
+            "width": .5, "alpha": .5, "dpi": 100, "legend": True,
             "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     ###########################################################################
@@ -78,8 +78,8 @@ for exp in EXPS:
     if (not cacheExists) or (aux.OVW):
         # Load postprocessed files --------------------------------------------
         pstPat = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
-        pstFiles = [pstPat.format(i) for i in aux.DATA_NAMES]
-        (dfTTI, dfTTO, dfWOP, _, dfMNX, dfPOE, dfCPT, _) = [
+        pstFiles = [pstPat.format(i) for i in aux.DATA_NAMES[:-1]]
+        (dfTTI, dfTTO, dfWOP, _, dfMNX, dfPOE, dfCPT) = [
             pd.read_csv(i) for i in pstFiles
         ]
         allDF = (dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT)
