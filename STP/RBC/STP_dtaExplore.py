@@ -72,8 +72,9 @@ monet.printExperimentHead(
 (sampleRate, shuffle) = (0.1, True)
 ans = aux.DICE_PARS
 pFeats = [
-    ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
-    ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear')
+    # ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
+    # ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear'), 
+    ('i_hrm', 'linear'), ('i_hrf', 'linear')
 ]
 dataEffect = DATA[
     (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) & 
