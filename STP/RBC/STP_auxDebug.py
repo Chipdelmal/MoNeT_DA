@@ -110,8 +110,7 @@ def calcMetrics(
         'TTI': monet.calcTTI(repRto, thi),
         'TTO': monet.calcTTO(repRto, tho),
         'WOP': monet.calcWOP(repRto, thw),
-        'MIN': minS,
-        'MAX': maxS,
+        'MIN': minS, 'MAX': maxS,
         'RAP': monet.getRatioAtTime(repRto, tap),
         'POE': monet.calcPOE(repRto, finalDay=finalDay, thresholds=thp),
         'CPT': monet.calcCPT(repRto)

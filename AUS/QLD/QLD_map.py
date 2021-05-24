@@ -22,7 +22,7 @@ plt.rcParams.update({
 })
 
 
-PTH_pts = '/home/chipdelmal/Documents/WorkSims/QLD/'
+PTH_pts = '/home/chipdelmal/Documents/WorkSims/QLD/GEO/'
 pts = pd.read_csv(PTH_pts+'MurWon_BlockCentroids.txt', sep='\t')
 (COLORS, DPI) = (plo.COLORS, 300)
 # #############################################################################

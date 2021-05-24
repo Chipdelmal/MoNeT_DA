@@ -16,7 +16,7 @@
 * `mfm`: mating fitness homozygous
 * `mft`: mating fitness heterozygous
 * `hrm`: homing rate male
-* `hrt`: homing rate female
+* `hrf`: homing rate female
 
 ### Outputs
 

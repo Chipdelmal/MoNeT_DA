@@ -32,12 +32,12 @@ OVW = False
     (
         ('i_sex', 1), ('i_ren', 2), ('i_res', 3), ('i_rsg', 4),
         ('i_gsv', 5), ('i_fcf', 6), ('i_mfm', 7), ('i_mft', 8),
-        ('i_hrm', 9), ('i_hrt', 10), ('i_grp', 12)
+        ('i_hrm', 9), ('i_hrf', 10), ('i_grp', 12)
     ),
     {
         'i_sex': 1  , 'i_ren': 1e0, 'i_res': 1e3, 'i_rsg': 1e10,
         'i_gsv': 1e10,'i_fcf': 1e10,'i_mfm': 1e3, 'i_mft': 1e3,
-        'i_hrm': 1e3, 'i_hrt': 1e10,'i_grp': 1,   'i_mig': 1e5
+        'i_hrm': 1e3, 'i_hrf': 1e3, 'i_grp': 1,   'i_mig': 1e5
     }
 )
 (THI, THO, THW, TAP) = (
@@ -60,7 +60,7 @@ DATA_TYPE = {
     'i_ren': np.intc,   'i_res': np.double, 
     'i_rsg': np.double, 'i_gsv': np.double, 'i_fcf': np.double,
     'i_mfm': np.double, 'i_mft': np.double,
-    'i_hrm': np.double, 'i_hrt': np.double,
+    'i_hrm': np.double, 'i_hrf': np.double,
     'i_grp': np.intc,   'i_mig': np.double
 }
 SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
