@@ -16,7 +16,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '90')
+    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
 else:
     (USR, LND, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 EXPS = aux.getExps(LND)
