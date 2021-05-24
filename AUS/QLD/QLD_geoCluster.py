@@ -9,10 +9,11 @@ from sklearn.cluster import KMeans
 from descartes import PolygonPatch
 from more_itertools import locate
 import QLD_fun as fun
+import QLD_aux as aux
 
 CLS_NUM = 10
 (PTH_PTS, FNM_PTS) = (
-    '/home/chipdelmal/Documents/WorkSims/QLD/GEO', 
+    aux.selectGeoPath('dsk'), 
     'MurWon_BlockCentroids'
 )
 FNM_OUT = '{}_C{}.csv'.format(FNM_PTS, str(CLS_NUM).zfill(2))

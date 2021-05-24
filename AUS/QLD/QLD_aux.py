@@ -24,3 +24,10 @@ def selectPath(USR, EXP, LND):
     fldrList = [PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR]
     [monet.makeFolder(i) for i in fldrList]
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
+
+def selectGeoPath(USR):
+    if USR == 'dsk':
+        PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
+    else:
+        PTH_PTS = '/RAID5/marshallShare/QLD/GEO'
+    return PTH_PTS
