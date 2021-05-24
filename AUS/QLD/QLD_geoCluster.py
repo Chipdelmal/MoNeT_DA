@@ -3,12 +3,14 @@ import numpy as np
 from os import path
 import pandas as pd
 import seaborn as sns
+import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from descartes import PolygonPatch
+from more_itertools import locate
 import QLD_fun as fun
 
-CLS_NUM = 2
+CLS_NUM = 10
 (PTH_PTS, FNM_PTS) = (
     '/home/chipdelmal/Documents/WorkSims/QLD/GEO', 
     'MurWon_BlockCentroids'
@@ -22,6 +24,7 @@ lonLat = list(zip(df['Xcoord'], df['Ycoord']))
 kmeans = KMeans(n_clusters=CLS_NUM, random_state=7415341).fit(lonLat)
 df['clst'] = kmeans.labels_
 centroids = kmeans.cluster_centers_
+df['id'] = range(df.shape[0])
 df.to_csv(path.join(PTH_PTS, FNM_OUT))
 ###############################################################################
 # Plot Clusters
@@ -41,7 +44,8 @@ for i in range(df.shape[0]):
 for i in range(len(centroids)):
     plt.text(
         centroids[i][0], centroids[i][1], str(i), 
-        color='#00000022', fontsize=12.5, ma='center', ha='center', va='center'
+        color='#00000022', fontsize=12.5, zorder=-1,
+        ma='center', ha='center', va='center'
     )
 # Polygons --------------------------------------------------------------------
 D = fun.disjoint_polygons(X, radius=.0075, n_angles=3)
@@ -61,8 +65,34 @@ for j in list(set(CLS_LB)):
         )
     )
 ax.set_aspect(1)
-fig.savefig(path.join(PTH_PTS, 'Map{}.png'.format(str(CLS_NUM).zfill(2))), dpi=1000)
-# ax.spines["top"].set_visible(False)
-# ax.spines["right"].set_visible(False)
-# ax.spines["bottom"].set_visible(False)
-# ax.spines["left"].set_visible(False)
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["bottom"].set_visible(False)
+ax.spines["left"].set_visible(False)
+ax.tick_params(
+    axis='both', which='both',
+    bottom=False, top=False, left=False, right=False,
+    labelbottom=False, labelleft=False
+)
+fig.savefig(
+    path.join(PTH_PTS, 'Map{}.png'.format(str(CLS_NUM).zfill(2))), 
+    dpi=1000, edgecolor=None,
+    orientation='portrait', papertype=None, format='png',
+    bbox_inches='tight', pad_inches=.02
+)
+###############################################################################
+# Export groupings by ID
+###############################################################################
+groupings = []
+clstIDs = list(sorted(set(df['clst'])))
+for (ix, clstID) in enumerate(clstIDs):
+    tmpDF = df[df['clst'] == clstID]
+    groupings.append(list(tmpDF['id']))
+out = {
+    'centroid': kmeans.cluster_centers_,
+    'groups': groupings
+}
+pkl.dump(
+    out, path.join(PTH_PTS, 'CLS_{}.pkl'.format(str(CLS_NUM).zfill(2))), 
+    compression='bz2'
+)
