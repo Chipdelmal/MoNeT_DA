@@ -19,7 +19,6 @@ python STP_clsPreprocess.py $1 'PAN' 'HLT' $QNT
 ###############################################################################
 python STP_clsTrain.py $1 'PAN' 'HLT' $QNT 'CPT'
 python STP_clsTrain.py $1 'PAN' 'HLT' $QNT 'POE'
-python STP_clsTrain.py $1 'PAN' 'HLT' $QNT 'POF'
 python STP_clsTrain.py $1 'PAN' 'HLT' $QNT 'WOP'
 python STP_clsTrain.py $1 'PAN' 'HLT' $QNT 'TTI'
 python STP_clsTrain.py $1 'PAN' 'HLT' $QNT 'TTO'

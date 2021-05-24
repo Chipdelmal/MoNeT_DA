@@ -14,14 +14,17 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '90', 'TTI')
-    JOB = aux.JOB_DSK
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'CPT')
 else:
     (USR, LND, AOI, QNT, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-    JOB = aux.JOB_SRV
 EXPS = aux.getExps(LND)
+# Setup number of cores -------------------------------------------------------
+if USR=='dsk':
+    JOB = aux.JOB_DSK
+else:
+    JOB = aux.JOB_SRV
 ###############################################################################
 # Paths
 ###############################################################################

@@ -11,24 +11,29 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
 from sklearn import preprocessing
+from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import STP_auxDebug as dbg
 
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
+else:
+    (USR, LND, AOI, QNT) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+    )
+# Setup number of cores -------------------------------------------------------
+if USR=='dsk':
     JOB = aux.JOB_DSK
 else:
-    (USR, LND, QNT) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
-    )
     JOB = aux.JOB_SRV
-EXPS = aux.getExps(LND)
 ###############################################################################
 # Paths
 ###############################################################################
+EXPS = aux.getExps(LND)
 (drive, land) = (
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
@@ -55,10 +60,16 @@ COLS = list(DATA.columns)
     [i for i in COLS if i[0]=='i'],
     [i for i in COLS if i[0]!='i']
 )
+# Time and head --------------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_SUMS, PT_IMG, tS, 
+    '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
+)
 ###############################################################################
 # DICE Plot 
 ###############################################################################
-(sampleRate, shuffle) = (1, True)
+(sampleRate, shuffle) = (0.1, True)
 ans = aux.DICE_PARS
 pFeats = [
     ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
@@ -68,64 +79,61 @@ dataEffect = DATA[
     (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) & 
     (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0)
 ]
+dataSample = dataEffect # dataEffect.sample(int(sampleRate*dataEffect.shape[0]))
 # Iterate through AOI ---------------------------------------------------------
 (yVar, sigma, col) = ans[0]
-for (yVar, sigma, col) in ans:
-    # Get factorials ----------------------------------------------------------
-    (xVar, scale) = pFeats[1]
-    for (xVar, scale) in pFeats:
-        fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
-        (fig, ax) = aux.plotDICE(
-            dataEffect, xVar, yVar, FEATS,
-            scale=scale, wiggle=True, sd=sigma, color=col
-        )
-        fig.savefig(fName, dpi=750, bbox_inches='tight', pad=0)
-        plt.close('all')
-
-
-
-###############################################################################
-# Filter Output with Constraints
-###############################################################################
-cptLim = (.8, 1.25)
-poeLim = (-1, .1)
-ttiLim = (-10, 20*365)
-ttoLim = (-10, 20*365)
-wopLim = (-10, 20*365)
-# Filter and return dataframe -------------------------------------------------
-fltr = [
-    cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
-    wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
-    ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
-    ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
-    poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
-]
-boolFilter = [all(i) for i in zip(*fltr)]
-daFltrd = DATA[boolFilter]
-daFltrd
-
-
-cols = ('i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic', LABLS[0])
-x = df[[*cols]].values
-min_max_scaler = preprocessing.MinMaxScaler()
-x_scaled = min_max_scaler.fit_transform(x)
-df = pd.DataFrame(x_scaled, columns=cols)
-gsv = list(df['i_gsv'].unique())
-dfFltrd = df[df['i_gsv']==gsv[-1]]
-###############################################################################
-# Load Dataset
-###############################################################################
-fig = px.scatter_3d(
-    dfFltrd, 
-    x='i_rer', y='i_ren', z='i_fic', 
-    size=list(1*np.asarray(dfFltrd['i_rsg'])),
-    color=LABLS[0], 
-    opacity=.25, color_continuous_scale='purples_r'
-)
-fig.update_traces(
-    marker=dict(
-        # size=2, 
-        line=dict(width=0, color=(0,0,0,0))
+for (yVar, sigma, col) in ans[:]:
+    Parallel(n_jobs=JOB)(
+        delayed(dbg.exportDICEParallel)(
+            AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
+            scale=scale, wiggle=True, sd=sigma, color=col, 
+            sampleRate=sampleRate, lw=0.075
+        ) for (xVar, scale) in pFeats
     )
-)
-fig.show()
+
+
+# ###############################################################################
+# # Filter Output with Constraints
+# ###############################################################################
+# cptLim = (.8, 1.25)
+# poeLim = (-1, .1)
+# ttiLim = (-10, 20*365)
+# ttoLim = (-10, 20*365)
+# wopLim = (-10, 20*365)
+# # Filter and return dataframe -------------------------------------------------
+# fltr = [
+#     cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
+#     wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
+#     ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
+#     ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
+#     poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
+# ]
+# boolFilter = [all(i) for i in zip(*fltr)]
+# daFltrd = DATA[boolFilter]
+# daFltrd
+
+
+# cols = ('i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic', LABLS[0])
+# x = df[[*cols]].values
+# min_max_scaler = preprocessing.MinMaxScaler()
+# x_scaled = min_max_scaler.fit_transform(x)
+# df = pd.DataFrame(x_scaled, columns=cols)
+# gsv = list(df['i_gsv'].unique())
+# dfFltrd = df[df['i_gsv']==gsv[-1]]
+# ###############################################################################
+# # Load Dataset
+# ###############################################################################
+# fig = px.scatter_3d(
+#     dfFltrd, 
+#     x='i_rer', y='i_ren', z='i_fic', 
+#     size=list(1*np.asarray(dfFltrd['i_rsg'])),
+#     color=LABLS[0], 
+#     opacity=.1, color_continuous_scale='purples_r'
+# )
+# fig.update_traces(
+#     marker=dict(
+#         # size=2, 
+#         line=dict(width=0, color=(0,0,0,0))
+#     )
+# )
+# fig.show()

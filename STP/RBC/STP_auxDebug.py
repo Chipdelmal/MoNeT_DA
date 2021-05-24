@@ -2,6 +2,7 @@
 import numpy as np
 from os import path
 import compress_pickle as pkl
+import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
 
 
@@ -196,6 +197,76 @@ def pstProcessParallel(
     ###########################################################################
     for (df, pth) in zip(outDFs, outPaths):
         df.to_csv(pth, index=False)
+
+
+###############################################################################
+# DICE Plots
+###############################################################################
+def plotDICE(
+        dataEffect, xVar, yVar, features,
+        sampleRate=1, wiggle=False, sd=0, scale='linear', 
+        lw=.175, color='#be0aff13', rangePad=(.975, 1.025), gw=.25
+    ):
+    (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
+    # Get levels and factorial combinations without feature -------------------
+    xLvls = sorted(list(inFact[xVar].unique()))
+    dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
+    dropSample = dropFeats.sample(frac=sampleRate)
+    # Generate figure ---------------------------------------------------------
+    (fig, ax) = plt.subplots(figsize=(10, 10))
+    for i in range(0, dropSample.shape[0]):
+        entry = dropSample.iloc[i]
+        zipIter = zip(list(entry.keys()), list(entry.values))
+        fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
+        fltr = [all(i) for i in zip(*fltrRaw)]
+        data = dataEffect[fltr][[xVar, yVar]]
+        if wiggle:
+            yData = [
+                i+np.random.uniform(low=-sd, high=sd) for i in data[yVar]
+            ]
+        else:
+            yData = data[yVar]
+        # Plot ------------------------------------------------------------
+        ax.plot(data[xVar], yData, lw=lw, color=color)
+        # ax.plot(data[xVar], yData, 'o', ms=1, color=color)
+    # Log and linear scales ---------------------------------------------------
+    if scale == 'log':
+        xRan = [xLvls[1], xLvls[-1]]
+    else:
+        xRan = [xLvls[0], xLvls[-1]]
+    STYLE = {
+        'xRange': xRan,
+        'yRange': [min(outFact)*rangePad[0], max(outFact)*rangePad[1]]
+    }
+    ax.set_aspect(monet.scaleAspect(1, STYLE))
+    ax.set_xlim(STYLE['xRange'])
+    ax.set_ylim(STYLE['yRange'])
+    ax.set_xscale(scale)
+    ax.vlines(
+        xLvls, 0, 1, lw=gw, ls='--', color='#000000', 
+        transform = ax.get_xaxis_transform()
+    )
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20, rotation=90)
+    fig.tight_layout()
+    return (fig, ax)
+
+
+def exportDICEParallel(
+        AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500, lw=0.175,
+        scale='linear', wiggle=False, sd=0.1, color='blue', sampleRate=0.5
+    ):
+    print('* Processing [{}:{}:{}]'.format(AOI, yVar, xVar), end='\r')
+    fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
+    (fig, ax) = plotDICE(
+        dataSample, xVar, yVar, FEATS, lw=lw,
+        scale=scale, wiggle=wiggle, sd=sd, color=color,
+        sampleRate=sampleRate
+    )
+    fig.savefig(fName, dpi=dpi, bbox_inches='tight', pad=0)
+    plt.clf(); plt.cla(); plt.close('all'); plt.gcf()
+    return None
+
 
 ###############################################################################
 # Auxiliary

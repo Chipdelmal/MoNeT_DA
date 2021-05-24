@@ -25,26 +25,21 @@ import STP_gene as drv
 import STP_land as lnd
 
 
-# https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
-# https://github.com/parrt/random-forest-importances
-# https://explained.ai/rf-importance/index.html
-# https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
-# https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance_multicollinear.html#sphx-glr-auto-examples-inspection-plot-permutation-importance-multicollinear-py
-# https://pdpbox.readthedocs.io/en/latest/pdp_plot.html
-# https://github.com/blent-ai/ALEPython
-
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'WOP')
+    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'POE')
     VT_SPLIT = aux.VT_TRAIN
-    JOB = aux.JOB_DSK
 else:
     (USR, LND, AOI, QNT, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
     VT_SPLIT = aux.VT_TRAIN
-    JOB = aux.JOB_SRV
 EXPS = aux.getExps(LND)
 (TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
+# Setup number of cores -------------------------------------------------------
+if USR=='dsk':
+    JOB = aux.JOB_DSK
+else:
+    JOB = aux.JOB_SRV
 ###############################################################################
 # Paths
 ###############################################################################
@@ -85,7 +80,7 @@ COLS = list(DATA.columns)
 # Pre-Analysis
 ###############################################################################
 correlation = DATA.corr(method='spearman')
-f, ax = plt.subplots(figsize=(10, 8))
+(f, ax) = plt.subplots(figsize=(10, 8))
 sns.heatmap(
     correlation, mask=np.zeros_like(correlation, dtype=np.bool), 
     cmap=sns.diverging_palette(220, 10, as_cmap=True),
@@ -145,47 +140,47 @@ viz = rfp.plot_corr_heatmap(DATA, figsize=(7,5))
 ###############################################################################
 # Interpretability Plots
 ###############################################################################
-feat = FEATS[3]
-for feat in FEATS:
-    isolate = pdp.pdp_isolate(
-        model=rf, dataset=TRN_X, model_features=FEATS, feature=feat
-    )
-    fracPlot = 2500
-    (fig, axes) = pdp.pdp_plot(
-        pdp_isolate_out=isolate, feature_name=feat,
-        center=False, x_quantile=True, plot_pts_dist=False,
-        ncols=len(list(rf.classes_)), plot_lines=True, frac_to_plot=fracPlot,
-        plot_params = {
-            'line_cmap': 'Blues',
-            'subtitle_fontsize': 1, 'xticks_rotation': 0,
-            'pdp_linewidth': .5, 'zero_linewidth': 0.1,
-            'pdp_color': '#ff006e', 'pdp_hl_color': '#ff006e',
-            'fill_color': '#ff006e', 'zero_color': '#ff006e',
-            'fill_alpha': 0.25, 'markersize': 0.05,
-        }
-    )
-    axes['title_ax'].set_visible(False)
-    for ax in axes['pdp_ax']:
-        ax.tick_params(axis='both', which='major', labelsize=3)
-        ax.set_xlabel('')
-        ax.set_ylim(-0, 1.1)
-        xDiff = (ax.get_xlim()[1]-ax.get_xlim()[0])
-        yDiff = (ax.get_ylim()[1]-ax.get_ylim()[0])
-        for (i, trc) in enumerate(ax.get_lines()):
-            if (i<fracPlot):
-                trc.set_color('#a2d2ff')
-                trc.set_linewidth(.1)
-                trc.set_alpha(.2)
-    fig.subplots_adjust(hspace=2)
-    fig.tight_layout()
-    fig.savefig(
-        modelPath+'_ICE'+'_'+feat.split('_')[-1]+'.jpg', 
-        dpi=1000, bbox_inches='tight', pad_inches=0.1
-    )
+# feat = FEATS[3]
+# for feat in FEATS:
+#     isolate = pdp.pdp_isolate(
+#         model=rf, dataset=TRN_X, model_features=FEATS, feature=feat
+#     )
+#     fracPlot = 2500
+#     (fig, axes) = pdp.pdp_plot(
+#         pdp_isolate_out=isolate, feature_name=feat,
+#         center=False, x_quantile=True, plot_pts_dist=False,
+#         ncols=len(list(rf.classes_)), plot_lines=True, frac_to_plot=fracPlot,
+#         plot_params = {
+#             'line_cmap': 'Blues',
+#             'subtitle_fontsize': 1, 'xticks_rotation': 0,
+#             'pdp_linewidth': .5, 'zero_linewidth': 0.1,
+#             'pdp_color': '#ff006e', 'pdp_hl_color': '#ff006e',
+#             'fill_color': '#ff006e', 'zero_color': '#ff006e',
+#             'fill_alpha': 0.25, 'markersize': 0.05,
+#         }
+#     )
+#     axes['title_ax'].set_visible(False)
+#     for ax in axes['pdp_ax']:
+#         ax.tick_params(axis='both', which='major', labelsize=3)
+#         ax.set_xlabel('')
+#         ax.set_ylim(-0, 1.1)
+#         xDiff = (ax.get_xlim()[1]-ax.get_xlim()[0])
+#         yDiff = (ax.get_ylim()[1]-ax.get_ylim()[0])
+#         for (i, trc) in enumerate(ax.get_lines()):
+#             if (i<fracPlot):
+#                 trc.set_color('#a2d2ff')
+#                 trc.set_linewidth(.1)
+#                 trc.set_alpha(.2)
+#     fig.subplots_adjust(hspace=2)
+#     fig.tight_layout()
+#     fig.savefig(
+#         modelPath+'_ICE'+'_'+feat.split('_')[-1]+'.jpg', 
+#         dpi=1000, bbox_inches='tight', pad_inches=0.1
+#     )
 ###############################################################################
 # Statistics & Model Export
 ###############################################################################
-plt.savefig(modelPath+'_RF.jpg', dpi=300)
+# plt.savefig(modelPath+'_RF.jpg', dpi=300)
 dump(rf, modelPath+'_RF.joblib')
 with open(modelPath+'_RF.txt', 'w') as f:
     with redirect_stdout(f):

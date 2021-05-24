@@ -3,6 +3,7 @@
 
 import os
 import sys
+import random
 import numpy as np
 import pandas as pd
 from os import path
@@ -24,6 +25,7 @@ else:
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
     JOB = aux.JOB_SRV
+SUBSAMPLE = 0.01
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###############################################################################
@@ -51,7 +53,7 @@ for exp in EXPS:
         aux.XP_ID+' PstTraces[{}:{}:{}]'.format(DRV, exp, AOI)
     )
     ###########################################################################
-    # Style 
+    # Style
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
@@ -69,26 +71,27 @@ for exp in EXPS:
     repFiles = monet.getFilteredFiles(
         PT_PRE+fltrPattern, globPattern.format('srp')
     )
-    expsNum = len(repFiles)
+    repSamples = random.sample(repFiles, int(len(repFiles)*SUBSAMPLE))
+    expsNum = len(repSamples)
     ###########################################################################
     # Check if tuples cache is present and generate if not
     ###########################################################################
     tpsName = 'pstExp_{}_{}q_{}t.pkl'.format(AOI, QNT, int(float(THS)*100))
     cacheExists = path.isfile(path.join(PT_MTR, tpsName))
-    if (not cacheExists) or (aux.OVW):
-        # Load postprocessed files --------------------------------------------
-        pstPat = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
-        pstFiles = [pstPat.format(i) for i in aux.DATA_NAMES[:-1]]
+    # Load postprocessed files --------------------------------------------
+    pstPat = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
+    pstFiles = [pstPat.format(i) for i in aux.DATA_NAMES]
+    if (not cacheExists) or True: # (aux.OVW):
         (dfTTI, dfTTO, dfWOP, _, dfMNX, dfPOE, dfCPT) = [
-            pd.read_csv(i) for i in pstFiles
+            pd.read_csv(i) for i in pstFiles[:-1]
         ]
         allDF = (dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT)
         # Filtered tuples -----------------------------------------------------
-        fmtStr = '{}* Generating file tuples por processing...{}'
-        print(fmtStr.format(monet.CBBL, monet.CEND), end='\r')
+        fmtStr = '{}* Generating file tuples por processing ({})...{}'
+        print(fmtStr.format(monet.CBBL, expsNum, monet.CEND), end='\r')
         expsIter = [None]*expsNum
         for i in range(expsNum):
-            repFile = repFiles[i]
+            repFile = repSamples[i]
             xpid = monet.getXpId(repFile, xpidIx)
             xpRow = [
                 monet.filterDFWithID(j, xpid, max=len(xpidIx)) for j in allDF

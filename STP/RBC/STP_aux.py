@@ -5,14 +5,14 @@ import matplotlib
 import numpy as np
 import pandas as pd
 from glob import glob
-import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
+
 
 # #############################################################################
 # Constants
 # #############################################################################
 OVW = False
-(JOB_DSK, JOB_SRV) = (4, 20)
+(JOB_DSK, JOB_SRV) = (5, 20)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
     25000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 
@@ -47,12 +47,12 @@ OVW = False
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
 )
 DICE_PARS = (
-    ('CPT', 0.01, '#4361ee43'), ('WOP', 0.25, '#ff006e12'), 
-    ('TTI', 0.25, '#be0aff13'), ('TTO', 0.25, '#a1ef7a43'), 
+    ('CPT', 0.01, '#4361ee43'), ('WOP', 2.50, '#ff006e12'), 
+    ('TTI', 2.50, '#be0aff13'), ('TTO', 2.50, '#a1ef7a43'), 
     ('POE', 0.01, '#23194212')
 )
 # ML --------------------------------------------------------------------------
-(THS, VT_TRAIN) = ('0.5',  0.3)
+(THS, VT_TRAIN) = ('0.1',  0.3)
 (TREES, DEPTH, KFOLD) = (100, 25, 20)
 DATA_TYPE = {
     'i_sex': np.int8,
@@ -66,8 +66,8 @@ DATA_TYPE = {
 SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 (ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS) = ( 
     [-.1, .2, .8, 1.1],
-    [-.1, .2, .8, 1.1],
-    [-.1, .2, .8, 1.1]
+    [-.1, .5, 1.1],
+    [-.1, .5, 1.1]
 )
 (ML_WOP_CATS, ML_TTI_CATS, ML_TTO_CATS) = (
     [-10, 365*3, 365*6, 365*11],
@@ -132,53 +132,4 @@ def selectPath(USR, EXP, LND):
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
 
 
-# #############################################################################
-# Temporary functions
-# #############################################################################
-def plotDICE(
-        dataEffect, xVar, yVar, features,
-        sampleRate=1, wiggle=False, sd=0, scale='linear', 
-        lw=.175, color='#be0aff13', rangePad=(.975, 1.025), gw=.25
-    ):
-    (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
-    # Get levels and factorial combinations without feature -------------------
-    xLvls = sorted(list(inFact[xVar].unique()))
-    dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
-    # Generate figure ---------------------------------------------------------
-    (fig, ax) = plt.subplots(figsize=(10, 10))
-    for i in range(0, dropFeats.shape[0]):
-        entry = dropFeats.iloc[i]
-        if (random.uniform(0, 1) <= sampleRate):
-            zipIter = zip(list(entry.keys()), list(entry.values))
-            fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
-            fltr = [all(i) for i in zip(*fltrRaw)]
-            data = dataEffect[fltr][[xVar, yVar]]
-            if wiggle:
-                yData = [
-                    i+np.random.uniform(low=-sd, high=sd) for i in data[yVar]
-                ]
-            else:
-                yData = data[yVar]
-            # Plot ------------------------------------------------------------
-            ax.plot(data[xVar], yData, lw=.175, color=color)
-    # Log and linear scales ---------------------------------------------------
-    if scale == 'log':
-        xRan = [xLvls[1], xLvls[-1]]
-    else:
-        xRan = [xLvls[0], xLvls[-1]]
-    STYLE = {
-        'xRange': xRan,
-        'yRange': [min(outFact)*rangePad[0], max(outFact)*rangePad[1]]
-    }
-    ax.set_aspect(monet.scaleAspect(1, STYLE))
-    ax.set_xlim(STYLE['xRange'])
-    ax.set_ylim(STYLE['yRange'])
-    ax.set_xscale(scale)
-    ax.vlines(
-        xLvls, 0, 1, lw=gw, ls='--', color='#000000', 
-        transform = ax.get_xaxis_transform()
-    )
-    plt.xticks(fontsize=20)
-    plt.yticks(fontsize=20, rotation=90)
-    fig.tight_layout()
-    return (fig, ax)
+

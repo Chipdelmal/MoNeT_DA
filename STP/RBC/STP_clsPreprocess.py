@@ -16,7 +16,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '90')
+    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
     JOB = aux.JOB_DSK
 else:
     (USR, LND, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -60,6 +60,7 @@ tCats = (
     aux.ML_WOP_CATS, aux.ML_TTI_CATS, aux.ML_TTO_CATS
 )
 for (mtr, ran) in zip(('CPT', 'POE', 'POF', 'WOP', 'TTI', 'TTO'), tCats):
+    print('{}:{}'.format(mtr, ran))
     dfCat[mtr] = pd.cut(
         dfClean[mtr],
         bins=ran,
