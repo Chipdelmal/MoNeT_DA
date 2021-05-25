@@ -40,6 +40,12 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+# Time and head --------------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_ROT, PT_OUT, tS, 
+    '{} ClsPreProcess[{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI)
+)
 ###############################################################################
 # Load DF
 ###############################################################################

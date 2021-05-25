@@ -47,7 +47,7 @@ monet.printExperimentHead(
 ###############################################################################
 # Flatten CSVs
 ###############################################################################
-fName = [glob('{}/*{}*{}*.csv'.format(i, AOI, MTR))[0] for i in PT_SUMS]
+fName = [sorted(glob('{}/*{}*{}*qnt.csv'.format(i, AOI, MTR)))[0] for i in PT_SUMS]
 dfList = [pd.read_csv(i, sep=',') for i in fName]
 for (df, exp) in zip(dfList, EXPS):
     df['i_mig'] = [int(exp)]*df.shape[0]

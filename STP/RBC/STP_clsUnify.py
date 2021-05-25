@@ -48,6 +48,7 @@ monet.printExperimentHead(
 # Merge Dataframes
 ###############################################################################
 dataFrames = []
+mtr = 'TTI'
 for mtr in ['TTI', 'TTO', 'WOP']:
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
     dta = pd.read_csv(pth)
