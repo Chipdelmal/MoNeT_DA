@@ -1,5 +1,6 @@
 import sys
 import random
+import subprocess
 from os import path
 from re import match
 from glob import glob
@@ -72,9 +73,9 @@ monet.printExperimentHead(
 (sampleRate, shuffle) = (0.1, True)
 ans = aux.DICE_PARS
 pFeats = [
-    # ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
-    # ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear'), 
-    ('i_hrm', 'linear'), ('i_hrf', 'linear')
+    ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
+    ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear'), 
+    ('i_hrm', 'linear'), ('i_hrt', 'linear')
 ]
 dataEffect = DATA[
     (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) & 
@@ -91,6 +92,14 @@ for (yVar, sigma, col) in ans[:]:
             sampleRate=sampleRate, lw=0.1
         ) for (xVar, scale) in pFeats
     )
+# Export full panel -----------------------------------------------------------
+cmd = [
+    'inkscape', '--export-type=png', '--export-dpi=500', 
+    path.join(PT_IMG, 'DICE.svg'), 
+    '--export-filename='+path.join(PT_IMG, 'DICE.png')
+]
+subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
 ###############################################################################
 # Filter Output with Constraints
