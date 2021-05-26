@@ -43,8 +43,8 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
     ###########################################################################
     if TYPE != 'ECO':
         yRange = yRange/2
-    # if TYPE == 'TRS':
-    #     yRange = yRange*2
+    if TYPE == 'TRS':
+        yRange = yRange*2
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 
