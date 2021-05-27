@@ -202,15 +202,17 @@ def pstProcessParallel(
 # DICE Plots
 ###############################################################################
 def plotDICE(
-        dataEffect, xVar, yVar, features,
+        dataEffect, xVar, yVar, features, hRows={},
         sampleRate=1, wiggle=False, sd=0, scale='linear', 
-        lw=.175, color='#be0aff13', rangePad=(.975, 1.025), gw=.25
+        lw=.175, color='#be0aff13', hcolor='#000000', hlw=.175,
+        rangePad=(.975, 1.025), gw=.25
     ):
     (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
     # Get levels and factorial combinations without feature -------------------
     xLvls = sorted(list(inFact[xVar].unique()))
     dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
     dropSample = dropFeats.sample(frac=sampleRate)
+    dropIndices = dropSample.index
     # Generate figure ---------------------------------------------------------
     (fig, ax) = plt.subplots(figsize=(10, 10))
     for i in range(0, dropSample.shape[0]):
@@ -225,9 +227,12 @@ def plotDICE(
             ]
         else:
             yData = data[yVar]
-        # Plot ------------------------------------------------------------
-        ax.plot(data[xVar], yData, lw=lw, color=color)
-        # ax.plot(data[xVar], yData, 'o', ms=1, color=color)
+        # Plot ----------------------------------------------------------------
+        if dropIndices[i] in hRows:
+            ax.plot(data[xVar], yData, lw=hlw, color=hcolor)
+            # ax.plot(data[xVar], yData, 'o', ms=1, color=hcolor)
+        else:
+            ax.plot(data[xVar], yData, lw=lw, color=color)
     # Log and linear scales ---------------------------------------------------
     if scale == 'log':
         xRan = [xLvls[1], xLvls[-1]]
@@ -252,15 +257,16 @@ def plotDICE(
 
 
 def exportDICEParallel(
-        AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500, lw=0.175,
-        scale='linear', wiggle=False, sd=0.1, color='blue', sampleRate=0.5
+        AOI, xVar, yVar, dataSample, FEATS, PT_IMG, hRows={}, 
+        dpi=500, lw=0.175, scale='linear', wiggle=False, sd=0.1, 
+        color='blue', sampleRate=0.5, hcolor='#00000020', hlw=5
     ):
     print('* Processing [{}:{}:{}]'.format(AOI, yVar, xVar), end='\r')
     fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
     (fig, ax) = plotDICE(
-        dataSample, xVar, yVar, FEATS, lw=lw,
+        dataSample, xVar, yVar, FEATS, hRows=hRows, lw=lw,
         scale=scale, wiggle=wiggle, sd=sd, color=color,
-        sampleRate=sampleRate
+        sampleRate=sampleRate, hcolor=hcolor, hlw=hlw
     )
     fig.savefig(fName, dpi=dpi, bbox_inches='tight', pad=0)
     plt.clf(); plt.cla(); plt.close('all'); plt.gcf()

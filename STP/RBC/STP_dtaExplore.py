@@ -58,8 +58,7 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Features and labels ---------------------------------------------------------
 COLS = list(DATA.columns)
 (FEATS, LABLS) = (
-    [i for i in COLS if i[0]=='i'],
-    [i for i in COLS if i[0]!='i']
+    [i for i in COLS if i[0]=='i'], [i for i in COLS if i[0]!='i']
 )
 # Time and head --------------------------------------------------------------
 tS = datetime.now()
@@ -70,27 +69,33 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot 
 ###############################################################################
-(sampleRate, shuffle) = (0.2, True)
+(sampleRate, shuffle) = (0.1, True)
 ans = aux.DICE_PARS
 pFeats = [
     ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
     ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear'), 
     ('i_hrm', 'linear'), ('i_hrt', 'linear')
 ]
+# Filter dataset on specific features (drop others) ---------------------------
 dataEffect = DATA[
     (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) & 
-    (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0) &
-    (DATA['i_fcf'] <= 1e-7)
+    (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0)
 ]
-dataSample = dataEffect # dataEffect.sample(int(sampleRate*dataEffect.shape[0]))
-# Iterate through AOI ---------------------------------------------------------
+# Select rows to highlight on constraints ------------------------------------
+dataHighlight = DATA[
+    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5)
+]
+highRows = set(dataHighlight.index)
+###############################################################################
+# Iterate through AOI 
+###############################################################################
 (yVar, sigma, col) = ans[0]
-for (yVar, sigma, col) in ans[:]:
+for (yVar, sigma, col) in ans[3:4]:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportDICEParallel)(
-            AOI, xVar, yVar, dataSample, FEATS, PT_IMG, dpi=500,
-            scale=scale, wiggle=True, sd=sigma, color=col, 
-            sampleRate=sampleRate, lw=0.1
+            AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
+            dpi=500, scale=scale, wiggle=True, sd=sigma, color=col, 
+            sampleRate=sampleRate, lw=0.1, hcolor='#00ff0020', hlw=0.1
         ) for (xVar, scale) in pFeats
     )
 # Export full panel -----------------------------------------------------------
@@ -100,8 +105,6 @@ cmd = [
     '--export-filename='+path.join(PT_IMG, 'DICE.png')
 ]
 subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
