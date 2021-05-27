@@ -37,12 +37,14 @@ def driveSelector(DRIVE, TYPE, popSize=11000):
     elif TYPE == 'HLT':
         colors = monet.COLHN
     elif TYPE == 'TRS':
-        colors = monet.COLTN
+        colors = ['#00a2fe1A', '#8338EC00', '#0C488700'] # monet.COLTN
     elif TYPE == 'WLD':
         colors = monet.COLWN
     ###########################################################################
     if TYPE != 'ECO':
         yRange = yRange/2
+    if TYPE == 'TRS':
+        yRange = yRange*2
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 

@@ -3,6 +3,8 @@
 
 import sys
 from glob import glob
+
+from numpy.core.fromnumeric import transpose
 import YDR_aux as aux
 import YDR_gene as drv
 import YDR_land as lnd
@@ -10,10 +12,16 @@ from datetime import datetime
 from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
+import matplotlib.pyplot as plt
 
+plt.rcParams.update({
+    "figure.facecolor":  (1.0, 0.0, 0.0, 0.0),  # red   with alpha = 30%
+    "axes.facecolor":    (0.0, 1.0, 0.0, 0.0),  # green with alpha = 50%
+    "savefig.facecolor": (0.0, 0.0, 1.0, 0.0),  # blue  with alpha = 20%
+})
 
 if monet.isNotebook():
-    (USR, SET, DRV, AOI) = ('dsk', 'shredder', 'YXS', 'ECO')
+    (USR, SET, DRV, AOI) = ('dsk', 'shredder', 'YXS', 'WLD')
     JOB = aux.JOB_DSK
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -65,7 +73,8 @@ for exp in EXPS:
         delayed(monet.exportPreTracesPlotWrapper)(
             exIx, fLists, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, 
-            border=True, borderColor='#8184a7AA', borderWidth=2
+            border=True, borderColor='#8184a7AA', borderWidth=2,
+            transparent=True
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------

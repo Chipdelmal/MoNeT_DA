@@ -14,7 +14,7 @@ import MoNeT_MGDrivE as monet
 OVW = False
 (JOB_DSK, JOB_SRV) = (8, 40)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
-    25000*1.25, # 2e6*1.5/2, 
+    1000000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 
     True, 0, False
 )
@@ -36,7 +36,7 @@ OVW = False
     ),
     {
         'i_sex': 1  , 'i_ren': 1e0, 'i_res': 1e3, 'i_rsg': 1e10,
-        'i_gsv': 1e10,'i_fcf': 1e10,'i_mfm': 1e3, 'i_mft': 1e3,
+        'i_gsv': 1e10,'i_fcf': 1e3, 'i_mfm': 1e3, 'i_mft': 1e3,
         'i_hrm': 1e3, 'i_hrt': 1e3, 'i_grp': 1,   'i_mig': 1e5
     }
 )
