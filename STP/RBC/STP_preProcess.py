@@ -62,10 +62,10 @@ for exp in EXPS:
         expIDPreDone = set(monet.splitExpNames(PT_PRE))
         expIDForProcessing = [i.split('/')[-1] for i in expDirsMean]
         expsIxList = list(locate(
-            [(i in expIDPreDone) for i in expIDForProcessing], 
+            [(i in expIDPreDone) for i in expIDForProcessing],
             lambda x: x!=True
         ))
-        expIter = [xpIter[i] for i in expsIxList]
+        expIter = [expIter[i] for i in expsIxList]
     sys.stdout.write("\033[K")
     ###########################################################################
     # Process data
