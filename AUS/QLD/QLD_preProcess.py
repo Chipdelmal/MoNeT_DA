@@ -14,7 +14,7 @@ from more_itertools import locate
 # os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk2', 'HLT', '10')
+    (USR, AOI, LND) = ('dsk', 'HLT', '02')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -48,7 +48,7 @@ for exp in EXPS:
     fmtStr = '{}* Create files list...{}'
     print(fmtStr.format(monet.CBBL, monet.CEND), end='\r')
     (expDirsMean, expDirsTrac) = monet.getExpPaths(
-        PT_DTA, mean='ANALYZED/', reps='TRACES/'
+        PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
     expIter = list(zip(list(range(expNum)), expDirsMean, expDirsTrac))
@@ -81,5 +81,6 @@ for exp in EXPS:
         ) for exIx in expIter
     )
 
-import compress_pickle as pkl
-dta = pkl.load('/home/chipdelmal/Documents/WorkSims/QLD/Experiments/s1/PREPROCESS/E_001-HLT_01_srp.bz')
+# import numpy as np
+# import compress_pickle as pkl
+# dta = pkl.load('/home/chipdelmal/Documents/WorkSims/QLD/Experiments/s1/PREPROCESS/E_001-HLT_01_srp.bz')

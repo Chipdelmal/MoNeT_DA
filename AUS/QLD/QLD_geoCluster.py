@@ -79,7 +79,7 @@ fig.savefig(
     path.join(PTH_PTS, 'Map{}.png'.format(str(CLS_NUM).zfill(2))), 
     dpi=1000, edgecolor=None,
     orientation='portrait', papertype=None, format='png',
-    bbox_inches='tight', pad_inches=.02
+    bbox_inches='tight', pad_inches=.1
 )
 ###############################################################################
 # Export groupings by ID

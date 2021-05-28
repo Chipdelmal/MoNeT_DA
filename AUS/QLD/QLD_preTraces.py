@@ -4,9 +4,12 @@
 import sys
 from os import path
 from datetime import datetime
+
+from matplotlib.pyplot import vlines
 import QLD_aux as aux
 import QLD_gene as drv
 import QLD_land as lnd
+import QLD_functions as fun
 # import STP_auxDebug as dbg
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
@@ -14,7 +17,7 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk2', 'HLT', '10')
+    (USR, AOI, LND) = ('dsk', 'HLT', '02')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -41,7 +44,7 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_DTA, PT_PRE, tS, 
+        PT_PRE, PT_IMG, tS, 
         '{} PreTraces [{}:{}:{}]'.format(aux.XP_ID, aux.DRV, exp, AOI)
     )
     ###########################################################################
@@ -52,14 +55,24 @@ for exp in EXPS:
         ranScaler = 4
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange') / ranScaler))
     STYLE = {
-            "width": .075, "alpha": 0, "dpi": 1000, "legend": True,
-            "aspect": .15, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
+            "width": .075, "alpha": 0, "dpi": 1500, "legend": True,
+            "aspect": .125, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     tS = datetime.now()
-    monet.printExperimentHead(
-        PT_PRE, PT_IMG, tS, 
-        '{} PreTraces [{}:{}:{}]'.format(aux.XP_ID, aux.DRV, exp, AOI)
-    )
+    # VLines ------------------------------------------------------------------
+    if exp=='s1':
+        rel = [
+            0, 0, 731, 738, 745, 752, 759, 766, 773, 780, 787, 794, 801, 808, 
+            733, 740, 747, 754, 761, 768, 775, 782, 789, 796, 803, 810
+        ]
+    elif exp=='s2':
+        rel = [
+            0, 0, 1096, 1103, 1110, 1117, 1124, 1131, 1138, 1145, 1152, 1159, 1166, 
+            1173, 1098, 1105, 1112, 1119, 1126, 1133, 1140, 1147, 1154, 1161, 
+            1168, 1175
+        ]
+    else:
+        rel = [0, 0]
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################
@@ -78,9 +91,9 @@ for exp in EXPS:
     ###########################################################################
     (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
-        delayed(monet.exportPreTracesParallel)(
+        delayed(fun.exportPreTracesParallel)(
             exIx, STYLE, PT_IMG, 
-            xpNum=xpNum, digs=digs, autoAspect=True,
+            xpNum=xpNum, digs=digs, autoAspect=True, vLines=rel,
             border=True, borderColor='#8184a7AA', borderWidth=1
         ) for exIx in expIter
     )
