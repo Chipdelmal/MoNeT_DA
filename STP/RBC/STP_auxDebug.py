@@ -229,8 +229,8 @@ def plotDICE(
             yData = data[yVar]
         # Plot ----------------------------------------------------------------
         if dropIndices[i] in hRows:
-            ax.plot(data[xVar], yData, lw=hlw, color=hcolor)
-            # ax.plot(data[xVar], yData, 'o', ms=1, color=hcolor)
+            ax.plot(data[xVar], yData, lw=hlw, ls=':', color=hcolor)
+            # ax.plot(data[xVar], yData, 'o', ms=0.5, color=hcolor)
         else:
             ax.plot(data[xVar], yData, lw=lw, color=color)
     # Log and linear scales ---------------------------------------------------

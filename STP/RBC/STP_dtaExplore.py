@@ -83,19 +83,20 @@ dataEffect = DATA[
 ]
 # Select rows to highlight on constraints ------------------------------------
 dataHighlight = DATA[
-    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5)
+    # ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) & 
+    (DATA['i_fcf'] > 1)
 ]
 highRows = set(dataHighlight.index)
 ###############################################################################
 # Iterate through AOI 
 ###############################################################################
 (yVar, sigma, col) = ans[0]
-for (yVar, sigma, col) in ans[3:4]:
+for (yVar, sigma, col) in ans[:]:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
             dpi=500, scale=scale, wiggle=True, sd=sigma, color=col, 
-            sampleRate=sampleRate, lw=0.1, hcolor='#00ff0020', hlw=0.1
+            sampleRate=sampleRate, hcolor='#00ff0029', lw=0.1, hlw=0.1
         ) for (xVar, scale) in pFeats
     )
 # Export full panel -----------------------------------------------------------
