@@ -92,7 +92,6 @@ for exp in EXPS:
         # #####################################################################
         Parallel(n_jobs=JOB)(
             delayed(dbg.pstFractionParallel)(
-                exIx, PT_OUT,
-                baseFiles, meanFiles, traceFiles
+                exIx, PT_OUT
             ) for exIx in expIter
         )

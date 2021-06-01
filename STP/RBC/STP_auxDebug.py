@@ -86,7 +86,7 @@ def exportPstTracesParallel(
 ###############################################################################
 # PstFraction Updates
 ###############################################################################
-def pstFractionParallel(exIx, PT_OUT, baseFiles, meanFiles, traceFiles):
+def pstFractionParallel(exIx, PT_OUT):
     (_, bFile, mFile, tFile) = exIx
     # Load data ---------------------------------------------------------------
     (base, trace) = [pkl.load(file) for file in (bFile, tFile)]
