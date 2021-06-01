@@ -14,7 +14,7 @@ from more_itertools import locate
 # os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk', 'HLT', '10')
+    (USR, AOI, LND) = ('dsk', 'HLT', '02')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -48,7 +48,7 @@ for exp in EXPS:
     fmtStr = '{}* Create files list...{}'
     print(fmtStr.format(monet.CBBL, monet.CEND), end='\r')
     (expDirsMean, expDirsTrac) = monet.getExpPaths(
-        PT_DTA, mean='ANALYZED/', reps='TRACES/'
+        PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
     expIter = list(zip(list(range(expNum)), expDirsMean, expDirsTrac))
@@ -65,13 +65,13 @@ for exp in EXPS:
             [(i in expIDPreDone) for i in expIDForProcessing], 
             lambda x: x!=True
         ))
-        expIter = [xpIter[i] for i in expsIxList]
+        expIter = [expIter[i] for i in expsIxList]
     sys.stdout.write("\033[K")
     ###########################################################################
     # Process data
     ###########################################################################
     Parallel(n_jobs=JOB)(
-        delayed(dbg.preProcessParallel)(
+        delayed(monet.preProcessParallel)(
             exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
             fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
@@ -80,3 +80,7 @@ for exp in EXPS:
             REP=aux.REP, SRP=aux.SRP
         ) for exIx in expIter
     )
+
+# import numpy as np
+# import compress_pickle as pkl
+# dta = pkl.load('/home/chipdelmal/Documents/WorkSims/QLD/Experiments/s1/PREPROCESS/E_001-HLT_01_srp.bz')
