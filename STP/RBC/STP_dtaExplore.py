@@ -18,7 +18,9 @@ import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 import STP_auxDebug as dbg
-
+from more_itertools import locate
+import warnings
+warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
@@ -63,46 +65,102 @@ COLS = list(DATA.columns)
 # Time and head --------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_SUMS, PT_IMG, tS, 
+    PT_SUMS, PT_IMG, tS,
     '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
 )
 ###############################################################################
-# DICE Plot 
+# DICE Plot
 ###############################################################################
-(sampleRate, shuffle) = (0.1, True)
+tracesNumber = 25000
+(sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
-    ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'), 
-    ('i_rsg', 'log'), ('i_gsv', 'log'), ('i_fcf', 'linear'), 
+    ('i_fcf', 'linear'), ('i_sex', 'linear'),
+    ('i_ren', 'linear'), ('i_res', 'linear'),
+    ('i_rsg', 'log'), ('i_gsv', 'log'),
     ('i_hrm', 'linear'), ('i_hrt', 'linear')
 ]
 # Filter dataset on specific features (drop others) ---------------------------
 dataEffect = DATA[
-    (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) & 
+    (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) &
     (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0)
 ]
 # Select rows to highlight on constraints ------------------------------------
-dataHighlight = DATA[((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) &  (DATA['i_fcf'] > 1)]
-highRows = {} #  set(dataHighlight.index)
+dataHighlight = DATA[
+    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) &
+    (DATA['i_fcf'] >= 1)
+]
+highRows = set(dataHighlight.index)
 ###############################################################################
-# Iterate through AOI 
+# Iterate through AOI
 ###############################################################################
 (yVar, sigma, col) = ans[0]
 for (yVar, sigma, col) in ans[:]:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
-            dpi=500, scale=scale, wiggle=True, sd=sigma, color=col, 
-            sampleRate=sampleRate, hcolor='#00ff0029', lw=0.1, hlw=0.1
+            dpi=750, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
+            color=col, hcolor=col[:-2]+'20', lw=0.1, hlw=0.1
         ) for (xVar, scale) in pFeats
     )
 # Export full panel -----------------------------------------------------------
 cmd = [
-    'inkscape', '--export-type=png', '--export-dpi=500', 
-    path.join(PT_IMG, 'DICE.svg'), 
+    'inkscape', '--export-type=png', '--export-dpi=500',
+    path.join(PT_IMG, 'DICE.svg'),
     '--export-filename='+path.join(PT_IMG, 'DICE.png')
 ]
 subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+
+###############################################################################
+# Debugging
+###############################################################################
+# (yVar, sigma, col) = ans[0]
+# (xVar, scale) = pFeats[5]
+# features=FEATS
+# # Function --------------------------------------------------------------------
+# (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
+# # Get levels and factorial combinations without feature -----------------------
+# xLvls = sorted(list(inFact[xVar].unique()))
+# dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
+# dropSample = dropFeats.sample(frac=sampleRate)
+# dropIndices = dropSample.index
+# # Figure ----------------------------------------------------------------------
+# (fig, ax) = plt.subplots(figsize=(10, 10))
+# i = 1000
+# doneRows = set()
+
+# entry = dropSample.iloc[i]
+# zipIter = zip(list(entry.keys()), list(entry.values))
+# fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
+# fltr = [all(i) for i in zip(*fltrRaw)]
+# rowsIx = list(locate(fltr, lambda x: x == True))
+# [doneRows.add(i) for i in rowsIx]
+# data = dataEffect[fltr][[xVar, yVar]]
+# for (ix, r)  in enumerate(list(data.index)):
+#     if ix in highRows:
+#         ax.plot(data[xVar][ix], yData[ix], 'o', ms=0.5, color=hcolor)
+
+
+# yData = data[yVar]
+# for exp in yData:
+# ax.plot(data[xVar], yData, lw=hlw, ls=':', color=hcolor)
+# ax.plot(data[xVar], yData, lw=1, ls=':', color='#b76935')
+
+
+
+# ixs = list(data[xVar].index)
+# [j in highRows for j in ixs]
+
+# data[xVar]
+# yData
+
+# list(zipIter)
+# [list(dataEffect[col]==val) for (col, val) in zipIter]
+
+
+
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
