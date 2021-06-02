@@ -10,7 +10,7 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 (XP_ID, XP_PTRN, EXPS) = (
     'SDP', 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}',
-    ('000', '001', '010')
+    ('000', '001') #, '010')
 )
 (POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*2.5), True, 0)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
