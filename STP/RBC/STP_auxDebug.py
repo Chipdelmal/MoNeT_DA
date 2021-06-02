@@ -223,10 +223,10 @@ def plotDICE(
     # Log and linear scales ---------------------------------------------------
     if scale == 'log':
         xRan = [xLvls[1], xLvls[-1]]
-        xdelta = .075
+        xdelta = .1
     else:
         xRan = [xLvls[0], xLvls[-1]]
-        xdelta = (xRan[1] - xRan[0])/250
+        xdelta = (xRan[1] - xRan[0])/100
     # Iterate through traces --------------------------------------------------
     for i in range(0, dropSample.shape[0]):
         # If the row index has already been processed, go to the next ---------
@@ -245,17 +245,19 @@ def plotDICE(
             yData = [i+random.uniform(low=-sd, high=sd) for i in data[yVar]]
         else:
             yData = data[yVar]
-        # Plot ----------------------------------------------------------------
+        # Plot markers --------------------------------------------------------
         for (ix, r) in enumerate(list(data.index)):
             # Draw highlights -------------------------------------------------
+            (x, y) = (data[xVar].iloc[ix], yData[ix])
+            if scale == 'log':
+                xPoint = [x*(1-xdelta), x*(1+xdelta)]
+            else:
+                xPoint = [x-xdelta, x+xdelta]
             if r in hRows:
-                (x, y) = (data[xVar].iloc[ix], yData[ix])
-                if scale == 'log':
-                    xPoint = [x*(1-xdelta), x*(1+xdelta)]
-                else:
-                    xPoint = [x-xdelta, x+xdelta]
-                # Plot markers for highlight ----------------------------------
-                ax.plot(xPoint, [y, y], color=hcolor, lw=hlw, zorder=10)
+                c = hcolor
+            else:
+                c = color
+            ax.plot(xPoint, [y, y], color=c, lw=hlw, zorder=10)
         # Plot trace ----------------------------------------------------------
         ax.plot(data[xVar], yData, lw=lw, color=color)
     # Styling -----------------------------------------------------------------
