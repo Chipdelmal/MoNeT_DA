@@ -1,6 +1,7 @@
 
-import numpy as np
 from os import path
+import numpy as np
+from numpy import random
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from more_itertools import locate
@@ -215,10 +216,18 @@ def plotDICE(
     xLvls = sorted(list(inFact[xVar].unique()))
     dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
     dropSample = dropFeats.sample(frac=sampleRate)
-    dropIndices = dropSample.index
+    # dropIndices = dropSample.index
     # Generate figure ---------------------------------------------------------
     doneRows = set()
     (fig, ax) = plt.subplots(figsize=(10, 10))
+    # Log and linear scales ---------------------------------------------------
+    if scale == 'log':
+        xRan = [xLvls[1], xLvls[-1]]
+        xdelta = .075
+    else:
+        xRan = [xLvls[0], xLvls[-1]]
+        xdelta = (xRan[1] - xRan[0])/250
+    # Iterate through traces --------------------------------------------------
     for i in range(0, dropSample.shape[0]):
         # If the row index has already been processed, go to the next ---------
         if (dropSample.iloc[i].name) in doneRows:
@@ -233,29 +242,23 @@ def plotDICE(
         # With filter in place, add the trace ---------------------------------
         data = dataEffect[fltr][[xVar, yVar]]
         if wiggle:
-            yData = [
-                i+np.random.uniform(low=-sd, high=sd) for i in data[yVar]
-            ]
+            yData = [i+random.uniform(low=-sd, high=sd) for i in data[yVar]]
         else:
             yData = data[yVar]
         # Plot ----------------------------------------------------------------
         for (ix, r) in enumerate(list(data.index)):
+            # Draw highlights -------------------------------------------------
             if r in hRows:
-                # print("{} {}".format(data[xVar].iloc[ix], yData[ix]))
-                ax.plot(
-                    data[xVar].iloc[ix], yData[ix], 
-                    '2', ms=2, color=hcolor
-                )
-        # if dropIndices[i] in hRows:
-            # ax.plot(data[xVar], yData, lw=hlw, ls=':', color=hcolor)
-            # ax.plot(data[xVar], yData, 'o', ms=0.5, color=hcolor)
-        # else:
+                (x, y) = (data[xVar].iloc[ix], yData[ix])
+                if scale == 'log':
+                    xPoint = [x*(1-xdelta), x*(1+xdelta)]
+                else:
+                    xPoint = [x-xdelta, x+xdelta]
+                # Plot markers for highlight ----------------------------------
+                ax.plot(xPoint, [y, y], color=hcolor, lw=hlw, zorder=10)
+        # Plot trace ----------------------------------------------------------
         ax.plot(data[xVar], yData, lw=lw, color=color)
-    # Log and linear scales ---------------------------------------------------
-    if scale == 'log':
-        xRan = [xLvls[1]*0.975, xLvls[-1]*1.025]
-    else:
-        xRan = [xLvls[0]*0.975, xLvls[-1]*1.025]
+    # Styling -----------------------------------------------------------------
     STYLE = {
         'xRange': xRan,
         'yRange': [min(outFact)*rangePad[0], max(outFact)*rangePad[1]]
@@ -266,7 +269,7 @@ def plotDICE(
     ax.set_xscale(scale)
     ax.vlines(
         xLvls, 0, 1, lw=gw, ls='--', color='#000000', 
-        transform = ax.get_xaxis_transform()
+        transform = ax.get_xaxis_transform(), zorder=-1
     )
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20, rotation=90)
