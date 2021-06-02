@@ -3,7 +3,10 @@ import numpy as np
 from os import path
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
+from more_itertools import locate
 import MoNeT_MGDrivE as monet
+import warnings
+warnings.filterwarnings("ignore",category=UserWarning)
 
 
 ###############################################################################
@@ -214,12 +217,20 @@ def plotDICE(
     dropSample = dropFeats.sample(frac=sampleRate)
     dropIndices = dropSample.index
     # Generate figure ---------------------------------------------------------
+    doneRows = set()
     (fig, ax) = plt.subplots(figsize=(10, 10))
     for i in range(0, dropSample.shape[0]):
+        # If the row index has already been processed, go to the next ---------
+        if (dropSample.iloc[i].name) in doneRows:
+            continue
+        # If not, process and plot --------------------------------------------
         entry = dropSample.iloc[i]
         zipIter = zip(list(entry.keys()), list(entry.values))
-        fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
+        fltrRaw = [list(dataEffect[col]==val) for (col, val) in zipIter]
         fltr = [all(i) for i in zip(*fltrRaw)]
+        rowsIx = list(locate(fltr, lambda x: x == True))
+        [doneRows.add(i) for i in rowsIx]
+        # With filter in place, add the trace ---------------------------------
         data = dataEffect[fltr][[xVar, yVar]]
         if wiggle:
             yData = [
@@ -228,16 +239,23 @@ def plotDICE(
         else:
             yData = data[yVar]
         # Plot ----------------------------------------------------------------
-        if dropIndices[i] in hRows:
-            ax.plot(data[xVar], yData, lw=hlw, ls=':', color=hcolor)
+        for (ix, r) in enumerate(list(data.index)):
+            if r in hRows:
+                # print("{} {}".format(data[xVar].iloc[ix], yData[ix]))
+                ax.plot(
+                    data[xVar].iloc[ix], yData[ix], 
+                    '2', ms=2, color=hcolor
+                )
+        # if dropIndices[i] in hRows:
+            # ax.plot(data[xVar], yData, lw=hlw, ls=':', color=hcolor)
             # ax.plot(data[xVar], yData, 'o', ms=0.5, color=hcolor)
-        else:
-            ax.plot(data[xVar], yData, lw=lw, color=color)
+        # else:
+        ax.plot(data[xVar], yData, lw=lw, color=color)
     # Log and linear scales ---------------------------------------------------
     if scale == 'log':
-        xRan = [xLvls[1], xLvls[-1]]
+        xRan = [xLvls[1]*0.975, xLvls[-1]*1.025]
     else:
-        xRan = [xLvls[0], xLvls[-1]]
+        xRan = [xLvls[0]*0.975, xLvls[-1]*1.025]
     STYLE = {
         'xRange': xRan,
         'yRange': [min(outFact)*rangePad[0], max(outFact)*rangePad[1]]
