@@ -269,7 +269,7 @@ def plotDICE(
     ax.set_xscale(scale)
     ax.vlines(
         xLvls, 0, 1, lw=gw, ls='--', color='#000000', 
-        transform = ax.get_xaxis_transform(), zorder=-1
+        transform=ax.get_xaxis_transform(), zorder=-1
     )
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20, rotation=90)

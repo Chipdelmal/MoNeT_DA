@@ -136,7 +136,7 @@ impDC = rfp.oob_dropcol_importances(rf, TRN_X, TRN_Y.values.ravel())
 impDCD = impDC.to_dict()['Importance']
 impPM = rfp.importances(rf, TRN_X, TRN_Y)
 impPMD = impPM.to_dict()['Importance']
-viz = rfp.plot_corr_heatmap(DATA, figsize=(7,5))
+# viz = rfp.plot_corr_heatmap(DATA, figsize=(7,5))
 ###############################################################################
 # Interpretability Plots
 ###############################################################################

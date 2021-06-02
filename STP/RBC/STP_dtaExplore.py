@@ -71,7 +71,7 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot
 ###############################################################################
-tracesNumber = 25000
+tracesNumber = 20000
 (sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
@@ -88,7 +88,7 @@ dataEffect = DATA[
 # Select rows to highlight on constraints ------------------------------------
 dataHighlight = DATA[
     ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) &
-    (DATA['i_fcf'] >= 1)
+    (DATA['i_fcf'] >= .9)
 ]
 highRows = set(dataHighlight.index)
 ###############################################################################
@@ -100,7 +100,7 @@ for (yVar, sigma, col) in ans[:]:
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
             dpi=750, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
-            color=col, hcolor=col[:-2]+'20', lw=0.1, hlw=0.1
+            color=col, hcolor='#000000'+'80', lw=0.1, hlw=0.075
         ) for (xVar, scale) in pFeats
     )
 # Export full panel -----------------------------------------------------------
