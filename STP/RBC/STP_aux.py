@@ -48,12 +48,12 @@ OVW = True
 )
 DICE_PARS = (
     ('CPT', 0.01, '#4361ee43'), ('WOP', 2.50, '#ff006e12'), 
-    ('TTI', 2.50, '#be0aff13'), ('TTO', 2.50, '#00B3E643'), 
-    ('POE', 0.01, '#23194233')
+    ('TTI', 2.50, '#23194233'), ('TTO', 2.50, '#00B3E643'), 
+    ('POE', 0.01, '#be0aff13')
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
-(TREES, DEPTH, KFOLD) = (100, 25, 20)
+(TREES, DEPTH, KFOLD) = (100, 10, 20)
 DATA_TYPE = {
     'i_sex': np.int8,
     'i_sxm': np.bool_,  'i_sxg': np.bool_,  'i_sxn': np.bool_,

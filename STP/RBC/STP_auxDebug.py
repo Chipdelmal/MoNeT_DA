@@ -227,6 +227,7 @@ def plotDICE(
     else:
         xRan = [xLvls[0], xLvls[-1]]
         xdelta = (xRan[1] - xRan[0])/100
+    yRan = [min(dataEffect[yVar]), max(dataEffect[yVar])]
     # Iterate through traces --------------------------------------------------
     for i in range(0, dropSample.shape[0]):
         # If the row index has already been processed, go to the next ---------
@@ -250,14 +251,15 @@ def plotDICE(
             # Draw highlights -------------------------------------------------
             (x, y) = (data[xVar].iloc[ix], yData[ix])
             if scale == 'log':
-                xPoint = [x*(1-xdelta), x*(1+xdelta)]
+                xPoint = [x*(1-xdelta), x, x*(1+xdelta)]
             else:
-                xPoint = [x-xdelta, x+xdelta]
+                xPoint = [x-xdelta, x, x+xdelta]
+            yD = (yRan[1]-yRan[0])/100
             if r in hRows:
-                c = hcolor
+                (c, yD) = (hcolor, yD)
             else:
-                c = color
-            ax.plot(xPoint, [y, y], color=c, lw=hlw, zorder=10)
+                (c, yD) = (color, -yD)
+            ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
         # Plot trace ----------------------------------------------------------
         ax.plot(data[xVar], yData, lw=lw, color=color)
     # Styling -----------------------------------------------------------------
@@ -284,7 +286,8 @@ def exportDICEParallel(
         dpi=500, lw=0.175, scale='linear', wiggle=False, sd=0.1, 
         color='blue', sampleRate=0.5, hcolor='#00000020', hlw=5
     ):
-    print('* Processing [{}:{}:{}]'.format(AOI, yVar, xVar), end='\r')
+    prgStr = '{}* Processing [{}:{}:{}]{}'
+    print(prgStr.format(monet.CBBL, AOI, yVar, xVar, monet.CEND), end='\r')
     fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
     (fig, ax) = plotDICE(
         dataSample, xVar, yVar, FEATS, hRows=hRows, lw=lw,
