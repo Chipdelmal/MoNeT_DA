@@ -71,11 +71,7 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot
 ###############################################################################
-<<<<<<< HEAD
 tracesNumber = 20000
-=======
-tracesNumber = 25000
->>>>>>> 5634779721b3e08fe3ea2b88b605d72a39f84859
 (sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
@@ -91,10 +87,10 @@ dataEffect = DATA[
 ]
 # Select rows to highlight on constraints ------------------------------------
 dataHighlight = DATA[
-    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) &
-    (DATA['i_fcf'] >= .9)
+    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) # &
+    # (DATA['i_fcf'] >= .9)
 ]
-highRows = set(dataHighlight.index)
+highRows = {} # set(dataHighlight.index)
 ###############################################################################
 # Iterate through AOI
 ###############################################################################

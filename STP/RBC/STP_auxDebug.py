@@ -223,7 +223,7 @@ def plotDICE(
     # Log and linear scales ---------------------------------------------------
     if scale == 'log':
         xRan = [xLvls[1], xLvls[-1]]
-        xdelta = .1
+        xdelta = .125
     else:
         xRan = [xLvls[0], xLvls[-1]]
         xdelta = (xRan[1] - xRan[0])/100
@@ -247,19 +247,20 @@ def plotDICE(
         else:
             yData = data[yVar]
         # Plot markers --------------------------------------------------------
-        for (ix, r) in enumerate(list(data.index)):
-            # Draw highlights -------------------------------------------------
-            (x, y) = (data[xVar].iloc[ix], yData[ix])
-            if scale == 'log':
-                xPoint = [x*(1-xdelta), x, x*(1+xdelta)]
-            else:
-                xPoint = [x-xdelta, x, x+xdelta]
-            yD = (yRan[1]-yRan[0])/100
-            if r in hRows:
-                (c, yD) = (hcolor, yD)
-            else:
-                (c, yD) = (color, -yD)
-            ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
+        if len(hRows) != 0:
+            for (ix, r) in enumerate(list(data.index)):
+                # Draw highlights ---------------------------------------------
+                (x, y) = (data[xVar].iloc[ix], yData[ix])
+                if scale == 'log':
+                    xPoint = [x*(1-xdelta), x, x*(1+xdelta)]
+                else:
+                    xPoint = [x-xdelta, x, x+xdelta]
+                yD = (yRan[1]-yRan[0])/100
+                if r in hRows:
+                    (c, yD) = (hcolor, yD)
+                else:
+                    (c, yD) = (color, -yD)
+                ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
         # Plot trace ----------------------------------------------------------
         ax.plot(data[xVar], yData, lw=lw, color=color)
     # Styling -----------------------------------------------------------------
