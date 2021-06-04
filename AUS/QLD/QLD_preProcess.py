@@ -74,7 +74,7 @@ for exp in EXPS:
         delayed(monet.preProcessParallel)(
             exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-            fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
+            fNameFmt='{}/{}-{}_', MF=(False, True), # drv.maleFemaleSelector(AOI),
             cmpr='bz2', nodeDigits=nodeDigits,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP

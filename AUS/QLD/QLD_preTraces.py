@@ -17,7 +17,7 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk', 'HLT', '10')
+    (USR, AOI, LND) = ('dsk', 'HLT', '02')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -69,7 +69,11 @@ for exp in EXPS:
         rel = [
             0, 0, 1096, 1103, 1110, 1117, 1124, 1131, 1138, 1145, 1152, 1159, 1166, 
             1173, 1098, 1105, 1112, 1119, 1126, 1133, 1140, 1147, 1154, 1161, 
-            1168, 1175
+            1168, 1175, 731
+        ]
+    elif exp=='s3':
+        rel = [
+            0, 0, 731
         ]
     else:
         rel = [0, 0]
@@ -94,7 +98,8 @@ for exp in EXPS:
         delayed(fun.exportPreTracesParallel)(
             exIx, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, autoAspect=True, vLines=rel,
-            border=True, borderColor='#8184a7AA', borderWidth=1
+            border=True, borderColor='#8184a7AA', borderWidth=1,
+            transparent=True
         ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------

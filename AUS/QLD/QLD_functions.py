@@ -20,7 +20,8 @@ def quickSaveFig(filename, fig, dpi=750, transparent=True):
 def exportPreTracesParallel(
             exIx, STYLE, PT_IMG,
             border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
-            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1
+            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1,
+            transparent=False
         ):
     monet.printProgress(exIx[0], xpNum, digs)
     repFilePath = exIx[1][1]
@@ -29,7 +30,7 @@ def exportPreTracesParallel(
     exportTracesPlot(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
         border=border, borderColor=borderColor, borderWidth=borderWidth,
-        vLines=vLines
+        vLines=vLines, transparent=transparent
     )
     return None
 
