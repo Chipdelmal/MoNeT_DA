@@ -24,7 +24,7 @@ OVW = True
 # #############################################################################
 def getExps(LND):
     # if LND=='01':
-    return ('s2', )# , 's2', 's3', 's4')
+    return ('s1', )# , 's2', 's3', 's4')
 
 
 # #############################################################################
@@ -37,6 +37,8 @@ def selectPath(USR, EXP, LND):
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/Experiments/{}/'.format(EXP)
     elif USR == 'dsk2':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/ExperimentsB/{}/'.format(EXP)
+    elif USR == 'dsk3':
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/ExperimentsC/{}/'.format(EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
@@ -51,6 +53,8 @@ def selectGeoPath(USR):
     if USR == 'dsk':
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
     elif USR == 'dsk2':
+        PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
+    elif USR == 'dsk3':
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
     else:
         PTH_PTS = '/RAID5/marshallShare/QLD/GEO'

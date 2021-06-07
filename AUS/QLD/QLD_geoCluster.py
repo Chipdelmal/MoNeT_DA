@@ -11,7 +11,7 @@ from more_itertools import locate
 import QLD_fun as fun
 import QLD_aux as aux
 
-CLS_NUM = 10
+CLS_NUM = 1
 (PTH_PTS, FNM_PTS) = (
     aux.selectGeoPath('dsk'), 
     'MurWon_BlockCentroids'
@@ -76,9 +76,9 @@ ax.tick_params(
     labelbottom=False, labelleft=False
 )
 fig.savefig(
-    path.join(PTH_PTS, 'Map{}.png'.format(str(CLS_NUM).zfill(2))), 
+    path.join(PTH_PTS, 'Map{}.pdf'.format(str(CLS_NUM).zfill(2))), 
     dpi=1000, edgecolor=None,
-    orientation='portrait', papertype=None, format='png',
+    orientation='portrait', papertype=None, format='pdf',
     bbox_inches='tight', pad_inches=.1
 )
 ###############################################################################

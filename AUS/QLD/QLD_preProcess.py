@@ -14,7 +14,7 @@ from more_itertools import locate
 # os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk', 'HLT', '02')
+    (USR, AOI, LND) = ('dsk3', 'HLT', '01')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
