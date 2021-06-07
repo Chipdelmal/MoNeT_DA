@@ -62,6 +62,7 @@ for exp in [exp, ]:
         ranScaler = .71
         aspect = .15
     else:
+        ranScaler = 1
         xRange = aux.XRAN
         aspect = .125
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange') / ranScaler))
