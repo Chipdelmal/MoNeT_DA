@@ -1,5 +1,5 @@
 
-
+import re
 import numpy as np
 import pandas as pd
 from glob import glob
@@ -16,7 +16,7 @@ OVW = True
     (0, 5*int(365)), 
     True, 0, False
 )
-(XP_ID, DRV, XP_PTRN, NO_REL_PAT) = ('QLD', 'IIT', 'E_{}.{}', '00')
+(XP_ID, DRV, XP_PTRN, NO_REL_PAT) = ('QLD', 'IIT', 'E_{}-{}_{}_{}.{}', '000')
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 
 # #############################################################################
@@ -63,8 +63,17 @@ def selectGeoPath(USR):
 
 def patternForReleases(ren, AOI, ftype, ext='bz'):
     strPat = XP_PTRN.format(
-        '*', ren, '*', '*', '*', 
-        '*', '*', '*', '*', '*', 
-        AOI, '*', ftype, ext
+        ren, AOI, '*', ftype, ext
     )
     return strPat
+
+
+def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
+    filesList = glob(PATH_EXP+'E*')
+    fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
+    splitFilenames = [re.split('_|-', i)[:skip] for i in fileNames]
+    ids = []
+    for c in range(len(splitFilenames[0])):
+        colSet = set([i[c] for i in splitFilenames])
+        ids.append(sorted(list(colSet)))
+    return ids

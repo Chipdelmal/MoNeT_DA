@@ -59,7 +59,7 @@ for exp in [exp, ]:
         ranScaler = 4
     elif LND=='01':
         xRange = (365*2, 5*365)
-        ranScaler = .75
+        ranScaler = .71
         aspect = .15
     else:
         xRange = aux.XRAN
