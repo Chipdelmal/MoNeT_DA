@@ -308,3 +308,14 @@ def chunks(l, n):
     for i in range(n):
         si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
         yield l[si:si+(d+1 if i < r else d)]
+
+
+def releasedSex(reType):
+    if reType==1:
+        return (1, 0, 0)
+    elif reType==2:
+        return (0, 1, 0)
+    elif reType==3:
+        return (0, 0, 1)
+    else:
+        return False
