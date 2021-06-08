@@ -89,7 +89,7 @@ constrained = DATA[
     (poeLim[0] <= DATA['POE']) & (DATA['POE'] <= poeLim[1]) &
     (DATA['i_res'] <= resLim) & 
     (DATA['i_ren'] <= renLim) & 
-    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5)
+    ((DATA['i_rsg'] + DATA['i_gsv']) <= 1e-5)
 ]
 ###############################################################################
 # Export data

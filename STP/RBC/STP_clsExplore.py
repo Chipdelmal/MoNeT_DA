@@ -55,7 +55,7 @@ mdls = [load(path.join(PT_OUT, i)) for i in fNameModel]
 ###############################################################################
 sex = dbg.releasedSex(1)
 (ren, res) = (2, .2)
-(rsg, gsv) = (1e-5, 1e-8)
+(rsg, gsv) = (1e-5, 1e-5)
 (hrm, hrt) = (0.786, 0.965)
 fcf = 1
 # Evaluate models at probe point ----------------------------------------------
