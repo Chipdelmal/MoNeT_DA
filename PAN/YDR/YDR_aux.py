@@ -15,7 +15,7 @@ XP_ID = 'YDR'
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
     'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
-(POP_SIZE, XRAN, FZ, STABLE_T) = (20e3*1.25, (0, (365*10)), True, 0)
+(POP_SIZE, XRAN, FZ, STABLE_T) = (20e3*1.25, (0, (365*10)), False, 0)
 # EXPS = ('000', '002', '004', '006', '008')
 EXPS = ('001', )
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
