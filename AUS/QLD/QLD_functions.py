@@ -20,7 +20,8 @@ def quickSaveFig(filename, fig, dpi=750, transparent=True):
 def exportPreTracesParallel(
             exIx, STYLE, PT_IMG,
             border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
-            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1
+            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1,
+            transparent=False, wop=1
         ):
     monet.printProgress(exIx[0], xpNum, digs)
     repFilePath = exIx[1][1]
@@ -29,7 +30,7 @@ def exportPreTracesParallel(
     exportTracesPlot(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
         border=border, borderColor=borderColor, borderWidth=borderWidth,
-        vLines=vLines
+        vLines=vLines, transparent=transparent, wop=wop
     )
     return None
 
@@ -39,7 +40,7 @@ def exportPreTracesPlotWrapper(
         expIx, fLists, STYLE, PT_IMG,
         border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
         xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1,
-        transparent=False
+        transparent=False, wop=False
     ):
     ter.printProgress(expIx+1, xpNum, digs)
     (_, repDta) = [pkl.load(file) for file in (fLists[expIx])]
@@ -48,7 +49,7 @@ def exportPreTracesPlotWrapper(
     exportTracesPlot(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
         border=border, borderColor=borderColor, borderWidth=borderWidth,
-        transparent=transparent, vLines=vLines, hLines=hLines
+        transparent=transparent, vLines=vLines, hLines=hLines, wop=wop
     )
     return None
 
@@ -87,9 +88,12 @@ def exportTracesPlot(
     axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
     axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
 
+    if wop==True:
+        axTemp.axvspan(vLines[0], vLines[1], alpha=0.15, facecolor='#3687ff', zorder=-5)
 
+    
     for vline in vLines[2:]:
-        axTemp.axvline(vline, alpha=.2, zorder=10, ls='-', lw=.15, color='#000000')
+        axTemp.axvline(vline, alpha=.5, zorder=10, ls='-', lw=.1, color='#000000')
      
     #axTemp.tick_params(color=(0, 0, 0, 0.5))
     axTemp.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
@@ -103,9 +107,9 @@ def exportTracesPlot(
     else:
         pad = 0
     figArr[0].savefig(
-            "{}/{}.png".format(PATH_IMG, nS),
+            "{}/{}.{}".format(PATH_IMG, nS, STYLE['format']),
             dpi=STYLE['dpi'], facecolor=None,
-            orientation='portrait', format='png', 
+            orientation='portrait', format=STYLE['format'], 
             transparent=transparent, bbox_inches='tight', pad_inches=pad
         )
     plt.clf()

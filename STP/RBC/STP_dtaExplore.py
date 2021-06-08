@@ -71,7 +71,7 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot
 ###############################################################################
-tracesNumber = 30000
+tracesNumber = 20000
 (sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
@@ -87,10 +87,10 @@ dataEffect = DATA[
 ]
 # Select rows to highlight on constraints ------------------------------------
 dataHighlight = DATA[
-    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) &
-    (DATA['i_fcf'] >= .9)
+    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) # &
+    # (DATA['i_fcf'] >= .9)
 ]
-highRows = set(dataHighlight.index)
+highRows = {} # set(dataHighlight.index)
 ###############################################################################
 # Iterate through AOI
 ###############################################################################
@@ -110,8 +110,28 @@ cmd = [
     '--export-filename='+path.join(PT_IMG, 'DICE.png')
 ]
 subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-
+###############################################################################
+# Filter Output with Constraints
+###############################################################################
+cptLim = (-1, .25)
+poeLim = (.75, 1)
+ttiLim = (30, 30*2)
+ttoLim = (-10, 20*365)
+wopLim = (3*365, 20*365)
+# Filter and return dataframe -------------------------------------------------
+fltr = [
+    cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
+    wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
+    ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
+    ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
+    poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
+]
+boolFilter = [all(i) for i in zip(*fltr)]
+daFltrd = DATA[boolFilter]
+constrained = daFltrd[
+    (daFltrd['i_ren'] < 10) & (daFltrd['i_res'] < .5)
+]
+constrained.to_csv(path.join(PT_OUT, 'DTA_constrained.csv'))
 
 ###############################################################################
 # Debugging
@@ -161,25 +181,6 @@ subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 
-###############################################################################
-# Filter Output with Constraints
-###############################################################################
-# cptLim = (-1, .25)
-# poeLim = (-1, .1)
-# ttiLim = (-10, 20*365)
-# ttoLim = (-10, 20*365)
-# wopLim = (-10, 20*365)
-# # Filter and return dataframe -------------------------------------------------
-# fltr = [
-#     cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
-#     wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
-#     ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
-#     ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
-#     poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
-# ]
-# boolFilter = [all(i) for i in zip(*fltr)]
-# daFltrd = DATA[boolFilter]
-# daFltrd
 
 
 # cols = ('i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic', LABLS[0])

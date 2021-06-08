@@ -1,5 +1,5 @@
 
-
+import re
 import numpy as np
 import pandas as pd
 from glob import glob
@@ -16,7 +16,7 @@ OVW = True
     (0, 5*int(365)), 
     True, 0, False
 )
-(XP_ID, DRV, XP_PTRN, NO_REL_PAT) = ('QLD', 'IIT', 'E_{}.{}', '00')
+(XP_ID, DRV, XP_PTRN, NO_REL_PAT) = ('QLD', 'IIT', 'E_{}-{}_{}_{}.{}', '000')
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 
 # #############################################################################
@@ -24,7 +24,7 @@ OVW = True
 # #############################################################################
 def getExps(LND):
     # if LND=='01':
-    return ('s1', 's2', 's3', 's4')
+    return ('s1', )# , 's2', 's3', 's4')
 
 
 # #############################################################################
@@ -37,6 +37,8 @@ def selectPath(USR, EXP, LND):
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/Experiments/{}/'.format(EXP)
     elif USR == 'dsk2':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/ExperimentsB/{}/'.format(EXP)
+    elif USR == 'dsk3':
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/ExperimentsC/{}/'.format(EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
@@ -52,6 +54,8 @@ def selectGeoPath(USR):
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
     elif USR == 'dsk2':
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
+    elif USR == 'dsk3':
+        PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
     else:
         PTH_PTS = '/RAID5/marshallShare/QLD/GEO'
     return PTH_PTS
@@ -59,8 +63,17 @@ def selectGeoPath(USR):
 
 def patternForReleases(ren, AOI, ftype, ext='bz'):
     strPat = XP_PTRN.format(
-        '*', ren, '*', '*', '*', 
-        '*', '*', '*', '*', '*', 
-        AOI, '*', ftype, ext
+        ren, AOI, '*', ftype, ext
     )
     return strPat
+
+
+def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
+    filesList = glob(PATH_EXP+'E*')
+    fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
+    splitFilenames = [re.split('_|-', i)[:skip] for i in fileNames]
+    ids = []
+    for c in range(len(splitFilenames[0])):
+        colSet = set([i[c] for i in splitFilenames])
+        ids.append(sorted(list(colSet)))
+    return ids

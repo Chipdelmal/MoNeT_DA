@@ -14,17 +14,19 @@ from more_itertools import locate
 # os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
-    (USR, AOI, LND) = ('dsk', 'HLT', '02')
+    (USR, AOI, LND, EXP) = ('dsk3', 'HLT', '01', 's1')
     JOB = aux.JOB_DSK
 else:
-    (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
+    (USR, AOI, LND, EXP) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+    )
     JOB = aux.JOB_SRV
 ###############################################################################
 # Processing loop
 ###############################################################################
 EXPS = aux.getExps(LND)
-exp = EXPS[0]
-for exp in EXPS:
+exp = EXP
+for exp in [exp, ]:
     ###########################################################################
     # Setting up paths
     ###########################################################################
@@ -74,7 +76,7 @@ for exp in EXPS:
         delayed(monet.preProcessParallel)(
             exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-            fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
+            fNameFmt='{}/{}-{}_', MF=(False, True), # drv.maleFemaleSelector(AOI),
             cmpr='bz2', nodeDigits=nodeDigits,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP

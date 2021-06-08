@@ -11,5 +11,7 @@ def landSelector(USR, LND):
         pts = pkl.load(path.join(pth, 'CLS_02.bz'))
     elif(LND=='10'):
         pts = pkl.load(path.join(pth, 'CLS_10.bz'))
+    elif(LND=='01'):
+        pts = pkl.load(path.join(pth, 'CLS_01.bz'))
     return pts['groups']
 

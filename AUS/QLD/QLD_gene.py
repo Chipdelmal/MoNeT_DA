@@ -14,7 +14,7 @@ def driveSelector(DRV, AOI, popSize=10000):
     if AOI == 'ECO':
         colors = monet.COLEN
     elif AOI == 'HLT':
-        colors = ['#FF006E0B', '#8338EC0A', '#0C48871F'] # monet.COLHN
+        colors = ['#FF006E0B', '#8338EC00', '#0C488717'] # monet.COLHN
     elif AOI == 'TRS':
         colors = monet.COLTN
     elif AOI == 'WLD':
