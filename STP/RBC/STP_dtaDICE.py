@@ -71,14 +71,15 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot
 ###############################################################################
-tracesNumber = 20000
+tracesNumber = 10000
 (sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
     ('i_fcf', 'linear'), ('i_sex', 'linear'),
     ('i_ren', 'linear'), ('i_res', 'linear'),
-    ('i_rsg', 'log'), ('i_gsv', 'log'),
-    ('i_hrm', 'linear'), ('i_hrt', 'linear')
+    ('i_rsg', 'log'),    ('i_gsv', 'log'),
+    ('i_hrm', 'linear'), ('i_hrt', 'linear'),
+    ('i_mfm', 'linear'), ('i_mft', 'linear')
 ]
 # Filter dataset on specific features (drop others) ---------------------------
 dataEffect = DATA[
@@ -105,7 +106,7 @@ for (yVar, sigma, col) in ans[:]:
     )
 # Export full panel -----------------------------------------------------------
 cmd = [
-    'inkscape', '--export-type=png', '--export-dpi=500',
+    'inkscape', '--export-type=png', '--export-dpi=400',
     path.join(PT_IMG, 'DICE.svg'),
     '--export-filename='+path.join(PT_IMG, 'DICE.png')
 ]
