@@ -7,7 +7,7 @@ THS='0.1'
 ###############################################################################
 # Processing data
 ###############################################################################
-# python STP_preProcess.py $1 'HLT' 'PAN'
+python STP_preProcess.py $1 'HLT' 'PAN'
 python STP_pstFraction.py $1 'HLT' 'PAN'
 python STP_pstProcess.py $1 'HLT' 'PAN' $QNT
 ###############################################################################
