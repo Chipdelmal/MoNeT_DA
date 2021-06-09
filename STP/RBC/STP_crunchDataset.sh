@@ -22,3 +22,4 @@ python STP_clsCompile.py $1 'PAN' 'HLT' $QNT 'POE'
 # Unify dataframes
 ###############################################################################
 python STP_clsUnify.py $1 'PAN' 'HLT' $QNT
+python STP_clsPreprocess.py $1 'PAN' 'HLT' $QNT

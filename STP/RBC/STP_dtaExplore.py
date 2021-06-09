@@ -68,142 +68,30 @@ monet.printExperimentHead(
     PT_SUMS, PT_IMG, tS,
     '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
 )
-###############################################################################
-# DICE Plot
-###############################################################################
-tracesNumber = 20000
-(sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
-ans = aux.DICE_PARS
-pFeats = [
-    ('i_fcf', 'linear'), ('i_sex', 'linear'),
-    ('i_ren', 'linear'), ('i_res', 'linear'),
-    ('i_rsg', 'log'), ('i_gsv', 'log'),
-    ('i_hrm', 'linear'), ('i_hrt', 'linear')
-]
-# Filter dataset on specific features (drop others) ---------------------------
-dataEffect = DATA[
-    (DATA['i_ren'] > 0) & (DATA['i_res'] > 0) &
-    (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0)
-]
-# Select rows to highlight on constraints ------------------------------------
-dataHighlight = DATA[
-    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) # &
-    # (DATA['i_fcf'] >= .9)
-]
-highRows = {} # set(dataHighlight.index)
-###############################################################################
-# Iterate through AOI
-###############################################################################
-(yVar, sigma, col) = ans[0]
-for (yVar, sigma, col) in ans[:]:
-    Parallel(n_jobs=JOB)(
-        delayed(dbg.exportDICEParallel)(
-            AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
-            dpi=750, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
-            color=col, hcolor='#000000'+'50', lw=0.1, hlw=0.075
-        ) for (xVar, scale) in pFeats
-    )
-# Export full panel -----------------------------------------------------------
-cmd = [
-    'inkscape', '--export-type=png', '--export-dpi=500',
-    path.join(PT_IMG, 'DICE.svg'),
-    '--export-filename='+path.join(PT_IMG, 'DICE.png')
-]
-subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
-cptLim = (-1, .25)
-poeLim = (.75, 1)
-ttiLim = (30, 30*2)
-ttoLim = (-10, 20*365)
-wopLim = (3*365, 20*365)
+# Design constraints ----------------------------------------------------------
+(sexLim, renLim, resLim) = (2, 8, .3)
+# Goals constraints -----------------------------------------------------------
+cptLim = (-1, .1)
+poeLim = (.9, 1)
+ttiLim = (0, 30*3)
+ttoLim = (4*365, 6*365)
+wopLim = (4*365, 6*365)
 # Filter and return dataframe -------------------------------------------------
-fltr = [
-    cptLim[0] <= DATA['CPT'], DATA['CPT'] <= cptLim[1],
-    wopLim[0] <= DATA['WOP'], DATA['WOP'] <= wopLim[1],
-    ttiLim[0] <= DATA['TTI'], DATA['TTI'] <= ttiLim[1],
-    ttoLim[0] <= DATA['TTO'], DATA['TTO'] <= ttoLim[1],
-    poeLim[0] <= DATA['POE'], DATA['POE'] <= poeLim[1],
+constrained = DATA[
+    (cptLim[0] <= DATA['CPT']) & (DATA['CPT'] <= cptLim[1]) &
+    (wopLim[0] <= DATA['WOP']) & (DATA['WOP'] <= wopLim[1]) &
+    (ttiLim[0] <= DATA['TTI']) & (DATA['TTI'] <= ttiLim[1]) &
+    (ttoLim[0] <= DATA['TTO']) & (DATA['TTO'] <= ttoLim[1]) &
+    (poeLim[0] <= DATA['POE']) & (DATA['POE'] <= poeLim[1]) &
+    (DATA['i_res'] <= resLim) & 
+    (DATA['i_ren'] <= renLim) & 
+    ((DATA['i_rsg'] + DATA['i_gsv']) <= 1e-5)
 ]
-boolFilter = [all(i) for i in zip(*fltr)]
-daFltrd = DATA[boolFilter]
-constrained = daFltrd[
-    (daFltrd['i_ren'] < 10) & (daFltrd['i_res'] < .5)
-]
+###############################################################################
+# Export data
+###############################################################################
 constrained.to_csv(path.join(PT_OUT, 'DTA_constrained.csv'))
-
-###############################################################################
-# Debugging
-###############################################################################
-# (yVar, sigma, col) = ans[0]
-# (xVar, scale) = pFeats[5]
-# features=FEATS
-# # Function --------------------------------------------------------------------
-# (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
-# # Get levels and factorial combinations without feature -----------------------
-# xLvls = sorted(list(inFact[xVar].unique()))
-# dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
-# dropSample = dropFeats.sample(frac=sampleRate)
-# dropIndices = dropSample.index
-# # Figure ----------------------------------------------------------------------
-# (fig, ax) = plt.subplots(figsize=(10, 10))
-# i = 1000
-# doneRows = set()
-
-# entry = dropSample.iloc[i]
-# zipIter = zip(list(entry.keys()), list(entry.values))
-# fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
-# fltr = [all(i) for i in zip(*fltrRaw)]
-# rowsIx = list(locate(fltr, lambda x: x == True))
-# [doneRows.add(i) for i in rowsIx]
-# data = dataEffect[fltr][[xVar, yVar]]
-# for (ix, r)  in enumerate(list(data.index)):
-#     if ix in highRows:
-#         ax.plot(data[xVar][ix], yData[ix], 'o', ms=0.5, color=hcolor)
-
-
-# yData = data[yVar]
-# for exp in yData:
-# ax.plot(data[xVar], yData, lw=hlw, ls=':', color=hcolor)
-# ax.plot(data[xVar], yData, lw=1, ls=':', color='#b76935')
-
-
-
-# ixs = list(data[xVar].index)
-# [j in highRows for j in ixs]
-
-# data[xVar]
-# yData
-
-# list(zipIter)
-# [list(dataEffect[col]==val) for (col, val) in zipIter]
-
-
-
-
-
-# cols = ('i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic', LABLS[0])
-# x = df[[*cols]].values
-# min_max_scaler = preprocessing.MinMaxScaler()
-# x_scaled = min_max_scaler.fit_transform(x)
-# df = pd.DataFrame(x_scaled, columns=cols)
-# gsv = list(df['i_gsv'].unique())
-# dfFltrd = df[df['i_gsv']==gsv[-1]]
-# ###############################################################################
-# # Load Dataset
-# ###############################################################################
-# fig = px.scatter_3d(
-#     dfFltrd, 
-#     x='i_rer', y='i_ren', z='i_fic', 
-#     size=list(1*np.asarray(dfFltrd['i_rsg'])),
-#     color=LABLS[0], 
-#     opacity=.1, color_continuous_scale='purples_r'
-# )
-# fig.update_traces(
-#     marker=dict(
-#         # size=2, 
-#         line=dict(width=0, color=(0,0,0,0))
-#     )
-# )
-# fig.show()

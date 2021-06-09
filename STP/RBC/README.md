@@ -6,8 +6,8 @@
 
 * `sex`: released mosquitos sex
   * `sxm`: male
-  * `sxg`: gravid female
-  * `sxn`: non-gravid female  
+  * `sxg`: gravid female (mixed)
+  * `sxn`: non-gravid female (mixed)
 * `ren`: releases number
 * `res`: releases size
 * `rsg`: resistance generation
@@ -57,6 +57,15 @@ For the **pst** DA:
 ./STP_pstTraces.sh dsk PAN
 ```
 
+### Data Analysis 
+
+To run all the data processing steps from *ANALYZED* and *TRACES* data up to the factorial CSV files, run:
+
+```bash
+./STP_crunchDataset.sh USR
+```
+
+This will probably take a while, depending on how many experiments were run.
 
 ## Some References
 

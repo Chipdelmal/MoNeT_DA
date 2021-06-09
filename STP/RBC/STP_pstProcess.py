@@ -74,7 +74,7 @@ for exp in EXPS:
         delayed(dbg.pstProcessParallel)(
             exIx, header, xpidIx, qnt=qnt, 
             thi=aux.THI, tho=aux.THO, thw=aux.THW, 
-            tap=aux.TAP, thp=(.01, .99)
+            tap=aux.TAP, thp=(.05, .95)
         ) for exIx in expIter
     )
 ###############################################################################
