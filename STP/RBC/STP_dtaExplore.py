@@ -68,7 +68,6 @@ monet.printExperimentHead(
     PT_OUT, PT_OUT, tS,
     '{} DtaExplore [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
 )
-
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
@@ -96,7 +95,7 @@ constrained
 ###############################################################################
 # Export data
 ###############################################################################
-constrained.to_csv(path.join(PT_OUT, 'DTA_constrained.csv'))
+constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 ###############################################################################
 # Sex
 ###############################################################################
@@ -105,4 +104,4 @@ partB = DATA[(500 > DATA['WOP'])  & (DATA['i_sex'] == 1)]
 drops = ['TTI', 'TTO', 'POE', 'WOP', 'POF', 'CPT', 'i_sex']
 dfs = [i.drop(drops, axis=1) for i in (partA, partB)]
 inter = pd.merge(*dfs, 'inner')
-constrained.to_csv(path.join(PT_OUT, 'DTA_sexInter.csv'))
+constrained.to_csv(path.join(PT_OUT, 'DTA_sexInter.csv'), index=False)
