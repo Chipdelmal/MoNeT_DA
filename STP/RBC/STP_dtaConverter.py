@@ -35,7 +35,7 @@ EXPS = aux.getExps(LND)
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, _, _, PT_PRE, _, _) = aux.selectPath(USR, EXPS[0], LND)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
@@ -73,7 +73,10 @@ for ix in range(expsNum):
     (mig, grp) = (ins[-1], ins[-2])
     fname = aux.XP_PTRN.format(*ins[:-2], 'HLT', ins[-2], 'srp', 'bz')
     (tti, tto, wop, poe, _, cpt) = [row[i] for i in outSorting]
-    expsIter[ix] = (ix, fname, tti, tto, wop, 0, 0, poe, cpt)
+    expsIter[ix] = (
+        ix, path.join(PT_PRE, fname), 
+        tti, tto, wop, 0, 0, poe, cpt
+    )
 ###############################################################################
 # Export iter
 ###############################################################################
