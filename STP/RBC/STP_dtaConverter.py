@@ -66,17 +66,22 @@ catSorting = [i for i in list(DATA.columns) if i[0]=='i']
 outSorting = [i for i in list(DATA.columns) if i[0]!='i']
 zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
 # Transform to fnames ---------------------------------------------------------
-expsIter = [None]*expsNum
+(expsIter, skipped) = ([None]*expsNum, 0)
 for ix in range(expsNum):
     row = DATA.iloc[ix]
     ins = [str(int(row[i]*zipper[i][0])).zfill(zipper[i][1]) for i in zipper]
     (mig, grp) = (ins[-1], ins[-2])
     fname = aux.XP_PTRN.format(*ins[:-2], 'HLT', ins[-2], 'srp', 'bz')
-    (tti, tto, wop, poe, _, cpt) = [row[i] for i in outSorting]
-    expsIter[ix] = (
-        ix, path.join(PT_PRE, fname), 
-        tti, tto, wop, 0, 0, poe, cpt
-    )
+    fpath = path.join(PT_PRE, fname)
+    if path.isfile(fpath):
+        (tti, tto, wop, poe, _, cpt) = [row[i] for i in outSorting]
+        expsIter[ix] = (
+            ix, fpath, 
+            tti, tto, wop, 0, 0, poe, cpt
+        )
+    else:
+        skipped = skipped + 1
+print('{}* Skipped: {}{}'.format(monet.CBBL, skipped, monet.CEND))
 ###############################################################################
 # Export iter
 ###############################################################################
