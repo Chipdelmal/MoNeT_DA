@@ -12,7 +12,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 OVW = True
-(JOB_DSK, JOB_SRV) = (10, 60)
+(JOB_DSK, JOB_SRV) = (8, 60)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
     1000000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 
@@ -53,7 +53,7 @@ DICE_PARS = (
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
-(TREES, DEPTH, KFOLD) = (100, 10, 20)
+(TREES, DEPTH, KFOLD) = (100, 15, 20)
 DATA_TYPE = {
     'i_sex': np.int8,
     'i_sxm': np.bool_,  'i_sxg': np.bool_,  'i_sxn': np.bool_,
@@ -65,13 +65,13 @@ DATA_TYPE = {
 }
 SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 (ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS) = ( 
-    [-.1, .25, .75, 1.1],
+    [-.1, .1, .25, .75, 1.1],
     [-.1, .1, .9, 1.1],
     [-.1, .25, .75, 1.1]
 )
 (ML_WOP_CATS, ML_TTI_CATS, ML_TTO_CATS) = (
-    [-10, 365*1, 365*2, 365*5, 365*6],
-    [-10, 60, 180, 365*4, 365*6],
+    [-10, 365*1, 365*4, 365*6],
+    [-10, 60, 180, 365*6],
     [-10, 365, 365*3, 365*6]
 )
 

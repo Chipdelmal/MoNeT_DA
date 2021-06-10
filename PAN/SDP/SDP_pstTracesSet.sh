@@ -14,4 +14,4 @@ bash ./SDP_pstTraces.sh $1 CRY $2
 bash ./SDP_pstTraces.sh $1 SDX $2
 bash ./SDP_pstTraces.sh $1 SDY $2
 
-# bash ./SDP_pstGridsSet.sh $1
+bash ./SDP_pstGridsSet.sh $1

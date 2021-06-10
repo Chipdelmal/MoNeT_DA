@@ -73,11 +73,11 @@ monet.printExperimentHead(
 # Filter Output with Constraints
 ###############################################################################
 # Design constraints ----------------------------------------------------------
-(sexLim, renLim, resLim) = (2, 20, .3)
+(sexLim, renLim, resLim) = (2, 8, .3)
 # Goals constraints -----------------------------------------------------------
 cptLim = (-1, .1)
 poeLim = (.9, 1)
-ttiLim = (0, 30*3)
+ttiLim = (0, 30*2)
 ttoLim = (4*365, 6*365)
 wopLim = (4*365, 6*365)
 # Filter and return dataframe -------------------------------------------------
@@ -89,6 +89,7 @@ constrained = DATA[
     (poeLim[0] <= DATA['POE']) & (DATA['POE'] <= poeLim[1]) &
     (DATA['i_ren'] <= renLim)  & 
     (DATA['i_res'] <= resLim)  & 
+    (DATA['i_sex'] == sexLim)  &
     (1e-5 <= (DATA['i_rsg'] + DATA['i_gsv']))
 ]
 constrained
@@ -96,3 +97,12 @@ constrained
 # Export data
 ###############################################################################
 constrained.to_csv(path.join(PT_OUT, 'DTA_constrained.csv'))
+###############################################################################
+# Sex
+###############################################################################
+partA = DATA[(1500 < DATA['WOP']) & (DATA['i_sex'] == 2)]
+partB = DATA[(500 > DATA['WOP'])  & (DATA['i_sex'] == 1)]
+drops = ['TTI', 'TTO', 'POE', 'WOP', 'POF', 'CPT', 'i_sex']
+dfs = [i.drop(drops, axis=1) for i in (partA, partB)]
+inter = pd.merge(*dfs, 'inner')
+constrained.to_csv(path.join(PT_OUT, 'DTA_sexInter.csv'))
