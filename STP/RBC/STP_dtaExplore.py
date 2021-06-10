@@ -65,8 +65,8 @@ COLS = list(DATA.columns)
 # Time and head --------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_SUMS, PT_IMG, tS,
-    '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
+    PT_OUT, PT_OUT, tS,
+    '{} DtaExplore [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
 )
 ###############################################################################
 # Filter Output with Constraints
