@@ -38,13 +38,19 @@ PT_OUT = path.join(path.split(path.split(PT_ROT)[0])[0], 'ML')
 PT_IMG = PT_IMG + 'dtaTraces/'
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+# Time and head ---------------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_OUT, PT_IMG, tS, 
+    aux.XP_ID+' DtaTaces[{}:{}:{}]'.format(DRV, exp, AOI)
+)
 ###############################################################################
 # Read Iter
 ###############################################################################
 expsIter = load(path.join(PT_OUT, 'DTA_PST.job'))
-###########################################################################
+###############################################################################
 # Style
-###########################################################################
+###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
     "width": .5, "alpha": .5, "dpi": 100, "legend": True,
