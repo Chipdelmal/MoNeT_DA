@@ -12,6 +12,7 @@ import MoNeT_MGDrivE as monet
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import MoNeT_MGDrivE as monet
 # https://machinelearningmastery.com/feature-selection-with-real-and-categorical-data/
 
 
@@ -66,11 +67,9 @@ tCats = (
     aux.ML_WOP_CATS, aux.ML_TTI_CATS, aux.ML_TTO_CATS
 )
 for (mtr, ran) in zip(('CPT', 'POE', 'POF', 'WOP', 'TTI', 'TTO'), tCats):
-    print('{}:{}'.format(mtr, ran))
+    print('{}- {}:{}'.format(monet.CBBL, mtr, ran, monet.CEND))
     dfCat[mtr] = pd.cut(
-        dfClean[mtr],
-        bins=ran,
-        labels=list(range(len(ran)-1))
+        dfClean[mtr], bins=ran, labels=list(range(len(ran)-1))
     )
 ###############################################################################
 # Export output
