@@ -25,7 +25,7 @@ else:
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
     JOB = aux.JOB_SRV
-SUBSAMPLE = 0.01
+SUBSAMPLE = 0.005
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###############################################################################
@@ -57,7 +57,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .5, "alpha": .5, "dpi": 100, "legend": True,
+            "width": .5, "alpha": .5, "dpi": 500, "legend": True,
             "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     ###########################################################################
@@ -116,7 +116,7 @@ for exp in EXPS:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportPstTracesParallel)(
             exIx, expsNum,
-            aux.STABLE_T, THS, QNT, STYLE, PT_IMG, 
+            aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
             digs=digs, border=True, autoAspect=True, labelPos=(.8, .2)
         ) for exIx in expsIter
     )
