@@ -8,5 +8,5 @@ python STP_dtaConverted.py $1 PAN HLT 50
 ###############################################################################
 # Export traces file
 ###############################################################################
-python STP_dtaTraces.py $1 PAN HLT 50 SX
-python STP_dtaTraces.py $1 PAN ECO 50 SX
+python STP_dtaTraces.py $1 PAN HLT 50 BA
+python STP_dtaTraces.py $1 PAN ECO 50 BA

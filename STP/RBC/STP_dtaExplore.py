@@ -91,10 +91,8 @@ constrained = DATA[
     (1e-5 <= (DATA['i_rsg'] + DATA['i_gsv']))
 ]
 constrained
-###############################################################################
-# Export data
-###############################################################################
-print('{}* Found {}/{} matches{}'.format(
+# Export data -----------------------------------------------------------------
+print('{}* Found {}/{} matches{} (FLTR)'.format(
 	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
 ))
 constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
@@ -103,7 +101,19 @@ constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 ###############################################################################
 partA = DATA[(1500 < DATA['WOP']) & (DATA['i_sex'] == 2)]
 partB = DATA[(500 > DATA['WOP'])  & (DATA['i_sex'] == 1)]
+# Find intersections ----------------------------------------------------------
 drops = ['TTI', 'TTO', 'POE', 'WOP', 'POF', 'CPT', 'i_sex']
 dfs = [i.drop(drops, axis=1) for i in (partA, partB)]
 inter = pd.merge(*dfs, 'inner')
-constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR_SX.csv'), index=False)
+pA = inter.copy()
+pA['i_sex'] = [1]*inter.shape[0]
+pB = inter.copy()
+pB['i_sex'] = [2]*inter.shape[0]
+# Find intersections in main dataset ------------------------------------------
+pFull = pd.merge(pA, pB, 'outer')
+pInter = DATA.merge(pFull)
+# Export dataset --------------------------------------------------------------
+print('{}* Found {}/{} matches{} (FLTR_SX)'.format(
+	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
+))
+pInter.to_csv(path.join(PT_OUT, 'DTA_FLTR_SX.csv'), index=False)
