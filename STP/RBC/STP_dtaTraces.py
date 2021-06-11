@@ -1,5 +1,6 @@
 
 import sys
+import compress_pickle as pkl
 from os import path
 from joblib import dump, load
 from datetime import datetime
@@ -20,6 +21,8 @@ else:
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
     )
 FNAME = 'DTA_FLTR.csv'
+(EXPS, DRV) = (aux.getExps(LND), 'LDR')
+exp = EXPS[0]
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -41,8 +44,8 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_OUT, PT_IMG, tS, 
-    aux.XP_ID+' DtaTaces[{}:{}:{}]'.format(DRV, exp, AOI)
+    PT_OUT, PT_IMG, tS,
+    aux.XP_ID+' DtaTraces[{}:{}:{}]'.format(DRV, exp, AOI)
 )
 ###############################################################################
 # Read Iter
@@ -53,7 +56,7 @@ expsIter = load(path.join(PT_OUT, 'DTA_PST.job'))
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .5, "alpha": .5, "dpi": 100, "legend": True,
+    "width": .5, "alpha": .5, "dpi": 300, "legend": True,
     "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
 }
 ###############################################################################
@@ -68,7 +71,7 @@ Parallel(n_jobs=JOB)(
     ) for exIx in expsIter
 )
 # Export gene legend ------------------------------------------------------
-repDta = pkl.load(repFiles[-1])
+repDta = pkl.load(expsIter[0][1])
 monet.exportGeneLegend(
     repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
     PT_IMG+'/legend_{}.png'.format(AOI), 500

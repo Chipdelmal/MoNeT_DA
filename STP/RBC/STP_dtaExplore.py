@@ -74,11 +74,11 @@ monet.printExperimentHead(
 # Design constraints ----------------------------------------------------------
 (sexLim, renLim, resLim) = (2, 8, .3)
 # Goals constraints -----------------------------------------------------------
-cptLim = (-1, .1)
-poeLim = (.9, 1)
-ttiLim = (0, 30*2)
-ttoLim = (4*365, 6*365)
-wopLim = (4*365, 6*365)
+cptLim = (.25, .5)
+poeLim = (-1, 1)
+ttiLim = (-1, 6*365)
+ttoLim = (-1, 6*365)
+wopLim = (0, 2*365)
 # Filter and return dataframe -------------------------------------------------
 constrained = DATA[
     (cptLim[0] <= DATA['CPT']) & (DATA['CPT'] <= cptLim[1]) &
@@ -86,15 +86,17 @@ constrained = DATA[
     (ttiLim[0] <= DATA['TTI']) & (DATA['TTI'] <= ttiLim[1]) &
     (ttoLim[0] <= DATA['TTO']) & (DATA['TTO'] <= ttoLim[1]) &
     (poeLim[0] <= DATA['POE']) & (DATA['POE'] <= poeLim[1]) &
-    (DATA['i_ren'] <= renLim)  & 
-    (DATA['i_res'] <= resLim)  & 
-    (DATA['i_sex'] == sexLim)  &
+    (DATA['i_ren'] <= renLim)  &
+    (DATA['i_res'] <= resLim)  &
     (1e-5 <= (DATA['i_rsg'] + DATA['i_gsv']))
 ]
 constrained
 ###############################################################################
 # Export data
 ###############################################################################
+print('{}* Found {}/{} matches{}'.format(
+	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
+))
 constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 ###############################################################################
 # Sex
