@@ -92,7 +92,7 @@ constrained = DATA[
 ]
 constrained
 # Export data -----------------------------------------------------------------
-print('{}* Found {}/{} matches{} (FLTR)'.format(
+print('{}* Found {}/{} matches (FLTR){}'.format(
 	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
 ))
 constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
@@ -109,11 +109,13 @@ pA = inter.copy()
 pA['i_sex'] = [1]*inter.shape[0]
 pB = inter.copy()
 pB['i_sex'] = [2]*inter.shape[0]
+pC = inter.copy()
+pC['i_sex'] = [3]*inter.shape[0]
 # Find intersections in main dataset ------------------------------------------
-pFull = pd.merge(pA, pB, 'outer')
+pFull = pd.merge(pd.merge(pA, pB, 'outer'), pC, 'outer')
 pInter = DATA.merge(pFull)
 # Export dataset --------------------------------------------------------------
-print('{}* Found {}/{} matches{} (FLTR_SX)'.format(
+print('{}* Found {}/{} matches (FLTR_SX){}'.format(
 	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
 ))
 pInter.to_csv(path.join(PT_OUT, 'DTA_FLTR_SX.csv'), index=False)
