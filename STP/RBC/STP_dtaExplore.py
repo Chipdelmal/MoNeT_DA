@@ -106,4 +106,4 @@ partB = DATA[(500 > DATA['WOP'])  & (DATA['i_sex'] == 1)]
 drops = ['TTI', 'TTO', 'POE', 'WOP', 'POF', 'CPT', 'i_sex']
 dfs = [i.drop(drops, axis=1) for i in (partA, partB)]
 inter = pd.merge(*dfs, 'inner')
-constrained.to_csv(path.join(PT_OUT, 'DTA_sexInter.csv'), index=False)
+constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR_SX.csv'), index=False)

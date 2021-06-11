@@ -27,6 +27,7 @@ if USR=='dsk':
     JOB = aux.JOB_DSK
 else:
     JOB = aux.JOB_SRV
+(CBBL, CEND) = (monet.CBBL, monet.CEND)
 ###############################################################################
 # Paths
 ###############################################################################
@@ -68,6 +69,7 @@ zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
 # Transform to fnames ---------------------------------------------------------
 (expsIter, skipped, counter) = ([], 0, 0)
 for ix in range(expsNum):
+    print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
     ins = [str(int(row[i]*zipper[i][0])).zfill(zipper[i][1]) for i in zipper]
     (mig, grp) = (ins[-1], ins[-2])
@@ -82,7 +84,7 @@ for ix in range(expsNum):
         counter = counter + 1
     else:
         skipped = skipped + 1
-print('{}* Skipped: {}/{}{}'.format(monet.CBBL, skipped, expsNum, monet.CEND))
+print('{}* Skipped (no PRE): {}/{}{}'.format(CBBL, skipped, expsNum, CEND))
 ###############################################################################
 # Export iter
 ###############################################################################

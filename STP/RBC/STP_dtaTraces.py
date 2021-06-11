@@ -15,19 +15,24 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
+    (USR, LND, AOI, QNT, NME) = ('dsk', 'PAN', 'HLT', '50', '')
 else:
     (USR, LND, AOI, QNT) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-FNAME = 'DTA_FLTR.csv'
-(EXPS, DRV) = (aux.getExps(LND), 'LDR')
-exp = EXPS[0]
+# Filename --------------------------------------------------------------------
+if NME == 'SX':
+    FNAME = 'DTA_FLTR_SX.csv'
+else:
+    FNAME = 'DTA_FLTR.csv'
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
 else:
     JOB = aux.JOB_SRV
+# Experiments -----------------------------------------------------------------
+(EXPS, DRV) = (aux.getExps(LND), 'LDR')
+exp = EXPS[0]
 ###############################################################################
 # Paths
 ###############################################################################
