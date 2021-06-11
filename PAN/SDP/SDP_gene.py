@@ -2,14 +2,14 @@
 import MoNeT_MGDrivE as monet
 import SDP_gene_AXS as AXS
 import SDP_gene_CRS as CRS
-import SDP_gene_CRS as CRX
-import SDP_gene_CRS as CRY
+import SDP_gene_CRX as CRX
+import SDP_gene_CRY as CRY
 import SDP_gene_FSR as FSR
 import SDP_gene_IIT as IIT
 import SDP_gene_PGS as PGS
 import SDP_gene_SDR as SDR
-import SDP_gene_SDR as SDX
-import SDP_gene_SDR as SDY
+import SDP_gene_SDX as SDX
+import SDP_gene_SDY as SDY
 import SDP_gene_SIT as SIT
 
 ###############################################################################
@@ -50,7 +50,7 @@ def driveSelector(DRV, AOI, popSize=10000):
         colors = monet.COLWN
     # Return ------------------------------------------------------------------
     geneDict = {
-        'gDict': aggD, 'yRange': yRange, 
+        'gDict': aggD, 'yRange': yRange,
         'colors': colors, 'folder': folder
     }
     return geneDict
