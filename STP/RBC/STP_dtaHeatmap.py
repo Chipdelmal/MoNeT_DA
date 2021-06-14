@@ -24,7 +24,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MOI) = ('dsk', 'PAN', 'HLT', '50', 'WOP')
+    (USR, LND, AOI, QNT, MOI) = ('dsk', 'PAN', 'HLT', '50', 'CPT')
 else:
     (USR, LND, AOI, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -65,40 +65,44 @@ thsStr = str(int(float(aux.THS)*100))
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
-(zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-(lvls, mthd) = (np.arange(zmin, zmax, (zmax-zmin)/10), 'linear')
-# Filter the dataframe ----------------------------------------------------
+# (zmin, zmax) = (min(DATA[MOI])*2, max(DATA[MOI]))
+(zmin, zmax) = (.4, max(DATA[MOI]))
+(lvls, mthd) = (np.arange(zmin, zmax, (zmax-zmin)/20), 'linear')
+# Filter the dataframe --------------------------------------------------------
 headerInd = [i for i in DATA.columns if i[0]=='i']
 uqVal = {i: list(DATA[i].unique()) for i in headerInd}
-###########################################################################
+###############################################################################
 # Filter dataframe
-###########################################################################
-dfSrf = DATA[
-    (DATA['i_sex'] == 1) & 
-    (DATA['i_rsg'] == 0) &
-    (DATA['i_gsv'] == 1e-02) &
-    (DATA['i_fcf'] == 1) &
-    (DATA['i_mfm'] == 0.73) &
-    (DATA['i_mft'] == 0.93) &
-    (DATA['i_hrm'] == 0.611) &
-    (DATA['i_hrt'] == 0.916) &
-    (DATA['i_grp'] == 0) & (DATA['i_mig'] == 0)
-]
+###############################################################################
+fltr = {
+    'i_sex': 3,
+    'i_rsg': 0,
+    'i_gsv': 1e-02,
+    'i_fcf': 1,
+    'i_mfm': 0.73,
+    'i_mft': 0.93,
+    'i_hrm': 0.611,
+    'i_hrt': 0.916,
+    'i_grp': 0, 'i_mig': 0
+}
+ks = [all(i) for i in zip(*[DATA[k]==fltr[k] for k in list(fltr.keys())])]
+dfSrf = DATA[ks]
 dfSrf.shape
-###########################################################################
+###############################################################################
 # Generate Surface
-###########################################################################
+###############################################################################
 (x, y, z) = (dfSrf[HD_IND[0]], dfSrf[HD_IND[1]], dfSrf[MOI])
-(a, b) = ((min(x), max(x)), (min(y), max(y)))
 rs = monet.calcResponseSurface(x, y, z, scalers=[1, 1, 1], mthd=mthd)
+# Get ranges ------------------------------------------------------------------
+(a, b) = ((min(x), max(x)), (min(y), max(y)))
 (rsG, rsS) = (rs['grid'], rs['surface'])
-# Plot the response surface -----------------------------------------------
-(fig, ax) = plt.subplots(figsize=(10, 10))
+# Plot the response surface ---------------------------------------------------
+(fig, ax) = plt.subplots(figsize=(10, 8))
 # Experiment points, contour lines, response surface
 xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
 cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
 cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=monet.cmapM, extend='max')
-# Styling -----------------------------------------------------------------
+# Styling ---------------------------------------------------------------------
 cbar = fig.colorbar(cs)
 cbar.ax.get_yaxis().labelpad = 25
 cbar.ax.set_ylabel('{}'.format(MOI), fontsize=15, rotation=270)
@@ -106,4 +110,23 @@ ax.grid(which='both', axis='y', lw=.1, alpha=0.1, color=(0, 0, 0))
 ax.grid(which='minor', axis='x', lw=.1, alpha=0.1, color=(0, 0, 0))
 plt.xlim(a[0], a[1])
 plt.ylim(b[0], b[1])
-
+pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
+plt.title(pTitle, fontsize=7.5)
+###############################################################################
+# Export File
+###############################################################################
+# Generate filename -----------------------------------------------------------
+(allKeys, fltrKeys) = (list(aux.DATA_SCA.keys()), set(fltr.keys()))
+fElements = []
+for (i, k) in enumerate(allKeys):
+    if k in fltrKeys:
+        xEl = str(int(fltr[k]*aux.DATA_SCA[k])).zfill(aux.DATA_PAD[k])
+    else:
+        xEl = 'X'*aux.DATA_PAD[k]
+    fElements.append(xEl)
+fName = 'E_'+'_'.join(fElements)
+# Save file -------------------------------------------------------------------
+fig.savefig(
+    path.join(PT_IMG, fName+'.png'), 
+    dpi=500, bbox_inches='tight', pad=0
+)
