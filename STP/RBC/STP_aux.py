@@ -81,6 +81,39 @@ SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 )
 
 # #############################################################################
+# Dependent Variables for Heatmaps
+# #############################################################################
+def selectDepVars(MOI, AOI):
+    # Select ranges and dependent variable-------------------------------------
+    if (MOI == 'WOP') or (MOI == 'TTI') or (MOI == 'TTO'):
+        scalers = [1, 1, XRAN]
+        (HD_DEP, IND_RAN) = ('0.1', 7)
+    elif (MOI == 'RAP'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('486', 7)
+    elif (MOI == 'MNX'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('min', 7)
+    elif (MOI == 'POE'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('POE', 1) 
+    elif (MOI == 'CPT'):
+        scalers = [1, 100, 1]
+        (HD_DEP, IND_RAN) = ('CPT', 1) 
+    elif (MOI == 'DER'):
+        scalers = [1, 100, 5]
+        (HD_DEP, IND_RAN) = ('DER', 5) 
+    # Color Mapping -----------------------------------------------------------
+    if AOI == 'HLT':
+        cmap = monet.cmapC
+    elif AOI == 'TRS':
+        cmap = monet.cmapM
+    elif AOI == 'WLD':
+        cmap = monet.cmapW
+    return (scalers, HD_DEP, IND_RAN, cmap)
+
+
+# #############################################################################
 # Probed experiments
 # #############################################################################
 EXPS_TO_PLOT = (
