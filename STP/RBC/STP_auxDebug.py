@@ -258,9 +258,10 @@ def plotDICE(
                 yD = (yRan[1]-yRan[0])/100
                 if r in hRows:
                     (c, yD) = (hcolor, yD)
-                else:
-                    (c, yD) = (color, -yD)
-                ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
+                    ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
+                # else:
+                #     (c, yD) = (color, -yD)
+                # ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
         # Plot trace ----------------------------------------------------------
         ax.plot(data[xVar], yData, lw=lw, color=color)
     # Styling -----------------------------------------------------------------

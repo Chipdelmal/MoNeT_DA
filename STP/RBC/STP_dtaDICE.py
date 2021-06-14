@@ -88,10 +88,10 @@ dataEffect = DATA[
 ]
 # Select rows to highlight on constraints ------------------------------------
 dataHighlight = DATA[
-    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) # &
-    # (DATA['i_fcf'] >= .9)
+    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) & (DATA['i_fcf'] >= 1) &
+    (DATA['i_hrm'] > .8) & (DATA['i_hrt'] > .8)
 ]
-highRows = {} # set(dataHighlight.index)
+highRows = set(dataHighlight.index)
 ###############################################################################
 # Iterate through AOI
 ###############################################################################

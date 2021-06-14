@@ -48,7 +48,8 @@ monet.printExperimentHead(
 NODE_NUM = len(land)
 imgListA = sorted(glob('{}*E_01*{}*.png'.format(PT_IMG, AOI, '*')))
 imgListB = sorted(glob('{}*E_02*{}*.png'.format(PT_IMG, AOI, '*')))
-imgTuples = list(zip(imgListA, imgListB))
+imgListC = sorted(glob('{}*E_03*{}*.png'.format(PT_IMG, AOI, '*')))
+imgTuples = list(zip(imgListA, imgListB, imgListC))
 imgChunks = list(monet.divideListInChunks(imgTuples, NODE_NUM))[:]
 # #########################################################################
 # Iterate through images
@@ -59,5 +60,7 @@ for (i, chunk) in enumerate(imgChunks):
     expGrid = vconcat(
         [hconcat([imread(i) for i in sorted(j)]) for j in chunk]
     )
-    fName = chunk[0][0].split('/')[-1].split('-')[0]
+    fName = 'E_XX_'+chunk[0][0].split('/')[-1].split('-')[0][5:]
     imwrite(PT_IMG_O + fName + '.png', expGrid)
+
+
