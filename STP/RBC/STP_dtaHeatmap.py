@@ -52,9 +52,9 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 HD_IND = ['i_ren', 'i_res']
+(xSca, ySca) = ('linear', 'linear')
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (1000, 1000)
-(xSca, ySca) = ('linear', 'linear')
 ###############################################################################
 # Read CSV
 ###############################################################################
@@ -65,10 +65,10 @@ thsStr = str(int(float(aux.THS)*100))
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
-# (zmin, zmax) = (min(DATA[MOI])*2, max(DATA[MOI]))
-(zmin, zmax) = (-0.1, max(DATA[MOI]))
-# (lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
-(lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
+(zmin, zmax) = (min(DATA[MOI])*2, max(DATA[MOI]))
+# (zmin, zmax) = (-0.1, max(DATA[MOI]))
+(lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
+# (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
 # Filter the dataframe --------------------------------------------------------
 headerInd = [i for i in DATA.columns if i[0]=='i']
 uqVal = {i: list(DATA[i].unique()) for i in headerInd}
@@ -78,7 +78,7 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 fltr = {
     'i_sex': 2,
     'i_ren': 2,
-    'i_res': .2,
+    'i_res': .1,
     'i_rsg': 0,
     'i_gsv': 0,
     'i_fcf': 1.5,
@@ -90,7 +90,7 @@ fltr = {
 }
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
-kSweep = 'i_rsg'
+kSweep = 'i_gsv'
 sweep = uqVal[kSweep]
 for sw in sweep:
     fltr[kSweep] = sw
@@ -98,37 +98,43 @@ for sw in sweep:
     dfSrf = DATA[ks]
     if dfSrf.shape[0] == 0:
         continue
+    scalers=[max(dfSrf[HD_IND[0]]), max(dfSrf[HD_IND[1]]), 1]
     ###############################################################################
     # Generate Surface
     ###############################################################################
     (x, y, z) = (dfSrf[HD_IND[0]], dfSrf[HD_IND[1]], dfSrf[MOI])
     rs = monet.calcResponseSurface(
         x, y, z, 
-        scalers=[max(DATA[HD_IND[0]]), max(DATA[HD_IND[1]]), 1], mthd=mthd,
-        xAxis=xSca, yAxis=ySca,
-        DXY=(ngdx, ngdy)
+        scalers=scalers, mthd=mthd, 
+        xAxis=xSca, yAxis=ySca, DXY=(ngdx, ngdy)
     )
     # Get ranges ------------------------------------------------------------------
     (a, b) = ((min(x), max(x)), (min(y), max(y)))
-    (rsG, rsS) = (rs['grid'], rs['surface'])
+    (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
     # Plot the response surface ---------------------------------------------------
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
     cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
+    # cs.cmap.set_over('red')
+    # cs.cmap.set_under('blue')
     # Styling ---------------------------------------------------------------------
     cbar = fig.colorbar(cs)
     cbar.ax.get_yaxis().labelpad = 25
     cbar.ax.set_ylabel('{}'.format(MOI), fontsize=15, rotation=270)
-    ax.grid(which='both', axis='y', lw=.1, alpha=0.1, color=(0, 0, 0))
-    ax.grid(which='minor', axis='x', lw=.1, alpha=0.1, color=(0, 0, 0))
+    ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
+    ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
+    ax.set_xticks([i/scalers[0] for i in list(sorted(x.unique()))])
+    ax.set_yticks([i/scalers[1] for i in list(sorted(y.unique()))])
     ax.set_xlabel(HD_IND[0])
     ax.set_ylabel(HD_IND[1])
     ax.axes.xaxis.set_ticklabels(dfSrf[HD_IND[0]].unique())
     ax.axes.yaxis.set_ticklabels(dfSrf[HD_IND[1]].unique())
-    plt.xlim(0, 1)# a[0], a[1])
-    plt.ylim(0, 1)# b[0], b[1])
+    # plt.xlim(0, 1) # plt.xlim(a[0], a[1])
+    # plt.ylim(0, 1) # plt.ylim(b[0], b[1])
+    plt.xlim(ran[0][0], ran[0][1])
+    plt.ylim(ran[1][0], ran[1][1])
     pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
     plt.title(pTitle, fontsize=7.5)
     ###############################################################################
