@@ -1,7 +1,8 @@
 import sys
+from math import exp
 import random
 import subprocess
-from os import path
+from os import minor, path
 from re import match
 from glob import glob
 from itertools import product
@@ -51,8 +52,8 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
 # Select surface variables
 ###############################################################################
-HD_IND = ['i_ren', 'i_res']
-(xSca, ySca) = ('linear', 'log')
+HD_IND = ['i_res', 'i_ren']
+(xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (1000, 1000)
@@ -99,49 +100,70 @@ for sw in sweep:
     dfSrf = DATA[ks]
     if dfSrf.shape[0] == 0:
         continue
-    scalers=[max(dfSrf[HD_IND[0]]), max(dfSrf[HD_IND[1]]), 1]
-    ###############################################################################
+    ###########################################################################
     # Generate Surface
-    ###############################################################################
+    ###########################################################################
     (x, y, z) = (dfSrf[HD_IND[0]], dfSrf[HD_IND[1]], dfSrf[MOI])
+    scalers = [1, 1, 1] # max(x), 1, 1] # max(y), 1]
+    (xLogMin, yLogMin) = (
+        min([i for i in sorted(list(x.unique())) if i > 0]),
+        min([i for i in sorted(list(y.unique())) if i > 0])
+    )
     rs = monet.calcResponseSurface(
         x, y, z, 
         scalers=scalers, mthd=mthd, 
-        xAxis=xSca, yAxis=ySca, DXY=(ngdx, ngdy)
+        xAxis=xSca, yAxis=ySca,
+        xLogMin=xLogMin, yLogMin=yLogMin,
+        DXY=(ngdx, ngdy)
     )
-    # Get ranges ------------------------------------------------------------------
+    # Get ranges --------------------------------------------------------------
     (a, b) = ((min(x), max(x)), (min(y), max(y)))
     (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
-    # Plot the response surface ---------------------------------------------------
+    ###########################################################################
+    # Plot
+    ###########################################################################
     (fig, ax) = plt.subplots(figsize=(10, 8))
-    # Experiment points, contour lines, response surface
+    # Experiment points, contour lines, response surface ----------------------
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
     cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
     # cs.cmap.set_under('blue')
-    # Styling ---------------------------------------------------------------------
+    # Color bar ---------------------------------------------------------------
     cbar = fig.colorbar(cs)
     cbar.ax.get_yaxis().labelpad = 25
     cbar.ax.set_ylabel('{}'.format(MOI), fontsize=15, rotation=270)
-    ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
+    # Grid and ticks ----------------------------------------------------------
+    if xSca == 'log':
+        gZeroX = [i for i in list(sorted(x.unique())) if i>0] 
+        ax.set_xticks([i/scalers[0] for i in gZeroX])
+        ax.axes.xaxis.set_ticklabels(gZeroX)
+    else:
+        ax.set_xticks([i/scalers[0] for i in list(sorted(x.unique()))])
+        ax.axes.xaxis.set_ticklabels(sorted(x.unique()))
+    if ySca == 'log':
+        gZeroY = [i for i in list(sorted(y.unique())) if i>0] 
+        ax.set_yticks([i/scalers[1] for i in gZeroY])
+        ax.axes.yaxis.set_ticklabels(gZeroY)
+    else:
+        ax.set_yticks([i/scalers[1] for i in list(sorted(y.unique()))])
+        ax.axes.yaxis.set_ticklabels(sorted(y.unique()))
     ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
-    ax.set_xticks([i/scalers[0] for i in list(sorted(x.unique()))])
-    ax.set_yticks([i/scalers[1] for i in list(sorted(y.unique()))])
+    ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
+    # Labels ------------------------------------------------------------------
     ax.set_xlabel(HD_IND[0])
     ax.set_ylabel(HD_IND[1])
-    ax.axes.xaxis.set_ticklabels(dfSrf[HD_IND[0]].unique())
-    ax.axes.yaxis.set_ticklabels(dfSrf[HD_IND[1]].unique())
-    # plt.xlim(0, 1) # plt.xlim(a[0], a[1])
-    # plt.ylim(0, 1) # plt.ylim(b[0], b[1])
+    # pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
+    # plt.title(pTitle, fontsize=7.5)
+    # Axes scales and limits --------------------------------------------------
+    ax.set_xscale(xSca)
+    ax.set_yscale(ySca)
     plt.xlim(ran[0][0], ran[0][1])
     plt.ylim(ran[1][0], ran[1][1])
-    pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
-    plt.title(pTitle, fontsize=7.5)
-    ###############################################################################
+    ###########################################################################
     # Export File
-    ###############################################################################
-    # Generate filename -----------------------------------------------------------
+    ###########################################################################
+    # Generate filename -------------------------------------------------------
     (allKeys, fltrKeys) = (list(aux.DATA_SCA.keys()), set(fltr.keys()))
     fElements = []
     for (i, k) in enumerate(allKeys):
@@ -151,12 +173,12 @@ for sw in sweep:
             xEl = 'X'*aux.DATA_PAD[k]
         fElements.append(xEl)
     fName = '{}_{}_{}-E_'.format(MOI, HD_IND[0], HD_IND[1])+'_'.join(fElements)
-    # Save file -------------------------------------------------------------------
+    # Save file ---------------------------------------------------------------
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
         dpi=500, bbox_inches='tight', pad=0
     )
-    # Clearing and closing (fig, ax) ----------------------------------------------
+    # Clearing and closing (fig, ax) ------------------------------------------
     plt.clf()
     plt.cla() 
     plt.close(fig)
