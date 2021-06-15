@@ -52,7 +52,8 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 HD_IND = ['i_ren', 'i_res']
-(xSca, ySca) = ('linear', 'linear')
+(xSca, ySca) = ('linear', 'log')
+# Scalers and sampling --------------------------------------------------------
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (1000, 1000)
 ###############################################################################
@@ -65,7 +66,7 @@ thsStr = str(int(float(aux.THS)*100))
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
-(zmin, zmax) = (min(DATA[MOI])*2, max(DATA[MOI]))
+(zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
 # (zmin, zmax) = (-0.1, max(DATA[MOI]))
 (lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
 # (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
@@ -80,8 +81,8 @@ fltr = {
     'i_ren': 2,
     'i_res': .1,
     'i_rsg': 0,
-    'i_gsv': 0,
-    'i_fcf': 1.5,
+    'i_gsv': 0.01,
+    'i_fcf': 1,
     'i_mfm': 0.73,
     'i_mft': 0.93,
     'i_hrm': 0.611,
@@ -90,7 +91,7 @@ fltr = {
 }
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
-kSweep = 'i_gsv'
+kSweep = 'i_sex'
 sweep = uqVal[kSweep]
 for sw in sweep:
     fltr[kSweep] = sw
@@ -149,7 +150,7 @@ for sw in sweep:
         else:
             xEl = 'X'*aux.DATA_PAD[k]
         fElements.append(xEl)
-    fName = 'E_'+'_'.join(fElements)
+    fName = '{}_{}_{}-E_'.format(MOI, HD_IND[0], HD_IND[1])+'_'.join(fElements)
     # Save file -------------------------------------------------------------------
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
