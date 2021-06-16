@@ -10,3 +10,4 @@ bash ./SDP_pstProcess.sh $1 CRX
 bash ./SDP_pstProcess.sh $1 CRY
 bash ./SDP_pstProcess.sh $1 SDX
 bash ./SDP_pstProcess.sh $1 SDY
+bash ./SDP_pstProcess.sh $1 SIT
