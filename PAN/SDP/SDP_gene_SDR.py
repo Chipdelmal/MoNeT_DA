@@ -46,7 +46,7 @@ TRS_DICT = OrderedDict((
     ('C*', (('P', locusA), ('M', locusA))),
     ('O-', (('W', locusA), ))
 ))
-CRS_TRS = monet.geneFrequencies(TRS_DICT, genotypes)
+CRS_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
@@ -55,7 +55,7 @@ WLD_DICT = OrderedDict((
     ('O*', (('B', locusB), ('R', locusB), ('G', locusB))),
     ('W-', (('W', locusB), ))
 ))
-CRS_WLD = monet.geneFrequencies(WLD_DICT, genotypes)
+CRS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes)
 
 ###############################################################################
 # Drive Selector
