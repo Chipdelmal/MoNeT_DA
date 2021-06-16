@@ -104,11 +104,13 @@ def selectDepVars(MOI, AOI):
         scalers = [1, 100, 5]
         (HD_DEP, IND_RAN) = ('DER', 5) 
     # Color Mapping -----------------------------------------------------------
-    if AOI == 'HLT':
+    if MOI == 'WOP':
         cmap = monet.cmapC
-    elif AOI == 'TRS':
+    elif MOI == 'CPT':
         cmap = monet.cmapM
-    elif AOI == 'WLD':
+    elif MOI == 'POE':
+        cmap = monet.cmapW
+    else:
         cmap = monet.cmapW
     return (scalers, HD_DEP, IND_RAN, cmap)
 
