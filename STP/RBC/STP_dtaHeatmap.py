@@ -52,8 +52,10 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
 # Select surface variables
 ###############################################################################
-HD_IND = ['i_res', 'i_ren']
-(xSca, ySca) = ('linear', 'linear')
+(HD_IND, kSweep) = (
+    ['i_fcf', 'i_gsv'], 'i_rsg'
+)
+(xSca, ySca) = ('linear', 'log')
 # Scalers and sampling --------------------------------------------------------
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (1000, 1000)
@@ -80,7 +82,7 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 fltr = {
     'i_sex': 2,
     'i_ren': 2,
-    'i_res': .1,
+    'i_res': .3,
     'i_rsg': 0,
     'i_gsv': 0.01,
     'i_fcf': 1,
@@ -92,7 +94,6 @@ fltr = {
 }
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
-kSweep = 'i_sex'
 sweep = uqVal[kSweep]
 for sw in sweep:
     fltr[kSweep] = sw
@@ -124,7 +125,7 @@ for sw in sweep:
     ###########################################################################
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface ----------------------
-    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=3, alpha=.25, marker='.')
+    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=15, alpha=.25, marker='.')
     cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
@@ -153,8 +154,8 @@ for sw in sweep:
     # Labels ------------------------------------------------------------------
     ax.set_xlabel(HD_IND[0])
     ax.set_ylabel(HD_IND[1])
-    # pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
-    # plt.title(pTitle, fontsize=7.5)
+    pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
+    plt.title(pTitle, fontsize=7.5)
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
     ax.set_yscale(ySca)
@@ -172,7 +173,9 @@ for sw in sweep:
         else:
             xEl = 'X'*aux.DATA_PAD[k]
         fElements.append(xEl)
-    fName = '{}_{}_{}-E_'.format(MOI, HD_IND[0], HD_IND[1])+'_'.join(fElements)
+    fName = '{}_{}_{}-E_'.format(
+            MOI, HD_IND[0][2:], HD_IND[1][2:]
+        )+'_'.join(fElements)
     # Save file ---------------------------------------------------------------
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
