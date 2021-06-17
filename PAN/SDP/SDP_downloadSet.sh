@@ -1,4 +1,5 @@
 
+./SDP_download.sh 'IIT'
 ./SDP_download.sh 'autosomalXShredder'       
 ./SDP_download.sh 'pgSIT' 
 ./SDP_download.sh 'SIT'
@@ -7,4 +8,3 @@
 ./SDP_download.sh 'fsRIDL'
 ./SDP_download.sh 'CRISPR-YG' 
 ./SDP_download.sh 'CRISPR-DsX' 
-./SDP_download.sh 'IIT'
