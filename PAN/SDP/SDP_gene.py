@@ -20,25 +20,25 @@ def driveSelector(DRV, AOI, popSize=10000):
     if AOI == 'TPS':
         if DRV == 'IIT':
             colors = ['#FF006E00', '#8338EC00', '#0C4887']
-        if DRV == 'FSR':
+        elif DRV == 'FSR':
             colors = ['#FF006E00', '#8338EC00', '#2614ed']
-        if DRV == 'PGS':
+        elif DRV == 'PGS':
             colors = ['#FF006E00', '#8338EC00', '#FF006E']
-        if DRV == 'AXS':
+        elif DRV == 'AXS':
             colors = ['#FF006E00', '#8338EC00', '#45d40c']
-        if DRV == 'CRX':
+        elif DRV == 'CRX':
             colors = ['#FF006E00', '#8338EC00', '#8338EC']
-        if DRV == 'CRY':
+        elif DRV == 'CRY':
             colors = ['#FF006E00', '#8338EC00', '#1888e3']
-        if DRV == 'SDX':
+        elif DRV == 'SDX':
             colors = ['#FF006E00', '#8338EC00', '#BC1097']
-        if DRV == 'SDY':
+        elif DRV == 'SDY':
             colors = ['#FF006E00', '#8338EC00', '#FFE93E']
-        if DRV == 'CRS':
+        elif DRV == 'CRS':
             colors = ['#FF006E00', '#8338EC00', '#FFAE42']
-        if DRV == 'SDR':
+        elif DRV == 'SDR':
             colors = ['#FF006E00', '#8338EC00', '#00FA9A']
-        if DRV == 'SIT':
+        elif DRV == 'SIT':
             colors = ['#FF006E00', '#8338EC00', '#ED1C24']
         else:
             colors = ['#FF006E00', '#8338EC00', '#808080']
