@@ -16,29 +16,6 @@ import SDP_gene_SIT as SIT
 # Drive
 ###############################################################################
 def driveSelector(DRV, AOI, popSize=10000):
-    # Drive Selection ---------------------------------------------------------
-    if DRV == 'IIT':
-        (aggD, yRange, folder) = IIT.driveParameters(AOI, popSize)
-    if DRV == 'FSR':
-        (aggD, yRange, folder) = FSR.driveParameters(AOI, popSize)
-    if DRV == 'PGS':
-        (aggD, yRange, folder) = PGS.driveParameters(AOI, popSize)
-    if DRV == 'AXS':
-        (aggD, yRange, folder) = AXS.driveParameters(AOI, popSize)
-    if DRV == 'CRX':
-        (aggD, yRange, folder) = CRX.driveParameters(AOI, popSize)
-    if DRV == 'CRY':
-        (aggD, yRange, folder) = CRY.driveParameters(AOI, popSize)
-    if DRV == 'SDX':
-        (aggD, yRange, folder) = SDX.driveParameters(AOI, popSize)
-    if DRV == 'SDY':
-        (aggD, yRange, folder) = SDY.driveParameters(AOI, popSize)
-    if DRV == 'CRS':
-        (aggD, yRange, folder) = CRS.driveParameters(AOI, popSize)
-    if DRV == 'SDR':
-        (aggD, yRange, folder) = SDR.driveParameters(AOI, popSize)
-    if DRV == 'SIT':
-        (aggD, yRange, folder) = SIT.driveParameters(AOI, popSize)
     # Colors ------------------------------------------------------------------
     if AOI == 'TPS':
         if DRV == 'IIT':
@@ -74,6 +51,32 @@ def driveSelector(DRV, AOI, popSize=10000):
             colors = monet.COLTN
         elif AOI == 'WLD':
             colors = monet.COLWN
+    # Drive Selection ---------------------------------------------------------
+    if AOI == 'TPS':
+        AOI = 'HLT'
+    # 
+    if DRV == 'IIT':
+        (aggD, yRange, folder) = IIT.driveParameters(AOI, popSize)
+    if DRV == 'FSR':
+        (aggD, yRange, folder) = FSR.driveParameters(AOI, popSize)
+    if DRV == 'PGS':
+        (aggD, yRange, folder) = PGS.driveParameters(AOI, popSize)
+    if DRV == 'AXS':
+        (aggD, yRange, folder) = AXS.driveParameters(AOI, popSize)
+    if DRV == 'CRX':
+        (aggD, yRange, folder) = CRX.driveParameters(AOI, popSize)
+    if DRV == 'CRY':
+        (aggD, yRange, folder) = CRY.driveParameters(AOI, popSize)
+    if DRV == 'SDX':
+        (aggD, yRange, folder) = SDX.driveParameters(AOI, popSize)
+    if DRV == 'SDY':
+        (aggD, yRange, folder) = SDY.driveParameters(AOI, popSize)
+    if DRV == 'CRS':
+        (aggD, yRange, folder) = CRS.driveParameters(AOI, popSize)
+    if DRV == 'SDR':
+        (aggD, yRange, folder) = SDR.driveParameters(AOI, popSize)
+    if DRV == 'SIT':
+        (aggD, yRange, folder) = SIT.driveParameters(AOI, popSize)
     # Return ------------------------------------------------------------------
     geneDict = {
         'gDict': aggD, 'yRange': yRange,
