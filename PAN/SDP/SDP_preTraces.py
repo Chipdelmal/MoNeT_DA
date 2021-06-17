@@ -30,6 +30,8 @@ for exp in EXPS:
     )
     PT_IMG = PT_IMG + 'preTraces/'
     monet.makeFolder(PT_IMG)
+    if AOI == 'TPS':
+        AOI = 'HLT'
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(

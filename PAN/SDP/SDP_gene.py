@@ -40,14 +40,40 @@ def driveSelector(DRV, AOI, popSize=10000):
     if DRV == 'SIT':
         (aggD, yRange, folder) = SIT.driveParameters(AOI, popSize)
     # Colors ------------------------------------------------------------------
-    if AOI == 'ECO':
-        colors = monet.COLEN
-    elif AOI == 'HLT':
-        colors = monet.COLHN
-    elif AOI == 'TRS':
-        colors = monet.COLTN
-    elif AOI == 'WLD':
-        colors = monet.COLWN
+    if AOI == 'TPS':
+        if DRV == 'IIT':
+            colors = ['#FF006E00', '#8338EC00', '#0C4887']
+        if DRV == 'FSR':
+            colors = ['#FF006E00', '#8338EC00', '#2614ed']
+        if DRV == 'PGS':
+            colors = ['#FF006E00', '#8338EC00', '#FF006E']
+        if DRV == 'AXS':
+            colors = ['#FF006E00', '#8338EC00', '#45d40c']
+        if DRV == 'CRX':
+            colors = ['#FF006E00', '#8338EC00', '#8338EC']
+        if DRV == 'CRY':
+            colors = ['#FF006E00', '#8338EC00', '#1888e3']
+        if DRV == 'SDX':
+            colors = ['#FF006E00', '#8338EC00', '#BC1097']
+        if DRV == 'SDY':
+            colors = ['#FF006E00', '#8338EC00', '#FFE93E']
+        if DRV == 'CRS':
+            colors = ['#FF006E00', '#8338EC00', '#FFAE42']
+        if DRV == 'SDR':
+            colors = ['#FF006E00', '#8338EC00', '#00FA9A']
+        if DRV == 'SIT':
+            colors = ['#FF006E00', '#8338EC00', '#ED1C24']
+        else:
+            colors = ['#FF006E00', '#8338EC00', '#808080']
+    else:
+        if AOI == 'ECO':
+            colors = monet.COLEN
+        elif AOI == 'HLT':
+            colors = monet.COLHN
+        elif AOI == 'TRS':
+            colors = monet.COLTN
+        elif AOI == 'WLD':
+            colors = monet.COLWN
     # Return ------------------------------------------------------------------
     geneDict = {
         'gDict': aggD, 'yRange': yRange,
