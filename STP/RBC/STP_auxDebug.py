@@ -66,7 +66,7 @@ def exportPstTracesParallel(
         autoAspect=False, popScaler=1,
         wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True
     ):
-    (ix, repFile, tti, tto, wop, mnf, mnd, poe, cpt) = exIx
+    (ix, repFile, tti, tto, wop, mnf, _, poe, cpt) = exIx
     repDta = pkl.load(repFile)
     # Print to terminal -------------------------------------------------------
     padi = str(ix+1).zfill(digs)
