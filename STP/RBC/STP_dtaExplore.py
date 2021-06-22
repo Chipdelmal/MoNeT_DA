@@ -78,7 +78,8 @@ cptLim = (.25, .5)
 poeLim = (-1, 1)
 ttiLim = (-1, 4*365)
 ttoLim = (-1, 6*365)
-wopLim = (0, 3*365)
+wopLim = (0, 2*365)
+mnfLim = (0, 1)
 # Filter and return dataframe -------------------------------------------------
 constrained = DATA[
     (cptLim[0] <= DATA['CPT']) & (DATA['CPT'] <= cptLim[1]) &
@@ -86,6 +87,7 @@ constrained = DATA[
     (ttiLim[0] <= DATA['TTI']) & (DATA['TTI'] <= ttiLim[1]) &
     (ttoLim[0] <= DATA['TTO']) & (DATA['TTO'] <= ttoLim[1]) &
     (poeLim[0] <= DATA['POE']) & (DATA['POE'] <= poeLim[1]) &
+    (mnfLim[0] <= DATA['MNF']) & (DATA['MNF'] <= mnfLim[1]) &
     (DATA['i_ren'] <= renLim)  &
     (DATA['i_res'] <= resLim)  &
     (1e-5 <= (DATA['i_rsg'] + DATA['i_gsv']))
@@ -102,7 +104,7 @@ constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 partA = DATA[(1500 < DATA['WOP']) & (DATA['i_sex'] == 2)]
 partB = DATA[(500 > DATA['WOP'])  & (DATA['i_sex'] == 1)]
 # Find intersections ----------------------------------------------------------
-drops = ['TTI', 'TTO', 'POE', 'WOP', 'POF', 'CPT', 'i_sex']
+drops = ['TTI', 'TTO', 'POE', 'WOP', 'POF', 'CPT', 'MNF', 'i_sex']
 dfs = [i.drop(drops, axis=1) for i in (partA, partB)]
 inter = pd.merge(*dfs, 'inner')
 pA = inter.copy()

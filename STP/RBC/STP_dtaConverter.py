@@ -72,6 +72,7 @@ outSorting = [i for i in list(DATA.columns) if i[0]!='i']
 zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
 # Transform to fnames ---------------------------------------------------------
 (expsIter, skipped, counter) = ([], 0, 0)
+ix = 0
 for ix in range(expsNum):
     print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
@@ -80,7 +81,7 @@ for ix in range(expsNum):
     fname = aux.XP_PTRN.format(*ins[:-2], AOI, ins[-2], 'srp', 'bz')
     fpath = path.join(PT_PRE, fname)
     if path.isfile(fpath):
-        (tti, tto, wop, poe, pof, cpt) = [row[i] for i in outSorting]
+        (tti, tto, wop, poe, _, cpt, mnf) = [row[i] for i in outSorting]
         expsIter.append([
             counter, fpath,
             tti, tto, wop, 0, 0, poe, cpt
