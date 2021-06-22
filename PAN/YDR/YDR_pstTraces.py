@@ -88,7 +88,7 @@ for exp in EXPS:
         exIx, repFiles, xpidIx,
         dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
         aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
-        digs=digs, popScaler=1, border=True, tra
+        digs=digs, popScaler=1, border=True
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------
