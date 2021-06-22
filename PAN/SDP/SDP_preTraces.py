@@ -43,10 +43,10 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .75, "alpha": .75, "dpi": 300, "legend": True,
+            "width": .05, "alpha": .05, "dpi": 500, "legend": True,
             "aspect": .25, "colors": CLR, "xRange": aux.XRAN, 'yRange': YRAN
         }
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.2, STYLE)
     ###########################################################################
     # Load preprocessed files lists
     ###########################################################################
@@ -63,8 +63,8 @@ for exp in EXPS:
     (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPreTracesPlotWrapper)(
-            exIx, fLists, STYLE, PT_IMG, 
-            xpNum=xpNum, digs=digs, border=True, 
+            exIx, fLists, STYLE, PT_IMG,
+            xpNum=xpNum, digs=digs, border=False,
             transparent=True
         ) for exIx in range(0, len(fLists))
     )

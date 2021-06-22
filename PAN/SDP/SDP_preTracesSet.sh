@@ -2,6 +2,7 @@
 #!/bin/bash
 # argv1: USR
 
+bash ./SDP_preTraces.sh $1 SIT
 bash ./SDP_preTraces.sh $1 IIT
 bash ./SDP_preTraces.sh $1 FSR
 bash ./SDP_preTraces.sh $1 PGS

@@ -19,29 +19,29 @@ def driveSelector(DRV, AOI, popSize=10000):
     # Colors ------------------------------------------------------------------
     if AOI == 'TPS':
         if DRV == 'IIT':
-            colors = ['#FF006E00', '#8338EC00', '#0C4887']
+            colors = ['#FF006E00', '#8338EC00', '#0C488744']
         elif DRV == 'FSR':
-            colors = ['#FF006E00', '#8338EC00', '#2614ed']
+            colors = ['#FF006E00', '#8338EC00', '#2614ed44']
         elif DRV == 'PGS':
-            colors = ['#FF006E00', '#8338EC00', '#FF006E']
+            colors = ['#FF006E00', '#8338EC00', '#FF006E44']
         elif DRV == 'AXS':
-            colors = ['#FF006E00', '#8338EC00', '#45d40c']
+            colors = ['#FF006E00', '#8338EC00', '#45d40c44']
         elif DRV == 'CRX':
-            colors = ['#FF006E00', '#8338EC00', '#8338EC']
+            colors = ['#FF006E00', '#8338EC00', '#8338EC44']
         elif DRV == 'CRY':
-            colors = ['#FF006E00', '#8338EC00', '#1888e3']
+            colors = ['#FF006E00', '#8338EC00', '#1888e344']
         elif DRV == 'SDX':
-            colors = ['#FF006E00', '#8338EC00', '#BC1097']
+            colors = ['#FF006E00', '#8338EC00', '#BC109744']
         elif DRV == 'SDY':
-            colors = ['#FF006E00', '#8338EC00', '#FFE93E']
+            colors = ['#FF006E00', '#8338EC00', '#FFE93E44']
         elif DRV == 'CRS':
-            colors = ['#FF006E00', '#8338EC00', '#FFAE42']
+            colors = ['#FF006E00', '#8338EC00', '#FFAE4244']
         elif DRV == 'SDR':
-            colors = ['#FF006E00', '#8338EC00', '#00FA9A']
+            colors = ['#FF006E00', '#8338EC00', '#00FA9A44']
         elif DRV == 'SIT':
-            colors = ['#FF006E00', '#8338EC00', '#ED1C24']
+            colors = ['#FF006E00', '#8338EC00', '#ED1C2444']
         else:
-            colors = ['#FF006E00', '#8338EC00', '#808080']
+            colors = ['#FF006E00', '#8338EC00', '#80808044']
     else:
         if AOI == 'ECO':
             colors = monet.COLEN
