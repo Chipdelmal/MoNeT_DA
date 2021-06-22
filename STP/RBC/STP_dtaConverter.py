@@ -70,6 +70,7 @@ expsNum = DATA.shape[0]
 catSorting = [i for i in list(DATA.columns) if i[0]=='i']
 outSorting = [i for i in list(DATA.columns) if i[0]!='i']
 zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
+print(outSorting)
 # Transform to fnames ---------------------------------------------------------
 (expsIter, skipped, counter) = ([], 0, 0)
 ix = 0
@@ -84,7 +85,7 @@ for ix in range(expsNum):
         (tti, tto, wop, poe, _, cpt, mnf) = [row[i] for i in outSorting]
         expsIter.append([
             counter, fpath,
-            tti, tto, wop, 0, 0, poe, cpt
+            tti, tto, wop, mnf, 0, poe, cpt
         ])
         counter = counter + 1
     else:

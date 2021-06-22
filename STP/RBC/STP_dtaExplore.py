@@ -74,12 +74,12 @@ monet.printExperimentHead(
 # Design constraints ----------------------------------------------------------
 (sexLim, renLim, resLim) = (2, 8, .3)
 # Goals constraints -----------------------------------------------------------
-cptLim = (.25, .5)
+cptLim = (-0.1, .2)
 poeLim = (-1, 1)
 ttiLim = (-1, 4*365)
 ttoLim = (-1, 6*365)
 wopLim = (0, 2*365)
-mnfLim = (0, 1)
+mnfLim = (0, .2)
 # Filter and return dataframe -------------------------------------------------
 constrained = DATA[
     (cptLim[0] <= DATA['CPT']) & (DATA['CPT'] <= cptLim[1]) &
