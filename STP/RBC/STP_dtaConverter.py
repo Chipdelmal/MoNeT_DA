@@ -80,10 +80,10 @@ for ix in range(expsNum):
     fname = aux.XP_PTRN.format(*ins[:-2], AOI, ins[-2], 'srp', 'bz')
     fpath = path.join(PT_PRE, fname)
     if path.isfile(fpath):
-        (tti, tto, wop, poe, _, cpt) = [row[i] for i in outSorting]
+        (tti, tto, wop, poe, mnf, cpt) = [row[i] for i in outSorting]
         expsIter.append([
             counter, fpath,
-            tti, tto, wop, 0, 0, poe, cpt
+            tti, tto, wop, mnf, 0, poe, cpt
         ])
         counter = counter + 1
     else:
