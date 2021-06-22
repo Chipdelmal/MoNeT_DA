@@ -64,7 +64,7 @@ def exportPstTracesParallel(
         border=True, borderColor='#322E2D', borderWidth=1, 
         labelPos=(.7, .9), xpsNum=0, digs=3, 
         autoAspect=False, popScaler=1,
-        wopPrint=True, cptPrint=True, poePrint=True,
+        wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True
     ):
     (ix, repFile, tti, tto, wop, mnf, mnd, poe, cpt) = exIx
     repDta = pkl.load(repFile)
@@ -79,10 +79,11 @@ def exportPstTracesParallel(
         repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
         vLines=[tti, tto, mnd], hLines=[mnf*pop], labelPos=labelPos, 
         border=border, borderColor=borderColor, borderWidth=borderWidth,
-        autoAspect=autoAspect, popScaler=1,
+        autoAspect=autoAspect, popScaler=popScaler,
         wop=wop, wopPrint=wopPrint, 
         cpt=cpt, cptPrint=cptPrint,
-        poe=poe, poePrint=poePrint
+        poe=poe, poePrint=poePrint,
+        mnf=mnf, mnfPrint=mnfPrint
     )
     return None
 
