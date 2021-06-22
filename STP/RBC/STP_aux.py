@@ -54,7 +54,7 @@ OVW = True
 DICE_PARS = (
     ('CPT', 0.01, '#4361ee43'), ('WOP', 2.50, '#ff006e12'), 
     ('TTI', 2.50, '#23194233'), ('TTO', 2.50, '#00B3E643'), 
-    ('POE', 0.01, '#be0aff13')
+    ('POE', 0.01, '#be0aff13'), ('MNF', 0.01, '#ed174b13')
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
@@ -69,10 +69,11 @@ DATA_TYPE = {
     'i_grp': np.intc,   'i_mig': np.double
 }
 SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
-(ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS) = ( 
+(ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS, ML_MNX_CATS) = ( 
     [-.1, .1, .25, .75, 1.1],
     [-.1, .1, .9, 1.1],
-    [-.1, .25, .75, 1.1]
+    [-.1, .25, .75, 1.1],
+    [-.1, .25, .5, .75, 1.1]
 )
 (ML_WOP_CATS, ML_TTI_CATS, ML_TTO_CATS) = (
     [-10, 365*1, 365*4, 365*6],

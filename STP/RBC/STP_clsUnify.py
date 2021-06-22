@@ -48,7 +48,7 @@ monet.printExperimentHead(
 # Merge Dataframes
 ###############################################################################
 dataFrames = []
-mtr = 'TTI'
+mtr = 'MNX'
 for mtr in ['TTI', 'TTO', 'WOP']:
     print('* Processing {}'.format(mtr), end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
@@ -60,6 +60,13 @@ for mtr in ['TTI', 'TTO', 'WOP']:
 for mtr in ['POE', 'CPT']:
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
     dta = pd.read_csv(pth)
+    dataFrames.append(dta)
+for mtr in ['MNX', ]:
+    pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
+    dta = pd.read_csv(pth)
+    dataCols = [k for k in dta.columns if k[0]=='i']+['min']
+    dta = dta[dataCols]
+    dta = dta.rename(columns={'min': 'MNF'})
     dataFrames.append(dta)
 fullDataframe = reduce(lambda x, y: pd.merge(x, y, ), dataFrames)
 ###############################################################################

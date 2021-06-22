@@ -64,9 +64,10 @@ dfClean.to_csv(path.join(PT_OUT, fName_R), index=False)
 dfCat = dfClean.copy()
 tCats = (
     aux.ML_CPT_CATS, aux.ML_POE_CATS, aux.ML_POF_CATS,
-    aux.ML_WOP_CATS, aux.ML_TTI_CATS, aux.ML_TTO_CATS
+    aux.ML_WOP_CATS, aux.ML_TTI_CATS, aux.ML_TTO_CATS, 
+    aux.ML_MNX_CATS
 )
-for (mtr, ran) in zip(('CPT', 'POE', 'POF', 'WOP', 'TTI', 'TTO'), tCats):
+for (mtr, ran) in zip(('CPT', 'POE', 'POF', 'WOP', 'TTI', 'TTO', 'MNF'), tCats):
     print('{}- {}:{}'.format(monet.CBBL, mtr, ran, monet.CEND))
     dfCat[mtr] = pd.cut(
         dfClean[mtr], bins=ran, labels=list(range(len(ran)-1))
