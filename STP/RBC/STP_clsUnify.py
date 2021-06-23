@@ -50,7 +50,7 @@ monet.printExperimentHead(
 dataFrames = []
 mtr = 'MNX'
 for mtr in ['TTI', 'TTO', 'WOP']:
-    print('* Processing {}'.format(mtr), end='\r')
+    print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
     dta = pd.read_csv(pth)
     dataCols = [k for k in dta.columns if k[0]=='i']+[aux.THS]
@@ -58,10 +58,12 @@ for mtr in ['TTI', 'TTO', 'WOP']:
     dta = dta.rename(columns={aux.THS: mtr})
     dataFrames.append(dta)
 for mtr in ['POE', 'CPT']:
+    print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
     dta = pd.read_csv(pth)
     dataFrames.append(dta)
 for mtr in ['MNX', ]:
+    print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
     dta = pd.read_csv(pth)
     dataCols = [k for k in dta.columns if k[0]=='i']+['min']
