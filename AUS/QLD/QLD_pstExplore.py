@@ -4,44 +4,71 @@
 import sys
 from os import path
 from datetime import datetime
-
 from matplotlib.pyplot import vlines
 import QLD_aux as aux
 import QLD_gene as drv
 import QLD_land as lnd
-import QLD_functions as fun
-# import STP_auxDebug as dbg
+import numpy as np
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 import compress_pickle as pkl
 
 
-if monet.isNotebook():
-    (USR, AOI, LND, EXP) = ('dsk', 'HLT', '02', 's1')
-    JOB = aux.JOB_DSK
-else:
-    (USR, AOI, LND, EXP) = (
-        sys.argv[1], sys.argv[2], 
-        sys.argv[3],  sys.argv[4]
-    )
-    JOB = aux.JOB_SRV
-EXPS = aux.getExps(LND)
-exp = EXP
+base = '/home/chipdelmal/Documents/WorkSims/QLD/Experiments/'
+year = 3.5
+start = int(year*365) # 1175
+print('*'*50)
+print("  Average signal extrema after {}y".format(year))
+print('*'*50)
 ###########################################################################
-# Setting up paths
+# Analyzing seasonality
 ###########################################################################
-(drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
-    lnd.landSelector(USR, LND)
+pths = (
+    "s4/PREPROCESS/E_000-HLT_00_sum.bz",
+    "s4/PREPROCESS/E_000-HLT_01_sum.bz"
 )
-(gene, fldr) = (drive.get('gDict'), drive.get('folder'))
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-    USR, exp, LND
+basePopMean = [pkl.load(path.join(base, i))['population'] for i in pths]
+totalPop = [i[:,2] for i in basePopMean]
+(mx, mn) = ([np.max(i) for i in totalPop], [np.min(i) for i in totalPop])
+print('+ Max untreated: {:.0f}, {:.0f}'.format(*mx))
+print('+ Min untreated: {:.0f}, {:.0f}'.format(*mn))
+print('-'*50)
+###########################################################################
+# IIT Suppression
+###########################################################################
+pths = (
+    "s1/PREPROCESS/E_007-HLT_00_sum.bz",
+    "s1/PREPROCESS/E_007-HLT_01_sum.bz",
 )
-PT_IMG = path.join(PT_IMG, 'preTraces')
-monet.makeFolder(PT_IMG)
+basePopMean = [pkl.load(path.join(base, i))['population'] for i in pths]
+totalPop = [i[:,2][start:] for i in basePopMean]
+(mx, mn) = ([np.max(i) for i in totalPop], [np.min(i) for i in totalPop])
+print('+ Max IIT: {:.0f}, {:.0f}'.format(*mx))
+print('+ Min IIT: {:.0f}, {:.0f}'.format(*mn))
+print('-'*50)
 ###########################################################################
-# Setting up paths
+# SRE Suppression
 ###########################################################################
-pthB = "/home/chipdelmal/Documents/WorkSims/s4/POSTPROCESS'E_000-HLT_00.png"
-pthA = "/home/chipdelmal/Documents/WorkSims/s1/POSTPROCESS/E_000-HLT_00.png"
+pths = (
+    "s3/PREPROCESS/E_007-HLT_00_sum.bz",
+    "s3/PREPROCESS/E_007-HLT_01_sum.bz",
+)
+basePopMean = [pkl.load(path.join(base, i))['population'] for i in pths]
+totalPop = [i[:,2][start:] for i in basePopMean]
+(mx, mn) = ([np.max(i) for i in totalPop], [np.min(i) for i in totalPop])
+print('+ Max SRE: {:.0f}, {:.0f}'.format(*mx))
+print('+ Min SRE: {:.0f}, {:.0f}'.format(*mn))
+print('-'*50)
+###########################################################################
+# IIT+SRE Suppression
+###########################################################################
+pths = (
+    "s2/PREPROCESS/E_007-HLT_00_sum.bz",
+    "s2/PREPROCESS/E_007-HLT_01_sum.bz",
+)
+basePopMean = [pkl.load(path.join(base, i))['population'] for i in pths]
+totalPop = [i[:,2][start:] for i in basePopMean]
+(mx, mn) = ([np.max(i) for i in totalPop], [np.min(i) for i in totalPop])
+print('+ Max IIT+SRE: {:.0f}, {:.0f}'.format(*mx))
+print('+ Min IIT+SRE: {:.0f}, {:.0f}'.format(*mn))
+print('-'*50)
