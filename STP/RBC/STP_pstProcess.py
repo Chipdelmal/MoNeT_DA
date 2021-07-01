@@ -41,7 +41,7 @@ for exp in EXPS:
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, exp, LND
+        USR, exp, LND, DRV
     )
     ###########################################################################
     # Setting up paths
