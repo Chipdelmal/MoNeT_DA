@@ -17,10 +17,10 @@ import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', '50')
+    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
     JOB = aux.JOB_DSK
 else:
-    (USR, LND, AOI, QNT) = (
+    (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
     JOB = aux.JOB_SRV
@@ -37,7 +37,7 @@ EXPS = aux.getExps(LND)
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
