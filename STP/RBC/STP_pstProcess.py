@@ -16,11 +16,13 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, QNT) = ('dsk', 'HLT', 'PAN', '50')
+    (USR, AOI, LND, DRV, QNT) = ('dsk', 'HLT', 'PAN', 'LDR', '50')
     JOB = aux.JOB_DSK
     CHUNKS = JOB
 else:
-    (USR, AOI, LND, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    (USR, AOI, LND, DRV, QNT) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    )
     JOB = aux.JOB_SRV
     CHUNKS = JOB
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
