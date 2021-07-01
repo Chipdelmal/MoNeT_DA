@@ -30,19 +30,25 @@ OVW = True
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD) = (
     (
-        ('i_sex', 1), ('i_ren', 2), ('i_res', 3), ('i_rsg', 4),
-        ('i_gsv', 5), ('i_fcf', 6), ('i_mfm', 7), ('i_mft', 8),
-        ('i_hrm', 9), ('i_hrt', 10), ('i_grp', 12)
+        ('i_sex', 1),   ('i_ren', 2),   ('i_res', 3), 
+        ('i_rsg', 4),   ('i_gsv', 5), 
+        ('i_fch', 6),   ('i_fcb', 7),   ('i_fcr', 8),
+        ('i_hrm', 9),   ('i_hrf', 10), 
+        ('i_grp', 12)
     ),
     {
-        'i_sex': 1  , 'i_ren': 1e0, 'i_res': 1e3, 'i_rsg': 1e10,
-        'i_gsv': 1e10,'i_fcf': 1e3, 'i_mfm': 1e3, 'i_mft': 1e3,
-        'i_hrm': 1e3, 'i_hrt': 1e3, 'i_grp': 1,   'i_mig': 1e5
+        'i_sex': 1e0,   'i_ren': 1e0,   'i_res': 1e3, 
+        'i_rsg': 1e10,  'i_gsv': 1e10,  
+        'i_fch': 1e5,   'i_fcb': 1e5,   'i_fcr': 1e5,
+        'i_hrm': 1e5,   'i_hrf': 1e5, 
+        'i_grp': 1e0,   'i_mig': 1e5
     },
     {
-        'i_sex': 2,   'i_ren': 2,   'i_res': 6,   'i_rsg': 23,
-        'i_gsv': 23,  'i_fcf': 6,   'i_mfm': 6,   'i_mft': 6,
-        'i_hrm': 6,   'i_hrt': 6,   'i_grp': 2,   'i_mig': 6
+        'i_sex': 2,     'i_ren': 2,     'i_res': 5,   
+        'i_rsg': 12,    'i_gsv': 12,  
+        'i_fch': 7,     'i_fcb': 7,     'i_fcr': 7,
+        'i_hrm': 7,     'i_hrf': 7,   
+        'i_grp': 2,     'i_mig': 7
     }
 )
 (THI, THO, THW, TAP) = (
@@ -52,9 +58,10 @@ OVW = True
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
 )
 DICE_PARS = (
+    ('MNF', 0.01, '#ed174b13'),
     ('CPT', 0.01, '#4361ee43'), ('WOP', 2.50, '#ff006e12'), 
     ('TTI', 2.50, '#23194233'), ('TTO', 2.50, '#00B3E643'), 
-    ('POE', 0.01, '#be0aff13'), ('MNF', 0.01, '#ed174b13')
+    ('POE', 0.01, '#be0aff13')
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
@@ -63,9 +70,9 @@ DATA_TYPE = {
     'i_sex': np.int8,
     'i_sxm': np.bool_,  'i_sxg': np.bool_,  'i_sxn': np.bool_,
     'i_ren': np.intc,   'i_res': np.double, 
-    'i_rsg': np.double, 'i_gsv': np.double, 'i_fcf': np.double,
-    'i_mfm': np.double, 'i_mft': np.double,
-    'i_hrm': np.double, 'i_hrt': np.double,
+    'i_rsg': np.double, 'i_gsv': np.double, 
+    'i_fch': np.double, 'i_fcb': np.double, 'i_fcr': np.double,
+    'i_hrm': np.double, 'i_hrf': np.double,
     'i_grp': np.intc,   'i_mig': np.double
 }
 SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
@@ -115,16 +122,6 @@ def selectDepVars(MOI, AOI):
         cmap = monet.cmapW
     return (scalers, HD_DEP, IND_RAN, cmap)
 
-
-# #############################################################################
-# Probed experiments
-# #############################################################################
-EXPS_TO_PLOT = (
-    'E_01_00_000000_00000000000000000000000_00000000000000000000000_000800_000730_000930_000874_000482',
-    'E_03_00_001000_00000000000000000000030_00000000000000000010000_001600_000730_000930_000655_000723',
-    'E_03_00_001000_00000000000000000000030_00000000000000000000000_001200_000730_000930_000437_000482'
-)
-
 # #############################################################################
 # Experiments
 # #############################################################################
@@ -165,12 +162,14 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 # Paths and Style
 # #############################################################################
-def selectPath(USR, EXP, LND):
+def selectPath(USR, EXP, LND, DRV=None):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/STP_Grid/{}/{}/'.format(LND, EXP)
+        PATH_ROOT = '/RAID5/marshallShare/STP_Grid/{}/{}/{}/'.format(
+            DRV, LND, EXP
+        )
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP_Grid/{}/{}/'.format(
-            LND, EXP
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP_Grid/{}/{}/{}/'.format(
+            DRV, LND, EXP
         )
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)

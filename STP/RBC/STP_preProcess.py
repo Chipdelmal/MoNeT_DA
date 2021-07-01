@@ -19,6 +19,7 @@ if monet.isNotebook():
 else:
     (USR, AOI, LND) = (sys.argv[1], sys.argv[2], sys.argv[3])
     JOB = aux.JOB_SRV
+DRV = aux.DRV
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -29,7 +30,7 @@ for exp in EXPS:
     # Setting up paths
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
         lnd.landSelector(exp, LND)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))

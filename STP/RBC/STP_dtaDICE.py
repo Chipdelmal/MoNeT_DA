@@ -71,7 +71,11 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot
 ###############################################################################
+<<<<<<< HEAD
 tracesNumber = 30000
+=======
+tracesNumber = 25000
+>>>>>>> bc0787c742b3f43ab9a68bd6b92f9c59ece66196
 (sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
