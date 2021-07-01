@@ -14,10 +14,11 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'CPT')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'CPT')
 else:
-    (USR, LND, AOI, QNT, MTR) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    (USR, LND, AOI, DRV, QNT, MTR) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], 
+        sys.argv[4], sys.argv[5], sys.argv[6]
     )
 EXPS = aux.getExps(LND)
 # Setup number of cores -------------------------------------------------------

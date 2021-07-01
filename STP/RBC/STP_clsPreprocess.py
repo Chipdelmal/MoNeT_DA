@@ -17,10 +17,12 @@ import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
+    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', '50')
     JOB = aux.JOB_DSK
 else:
-    (USR, LND, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    (USR, LND, AOI, QNT) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    )
     JOB = aux.JOB_SRV
 EXPS = aux.getExps(LND)
 ###############################################################################
