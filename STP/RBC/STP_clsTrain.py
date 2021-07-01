@@ -129,7 +129,7 @@ confusionMat = metrics.plot_confusion_matrix(
     # display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
     cmap=cm.Blues, normalize=None
 )
-plt.savefig(modelPath+'_RF.jpg', dpi=300)
+plt.savefig(modelPath+'_RF.png', dpi=300)
 # Features importance ---------------------------------------------------------
 featImportance = list(rf.feature_importances_)
 impDC = rfp.oob_dropcol_importances(rf, TRN_X, TRN_Y.values.ravel())

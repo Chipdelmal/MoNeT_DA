@@ -71,7 +71,7 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot
 ###############################################################################
-tracesNumber = 20000
+tracesNumber = 30000
 (sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
@@ -100,7 +100,7 @@ for (yVar, sigma, col) in ans[:]:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
-            dpi=750, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
+            dpi=500, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
             color=col, hcolor='#000000'+'50', lw=0.1, hlw=0.075
         ) for (xVar, scale) in pFeats
     )
