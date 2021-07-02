@@ -28,7 +28,7 @@ else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-TRACE_NUM = 15000
+TRACE_NUM = 25000
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -99,7 +99,7 @@ for (yVar, sigma, col) in ans[:]:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
-            dpi=500, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
+            dpi=400, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
             color=col, hcolor='#000000'+'50', lw=0.1, hlw=0.075
         ) for (xVar, scale) in pFeats
     )
@@ -111,78 +111,3 @@ cmd = [
 ]
 subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-
-###############################################################################
-# Debugging
-###############################################################################
-# (yVar, sigma, col) = ans[0]
-# (xVar, scale) = pFeats[5]
-# features=FEATS
-# # Function --------------------------------------------------------------------
-# (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
-# # Get levels and factorial combinations without feature -----------------------
-# xLvls = sorted(list(inFact[xVar].unique()))
-# dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
-# dropSample = dropFeats.sample(frac=sampleRate)
-# dropIndices = dropSample.index
-# # Figure ----------------------------------------------------------------------
-# (fig, ax) = plt.subplots(figsize=(10, 10))
-# i = 1000
-# doneRows = set()
-
-# entry = dropSample.iloc[i]
-# zipIter = zip(list(entry.keys()), list(entry.values))
-# fltrRaw = [list(dataEffect[col] == val) for (col, val) in zipIter]
-# fltr = [all(i) for i in zip(*fltrRaw)]
-# rowsIx = list(locate(fltr, lambda x: x == True))
-# [doneRows.add(i) for i in rowsIx]
-# data = dataEffect[fltr][[xVar, yVar]]
-# for (ix, r)  in enumerate(list(data.index)):
-#     if ix in highRows:
-#         ax.plot(data[xVar][ix], yData[ix], 'o', ms=0.5, color=hcolor)
-
-
-# yData = data[yVar]
-# for exp in yData:
-# ax.plot(data[xVar], yData, lw=hlw, ls=':', color=hcolor)
-# ax.plot(data[xVar], yData, lw=1, ls=':', color='#b76935')
-
-
-
-# ixs = list(data[xVar].index)
-# [j in highRows for j in ixs]
-
-# data[xVar]
-# yData
-
-# list(zipIter)
-# [list(dataEffect[col]==val) for (col, val) in zipIter]
-
-
-
-
-
-# cols = ('i_rsg', 'i_rer', 'i_ren', 'i_qnt', 'i_gsv', 'i_fic', LABLS[0])
-# x = df[[*cols]].values
-# min_max_scaler = preprocessing.MinMaxScaler()
-# x_scaled = min_max_scaler.fit_transform(x)
-# df = pd.DataFrame(x_scaled, columns=cols)
-# gsv = list(df['i_gsv'].unique())
-# dfFltrd = df[df['i_gsv']==gsv[-1]]
-# ###############################################################################
-# # Load Dataset
-# ###############################################################################
-# fig = px.scatter_3d(
-#     dfFltrd, 
-#     x='i_rer', y='i_ren', z='i_fic', 
-#     size=list(1*np.asarray(dfFltrd['i_rsg'])),
-#     color=LABLS[0], 
-#     opacity=.1, color_continuous_scale='purples_r'
-# )
-# fig.update_traces(
-#     marker=dict(
-#         # size=2, 
-#         line=dict(width=0, color=(0,0,0,0))
-#     )
-# )
-# fig.show()
