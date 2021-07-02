@@ -28,6 +28,7 @@ else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
+TRACE_NUM = 15000
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -41,7 +42,7 @@ EXPS = aux.getExps(LND)
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
@@ -71,19 +72,13 @@ monet.printExperimentHead(
 ###############################################################################
 # DICE Plot
 ###############################################################################
-<<<<<<< HEAD
-tracesNumber = 30000
-=======
-tracesNumber = 25000
->>>>>>> bc0787c742b3f43ab9a68bd6b92f9c59ece66196
-(sampleRate, shuffle) = (tracesNumber/DATA.shape[0], True)
+(sampleRate, shuffle) = (TRACE_NUM/DATA.shape[0], True)
 ans = aux.DICE_PARS
 pFeats = [
-    ('i_fcf', 'linear'), ('i_sex', 'linear'),
-    ('i_ren', 'linear'), ('i_res', 'linear'),
+    ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'),
     ('i_rsg', 'log'),    ('i_gsv', 'log'),
-    ('i_hrm', 'linear'), ('i_hrt', 'linear'),
-    ('i_mfm', 'linear'), ('i_mft', 'linear')
+    ('i_fch', 'linear'), ('i_fcb', 'linear'), # ('i_fcr', 'linear')
+    ('i_hrm', 'linear'), ('i_hrf', 'linear'),
 ]
 # Filter dataset on specific features (drop others) ---------------------------
 dataEffect = DATA[
@@ -92,10 +87,10 @@ dataEffect = DATA[
 ]
 # Select rows to highlight on constraints ------------------------------------
 dataHighlight = DATA[
-    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) & (DATA['i_fcf'] >= 1) &
-    (DATA['i_hrm'] > .8) & (DATA['i_hrt'] > .8)
+    ((DATA['i_rsg'] + DATA['i_gsv']) > 1e-5) & 
+    (DATA['i_fch'] > .8) & (DATA['i_fcr'] > .8)
 ]
-highRows = set(dataHighlight.index)
+highRows = set([]) # set(dataHighlight.index)
 ###############################################################################
 # Iterate through AOI
 ###############################################################################
