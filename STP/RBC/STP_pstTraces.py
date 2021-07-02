@@ -18,11 +18,12 @@ import STP_land as lnd
 import STP_auxDebug as dbg
 
 if monet.isNotebook():
-    (USR, AOI, LND, QNT, THS) = ('dsk', 'HLT', 'PAN', '50', '0.5')
+    (USR, AOI, LND, DRV, QNT, THS) = ('dsk', 'HLT', 'PAN', 'LDR', '50', '0.1')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, QNT, THS) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+        sys.argv[1], sys.argv[2], sys.argv[3], 
+        sys.argv[4], sys.argv[5], sys.argv[6]
     )
     JOB = aux.JOB_SRV
 SUBSAMPLE = 0.005
