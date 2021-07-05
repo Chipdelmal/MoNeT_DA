@@ -77,7 +77,7 @@ def exportPstTracesParallel(
     # STYLE['yRange'] = (0,  pop*popScaler)
     monet.exportTracesPlot(
         repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-        vLines=[tti, tto, mnd], hLines=[mnf*pop], labelPos=labelPos, 
+        vLines=[tti, tto, 0], hLines=[mnf*pop], labelPos=labelPos, 
         border=border, borderColor=borderColor, borderWidth=borderWidth,
         autoAspect=autoAspect, popScaler=popScaler,
         wop=wop, wopPrint=wopPrint, 

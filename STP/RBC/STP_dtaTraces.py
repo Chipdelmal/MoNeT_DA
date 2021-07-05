@@ -15,10 +15,10 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
+    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
 else:
-    (USR, LND, AOI, QNT) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+    (USR, LND, AOI, DRV, QNT) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
@@ -36,7 +36,7 @@ EXPS = aux.getExps(LND)
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_OUT = path.join(path.split(path.split(PT_ROT)[0])[0], 'ML')
 PT_IMG = PT_IMG + 'dtaTraces/'
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
