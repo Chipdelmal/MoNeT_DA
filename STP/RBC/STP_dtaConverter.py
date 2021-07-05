@@ -24,6 +24,8 @@ else:
 # Filename --------------------------------------------------------------------
 if NME == 'SX':
     FNAME = 'DTA_FLTR_SX.csv'
+elif NMA == 'BD':
+    FNAME = 'DTA_FLTR_BD.csv'
 else:
     FNAME = 'DTA_FLTR.csv'
 # Setup number of cores -------------------------------------------------------

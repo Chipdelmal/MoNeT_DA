@@ -23,10 +23,10 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT) = ('dsk', 'PAN', 'HLT', '50')
+    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
 else:
-    (USR, LND, AOI, QNT) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+    (USR, LND, AOI, DRV, QNT) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
@@ -41,7 +41,7 @@ EXPS = aux.getExps(LND)
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
@@ -98,6 +98,36 @@ print('{}* Found {}/{} matches (FLTR){}'.format(
 	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
 ))
 constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
+###############################################################################
+# Filter Output with Constraints
+###############################################################################
+# Design constraints ----------------------------------------------------------
+(sexLim, renLim, resLim) = (2, 10, .5)
+# Goals constraints -----------------------------------------------------------
+cptLim = (-0.1, .2)
+poeLim = (-.1, 1)
+ttiLim = (-1, 365/4)
+ttoLim = (-1, 6*365)
+wopLim = (0, 2*365)
+mnfLim = (0, .2)
+# Filter and return dataframe -------------------------------------------------
+constrained = DATA[
+    (DATA['i_sex'] == 2)        &
+    # (DATA['i_fch'] == 0.175)    &
+    # (DATA['i_fcb'] == 0.117)    &
+    (DATA['i_hrm'] == 0.9)      &
+    (DATA['i_hrf'] == 0.8604)   &
+    (0 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
+    (0 <= DATA['i_res'])        & (DATA['i_res'] <= resLim)         &
+    (1e-2  <= DATA['i_gsv'])    &
+    (0 <= DATA['i_rsg'])
+]
+constrained
+# Export data -----------------------------------------------------------------
+print('{}* Found {}/{} matches (FLTR_BD){}'.format(
+	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
+))
+constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR_BD.csv'), index=False)
 ###############################################################################
 # Sex
 ###############################################################################

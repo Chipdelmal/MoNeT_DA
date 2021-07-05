@@ -25,10 +25,11 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MOI) = ('dsk', 'PAN', 'HLT', '50', 'CPT')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'CPT')
 else:
-    (USR, LND, AOI, QNT, MOI) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    (USR, LND, AOI, DRV, QNT, MOI) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], 
+        sys.argv[4], sys.argv[5], sys.argv[6]
     )
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
@@ -43,7 +44,7 @@ EXPS = aux.getExps(LND)
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img', 'heat')
@@ -53,9 +54,9 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_gsv', 'i_rsg'], 'i_fcf'
+    ['i_gsv', 'i_fch'], 'i_rsg'
 )
-(xSca, ySca) = ('log', 'log')
+(xSca, ySca) = ('log', 'linear')
 # Scalers and sampling --------------------------------------------------------
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (1000, 1000)
@@ -81,15 +82,15 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 ###############################################################################
 fltr = {
     'i_sex': 2,
-    'i_ren': 2,
-    'i_res': .3,
-    'i_rsg': 0,
-    'i_gsv': 0.01,
-    'i_fcf': 1,
-    'i_mfm': 0.73,
-    'i_mft': 0.93,
-    'i_hrm': 0.611,
-    'i_hrt': 0.916,
+    'i_ren': 10,
+    'i_res': .5,
+    'i_rsg': 7.90e-06,
+    'i_gsv': 1.e-02,
+    'i_fch': 0.175,
+    'i_fcb': 0.117,
+    'i_fcr': 0,
+    'i_hrm': 0.9,
+    'i_hrf': 0.8604,
     'i_grp': 0, 'i_mig': 0
 }
 [fltr.pop(i) for i in HD_IND]
