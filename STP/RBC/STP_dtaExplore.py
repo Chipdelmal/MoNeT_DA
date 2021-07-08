@@ -113,14 +113,14 @@ mnfLim = (0, .2)
 # Filter and return dataframe -------------------------------------------------
 constrained = DATA[
     (DATA['i_sex'] == 2)        &
-    # (DATA['i_fch'] == 0.175)    &
-    # (DATA['i_fcb'] == 0.117)    &
+    (DATA['i_fch'] == 0.175)    &
+    (DATA['i_fcb'] == 0.117)    &
     (DATA['i_hrm'] == 0.9)      &
     (DATA['i_hrf'] == 0.8604)   &
     (0 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
-    (0 <= DATA['i_res'])        & (DATA['i_res'] <= resLim)         &
-    (1e-2  <= DATA['i_gsv'])    &
-    (0 <= DATA['i_rsg'])
+    (0 <= DATA['i_res'])        & (DATA['i_res'] <= resLim)         
+    # (0 <= DATA['i_gsv'])    &
+    # (0 <= DATA['i_rsg'])
 ]
 constrained
 # Export data -----------------------------------------------------------------

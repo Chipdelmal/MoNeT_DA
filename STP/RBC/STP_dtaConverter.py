@@ -16,15 +16,16 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, NME) = ('dsk', 'PAN', 'HLT', '50', '')
+    (USR, LND, AOI, DRV, QNT, NME) = ('dsk', 'PAN', 'HLT', '50', '')
 else:
-    (USR, LND, AOI, QNT, NME) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    (USR, LND, AOI, DRV, QNT, NME) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], 
+	sys.argv[4], sys.argv[5], sys.argv[6]
     )
 # Filename --------------------------------------------------------------------
 if NME == 'SX':
     FNAME = 'DTA_FLTR_SX.csv'
-elif NMA == 'BD':
+elif NME == 'BD':
     FNAME = 'DTA_FLTR_BD.csv'
 else:
     FNAME = 'DTA_FLTR.csv'
@@ -42,7 +43,7 @@ EXPS = aux.getExps(LND)
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, _, _, PT_PRE, _, _) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, _, _, PT_PRE, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
