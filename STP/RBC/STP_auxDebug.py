@@ -210,7 +210,7 @@ def plotDICE(
         dataEffect, xVar, yVar, features, hRows={},
         sampleRate=1, wiggle=False, sd=0, scale='linear', 
         lw=.175, color='#be0aff13', hcolor='#000000', hlw=.175,
-        rangePad=(.975, 1.025), gw=.25
+        rangePad=(.975, 1.025), gw=.25, yRange=None
     ):
     (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
     # Get levels and factorial combinations without feature -------------------
@@ -228,7 +228,10 @@ def plotDICE(
     else:
         xRan = [xLvls[0], xLvls[-1]]
         xdelta = (xRan[1] - xRan[0])/100
-    yRan = [min(dataEffect[yVar]), max(dataEffect[yVar])]
+    if yRange is None:
+        yRan = [min(dataEffect[yVar]), max(dataEffect[yVar])]
+    else:
+        yRan = yRange
     # Iterate through traces --------------------------------------------------
     for i in range(0, dropSample.shape[0]):
         # If the row index has already been processed, go to the next ---------
@@ -266,10 +269,17 @@ def plotDICE(
         # Plot trace ----------------------------------------------------------
         ax.plot(data[xVar], yData, lw=lw, color=color)
     # Styling -----------------------------------------------------------------
-    STYLE = {
-        'xRange': xRan,
-        'yRange': [min(outFact)*rangePad[0], max(outFact)*rangePad[1]]
-    }
+    if yRange is None:
+        STYLE = {
+            'xRange': xRan,
+            'yRange': [min(outFact)*rangePad[0], max(outFact)*rangePad[1]]
+        }
+    else:
+        STYLE = {
+            'xRange': xRan,
+            'yRange': yRan
+        }
+    # Apply styling to axes ---------------------------------------------------
     ax.set_aspect(monet.scaleAspect(1, STYLE))
     ax.set_xlim(STYLE['xRange'])
     ax.set_ylim(STYLE['yRange'])
@@ -287,7 +297,8 @@ def plotDICE(
 def exportDICEParallel(
         AOI, xVar, yVar, dataSample, FEATS, PT_IMG, hRows={}, 
         dpi=500, lw=0.175, scale='linear', wiggle=False, sd=0.1, 
-        color='blue', sampleRate=0.5, hcolor='#00000020', hlw=5
+        color='blue', sampleRate=0.5, hcolor='#00000020', hlw=5,
+        yRange=None
     ):
     prgStr = '{}* Processing [{}:{}:{}]{}'
     print(prgStr.format(monet.CBBL, AOI, yVar, xVar, monet.CEND), end='\r')
@@ -295,7 +306,7 @@ def exportDICEParallel(
     (fig, ax) = plotDICE(
         dataSample, xVar, yVar, FEATS, hRows=hRows, lw=lw,
         scale=scale, wiggle=wiggle, sd=sd, color=color,
-        sampleRate=sampleRate, hcolor=hcolor, hlw=hlw
+        sampleRate=sampleRate, hcolor=hcolor, hlw=hlw, yRange=yRange
     )
     fig.savefig(fName, dpi=dpi, bbox_inches='tight', pad=0)
     plt.clf(); plt.cla(); plt.close('all'); plt.gcf()

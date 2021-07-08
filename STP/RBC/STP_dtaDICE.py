@@ -28,7 +28,7 @@ else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-TRACE_NUM = 35000
+TRACE_NUM = 5000
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -77,7 +77,7 @@ ans = aux.DICE_PARS
 pFeats = [
     ('i_sex', 'linear'), ('i_ren', 'linear'), ('i_res', 'linear'),
     ('i_rsg', 'log'),    ('i_gsv', 'log'),
-    ('i_fch', 'linear'), ('i_fcb', 'linear'), # ('i_fcr', 'linear')
+    ('i_fch', 'linear'), ('i_fcb', 'linear'), ('i_fcr', 'linear'),
     ('i_hrm', 'linear'), ('i_hrf', 'linear'),
 ]
 # Filter dataset on specific features (drop others) ---------------------------
@@ -94,13 +94,13 @@ highRows = set([]) # set(dataHighlight.index)
 ###############################################################################
 # Iterate through AOI
 ###############################################################################
-(yVar, sigma, col) = ans[0]
-for (yVar, sigma, col) in ans[:]:
+(yVar, sigma, col, yRange) = ans[0]
+for (yVar, sigma, col, yRange) in ans[:]:
     Parallel(n_jobs=JOB)(
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
             dpi=400, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
-            color=col, hcolor='#000000'+'50', lw=0.1, hlw=0.075
+            color=col, hcolor='#000000'+'50', lw=0.1, hlw=0.075, yRange=yRange
         ) for (xVar, scale) in pFeats
     )
 # Export full panel -----------------------------------------------------------

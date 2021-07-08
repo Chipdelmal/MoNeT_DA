@@ -26,11 +26,11 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, QNT, MTR) = ('dsk', 'PAN', 'HLT', '50', 'MNF')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('dsk', 'PAN', 'HLT', 'LDR' '50', 'MNF')
     VT_SPLIT = aux.VT_TRAIN
 else:
-    (USR, LND, AOI, QNT, MTR) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    (USR, LND, AOI, DRV, QNT, MTR) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6]
     )
     VT_SPLIT = aux.VT_TRAIN
 EXPS = aux.getExps(LND)
@@ -47,7 +47,7 @@ else:
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
-(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND)
+(PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
