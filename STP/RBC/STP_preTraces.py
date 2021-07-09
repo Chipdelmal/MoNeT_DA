@@ -14,7 +14,7 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV) = ('dsk', 'HLT', 'PAN', 'LDR')
+    (USR, AOI, LND,DRV) = ('dsk', 'HLT', 'PAN', 'LDR')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -34,7 +34,7 @@ for exp in EXPS:
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, exp, LND
+        USR, exp, LND, DRV
     )
     PT_IMG = path.join(PT_IMG, 'preTraces')
     monet.makeFolder(PT_IMG)

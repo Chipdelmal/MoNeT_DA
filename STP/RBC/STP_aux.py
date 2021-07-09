@@ -12,7 +12,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 OVW = True
-(JOB_DSK, JOB_SRV) = (8, 60)
+(JOB_DSK, JOB_SRV) = (8, 40)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
     1000000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 
@@ -58,7 +58,7 @@ OVW = True
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
 )
 DICE_PARS = (
-    ('TTI', 0.050, '#23194233', (0, 150)),
+    ('TTI', 0.075, '#23194233', (0, 150)),
     ('CPT', 0.005, '#4361ee43', None),      ('WOP', 0.050, '#ff006e22', None), 
     ('TTO', 0.050, '#00B3E643', None), 
     ('MNF', 0.000, '#be0aff33', None),      ('POE', 0.001, '#00874b33', None)

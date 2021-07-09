@@ -74,12 +74,12 @@ monet.printExperimentHead(
 # Design constraints ----------------------------------------------------------
 (sexLim, renLim, resLim) = (2, 8, .3)
 # Goals constraints -----------------------------------------------------------
-cptLim = (-0.1, .2)
+cptLim = (-0.1, .4)
 poeLim = (-.1, 1)
 ttiLim = (-1, 365/4)
 ttoLim = (-1, 6*365)
-wopLim = (0, 2*365)
-mnfLim = (0, .2)
+wopLim = (0, 10*365)
+mnfLim = (0, 1000)
 # Filter and return dataframe -------------------------------------------------
 constrained = DATA[
     (cptLim[0] <= DATA['CPT']) & (DATA['CPT'] <= cptLim[1]) &
@@ -90,7 +90,8 @@ constrained = DATA[
     (mnfLim[0] <= DATA['MNF']) & (DATA['MNF'] <= mnfLim[1]) &
     (DATA['i_ren'] <= renLim)  &
     (DATA['i_res'] <= resLim)  &
-    (1e-2  >= DATA['i_gsv'])
+    (1e-2  >= DATA['i_gsv']) &
+    DATA['i_sex'] == 1
 ]
 constrained
 # Export data -----------------------------------------------------------------
