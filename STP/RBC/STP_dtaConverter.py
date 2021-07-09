@@ -16,11 +16,11 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, NME) = ('dsk', 'PAN', 'HLT', '50', '')
+    (USR, LND, AOI, DRV, QNT, NME, TRC) = ('dsk', 'PAN', 'HLT', '50', '', 'HLT')
 else:
-    (USR, LND, AOI, DRV, QNT, NME) = (
+    (USR, LND, AOI, DRV, QNT, NME, TRC) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
-	sys.argv[4], sys.argv[5], sys.argv[6]
+	sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7]
     )
 # Filename --------------------------------------------------------------------
 if NME == 'SX':
@@ -82,7 +82,7 @@ for ix in range(expsNum):
     row = DATA.iloc[ix]
     ins = [str(int(row[i]*zipper[i][0])).zfill(zipper[i][1]) for i in zipper]
     (mig, grp) = (ins[-1], ins[-2])
-    fname = aux.XP_PTRN.format(*ins[:-2], AOI, ins[-2], 'srp', 'bz')
+    fname = aux.XP_PTRN.format(*ins[:-2], TRC, ins[-2], 'srp', 'bz')
     fpath = path.join(PT_PRE, fname)
     if path.isfile(fpath):
         (tti, tto, wop, poe, _, cpt, mnf) = [row[i] for i in outSorting]
