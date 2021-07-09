@@ -15,10 +15,11 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT, TRC) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'ECO')
 else:
-    (USR, LND, AOI, DRV, QNT) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    (USR, LND, AOI, DRV, QNT, TRC) = (
+        sys.argv[1], sys.argv[2], sys.argv[3], 
+        sys.argv[4], sys.argv[5], sys.argv[6]
     )
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
@@ -33,7 +34,7 @@ exp = EXPS[0]
 ###############################################################################
 EXPS = aux.getExps(LND)
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(aux.DRV, TRC, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, EXPS[0], LND, DRV)
