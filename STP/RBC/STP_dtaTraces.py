@@ -75,5 +75,5 @@ Parallel(n_jobs=JOB)(
 repDta = pkl.load(expsIter[0][1])
 monet.exportGeneLegend(
     repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-    PT_IMG+'/legend_{}.png'.format(AOI), 500
+    PT_IMG+'/legend_{}.png'.format(TRC), 500
 )
