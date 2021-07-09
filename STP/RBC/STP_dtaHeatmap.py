@@ -54,9 +54,9 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_gsv', 'i_fch'], 'i_rsg'
+    ['i_fch', 'i_fcr'], 'i_fcb'
 )
-(xSca, ySca) = ('log', 'linear')
+(xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (1000, 1000)
@@ -82,15 +82,15 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 ###############################################################################
 fltr = {
     'i_sex': 2,
-    'i_ren': 10,
+    'i_ren': 12,
     'i_res': .5,
-    'i_rsg': 7.90e-06,
+    'i_rsg': 0.079,
     'i_gsv': 1.e-02,
     'i_fch': 0.175,
     'i_fcb': 0.117,
     'i_fcr': 0,
-    'i_hrm': 0.9,
-    'i_hrf': 0.8604,
+    'i_hrm': 1.0,
+    'i_hrf': 0.956,
     'i_grp': 0, 'i_mig': 0
 }
 [fltr.pop(i) for i in HD_IND]
