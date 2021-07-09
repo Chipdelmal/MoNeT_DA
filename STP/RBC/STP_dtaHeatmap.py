@@ -25,7 +25,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'CPT')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'WOP')
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -54,7 +54,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_fch', 'i_fcr'], 'i_fcb'
+    ['i_ren', 'i_res'], 'i_fch'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------

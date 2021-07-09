@@ -103,7 +103,7 @@ constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 # Filter Output with Constraints
 ###############################################################################
 # Design constraints ----------------------------------------------------------
-(sexLim, renLim, resLim) = (2, 10, .5)
+(sexLim, renLim, resLim) = (2, 24, 1)
 # Goals constraints -----------------------------------------------------------
 cptLim = (-0.1, .2)
 poeLim = (-.1, 1)
@@ -116,12 +116,13 @@ constrained = DATA[
     (DATA['i_sex'] == 2)        &
     (DATA['i_fch'] == 0.175)    &
     (DATA['i_fcb'] == 0.117)    &
-    (DATA['i_hrm'] == 0.9)      &
-    (DATA['i_hrf'] == 0.8604)   &
+    (DATA['i_fcr'] == 0)        &
+    (DATA['i_hrm'] == 1.0)      &
+    (DATA['i_hrf'] == 0.956)    &
+    (DATA['i_rsg'] == 0.079)    &
+    (DATA['i_gsv'] == 1.e-02)   &
     (0 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
     (0 <= DATA['i_res'])        & (DATA['i_res'] <= resLim)         
-    # (0 <= DATA['i_gsv'])    &
-    # (0 <= DATA['i_rsg'])
 ]
 constrained
 # Export data -----------------------------------------------------------------
