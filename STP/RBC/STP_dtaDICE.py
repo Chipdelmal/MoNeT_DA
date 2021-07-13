@@ -110,4 +110,3 @@ cmd = [
     '--export-filename='+path.join(PT_IMG, 'DICE.png')
 ]
 subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
