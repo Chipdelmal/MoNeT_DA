@@ -58,10 +58,9 @@ OVW = True
     [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
 )
 DICE_PARS = (
-    ('TTI', 0.075, '#23194233', (0, 150)),
-    ('CPT', 0.005, '#4361ee43', None),      ('WOP', 0.050, '#ff006e22', None), 
-    ('TTO', 0.050, '#00B3E643', None), 
-    ('MNF', 0.000, '#be0aff33', None),      ('POE', 0.001, '#00874b33', None)
+    ('CPT', 0.005, '#4361ee43', None),  ('WOP', 0.050, '#ff006e22', None), 
+    ('TTO', 0.050, '#00B3E643', None),  ('TTI', 0.075, '#23194233', (0, 150)),
+    ('MNF', 0.000, '#be0aff33', None),  ('POE', 0.001, '#00874b33', None)
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
@@ -75,7 +74,7 @@ DATA_TYPE = {
     'i_hrm': np.double, 'i_hrf': np.double,
     'i_grp': np.intc,   'i_mig': np.double
 }
-SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
+SEX_CATS = ('i_sxm', 'i_sxg')# , 'i_sxn')
 (ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS, ML_MNX_CATS) = ( 
     [-.1, .25, .75, 1.1],
     [-.1, .5, 1.1],

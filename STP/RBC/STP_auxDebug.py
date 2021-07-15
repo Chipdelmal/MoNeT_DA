@@ -6,6 +6,7 @@ import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from more_itertools import locate
 import MoNeT_MGDrivE as monet
+from sklearn.preprocessing import LabelBinarizer
 import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
@@ -332,3 +333,17 @@ def releasedSex(reType):
         return (0, 0, 1)
     else:
         return False
+
+class Binarizer(LabelBinarizer):
+    def transform(self, y):
+        Y = super().transform(y)
+        if self.y_type_ == 'binary':
+            return np.hstack((Y, 1-Y))
+        else:
+            return Y
+
+    def inverse_transform(self, Y, threshold=None):
+        if self.y_type_ == 'binary':
+            return super().inverse_transform(Y[:, 0], threshold)
+        else:
+            return super().inverse_transform(Y, threshold)
