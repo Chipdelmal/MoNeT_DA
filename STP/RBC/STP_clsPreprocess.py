@@ -10,6 +10,7 @@ import compress_pickle as pkl
 from sklearn.preprocessing import LabelBinarizer
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
+import STP_auxDebug as dbg
 import STP_gene as drv
 import STP_land as lnd
 import MoNeT_MGDrivE as monet
@@ -56,7 +57,7 @@ dfRaw = pd.read_csv(path.join(PT_OUT, fName_I))
 ###############################################################################
 # One-Hot Sex
 ###############################################################################
-oneHotSex = LabelBinarizer().fit_transform(dfRaw.i_sex)
+oneHotSex = dbg.Binarizer().fit_transform(dfRaw.i_sex)
 oneHotSexDF = pd.DataFrame(oneHotSex, columns=aux.SEX_CATS)
 dfClean = pd.concat([oneHotSexDF, dfRaw.drop('i_sex', axis=1)], axis=1)
 dfClean.to_csv(path.join(PT_OUT, fName_R), index=False)
@@ -78,3 +79,4 @@ for (mtr, ran) in zip(('CPT', 'POE', 'POF', 'WOP', 'TTI', 'TTO', 'MNF'), tCats):
 # Export output
 ###############################################################################
 dfCat.to_csv(path.join(PT_OUT, fName_C), index=False)
+

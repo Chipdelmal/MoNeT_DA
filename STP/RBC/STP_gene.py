@@ -3,6 +3,7 @@
 
 import MoNeT_MGDrivE as monet
 import STP_gene_LDR as LDR
+import STP_gene_LDR as SDR
 
 ###############################################################################
 # Drive
@@ -12,6 +13,8 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
     # Linked Drive ------------------------------------------------------------
     if DRIVE == 'LDR':
         (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
+    elif DRIVE == 'SDR':
+        (aggD, yRange, folder) = SDR.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN

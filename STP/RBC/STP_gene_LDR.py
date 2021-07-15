@@ -2,12 +2,12 @@
 
 from collections import OrderedDict
 import MoNeT_MGDrivE as monet
+
 ###############################################################################
-# https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_main.R
+# https://github.com/Chipdelmal/MGDrivE/blob/fb2106b7cfd52116121c8b6a4fa14ad360056e40/MGDrivE/R/Cube-CRISPR2MF.R
 ###############################################################################
 genotypes = ('WW', 'WH', 'WR', 'WB', 'HH', 'HR', 'HB', 'RR', 'RB', 'BB')
 locus = (0, 1)
-
 ###############################################################################
 # Ecology genotype counts
 ###############################################################################
