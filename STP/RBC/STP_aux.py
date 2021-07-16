@@ -27,6 +27,7 @@ OVW = True
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
 )
+REF_FILE = 'E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0100000_0100000'
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD) = (
     (
@@ -55,7 +56,7 @@ OVW = True
     [.10, .25, .50],
     [.10, .25, .50],
     [.10, .25, .50],
-    [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
+    [0, 365]# [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
 )
 DICE_PARS = (
     ('CPT', 0.005, '#4361ee43', None),  ('WOP', 0.050, '#ff006e22', None), 
@@ -74,7 +75,7 @@ DATA_TYPE = {
     'i_hrm': np.double, 'i_hrf': np.double,
     'i_grp': np.intc,   'i_mig': np.double
 }
-SEX_CATS = ('i_sxm', 'i_sxg')# , 'i_sxn')
+SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 (ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS, ML_MNX_CATS) = ( 
     [-.1, .25, .75, 1.1],
     [-.1, .5, 1.1],
@@ -168,6 +169,10 @@ def selectPath(USR, EXP, LND, DRV=None):
         )
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP_Grid/{}/{}/{}/'.format(
+            DRV, LND, EXP
+        )
+    elif USR == 'dsk2':
+        PATH_ROOT = '/home/chipdelmal/Desktop/STP_Grid/{}/{}/{}/'.format(
             DRV, LND, EXP
         )
     (PATH_IMG, PATH_DATA) = (
