@@ -74,7 +74,7 @@ DATA_TYPE = {
     'i_hrm': np.double, 'i_hrf': np.double,
     'i_grp': np.intc,   'i_mig': np.double
 }
-SEX_CATS = ('i_sxm', 'i_sxg')# , 'i_sxn')
+SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 (ML_CPT_CATS, ML_POE_CATS, ML_POF_CATS, ML_MNX_CATS) = ( 
     [-.1, .25, .75, 1.1],
     [-.1, .5, 1.1],
