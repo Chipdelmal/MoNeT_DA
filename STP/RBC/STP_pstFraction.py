@@ -16,12 +16,12 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV) = ('dsk', 'HLT', 'PAN', 'LDR')
+    (USR, AOI, LND, DRV) = ('dsk2', 'HLT', 'PAN', 'LDR')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     JOB = aux.JOB_SRV
-(EXPS, DRV) = (aux.getExps(LND), 'LDR')
+(EXPS, DRV, GRID_REF) = (aux.getExps(LND), 'LDR', False)
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -50,25 +50,32 @@ for exp in EXPS:
     # Get releases number set -------------------------------------------------
     ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[2]
     # Get base experiments pattern --------------------------------------------
-    basePat = aux.patternForReleases(aux.NO_REL_PAT, AOI, 'sum')
-    baseFiles = sorted(glob(PT_PRE+basePat))
-    baseFNum = len(baseFiles)
+    if GRID_REF:
+        basePat = aux.patternForReleases(aux.NO_REL_PAT, AOI, 'sum')
+        baseFiles = sorted(glob(PT_PRE+basePat))
+        baseFNum = len(baseFiles)
     # #########################################################################
     # Probe experiments
     #   sum: Analyzed data aggregated into one node
     #   srp: Garbage data aggregated into one node
     # #########################################################################
     (xpNum, digs) = monet.lenAndDigits(ren)
-    (i, rnIt) = (0, '00')
+    (i, rnIt) = (0, '12')
     for (i, rnIt) in enumerate(ren):
         monet.printProgress(i+1, xpNum, digs)
+        # Repetitions data (Garbage) ------------------------------------------
+        tracePat = aux.patternForReleases(rnIt, AOI, 'srp')
+        traceFiles = sorted(glob(PT_PRE+tracePat))
         # Mean data (Analyzed) ------------------------------------------------
         meanPat = aux.patternForReleases(rnIt, AOI, 'sum')
         meanFiles = sorted(glob(PT_PRE+meanPat))
         expNum = len(meanFiles)
-        # Repetitions data (Garbage) ------------------------------------------
-        tracePat = aux.patternForReleases(rnIt, AOI, 'srp')
-        traceFiles = sorted(glob(PT_PRE+tracePat))
+        # Patch for static reference file -------------------------------------
+        if not GRID_REF:
+            baseFiles = [
+                dbg.replaceExpBase(f, aux.REF_FILE) for f in meanFiles
+            ]
+            baseFNum = len(baseFiles)
         # Create experiments iterator list ------------------------------------
         expIter = list(zip(
             list(range(expNum)), baseFiles, meanFiles, traceFiles

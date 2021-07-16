@@ -10,6 +10,12 @@ fi
 ##############################################################################
 # ML csvs
 ##############################################################################
+if [[ "$TYP" = "DICE" ]]; then
+    scp -r lab:/RAID5/marshallShare/STP_Grid/LDR/PAN/ML/img/*.png /home/chipdelmal/Documents/WorkSims/STP_Grid/LDR/PAN/ML/img
+fi
+##############################################################################
+# ML csvs
+##############################################################################
 if [[ "$TYP" = "PRE" ]]; then
     scp -r lab:/RAID5/marshallShare/STP_Grid/LDR/PAN/000000/img/preTraces/ /home/chipdelmal/Documents/WorkSims/STP_Grid/LDR/PAN/000000/img/
 fi

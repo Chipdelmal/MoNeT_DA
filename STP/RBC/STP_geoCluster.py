@@ -12,8 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn.cluster import KMeans
 import compress_pickle as pkl
 import STP_aux as aux
-import STP_plots as plo
-import STP_functions as fun
+import STP_auxDebug as plo
 
 
 if monet.isNotebook():
@@ -115,7 +114,7 @@ mH.scatter(
 for i in range(len(lon)):
     (x, y) = mH(lon[i], lat[i])
     ax.annotate(i, xy=(x, y), size=.2, ha='center', va='center', color='white')
-fun.quickSaveFig(PTH_PTS + 'raw.png', fig, dpi=1000)
+monet.quickSaveFig(PTH_PTS + 'raw.png', fig, dpi=1000)
 mH.scatter(
     [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
     alpha=.5, marker='x', s=[5],
