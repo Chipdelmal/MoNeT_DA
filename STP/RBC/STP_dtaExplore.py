@@ -23,7 +23,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('dsk2', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -72,11 +72,11 @@ monet.printExperimentHead(
 # Filter Output with Constraints
 ###############################################################################
 # Design constraints ----------------------------------------------------------
-(sexLim, renLim, resLim) = (2, 8, .3)
+(sexLim, renLim, resLim) = (2, 15, .5)
 # Goals constraints -----------------------------------------------------------
-cptLim = (-0.1, .4)
+cptLim = (0.25, 1)
 poeLim = (-.1, 1)
-ttiLim = (-1, 365/4)
+ttiLim = (-1, 365/6)
 ttoLim = (-1, 6*365)
 wopLim = (0, 10*365)
 mnfLim = (0, 1000)
