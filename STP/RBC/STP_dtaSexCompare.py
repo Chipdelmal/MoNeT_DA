@@ -88,22 +88,44 @@ mrgDF = sxML.merge(
 ###############################################################################
 # Distributions
 ###############################################################################
+dtaTrpl = (mrgDF['CPT_ML'], mrgDF['CPT_NG'], mrgDF['CPT_GV'])
+colTrpl = ('#03045e', '#ff006e', '#3a86ff')
 (fig, ax) = plt.subplots(nrows=3, ncols=1)
-sns.violinplot(x=mrgDF['CPT_ML'], ax=ax[0], size=.25, color='#03045e12', cut=0)
-sns.stripplot(x=mrgDF['CPT_ML'], ax=ax[0], size=.25, color='#03045e32')
-sns.stripplot(x=mrgDF['CPT_NG'], ax=ax[1], size=.25, color='#ff006e32')
-sns.stripplot(x=mrgDF['CPT_GV'], ax=ax[2], size=.25, color='#3a86ff32')
+for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
+    sns.boxplot(
+        x=dta[0],
+        showmeans=True, meanline=True, 
+        meanprops={'color': '#212529', 'ls': '-', 'lw': .75},
+        medianprops={'visible': False}, whiskerprops={'visible': False},
+        zorder=10, showfliers=False, showbox=False, showcaps=False, ax=ax[i]
+    )
+    sns.stripplot(
+        x=dta[0], 
+        ax=ax[i], size=.5, color=dta[1], alpha=.35, zorder=1
+    )
 for a in ax:
+    a.axis("off")
     a.set_xlim(0, 1)
-plt.show()
-fig.savefig(path.join(PT_IMG, 'SEX_DISTR.png'), dpi=500)
+    a.set_ylim(-.125, .125)
+    a.xaxis.set_ticklabels([])
+fig.savefig(
+    path.join(PT_IMG, 'SEX_DISTR.png'), 
+    dpi=500, bbox_inches='tight', pad_inches=0
+)
 ###############################################################################
 # Compare Datasets
 ###############################################################################
-(fig, ax) = plt.subplots(nrows=2, ncols=1)
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[0], size=.25, color='#ff006e32')
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[1], size=.25, color='#3a86ff32')
+(fig, ax) = plt.subplots(nrows=3, ncols=1)
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_ML'], ax=ax[0], size=.25, color='#03045e00')
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.25, color='#ff006e32')
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.25, color='#3a86ff32')
 for a in ax:
-    a.set_xlim(-.5, .5)
-plt.show()
-fig.savefig(path.join(PT_IMG, 'SEX_COMP.png'), dpi=500)
+    a.set_xlim(0, 1)
+    a.axis("off")
+    a.set_xlim(0, 1)
+    a.set_ylim(-.125, .125)
+    a.xaxis.set_ticklabels([])
+fig.savefig(
+    path.join(PT_IMG, 'SEX_COMP.png'),
+    dpi=500, bbox_inches='tight', pad_inches=0
+)
