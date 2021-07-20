@@ -89,7 +89,7 @@ mrgDF = sxML.merge(
 # Distributions
 ###############################################################################
 dtaTrpl = (mrgDF['CPT_ML'], mrgDF['CPT_NG'], mrgDF['CPT_GV'])
-colTrpl = ('#03045e', '#ff006e', '#3a86ff')
+colTrpl = ('#45d40c', '#ff006e', '#8338EC')
 (fig, ax) = plt.subplots(nrows=3, ncols=1)
 for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
     sns.boxplot(
@@ -101,7 +101,7 @@ for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
     )
     sns.stripplot(
         x=dta[0], 
-        ax=ax[i], size=.5, color=dta[1], alpha=.35, zorder=1
+        ax=ax[i], size=.35, color=dta[1], alpha=.25, zorder=1
     )
 for a in ax:
     a.axis("off")
@@ -116,9 +116,9 @@ fig.savefig(
 # Compare Datasets
 ###############################################################################
 (fig, ax) = plt.subplots(nrows=3, ncols=1)
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_ML'], ax=ax[0], size=.25, color='#03045e00')
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.25, color='#ff006e32')
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.25, color='#3a86ff32')
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_ML'], ax=ax[0], size=.25, color=colTrpl[0])
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.25, color=colTrpl[1])
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.25, color=colTrpl[2])
 for a in ax:
     a.set_xlim(0, 1)
     a.axis("off")

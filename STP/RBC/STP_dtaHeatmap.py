@@ -1,7 +1,5 @@
 import sys
 from math import exp
-import random
-import subprocess
 from os import minor, path
 from re import match
 from glob import glob
@@ -12,8 +10,6 @@ import numpy as np
 from numpy.lib.arraypad import pad
 import pandas as pd
 import matplotlib.pyplot as plt
-import plotly.express as px
-from sklearn import preprocessing
 from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
@@ -21,6 +17,7 @@ import STP_gene as drv
 import STP_land as lnd
 import STP_auxDebug as dbg
 from more_itertools import locate
+from sklearn.model_selection import ParameterGrid
 import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
@@ -54,7 +51,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_ren', 'i_res'], 'i_fch'
+    ['i_fch', 'i_fcb'], 'i_res'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -77,13 +74,27 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Filter the dataframe --------------------------------------------------------
 headerInd = [i for i in DATA.columns if i[0]=='i']
 uqVal = {i: list(DATA[i].unique()) for i in headerInd}
+# Filter the dataframe --------------------------------------------------------
+amend = uqVal
+amend['i_res'] = [0]
+amendFact = list(ParameterGrid(amend))
+outFix = {
+    'TTI': max(DATA['TTI']), 'TTO': max(DATA['TTO']), 'WOP': min(DATA['WOP']),
+    'POE': min(DATA['POE']), 'POF': max(DATA['POF']), 'CPT': max(DATA['CPT']),
+    'MNF': max(DATA['MNF'])
+}
+amendDict = [{**i, **outFix} for i in amendFact]
+DATA = DATA.append(amendDict, ignore_index=True)
+# Filter the dataframe --------------------------------------------------------
+headerInd = [i for i in DATA.columns if i[0]=='i']
+uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 ###############################################################################
 # Filter dataframe
 ###############################################################################
 fltr = {
     'i_sex': 2,
-    'i_ren': 12,
-    'i_res': .5,
+    'i_ren': 8,
+    'i_res': .6,
     'i_rsg': 0.079,
     'i_gsv': 1.e-02,
     'i_fch': 0.175,
@@ -100,7 +111,7 @@ for sw in sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[DATA[k]==fltr[k] for k in list(fltr.keys())])]
     dfSrf = DATA[ks]
-    if dfSrf.shape[0] == 0:
+    if dfSrf.shape[0] < 4:
         continue
     ###########################################################################
     # Generate Surface
@@ -126,7 +137,7 @@ for sw in sweep:
     ###########################################################################
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface ----------------------
-    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=15, alpha=.25, marker='.')
+    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
     cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
