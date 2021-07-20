@@ -93,11 +93,14 @@ SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 # #############################################################################
 def selectDepVars(MOI, AOI):
     # Select ranges and dependent variable-------------------------------------
-    if (MOI == 'WOP') or (MOI == 'TTI') or (MOI == 'TTO'):
+    if (MOI == 'WOP') or (MOI == 'TTO'):
+        scalers = [1, 1, XRAN]
+        (HD_DEP, IND_RAN) = ('0.1', 7)
+    elif (MOI == 'TTI'):
         scalers = [1, 1, XRAN]
         (HD_DEP, IND_RAN) = ('0.1', 7)
     elif (MOI == 'RAP'):
-        scalers = [1, 100, 1]
+        scalers = [1, 100, 90]
         (HD_DEP, IND_RAN) = ('486', 7)
     elif (MOI == 'MNX'):
         scalers = [1, 100, 1]
@@ -111,6 +114,9 @@ def selectDepVars(MOI, AOI):
     elif (MOI == 'DER'):
         scalers = [1, 100, 5]
         (HD_DEP, IND_RAN) = ('DER', 5) 
+    elif (MOI == 'MNF'):
+        scalers = [1, 1, 1]
+        (HD_DEP, IND_RAN) = ('MNF', 1) 
     # Color Mapping -----------------------------------------------------------
     if MOI == 'WOP':
         cmap = monet.cmapC

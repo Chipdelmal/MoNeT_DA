@@ -22,7 +22,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'TTI')
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -51,7 +51,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_fch', 'i_fcb'], 'i_res'
+    ['i_ren', 'i_res'], 'i_sex'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -67,7 +67,10 @@ thsStr = str(int(float(aux.THS)*100))
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
-(zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
+if MOI == 'TTI':
+    (zmin, zmax) = (45, 90)
+else:
+    (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
 # (zmin, zmax) = (-0.1, max(DATA[MOI]))
 (lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
 # (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
@@ -75,14 +78,19 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 headerInd = [i for i in DATA.columns if i[0]=='i']
 uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 # Filter the dataframe --------------------------------------------------------
-amend = uqVal
-amend['i_res'] = [0]
-amendFact = list(ParameterGrid(amend))
 outFix = {
     'TTI': max(DATA['TTI']), 'TTO': max(DATA['TTO']), 'WOP': min(DATA['WOP']),
     'POE': min(DATA['POE']), 'POF': max(DATA['POF']), 'CPT': max(DATA['CPT']),
     'MNF': max(DATA['MNF'])
 }
+amend = uqVal.copy()
+amend['i_res'] = [0]
+amendFact = list(ParameterGrid(amend))
+amendDict = [{**i, **outFix} for i in amendFact]
+DATA = DATA.append(amendDict, ignore_index=True)
+amend = uqVal.copy()
+amend['i_ren'] = [0]
+amendFact = list(ParameterGrid(amend))
 amendDict = [{**i, **outFix} for i in amendFact]
 DATA = DATA.append(amendDict, ignore_index=True)
 # Filter the dataframe --------------------------------------------------------
