@@ -22,7 +22,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'TTI')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'CPT')
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -51,7 +51,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_ren', 'i_res'], 'i_sex'
+    ['i_fch', 'i_fcb'], 'i_ren'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -67,12 +67,18 @@ thsStr = str(int(float(aux.THS)*100))
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
+# Contour levels --------------------------------------------------------------
 if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-# (zmin, zmax) = (-0.1, max(DATA[MOI]))
+if zmax > 10:
+    rval = 0
+else:
+    rval = 1
 (lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
+lvls = [round(i, rval) for i in lvls]
+# (zmin, zmax) = (-0.1, max(DATA[MOI]))
 # (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
 # Filter the dataframe --------------------------------------------------------
 headerInd = [i for i in DATA.columns if i[0]=='i']
@@ -100,7 +106,7 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 # Filter dataframe
 ###############################################################################
 fltr = {
-    'i_sex': 2,
+    'i_sex': 1,
     'i_ren': 8,
     'i_res': .6,
     'i_rsg': 0.079,
@@ -146,7 +152,7 @@ for sw in sweep:
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface ----------------------
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
+    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#555555', linewidths=.5, alpha=.5)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
     # cs.cmap.set_under('blue')
@@ -174,6 +180,10 @@ for sw in sweep:
     # Labels ------------------------------------------------------------------
     ax.set_xlabel(HD_IND[0])
     ax.set_ylabel(HD_IND[1])
+    ax.clabel(
+        cc, inline=True, fontsize=10, fmt='%1.{}f'.format(rval),
+        rightside_up=False
+    )
     pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
     plt.title(pTitle, fontsize=7.5)
     # Axes scales and limits --------------------------------------------------
