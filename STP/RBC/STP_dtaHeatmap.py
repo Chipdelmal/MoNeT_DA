@@ -51,7 +51,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_fch', 'i_fcb'], 'i_ren'
+    ['i_ren', 'i_res'], 'i_fch'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -75,9 +75,8 @@ else:
 if zmax > 10:
     rval = 0
 else:
-    rval = 1
+    rval = 3
 (lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
-lvls = [round(i, rval) for i in lvls]
 # (zmin, zmax) = (-0.1, max(DATA[MOI]))
 # (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
 # Filter the dataframe --------------------------------------------------------

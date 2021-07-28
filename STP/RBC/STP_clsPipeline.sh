@@ -23,9 +23,9 @@ fi
 ###############################################################################
 # Train Model
 ###############################################################################
-python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'CPT'
-# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'POE'
-python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'WOP'
-# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'TTI'
-# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'TTO'
-# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'MNF'
+# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'CPT'
+python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'POE'
+# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'WOP'
+python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'TTI'
+python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'TTO'
+python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'MNF'
