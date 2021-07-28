@@ -71,7 +71,7 @@ for exp in [exp, ]:
             "aspect": aspect, "colors": CLR, "xRange": xRange, "yRange": YRAN,
             "format": 'png', 'ls': '-'
         }
-    tS = datetime.now()
+    print('- YRAN: {}'.format(YRAN))
     # VLines ------------------------------------------------------------------
     if exp=='s1':
         rel = [

@@ -85,4 +85,4 @@ for exp in [exp, ]:
 
 # import numpy as np
 # import compress_pickle as pkl
-# dta = pkl.load('/home/chipdelmal/Documents/WorkSims/QLD/Experiments/s1/PREPROCESS/E_001-HLT_01_srp.bz')
+# dta = pkl.load('/home/chipdelmal/Documents/WorkSims/QLD/Experiments/s1/PREPROCESS/E_007-HLT_00_sum.bz')
