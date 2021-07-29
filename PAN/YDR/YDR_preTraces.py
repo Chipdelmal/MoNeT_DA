@@ -25,7 +25,7 @@ if monet.isNotebook():
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 JOB = aux.JOB_SRV
-if USR=='dsk':
+if USR=='dsk' or USR=='lab':
     JOB = aux.JOB_DSK
 ###############################################################################
 # Setting up paths and style
@@ -80,8 +80,8 @@ for exp in EXPS:
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------
-    sumDta = pkl.load(fLists[-1][0])
-    monet.exportGeneLegend(
-        sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-        PT_IMG+'/legend_{}.png'.format(AOI), 500
-    )
+    # sumDta = pkl.load(fLists[-1][0])
+    # monet.exportGeneLegend(
+    #     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+    #     PT_IMG+'/legend_{}.png'.format(AOI), 500
+    # )

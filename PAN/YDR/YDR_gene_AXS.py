@@ -78,7 +78,7 @@ def driveParameters(TYPE, popSize):
         yRange = popSize/2
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(*AXS_TRS)
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*AXS_WLD)
         yRange = popSize
