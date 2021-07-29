@@ -31,7 +31,7 @@ EXPS = ('001', )
         [int((i+1)*365-1) for i in range(5)]
     )
 FRATE = 30
-(JOB_DSK, JOB_SRV) = (8, 40)
+(JOB_DSK, JOB_SRV) = (8, 8)
 
 # #############################################################################
 # Experiment-Specific Path Functions
@@ -76,6 +76,8 @@ def selectPath(USR, SET, DRV, EXP):
         PATH_ROOT = '/RAID5/marshallShare/yLinked/{}/{}/{}/'.format(SET, DRV, EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/YDR/{}/{}/{}/'.format(SET, DRV, EXP)
+    elif USR == 'lab':
+        PATH_ROOT = '/Volumes/marshallShare/yLinked2/{}/{}/{}/'.format(SET, DRV, EXP)
     elif USR == 'srv2':
         PATH_ROOT = '/RAID5/marshallShare/yLinked2/{}/{}/{}/'.format(SET, DRV, EXP)
     (PATH_IMG, PATH_DATA) = (
