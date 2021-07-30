@@ -13,7 +13,7 @@ import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 
 if monet.isNotebook():
-    (USR, SET, DRV, AOI) = ('lab', 'homing', 'XSD', 'TRS')
+    (USR, SET, DRV, AOI) = ('lab', 'shredder', 'AXS', 'TRS')
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 ###############################################################################
@@ -40,6 +40,16 @@ monet.printExperimentHead(
 ###############################################################################
 # Mean Max introgression
 ###############################################################################
-fReplace = 'E_048_078_076_079_007_011_011_100_0166666_12-HLT_00_rto.npy'
-rats = np.load(path.join(PT_OUT, fReplace))
-print("Mean(Max) = {:.3f}". format(1-np.mean([min(i) for i in rats])))
+if SET == 'homing':
+    fReplace = 'E_048_078_076_079_007_011_011_100_0166666_12-HLT_00_rto.npy'
+    rats = np.load(path.join(PT_OUT, fReplace))
+    print("Mean(Max) = {:.3f}". format(1-np.mean([min(i) for i in rats])))
+###############################################################################
+# Mean Max introgression
+###############################################################################
+if SET == 'shredder':
+    fSuppress = 'E_099_099_007_000_100_0000001_0000001_12-HLT_00_rto.npy'
+    rats = np.load(path.join(PT_OUT, fSuppress))
+    times = [(np.argmax(i < .01)-(12*7))/7 for i in rats]
+    print("Weeks to Elimination = {:.3f}".format(np.mean([x for x in times if x > 0])))
+    print("Weeks to Rebound = {:.3f}".format(np.mean([(np.argmax(i[12*7:] > .95))/7 for i in rats])))
