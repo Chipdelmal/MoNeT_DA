@@ -22,7 +22,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -43,16 +43,6 @@ PT_IMG = path.join(PT_OUT, 'img', 'heat')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
-# Select surface variables
-###############################################################################
-(HD_IND, kSweep) = (
-    ['i_ren', 'i_res'], 'i_sex'
-)
-(xSca, ySca) = ('linear', 'linear')
-# Scalers and sampling --------------------------------------------------------
-(scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
-(ngdx, ngdy) = (1000, 1000)
-###############################################################################
 # Read CSV
 ###############################################################################
 thsStr = str(int(float(aux.THS)*100))
@@ -62,32 +52,26 @@ thsStr = str(int(float(aux.THS)*100))
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
-if MOI == 'TTI':
-    (zmin, zmax) = (45, 90)
-else:
-    (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-# (zmin, zmax) = (-0.1, max(DATA[MOI]))
-(lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
-# (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
-# Filter the dataframe --------------------------------------------------------
+###############################################################################
+# Fix dataframe
+###############################################################################
 headerInd = [i for i in DATA.columns if i[0]=='i']
-uqVal = {i: list(DATA[i].unique()) for i in headerInd}
-# Add zeroes to dataframe -----------------------------------------------------
+headerInd.remove('i_ren')
+headerInd.remove('i_res')
+uqRows = DATA[headerInd].drop_duplicates()
+# Select values for padding ---------------------------------------------------
 outFix = {
     'TTI': max(DATA['TTI']), 'TTO': max(DATA['TTO']), 'WOP': min(DATA['WOP']),
     'POE': min(DATA['POE']), 'POF': max(DATA['POF']), 'CPT': max(DATA['CPT']),
     'MNF': max(DATA['MNF'])
 }
-amend = uqVal.copy()
-amend['i_res'] = [0]
-amendFact = list(ParameterGrid(amend))
-amendDict = [{**i, **outFix} for i in amendFact]
-DATA = DATA.append(amendDict, ignore_index=True)
-amend = uqVal.copy()
-amend['i_ren'] = [0]
-amendFact = list(ParameterGrid(amend))
-amendDict = [{**i, **outFix} for i in amendFact]
-DATA = DATA.append(amendDict, ignore_index=True)
+# Replace row values ----------------------------------------------------------
+for i, row in uqRows.iterrows():
+    uqRows.at[i, 'i_ren'] = 0
+    uqRows.at[i, 'i_res'] = 0
+    for j in outFix:
+        uqRows.at[i, j] = outFix[j]
+DATA = DATA.append(uqRows, ignore_index=True)
 ###############################################################################
 # Export amended dataset
 ###############################################################################
