@@ -23,5 +23,6 @@ python STP_clsCompile.py $USR 'PAN' 'HLT' $DRV $QNT 'MNX'
 # Unify dataframes
 ###############################################################################
 python STP_clsUnify.py $USR 'PAN' 'HLT' $DRV $QNT
+python STP_dtaAmend.py $USR 'PAN' 'HLT' $DRV $QNT
 python STP_clsPreprocess.py $USR 'PAN' 'HLT' $DRV $QNT
 python STP_dtaDICE.py $USR 'PAN' 'HLT' $DRV $QNT

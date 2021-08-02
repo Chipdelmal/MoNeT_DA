@@ -71,7 +71,7 @@ for exp in [exp, ]:
             "aspect": aspect, "colors": CLR, "xRange": xRange, "yRange": YRAN,
             "format": 'png', 'ls': '-'
         }
-    tS = datetime.now()
+    print('- YRAN: {}'.format(YRAN))
     # VLines ------------------------------------------------------------------
     if exp=='s1':
         rel = [
@@ -109,7 +109,7 @@ for exp in [exp, ]:
     # Arrange file tuples -----------------------------------------------------
     expIter = list(zip(list(range(expNum, 0, -1)), fLists))
     expIter.reverse()
-    # NEEDS OVW FITLERING!!!!!!!!!! -------------------------------------------
+    # NEEDS OVW FILTERING!!!!!!!!!! -------------------------------------------
     ###########################################################################
     # Process files
     ###########################################################################

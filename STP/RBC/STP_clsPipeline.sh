@@ -19,13 +19,13 @@ fi
 ###############################################################################
 # Data pre-process
 ###############################################################################
-python STP_clsPreprocess.py $USR 'PAN' 'HLT' $DRV $QNT
+# python STP_clsPreprocess.py $USR 'PAN' 'HLT' $DRV $QNT
 ###############################################################################
 # Train Model
 ###############################################################################
-python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'CPT'
+# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'CPT'
 python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'POE'
-python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'WOP'
+# python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'WOP'
 python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'TTI'
 python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'TTO'
 python STP_clsTrain.py $USR 'PAN' 'HLT' $DRV $QNT 'MNF'

@@ -12,7 +12,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 OVW = True
-(JOB_DSK, JOB_SRV) = (8, 60)
+(JOB_DSK, JOB_SRV) = (4, 60)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
     1000000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 
@@ -61,7 +61,7 @@ REF_FILE = 'E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000
 DICE_PARS = (
     ('CPT', 0.005, '#4361ee43', None),  ('WOP', 0.050, '#ff006e22', None), 
     ('TTO', 0.050, '#00B3E643', None),  ('TTI', 0.075, '#23194233', (0, 150)),
-    ('MNF', 0.000, '#be0aff33', None),  ('POE', 0.001, '#00874b33', None)
+    ('MNF', 0.000, '#be0aff33', None),  ('POE', 0.001, '#fb560733', None)
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
@@ -93,11 +93,14 @@ SEX_CATS = ('i_sxm', 'i_sxg', 'i_sxn')
 # #############################################################################
 def selectDepVars(MOI, AOI):
     # Select ranges and dependent variable-------------------------------------
-    if (MOI == 'WOP') or (MOI == 'TTI') or (MOI == 'TTO'):
+    if (MOI == 'WOP') or (MOI == 'TTO'):
+        scalers = [1, 1, XRAN]
+        (HD_DEP, IND_RAN) = ('0.1', 7)
+    elif (MOI == 'TTI'):
         scalers = [1, 1, XRAN]
         (HD_DEP, IND_RAN) = ('0.1', 7)
     elif (MOI == 'RAP'):
-        scalers = [1, 100, 1]
+        scalers = [1, 100, 90]
         (HD_DEP, IND_RAN) = ('486', 7)
     elif (MOI == 'MNX'):
         scalers = [1, 100, 1]
@@ -111,6 +114,9 @@ def selectDepVars(MOI, AOI):
     elif (MOI == 'DER'):
         scalers = [1, 100, 5]
         (HD_DEP, IND_RAN) = ('DER', 5) 
+    elif (MOI == 'MNF'):
+        scalers = [1, 1, 1]
+        (HD_DEP, IND_RAN) = ('MNF', 1) 
     # Color Mapping -----------------------------------------------------------
     if MOI == 'WOP':
         cmap = monet.cmapC

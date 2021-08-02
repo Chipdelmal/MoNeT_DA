@@ -1,7 +1,5 @@
 import sys
 from math import exp
-import random
-import subprocess
 from os import minor, path
 from re import match
 from glob import glob
@@ -12,8 +10,6 @@ import numpy as np
 from numpy.lib.arraypad import pad
 import pandas as pd
 import matplotlib.pyplot as plt
-import plotly.express as px
-from sklearn import preprocessing
 from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
@@ -21,11 +17,12 @@ import STP_gene as drv
 import STP_land as lnd
 import STP_auxDebug as dbg
 from more_itertools import locate
+from sklearn.model_selection import ParameterGrid
 import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'CPT')
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -70,10 +67,37 @@ thsStr = str(int(float(aux.THS)*100))
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
-(zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-# (zmin, zmax) = (-0.1, max(DATA[MOI]))
+# Contour levels --------------------------------------------------------------
+if MOI == 'TTI':
+    (zmin, zmax) = (45, 90)
+else:
+    (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
+if zmax > 10:
+    rval = 0
+else:
+    rval = 3
 (lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
+# (zmin, zmax) = (-0.1, max(DATA[MOI]))
 # (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
+# Filter the dataframe --------------------------------------------------------
+headerInd = [i for i in DATA.columns if i[0]=='i']
+uqVal = {i: list(DATA[i].unique()) for i in headerInd}
+# Filter the dataframe --------------------------------------------------------
+outFix = {
+    'TTI': max(DATA['TTI']), 'TTO': max(DATA['TTO']), 'WOP': min(DATA['WOP']),
+    'POE': min(DATA['POE']), 'POF': max(DATA['POF']), 'CPT': max(DATA['CPT']),
+    'MNF': max(DATA['MNF'])
+}
+amend = uqVal.copy()
+amend['i_res'] = [0]
+amendFact = list(ParameterGrid(amend))
+amendDict = [{**i, **outFix} for i in amendFact]
+DATA = DATA.append(amendDict, ignore_index=True)
+amend = uqVal.copy()
+amend['i_ren'] = [0]
+amendFact = list(ParameterGrid(amend))
+amendDict = [{**i, **outFix} for i in amendFact]
+DATA = DATA.append(amendDict, ignore_index=True)
 # Filter the dataframe --------------------------------------------------------
 headerInd = [i for i in DATA.columns if i[0]=='i']
 uqVal = {i: list(DATA[i].unique()) for i in headerInd}
@@ -81,9 +105,9 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 # Filter dataframe
 ###############################################################################
 fltr = {
-    'i_sex': 2,
-    'i_ren': 12,
-    'i_res': .5,
+    'i_sex': 1,
+    'i_ren': 8,
+    'i_res': .6,
     'i_rsg': 0.079,
     'i_gsv': 1.e-02,
     'i_fch': 0.175,
@@ -100,7 +124,7 @@ for sw in sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[DATA[k]==fltr[k] for k in list(fltr.keys())])]
     dfSrf = DATA[ks]
-    if dfSrf.shape[0] == 0:
+    if dfSrf.shape[0] < 4:
         continue
     ###########################################################################
     # Generate Surface
@@ -126,8 +150,8 @@ for sw in sweep:
     ###########################################################################
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface ----------------------
-    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=15, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='w', linewidths=.5, alpha=.25)
+    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
+    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#555555', linewidths=.5, alpha=.5)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
     # cs.cmap.set_under('blue')
@@ -155,6 +179,10 @@ for sw in sweep:
     # Labels ------------------------------------------------------------------
     ax.set_xlabel(HD_IND[0])
     ax.set_ylabel(HD_IND[1])
+    ax.clabel(
+        cc, inline=True, fontsize=10, fmt='%1.{}f'.format(rval),
+        rightside_up=False
+    )
     pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
     plt.title(pTitle, fontsize=7.5)
     # Axes scales and limits --------------------------------------------------

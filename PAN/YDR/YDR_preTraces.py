@@ -22,11 +22,11 @@ plt.rcParams.update({
 
 if monet.isNotebook():
     (USR, SET, DRV, AOI) = ('dsk', 'shredder', 'YXS', 'WLD')
-    JOB = aux.JOB_DSK
 else:
     (USR, SET, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-    JOB = aux.JOB_SRV
-
+JOB = aux.JOB_SRV
+if USR=='dsk' or USR=='lab':
+    JOB = aux.JOB_DSK
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
@@ -74,14 +74,14 @@ for exp in EXPS:
             exIx, fLists, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, 
             border=True, borderColor='#8184a7AA', borderWidth=2,
-            transparent=True
+            transparent=True, 
+            vLines=[0, 0, 0, 1825, 365*10],
+            hLines=[0, 2500, 5000]
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------
-    sumDta = pkl.load(fLists[-1][0])
-    monet.exportGeneLegend(
-        sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-        PT_IMG+'/legend_{}.png'.format(AOI), 500
-    )
-
-
+    # sumDta = pkl.load(fLists[-1][0])
+    # monet.exportGeneLegend(
+    #     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+    #     PT_IMG+'/legend_{}.png'.format(AOI), 500
+    # )

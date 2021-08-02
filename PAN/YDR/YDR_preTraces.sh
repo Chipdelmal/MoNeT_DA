@@ -4,9 +4,9 @@
 # argv2: Gene Drive
 
 expSet=$(./YDR_selector.sh $2)
-python YDR_preTraces.py $1 $expSet $2 ECO
-python YDR_preTraces.py $1 $expSet $2 HLT
-python YDR_preTraces.py $1 $expSet $2 TRS
-python YDR_preTraces.py $1 $expSet $2 WLD
+# python3 YDR_preTraces.py $1 $expSet $2 ECO
+# python3 YDR_preTraces.py $1 $expSet $2 HLT
+python3 YDR_preTraces.py $1 $expSet $2 TRS
+# python3 YDR_preTraces.py $1 $expSet $2 WLD
 
-python YDR_preGrids.py $1 $expSet $2
+# python3 YDR_preGrids.py $1 $expSet $2

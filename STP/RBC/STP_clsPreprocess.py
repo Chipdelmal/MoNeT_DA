@@ -19,18 +19,21 @@ import MoNeT_MGDrivE as monet
 
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
-    JOB = aux.JOB_DSK
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
+# Setup number of cores -------------------------------------------------------
+if USR=='dsk':
+    JOB = aux.JOB_DSK
+else:
     JOB = aux.JOB_SRV
 EXPS = aux.getExps(LND)
 ###############################################################################
 # Paths
 ###############################################################################
 (fName_I, fName_R, fName_C) = (
-    'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
+    'A_SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
     'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
 )
