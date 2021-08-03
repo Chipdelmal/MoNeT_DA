@@ -103,7 +103,7 @@ fltr = {
 sweep = uqVal[kSweep]
 for sw in sweep:
     fltr[kSweep] = sw
-    ks = [all(i) for i in zip(*[DATA[k]==fltr[k] for k in list(fltr.keys())])]
+    ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]
     dfSrf = DATA[ks]
     if dfSrf.shape[0] < 4:
         continue
@@ -196,8 +196,3 @@ for sw in sweep:
     plt.cla() 
     plt.close(fig)
     plt.gcf()
-
-
-DATA[
-    (DATA['i_ren'] == 0)
-]
