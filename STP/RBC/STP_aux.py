@@ -173,6 +173,10 @@ def selectPath(USR, EXP, LND, DRV=None):
         PATH_ROOT = '/RAID5/marshallShare/STP_Grid/{}/{}/{}/'.format(
             DRV, LND, EXP
         )
+    elif USR == 'lab':
+        PATH_ROOT = '/Volumes/marshallShare/STP_Grid/{}/{}/{}/'.format(
+            DRV, LND, EXP
+        )
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/STP_Grid/{}/{}/{}/'.format(
             DRV, LND, EXP

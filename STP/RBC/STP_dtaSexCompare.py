@@ -18,9 +18,10 @@ from more_itertools import locate
 from functools import reduce
 import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
+plt.ioff()
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -86,11 +87,11 @@ mrgDF = sxML.merge(
     'POE': 'POE_GV', 'POF': 'POF_GV', 'CPT': 'CPT_GV', 'MN': 'MN_GV'
 })
 ###############################################################################
-# Distributions
+# Distributions CPT
 ###############################################################################
 dtaTrpl = (mrgDF['CPT_ML'], mrgDF['CPT_NG'], mrgDF['CPT_GV'])
-colTrpl = ('#45d40c', '#ff006e', '#8338EC')
-(fig, ax) = plt.subplots(nrows=3, ncols=1)
+colTrpl = ('#00bbf9', '#9b5de5', '#f15bb5')
+(fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(10, 3))
 for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
     sns.boxplot(
         x=dta[0],
@@ -101,7 +102,7 @@ for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
     )
     sns.stripplot(
         x=dta[0], 
-        ax=ax[i], size=.35, color=dta[1], alpha=.25, zorder=1
+        ax=ax[i], size=.25, color=dta[1], alpha=.5, zorder=1
     )
 for a in ax:
     a.axis("off")
@@ -110,15 +111,16 @@ for a in ax:
     a.xaxis.set_ticklabels([])
 fig.savefig(
     path.join(PT_IMG, 'SEX_DISTR.png'), 
-    dpi=500, bbox_inches='tight', pad_inches=0
+    dpi=750, bbox_inches='tight', pad_inches=0
 )
+plt.close()
 ###############################################################################
-# Compare Datasets
+# Compare Datasets CPT
 ###############################################################################
-(fig, ax) = plt.subplots(nrows=3, ncols=1)
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_ML'], ax=ax[0], size=.25, color=colTrpl[0])
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.25, color=colTrpl[1])
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.25, color=colTrpl[2])
+(fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(10, 3))
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_ML'], ax=ax[0], size=.2, alpha=.35, color=colTrpl[0])
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.2, alpha=.35, color=colTrpl[1])
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.2, alpha=.35, color=colTrpl[2])
 for a in ax:
     a.set_xlim(0, 1)
     a.axis("off")
@@ -127,5 +129,52 @@ for a in ax:
     a.xaxis.set_ticklabels([])
 fig.savefig(
     path.join(PT_IMG, 'SEX_COMP.png'),
-    dpi=500, bbox_inches='tight', pad_inches=0
+    dpi=750, bbox_inches='tight', pad_inches=0
 )
+plt.close()
+###############################################################################
+# Distributions WOP
+###############################################################################
+dtaTrpl = (mrgDF['WOP_ML'], mrgDF['WOP_NG'], mrgDF['WOP_GV'])
+colTrpl = ('#00bbf9', '#9b5de5', '#f15bb5')
+(fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(10, 3))
+for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
+    sns.boxplot(
+        x=dta[0],
+        showmeans=True, meanline=True, 
+        meanprops={'color': '#212529', 'ls': '-', 'lw': .75},
+        medianprops={'visible': False}, whiskerprops={'visible': False},
+        zorder=10, showfliers=False, showbox=False, showcaps=False, ax=ax[i]
+    )
+    sns.stripplot(
+        x=dta[0], 
+        ax=ax[i], size=.25, color=dta[1], alpha=.5, zorder=1
+    )
+for a in ax:
+    a.axis("off")
+    a.set_xlim(0, 5*365)
+    a.set_ylim(-.125, .125)
+    a.xaxis.set_ticklabels([])
+fig.savefig(
+    path.join(PT_IMG, 'SEX_DISTR_WOP.png'), 
+    dpi=750, bbox_inches='tight', pad_inches=0
+)
+plt.close()
+###############################################################################
+# Compare Datasets WOP
+###############################################################################
+(fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(10, 3))
+sns.stripplot(x=mrgDF['WOP_ML']-mrgDF['WOP_ML'], ax=ax[0], size=.2, alpha=.35, color=colTrpl[0])
+sns.stripplot(x=mrgDF['WOP_ML']-mrgDF['WOP_NG'], ax=ax[1], size=.2, alpha=.35, color=colTrpl[1])
+sns.stripplot(x=mrgDF['WOP_ML']-mrgDF['WOP_GV'], ax=ax[2], size=.2, alpha=.35, color=colTrpl[2])
+for a in ax:
+    a.set_xlim(0, 1)
+    a.axis("off")
+    a.set_xlim(0, 30)
+    a.set_ylim(-.125, .125)
+    a.xaxis.set_ticklabels([])
+fig.savefig(
+    path.join(PT_IMG, 'SEX_COMP_WOP.png'),
+    dpi=750, bbox_inches='tight', pad_inches=0
+)
+plt.close()
