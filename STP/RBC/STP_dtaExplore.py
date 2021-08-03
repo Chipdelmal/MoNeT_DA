@@ -72,7 +72,7 @@ monet.printExperimentHead(
 # Filter Output with Constraints
 ###############################################################################
 # Design constraints ----------------------------------------------------------
-(sexLim, renLim, resLim) = (2, 15, .5)
+(sexLim, renLim, resLim) = (1, 15, .5)
 # Goals constraints -----------------------------------------------------------
 cptLim = (0.25, 1)
 poeLim = (-.1, 1)
@@ -107,7 +107,7 @@ constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 # Goals constraints -----------------------------------------------------------
 cptLim = (-0.1, 1.1)
 poeLim = (-.1, 1)
-ttiLim = (-1, 365/4)
+ttiLim = (-1, 4*365)
 ttoLim = (-1, 6*365)
 wopLim = (0, 10*365)
 mnfLim = (0, 1)
@@ -115,7 +115,7 @@ mnfLim = (0, 1)
 constrained = DATA[
     (DATA['i_sex'] == sexLim)        &
     (DATA['i_fch'] == 0.175)    &
-    (DATA['i_fcb'] == 0.1169999999999999)    &
+    (DATA['i_fcb'] == 0.117)    &
     (DATA['i_fcr'] == 0)        &
     (DATA['i_hrm'] == 1.0)      &
     (DATA['i_hrf'] == 0.956)    &
@@ -124,6 +124,7 @@ constrained = DATA[
     (0 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
     (0 <= DATA['i_res'])        & (DATA['i_res'] <= resLim)         
 ]
+# print(DATA['i_fcb'].unique())
 constrained.shape
 # Export data -----------------------------------------------------------------
 print('{}* Found {}/{} matches (FLTR_BD){}'.format(
