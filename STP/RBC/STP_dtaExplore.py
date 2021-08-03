@@ -1,5 +1,6 @@
 import sys
 import random
+import math
 import subprocess
 from os import path
 from re import match
@@ -113,16 +114,16 @@ wopLim = (0, 10*365)
 mnfLim = (0, 1)
 # Filter and return dataframe -------------------------------------------------
 constrained = DATA[
-    (DATA['i_sex'] == sexLim)        &
-    (DATA['i_fch'] == 0.175)    &
-    (DATA['i_fcb'] == 0.117)    &
-    (DATA['i_fcr'] == 0)        &
-    (DATA['i_hrm'] == 1.0)      &
-    (DATA['i_hrf'] == 0.956)    &
-    (DATA['i_rsg'] == 0.079)    &
-    (DATA['i_gsv'] == 1.e-02)   &
-    (0 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
-    (0 <= DATA['i_res'])        & (DATA['i_res'] <= resLim)         
+    (DATA['i_sex'] == sexLim)           &
+    np.isclose(DATA['i_fch'], 0.175)    &
+    np.isclose(DATA['i_fcb'], 0.117)    &
+    np.isclose(DATA['i_fcr'], 0)        &
+    np.isclose(DATA['i_hrm'], 1.0)      &
+    np.isclose(DATA['i_hrf'], 0.956)    &
+    np.isclose(DATA['i_rsg'], 0.079)    &
+    np.isclose(DATA['i_gsv'], 1.e-02)   &
+    (0 <= DATA['i_ren'])    & (DATA['i_ren'] <= renLim)         &
+    (0 <= DATA['i_res'])    & (DATA['i_res'] <= resLim)
 ]
 # print(DATA['i_fcb'].unique())
 constrained.shape
