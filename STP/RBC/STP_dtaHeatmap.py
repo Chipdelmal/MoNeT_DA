@@ -76,7 +76,7 @@ if zmax > 10:
     rval = 0
 else:
     rval = 3
-(lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/15), 'linear')
+(lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
 # (zmin, zmax) = (-0.1, max(DATA[MOI]))
 # (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
 # Filter the dataframe --------------------------------------------------------
