@@ -9,10 +9,15 @@ from numpy.lib.arraypad import pad
 import pandas as pd
 from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib import colors
+import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
+import matplotlib.pylab as pl
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
+import STP_auxDebug as dbg
 import seaborn as sns
 from more_itertools import locate
 from functools import reduce
@@ -58,3 +63,50 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Filtering to male releases only
 ###############################################################################
 male = DATA[DATA['i_sex']==1].drop('i_sex', axis=1)
+(sexLim, renLim, resLim) = (1, 50, 1.5)
+# Goals constraints -----------------------------------------------------------
+cptLim = (-0.1, 1.1)
+poeLim = (-.1, 1)
+ttiLim = (-1, 4*365)
+ttoLim = (-1, 6*365)
+wopLim = (0, 10*365)
+mnfLim = (0, 1)
+# Filter and return dataframe -------------------------------------------------
+fltr = {
+    'i_sex': 1, 'i_ren': 8, 
+    'i_rsg': 0.079, 'i_gsv': 0.01,
+    'i_fch': 0.175, 'i_fcb': 0.117, 'i_fcr': 0,
+    'i_hrm': 1.0, 'i_hrf': 0.956, 
+    'i_grp': 0, 'i_mig': 0
+}
+fltr.pop('i_ren')
+keys = list(fltr.keys())
+ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in keys])]
+resVals = list(DATA[ks]['i_res'].unique())
+###############################################################################
+# Plot
+###############################################################################
+c = mcolors.ColorConverter().to_rgb
+clrs = [c(i) for i in ['#ef233c', '#9bf6ff', '#4361ee', '#3a0ca3']]
+rvb = mcolors.LinearSegmentedColormap.from_list("", clrs)
+colors = rvb(np.linspace(0, 1, len(resVals)))
+(fig, ax) = plt.subplots(figsize=(10, 10))
+fltr['i_res'] = 0.25
+for (i, res) in enumerate(resVals):
+    fltr['i_res'] = res
+    keys = list(fltr.keys())
+    ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in keys])]
+    dfSrf = DATA[ks]
+    # plt.scatter(dfSrf['i_ren'], dfSrf['WOP'])
+    plt.plot(
+        list(dfSrf['i_ren']), 
+        list(dfSrf['WOP']), 
+        color=colors[i]
+    )
+ax.set_xlim(0, 24)
+ax.set_ylim(0, 1.75*365)
+plt.tight_layout()
+fig.savefig(    
+    path.join(PT_IMG, 'REN-RES_traces.png'), 
+    dpi=500, bbox_inches='tight', pad=0
+)
