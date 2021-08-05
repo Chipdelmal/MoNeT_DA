@@ -15,16 +15,15 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, TRC) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'ECO')
+    (USR, LND, AOI, DRV, QNT, TRC) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'HLT')
 else:
     (USR, LND, AOI, DRV, QNT, TRC) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
 # Setup number of cores -------------------------------------------------------
-if USR=='dsk':
-    JOB = aux.JOB_DSK
-else:
+JOB = aux.JOB_DSK
+if USR=='srv':
     JOB = aux.JOB_SRV
 # Experiments -----------------------------------------------------------------
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
@@ -67,9 +66,9 @@ STYLE = {
 Parallel(n_jobs=JOB)(
     delayed(dbg.exportPstTracesParallel)(
         exIx, fNum,
-        aux.STABLE_T, 0, QNT, STYLE, PT_IMG, 
+        aux.STABLE_T, 0, QNT, STYLE, PT_IMG,
         digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
-        poePrint=False, mnfPrint=False
+        poePrint=False, mnfPrint=False, ticksHide=False
     ) for exIx in expsIter
 )
 # Export gene legend ------------------------------------------------------

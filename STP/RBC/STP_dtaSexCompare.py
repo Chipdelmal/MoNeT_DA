@@ -102,7 +102,7 @@ for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
     )
     sns.stripplot(
         x=dta[0], 
-        ax=ax[i], size=.25, color=dta[1], alpha=.5, zorder=1
+        ax=ax[i], size=.35, color=dta[1], alpha=.5, zorder=1
     )
 for a in ax:
     a.axis("off")
@@ -118,9 +118,9 @@ plt.close()
 # Compare Datasets CPT
 ###############################################################################
 (fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(10, 3))
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_ML'], ax=ax[0], size=.2, alpha=.35, color=colTrpl[0])
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.2, alpha=.35, color=colTrpl[1])
-sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.2, alpha=.35, color=colTrpl[2])
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_ML'], ax=ax[0], size=.35, alpha=.35, color=colTrpl[0])
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.35, alpha=.35, color=colTrpl[1])
+sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.35, alpha=.35, color=colTrpl[2])
 for a in ax:
     a.set_xlim(0, 1)
     a.axis("off")
@@ -148,7 +148,7 @@ for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
     )
     sns.stripplot(
         x=dta[0], 
-        ax=ax[i], size=.25, color=dta[1], alpha=.5, zorder=1
+        ax=ax[i], size=.35, color=dta[1], alpha=.5, zorder=1
     )
 for a in ax:
     a.axis("off")
@@ -164,13 +164,12 @@ plt.close()
 # Compare Datasets WOP
 ###############################################################################
 (fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(10, 3))
-sns.stripplot(x=mrgDF['WOP_ML']-mrgDF['WOP_ML'], ax=ax[0], size=.2, alpha=.35, color=colTrpl[0])
-sns.stripplot(x=mrgDF['WOP_ML']-mrgDF['WOP_NG'], ax=ax[1], size=.2, alpha=.35, color=colTrpl[1])
-sns.stripplot(x=mrgDF['WOP_ML']-mrgDF['WOP_GV'], ax=ax[2], size=.2, alpha=.35, color=colTrpl[2])
+sns.stripplot(x=abs(mrgDF['WOP_ML']-mrgDF['WOP_ML']), ax=ax[0], size=.35, alpha=.35, color=colTrpl[0])
+sns.stripplot(x=abs(mrgDF['WOP_NG']-mrgDF['WOP_ML']), ax=ax[1], size=.35, alpha=.35, color=colTrpl[1])
+sns.stripplot(x=abs(mrgDF['WOP_GV']-mrgDF['WOP_ML']), ax=ax[2], size=.35, alpha=.35, color=colTrpl[2])
 for a in ax:
-    a.set_xlim(0, 1)
     a.axis("off")
-    a.set_xlim(0, 30)
+    a.set_xlim(0, 1.5*365)
     a.set_ylim(-.125, .125)
     a.xaxis.set_ticklabels([])
 fig.savefig(
