@@ -66,8 +66,8 @@ STYLE = {
 Parallel(n_jobs=JOB)(
     delayed(dbg.exportPstTracesParallel)(
         exIx, fNum,
-        aux.STABLE_T, 0, QNT, STYLE, PT_IMG, 
-        digs=digs, border=True, autoAspect=True, labelPos=(.8, .2),
+        aux.STABLE_T, 0, QNT, STYLE, PT_IMG,
+        digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
         poePrint=False, mnfPrint=False, ticksHide=False
     ) for exIx in expsIter
 )
