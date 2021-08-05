@@ -86,9 +86,8 @@ resVals = list(DATA[ks]['i_res'].unique())
 ###############################################################################
 # Plot
 ###############################################################################
-c = mcolors.ColorConverter().to_rgb
-clrs = [c(i) for i in ['#ef233c', '#9bf6ff', '#4361ee', '#3a0ca3']]
-rvb = mcolors.LinearSegmentedColormap.from_list("", clrs)
+clist = ['#ef233c', '#9bf6ff', '#4361ee', '#3a0ca3']
+rvb = monet.colorPaletteFromHexList(clist)
 colors = rvb(np.linspace(0, 1, len(resVals)))
 (fig, ax) = plt.subplots(figsize=(10, 10))
 fltr['i_res'] = 0.25
