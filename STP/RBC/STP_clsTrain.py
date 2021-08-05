@@ -26,7 +26,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MTR) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'CPT')
     VT_SPLIT = aux.VT_TRAIN
 else:
     (USR, LND, AOI, DRV, QNT, MTR) = (
@@ -35,6 +35,7 @@ else:
     VT_SPLIT = aux.VT_TRAIN
 EXPS = aux.getExps(LND)
 (TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
+TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -161,8 +162,33 @@ with open(modelPath+'_RF.txt', 'w') as f:
 with open(modelPath+'_RFI.csv', 'w') as f:
     for i in FEATS:
         print('{}, {:.3f}, {:.3f}'.format(i, impDCD[i], impPMD[i]))
-
-
-(fig, axes) = plt.subplots(figsize=(10,5), facecolor=facecolor, ncols=1, sharey=True)
+###############################################################################
+# Statistics & Model Export
+###############################################################################
+COLS = list(DATA.columns)
+(FEATS, LABLS) = (
+    [i for i in COLS if i[0]=='i'],
+    [i for i in COLS if i[0]!='i']
+)
+FEATS.remove('i_mig')
+FEATS.remove('i_grp')
+col = [i[2] for i in aux.DICE_PARS if i[0]==MTR][0]
+(fig, axes) = plt.subplots(figsize=(10, 10), ncols=1, sharey=True)
+axes.barh(
+    FEATS, [impDCD[i] for i in FEATS], 
+    align='center', zorder=10, 
+    color=col[:-2]+'AA'
+)
+axes.grid(1)
+axes.set_xlim(0, .5)
+if ticksHide:
+    axTemp.axes.xaxis.set_ticklabels([])
+    axTemp.axes.yaxis.set_ticklabels([])
+    axTemp.axes.xaxis.set_visible(False)
+    axTemp.axes.yaxis.set_visible(False)
+    # axTemp.xaxis.set_tick_params(width=0)
+    # axTemp.yaxis.set_tick_params(width=0)
+    axTemp.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+    axTemp.set_axis_off()
 fig.tight_layout()
-axes[0].barh(FEATS, impDCD, align='center', color=color_red, zorder=10)
+fig.savefig(path.join(PT_IMG, 'FIMP_{}.png'.format(MTR)), dpi=500)
