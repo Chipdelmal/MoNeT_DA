@@ -87,7 +87,7 @@ def exportPstTracesParallel(
         cpt=cpt, cptPrint=cptPrint,
         poe=poe, poePrint=poePrint,
         mnf=mnf, mnfPrint=mnfPrint,
-        ticksHide=True
+        ticksHide=ticksHide
     )
     return None
 
