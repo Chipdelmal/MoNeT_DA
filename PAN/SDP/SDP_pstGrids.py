@@ -41,7 +41,7 @@ for exp in EXPS:
     (xpNum, digs) = monet.lenAndDigits(imgChunks)
     for (i, chunk) in enumerate(imgChunks):
         monet.printProgress(i+1, xpNum, digs)
-        expGrid = vconcat([hconcat([imread(i) for i in j]) for j in chunk])
+        expGrid = vconcat([hconcat([imread(i, cv2.IMREAD_UNCHANGED) for i in j]) for j in chunk])
         # [[imread(i).shape for i in j] for j in chunk]
         fName = chunk[0][0].split('/')[-1].split('-')[0] + '-' + QNT
         imwrite(PT_IMG_O + fName + '.png', expGrid)
