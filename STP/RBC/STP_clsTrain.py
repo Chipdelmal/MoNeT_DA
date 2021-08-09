@@ -35,7 +35,7 @@ else:
     VT_SPLIT = aux.VT_TRAIN
 EXPS = aux.getExps(LND)
 (TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
-TICKS_HIDE = True
+TICKS_HIDE = False
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -173,22 +173,22 @@ COLS = list(DATA.columns)
 FEATS.remove('i_mig')
 FEATS.remove('i_grp')
 col = [i[2] for i in aux.DICE_PARS if i[0]==MTR][0]
-(fig, axes) = plt.subplots(figsize=(10, 10), ncols=1, sharey=True)
-axes.barh(
+(fig, ax) = plt.subplots(figsize=(10, 10), ncols=1, sharey=True)
+ax.barh(
     FEATS, [impDCD[i] for i in FEATS], 
     align='center', zorder=10, 
     color=col[:-2]+'AA'
 )
-axes.grid(1)
-axes.set_xlim(0, .5)
-if ticksHide:
-    axTemp.axes.xaxis.set_ticklabels([])
-    axTemp.axes.yaxis.set_ticklabels([])
-    axTemp.axes.xaxis.set_visible(False)
-    axTemp.axes.yaxis.set_visible(False)
-    # axTemp.xaxis.set_tick_params(width=0)
-    # axTemp.yaxis.set_tick_params(width=0)
-    axTemp.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
-    axTemp.set_axis_off()
+ax.grid(1)
+ax.set_xlim(0, .5)
+if TICKS_HIDE:
+    ax.axes.xaxis.set_ticklabels([])
+    ax.axes.yaxis.set_ticklabels([])
+    # ax.axes.xaxis.set_visible(False)
+    ax.axes.yaxis.set_visible(False)
+    # ax.xaxis.set_tick_params(width=0)
+    # ax.yaxis.set_tick_params(width=0)
+    ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+    # ax.set_axis_off()
 fig.tight_layout()
 fig.savefig(path.join(PT_IMG, 'FIMP_{}.png'.format(MTR)), dpi=500)

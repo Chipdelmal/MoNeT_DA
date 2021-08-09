@@ -59,9 +59,9 @@ REF_FILE = 'E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000
     [0, 365]# [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
 )
 DICE_PARS = (
-    ('CPT', 0.005, '#4361ee43', None),  ('WOP', 0.050, '#ff006e22', None), 
+    ('CPT', 0.005, '#4361ee43', None),  ('WOP', 0.050, '#be0aff33', None), 
     ('TTO', 0.050, '#00B3E643', None),  ('TTI', 0.075, '#23194233', (0, 150)),
-    ('MNF', 0.000, '#be0aff33', None),  ('POE', 0.001, '#fb560733', None)
+    ('MNF', 0.000, '#ff006e22', None),  ('POE', 0.001, '#fb560733', None)
 )
 # ML --------------------------------------------------------------------------
 (THS, VT_TRAIN) = ('0.1',  0.3)
@@ -119,7 +119,7 @@ def selectDepVars(MOI, AOI):
         (HD_DEP, IND_RAN) = ('MNF', 1) 
     # Color Mapping -----------------------------------------------------------
     if MOI == 'WOP':
-        cmap = monet.cmapC
+        cmap = monet.cmapP
     elif MOI == 'CPT':
         cmap = monet.cmapM
     elif MOI == 'POE':

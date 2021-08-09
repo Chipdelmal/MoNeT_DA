@@ -73,7 +73,7 @@ wopLim = (0, 10*365)
 mnfLim = (0, 1)
 # Filter and return dataframe -------------------------------------------------
 fltr = {
-    'i_sex': 1, 'i_ren': 8, 
+    'i_sex': 1, 'i_ren': 12, 
     'i_rsg': 0.079, 'i_gsv': 0.01,
     'i_fch': 0.175, 'i_fcb': 0.117, 'i_fcr': 0,
     'i_hrm': 1.0, 'i_hrf': 0.956, 
@@ -102,10 +102,66 @@ for (i, res) in enumerate(resVals):
         list(dfSrf['WOP']), 
         color=colors[i]
     )
+ax.xaxis.set_ticks(np.arange(0, 24, 4))
+ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
+ax.grid(1)
 ax.set_xlim(0, 24)
 ax.set_ylim(0, 1.75*365)
+ax.xaxis.set_tick_params(width=2)
+ax.yaxis.set_tick_params(width=2)
+ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
 plt.tight_layout()
 fig.savefig(    
-    path.join(PT_IMG, 'REN-RES_traces.png'), 
-    dpi=500, bbox_inches='tight', pad=0
+    path.join(PT_IMG, 'REN-RES_traces.png'),
+    dpi=750, bbox_inches='tight', pad=0,
+    pad_inches=0
+)
+###############################################################################
+# Filtering to male releases only
+###############################################################################
+male = DATA[DATA['i_sex']==1].drop('i_sex', axis=1)
+(sexLim, renLim, resLim) = (1, 50, 1.5)
+# Filter and return dataframe -------------------------------------------------
+fltr = {
+    'i_sex': 1, 'i_res': .5, 
+    'i_rsg': 0.079, 'i_gsv': 0.01,
+    'i_fch': 0.175, 'i_fcb': 0.117, 'i_fcr': 0,
+    'i_hrm': 1.0, 'i_hrf': 0.956, 
+    'i_grp': 0, 'i_mig': 0
+}
+fltr.pop('i_res')
+keys = list(fltr.keys())
+ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in keys])]
+renVals = list(DATA[ks]['i_ren'].unique())
+###############################################################################
+# Plot
+###############################################################################
+clist = ['#ef233c', '#9bf6ff', '#4361ee', '#3a0ca3']
+rvb = monet.colorPaletteFromHexList(clist)
+colors = rvb(np.linspace(0, 1, len(renVals)))
+(fig, ax) = plt.subplots(figsize=(10, 10))
+fltr['i_ren'] = 10
+for (i, ren) in enumerate(renVals):
+    fltr['i_ren'] = ren
+    keys = list(fltr.keys())
+    ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in keys])]
+    dfSrf = DATA[ks]
+    # plt.scatter(dfSrf['i_ren'], dfSrf['WOP'])
+    plt.plot(
+        list(dfSrf['i_res']), 
+        list(dfSrf['WOP']), 
+        color=colors[i]
+    )
+ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
+ax.grid(1)
+ax.set_xlim(0, 1)
+ax.set_ylim(0, 1.75*365)
+ax.xaxis.set_tick_params(width=2)
+ax.yaxis.set_tick_params(width=2)
+ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+plt.tight_layout()
+fig.savefig(    
+    path.join(PT_IMG, 'RES-REN_traces.png'),
+    dpi=750, bbox_inches='tight', pad=0,
+    pad_inches=0
 )
