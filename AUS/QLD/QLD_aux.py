@@ -64,7 +64,7 @@ def selectGeoPath(USR):
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
     elif USR == 'dsk3':
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
-    if (USR=='lab31') or (USR=='lab33'):
+    if (USR=='lab31') or (USR=='lab33') or (USR=='lab41') or (USR=='lab43'):
         PTH_PTS = '/Users/sanchez.hmsc/Desktop/QLD/GEO'
     else:
         PTH_PTS = '/RAID5/marshallShare/QLD/GEO'
