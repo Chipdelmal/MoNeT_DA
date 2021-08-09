@@ -135,7 +135,7 @@ constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR_BD.csv'), index=False)
 ###############################################################################
 # Sex
 ###############################################################################
-partB = DATA[(DATA['WOP'] < 1000)  & (DATA['i_sex'] == 1)]
+partB = DATA[(DATA['WOP'] < 750)  & (DATA['i_sex'] == 1)]
 partA = DATA[(1250 < DATA['WOP']) & (DATA['i_sex'] == 2)]
 # Find intersections ----------------------------------------------------------
 drops = ['TTI', 'TTO', 'POE', 'WOP', 'POF', 'CPT', 'MNF', 'i_sex']
