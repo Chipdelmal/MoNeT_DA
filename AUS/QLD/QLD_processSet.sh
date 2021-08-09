@@ -15,5 +15,3 @@ python QLD_pstFraction.py $1 $AOI $2 s1
 python QLD_pstFraction.py $1 $AOI $2 s2
 python QLD_pstFraction.py $1 $AOI $2 s3
 python QLD_pstFraction.py $1 $AOI $2 s4
-
-

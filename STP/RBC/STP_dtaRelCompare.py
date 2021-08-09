@@ -90,7 +90,8 @@ clist = [
     '#000000', '#03045e', '#6247aa', '#815ac0', '#c19ee0', '#d6e3f8'
 ]
 clist = [
-    '#fe1d23', '#fe576f', '#fdcbff', '#aacbff', '#00affe', '#013af4', '#0000ee'
+    '#fe1d23', '#fe576f', '#fdcbff', '#d6e3f8', 
+    '#aacbff', '#00affe', '#013af4', '#0000ee'
 ]
 clist.reverse()
 rvb = monet.colorPaletteFromHexList(clist)
