@@ -86,7 +86,13 @@ resVals = list(DATA[ks]['i_res'].unique())
 ###############################################################################
 # Plot
 ###############################################################################
-clist = ['#ef233c', '#9bf6ff', '#4361ee', '#3a0ca3']
+clist = [
+    '#000000', '#03045e', '#6247aa', '#815ac0', '#c19ee0', '#d6e3f8'
+]
+clist = [
+    '#fe1d23', '#fe576f', '#fdcbff', '#aacbff', '#00affe', '#013af4', '#0000ee'
+]
+clist.reverse()
 rvb = monet.colorPaletteFromHexList(clist)
 colors = rvb(np.linspace(0, 1, len(resVals)))
 (fig, ax) = plt.subplots(figsize=(10, 10))
@@ -136,7 +142,6 @@ renVals = list(DATA[ks]['i_ren'].unique())
 ###############################################################################
 # Plot
 ###############################################################################
-clist = ['#ef233c', '#9bf6ff', '#4361ee', '#3a0ca3']
 rvb = monet.colorPaletteFromHexList(clist)
 colors = rvb(np.linspace(0, 1, len(renVals)))
 (fig, ax) = plt.subplots(figsize=(10, 10))
