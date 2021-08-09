@@ -29,9 +29,9 @@ else:
 # Processing loop
 ###############################################################################
 EXPS = aux.getExps(LND)
-exp = EXP
 rel = aux.REL[0]
-for rel in aux.REL:
+exp = EXP
+for relN in aux.REL:
     for exp in [exp, ]:
         ###########################################################################
         # Setting up paths
@@ -42,7 +42,7 @@ for rel in aux.REL:
         )
         (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
         (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-            USR, exp, LND, rel
+            USR, exp, LND, relN
         )
         PT_IMG = path.join(PT_IMG, 'preTraces')
         monet.makeFolder(PT_IMG)
@@ -109,8 +109,8 @@ for rel in aux.REL:
         fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
         expNum = len(fLists)
         # Arrange file tuples -----------------------------------------------------
-        expIter = list(zip(list(range(expNum, 0, -1)), fLists))
-        expIter.reverse()
+        exper = list(zip(list(range(expNum, 0, -1)), fLists))
+        exper.reverse()
         # NEEDS OVW FILTERING!!!!!!!!!! -------------------------------------------
         ###########################################################################
         # Process files
@@ -122,7 +122,7 @@ for rel in aux.REL:
                 xpNum=xpNum, digs=digs, autoAspect=True, vLines=rel,
                 border=True, borderColor='#8184a7AA', borderWidth=1,
                 transparent=True, wop=wop
-            ) for exIx in expIter
+            ) for exIx in exper
         )
         # Export gene legend ------------------------------------------------------
         # sumDta = pkl.load(fLists[-1][0])

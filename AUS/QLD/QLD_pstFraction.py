@@ -30,7 +30,7 @@ else:
 EXPS = aux.getExps(LND)
 exp = EXPS[0]
 rel = aux.REL[0]
-for rel in aux.REL:
+for relN in aux.REL:
     for exp in [exp, ]:
         # #########################################################################
         # Setup paths and drive
@@ -41,7 +41,7 @@ for rel in aux.REL:
         )
         (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
         (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-            USR, exp, LND, rel
+            USR, exp, LND, relN
         )
         PT_IMG = path.join(PT_IMG, 'preTraces')
         monet.makeFolder(PT_IMG)
