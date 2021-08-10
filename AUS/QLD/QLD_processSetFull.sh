@@ -12,5 +12,5 @@
 ./QLD_panels.sh '/Users/sanchez.hmsc/Desktop/QLD/year3/'
 ./QLD_panels.sh '/Users/sanchez.hmsc/Desktop/QLD/year4/'
 
-rsync -avr -e "ssh" --exclude '*.csv' /Users/sanchez.hmsc/Desktop/QLD/year3 lab:/RAID0/QLD_PANELS
-rsync -avr -e "ssh" --exclude '*.csv' /Users/sanchez.hmsc/Desktop/QLD/year4 lab:/RAID0/QLD_PANELS
+rsync -avr -e "ssh" --exclude '*.csv' "/Users/sanchez.hmsc/Desktop/QLD/year3" "lab:/RAID0/QLD_PANELS"
+rsync -avr -e "ssh" --exclude '*.csv' "/Users/sanchez.hmsc/Desktop/QLD/year4" "lab:/RAID0/QLD_PANELS"
