@@ -71,7 +71,7 @@ for relN in aux.REL:
         STYLE = {
                 "width": .5, "alpha": 0, "dpi": 1500, "legend": True,
                 "aspect": aspect, "colors": CLR, "xRange": xRange, "yRange": YRAN,
-                "format": 'png', 'ls': '-'
+                "format": 'svg', 'ls': '-'
             }
         # print('- YRAN: {}'.format(YRAN))
         # VLines ------------------------------------------------------------------
