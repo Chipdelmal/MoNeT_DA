@@ -173,7 +173,7 @@ COLS = list(DATA.columns)
 FEATS.remove('i_mig')
 FEATS.remove('i_grp')
 col = [i[2] for i in aux.DICE_PARS if i[0]==MTR][0]
-(fig, ax) = plt.subplots(figsize=(10, 10), ncols=1, sharey=True)
+(fig, ax) = plt.subplots(figsize=(3, 10), ncols=1, sharey=True)
 ax.barh(
     FEATS, [impDCD[i] for i in FEATS], 
     align='center', zorder=10, 

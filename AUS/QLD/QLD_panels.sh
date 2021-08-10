@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PTH='/Users/sanchez.hmsc/Desktop/QLD/year4/'
+PTH=$1 # '/Users/sanchez.hmsc/Desktop/QLD/year4/'
 
 inkscape --export-type=png --export-dpi=250 "${PTH}QLD_panel_1e-06.svg" --export-filename="${PTH}1e-06"
 inkscape --export-type=png --export-dpi=250 "${PTH}QLD_panel_1e-07.svg" --export-filename="${PTH}1e-07"
