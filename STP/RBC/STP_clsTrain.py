@@ -179,7 +179,7 @@ ax.barh(
     align='center', zorder=10, 
     color=col[:-2]+'AA'
 )
-ax.grid(1)
+# ax.grid(1)
 ax.set_xlim(0, .5)
 if TICKS_HIDE:
     ax.axes.xaxis.set_ticklabels([])
@@ -191,4 +191,4 @@ if TICKS_HIDE:
     ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
     # ax.set_axis_off()
 fig.tight_layout()
-fig.savefig(path.join(PT_IMG, 'FIMP_{}.png'.format(MTR)), dpi=500)
+fig.savefig(path.join(PT_IMG, 'FIMP_{}.png'.format(MTR)), dpi=750)

@@ -14,6 +14,7 @@ from matplotlib import colors
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pl
+from matplotlib.patches import Patch
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
@@ -22,7 +23,7 @@ import seaborn as sns
 from more_itertools import locate
 from functools import reduce
 import warnings
-warnings.filterwarnings("ignore",category=UserWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
@@ -111,6 +112,8 @@ for (i, res) in enumerate(resVals):
     )
 ax.xaxis.set_ticks(np.arange(0, 24, 4))
 ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
+leg = [Patch(facecolor=colors[len(resVals)-(i+1)], edgecolor=list(colors[len(resVals)-(i+1)][:-1])+[.25], label=res) for (i, ren) in enumerate(resVals)]
+ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
 ax.grid(1)
 ax.set_xlim(0, 24)
 ax.set_ylim(0, 1.75*365)
@@ -158,6 +161,8 @@ for (i, ren) in enumerate(renVals):
         list(dfSrf['WOP']), 
         color=colors[i]
     )
+leg = [Patch(facecolor=colors[len(renVals)-(i+1)], edgecolor=list(colors[len(renVals)-(i+1)][:-1])+[.25], label=ren) for (i, ren) in enumerate(renVals)]
+ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
 ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
 ax.grid(1)
 ax.set_xlim(0, 1)
