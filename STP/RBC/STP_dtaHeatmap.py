@@ -72,7 +72,7 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
 elif MOI == 'WOP':
-    (zmin, zmax) = (0, 2.5*365)
+    (zmin, zmax) = (0, 2.25*365)
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
 
