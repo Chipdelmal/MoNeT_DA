@@ -163,13 +163,13 @@ plt.close()
 ###############################################################################
 # Compare Datasets WOP
 ###############################################################################
-(fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(10, 3))
+(fig, ax) = plt.subplots(nrows=3, ncols=1, figsize=(3, 3))
 sns.stripplot(x=abs(mrgDF['WOP_ML']-mrgDF['WOP_ML']), ax=ax[0], size=.35, alpha=.35, color=colTrpl[0])
 sns.stripplot(x=abs(mrgDF['WOP_NG']-mrgDF['WOP_ML']), ax=ax[1], size=.35, alpha=.35, color=colTrpl[1])
 sns.stripplot(x=abs(mrgDF['WOP_GV']-mrgDF['WOP_ML']), ax=ax[2], size=.35, alpha=.35, color=colTrpl[2])
 for a in ax:
     a.axis("off")
-    a.set_xlim(0, 1.5*365)
+    a.set_xlim(0, 2.5*365)
     a.set_ylim(-.125, .125)
     a.xaxis.set_ticklabels([])
 fig.savefig(

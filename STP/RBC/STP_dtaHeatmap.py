@@ -167,10 +167,20 @@ for sw in sweep:
         ax.set_ylabel(HD_IND[1])
         pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
         plt.title(pTitle, fontsize=7.5)
-    ax.clabel(
-        cc, inline=True, fontsize=10, fmt='%1.{}f'.format(rval),
-        rightside_up=False
-    )
+    if MOI=='WOP':
+        fmt = {}
+        strs = ["{:.2f}".format(i/365) for i in cc.levels]
+        for (l, s) in zip(cc.levels, strs):
+            fmt[l] = s
+        ax.clabel(
+            cc, inline=True, fontsize=15, fmt=fmt,
+            rightside_up=False
+        )
+    else:
+        ax.clabel(
+            cc, inline=True, fontsize=10, fmt='%1.{}f'.format(rval),
+            rightside_up=False
+        )
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
     ax.set_yscale(ySca)
