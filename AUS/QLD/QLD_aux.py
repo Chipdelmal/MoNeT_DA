@@ -12,7 +12,7 @@ import MoNeT_MGDrivE as monet
 OVW = True
 (JOB_DSK, JOB_SRV) = (8, 20)
 (POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
-    75000*2, # 2e6*1.5/2, 
+    30000*2*2, # 2e6*1.5/2, 
     (0, 5*int(365)), 
     True, 0, False
 )
@@ -24,13 +24,13 @@ OVW = True
 # #############################################################################
 def getExps(LND):
     # if LND=='01':
-    return ('s1', )# , 's2', 's3', 's4')
-
+    return ('s1', 's2', 's3', 's4')
+REL = ('1e-06', '1e-07', '1e-08', '1e-09', '1e-10')
 
 # #############################################################################
 # Paths and Style
 # #############################################################################
-def selectPath(USR, EXP, LND):
+def selectPath(USR, EXP, LND, REL):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/QLD/Experiments/{}/'.format(EXP)
     elif USR == 'dsk':
@@ -39,6 +39,14 @@ def selectPath(USR, EXP, LND):
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/ExperimentsB/{}/'.format(EXP)
     elif USR == 'dsk3':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/ExperimentsC/{}/'.format(EXP)
+    elif USR == 'lab31':
+        PATH_ROOT = '/Users/sanchez.hmsc/Desktop/QLD/year3/Experiments/{}/{}/'.format(REL, EXP)
+    elif USR == 'lab33':
+        PATH_ROOT = '/Users/sanchez.hmsc/Desktop/QLD/year3/ExperimentsC/{}/{}/'.format(REL, EXP)
+    elif USR == 'lab41':
+        PATH_ROOT = '/Users/sanchez.hmsc/Desktop/QLD/year4/Experiments/{}/{}/'.format(REL, EXP)
+    elif USR == 'lab43':
+        PATH_ROOT = '/Users/sanchez.hmsc/Desktop/QLD/year4/ExperimentsC/{}/{}/'.format(REL, EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
@@ -56,6 +64,8 @@ def selectGeoPath(USR):
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
     elif USR == 'dsk3':
         PTH_PTS = '/home/chipdelmal/Documents/WorkSims/QLD/GEO'
+    if (USR=='lab31') or (USR=='lab33') or (USR=='lab41') or (USR=='lab43'):
+        PTH_PTS = '/Users/sanchez.hmsc/Desktop/QLD/GEO'
     else:
         PTH_PTS = '/RAID5/marshallShare/QLD/GEO'
     return PTH_PTS

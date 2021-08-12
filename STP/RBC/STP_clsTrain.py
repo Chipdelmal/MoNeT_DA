@@ -26,7 +26,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MTR) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'MNF')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
     VT_SPLIT = aux.VT_TRAIN
 else:
     (USR, LND, AOI, DRV, QNT, MTR) = (
@@ -35,6 +35,7 @@ else:
     VT_SPLIT = aux.VT_TRAIN
 EXPS = aux.getExps(LND)
 (TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
+TICKS_HIDE = False
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -53,6 +54,7 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+(scalers, HD_DEP, _, cmap) = aux.selectDepVars(MTR, AOI)
 # Time and head --------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
@@ -80,12 +82,12 @@ COLS = list(DATA.columns)
 # Pre-Analysis
 ###############################################################################
 correlation = DATA.corr(method='spearman')
-(f, ax) = plt.subplots(figsize=(10, 8))
-sns.heatmap(
-    correlation, mask=np.zeros_like(correlation, dtype=np.bool), 
-    cmap=sns.diverging_palette(220, 10, as_cmap=True),
-    square=True, ax=ax
-)
+# (f, ax) = plt.subplots(figsize=(10, 8))
+# sns.heatmap(
+#     correlation, mask=np.zeros_like(correlation, dtype=np.bool), 
+#     cmap=sns.diverging_palette(220, 10, as_cmap=True),
+#     square=True, ax=ax
+# )
 # f.show()
 ###############################################################################
 # Split Train/Test
@@ -127,7 +129,7 @@ report = metrics.classification_report(VAL_Y, PRD_Y)
 confusionMat = metrics.plot_confusion_matrix(
     rf, VAL_X, VAL_Y, 
     # display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
-    cmap=cm.Blues, normalize=None
+    cmap=cmap, normalize=None
 )
 plt.savefig(modelPath+'_RF.png', dpi=300)
 # Features importance ---------------------------------------------------------
@@ -137,46 +139,6 @@ impDCD = impDC.to_dict()['Importance']
 impPM = rfp.importances(rf, TRN_X, TRN_Y)
 impPMD = impPM.to_dict()['Importance']
 # viz = rfp.plot_corr_heatmap(DATA, figsize=(7,5))
-###############################################################################
-# Interpretability Plots
-###############################################################################
-# feat = FEATS[3]
-# for feat in FEATS:
-#     isolate = pdp.pdp_isolate(
-#         model=rf, dataset=TRN_X, model_features=FEATS, feature=feat
-#     )
-#     fracPlot = 2500
-#     (fig, axes) = pdp.pdp_plot(
-#         pdp_isolate_out=isolate, feature_name=feat,
-#         center=False, x_quantile=True, plot_pts_dist=False,
-#         ncols=len(list(rf.classes_)), plot_lines=True, frac_to_plot=fracPlot,
-#         plot_params = {
-#             'line_cmap': 'Blues',
-#             'subtitle_fontsize': 1, 'xticks_rotation': 0,
-#             'pdp_linewidth': .5, 'zero_linewidth': 0.1,
-#             'pdp_color': '#ff006e', 'pdp_hl_color': '#ff006e',
-#             'fill_color': '#ff006e', 'zero_color': '#ff006e',
-#             'fill_alpha': 0.25, 'markersize': 0.05,
-#         }
-#     )
-#     axes['title_ax'].set_visible(False)
-#     for ax in axes['pdp_ax']:
-#         ax.tick_params(axis='both', which='major', labelsize=3)
-#         ax.set_xlabel('')
-#         ax.set_ylim(-0, 1.1)
-#         xDiff = (ax.get_xlim()[1]-ax.get_xlim()[0])
-#         yDiff = (ax.get_ylim()[1]-ax.get_ylim()[0])
-#         for (i, trc) in enumerate(ax.get_lines()):
-#             if (i<fracPlot):
-#                 trc.set_color('#a2d2ff')
-#                 trc.set_linewidth(.1)
-#                 trc.set_alpha(.2)
-#     fig.subplots_adjust(hspace=2)
-#     fig.tight_layout()
-#     fig.savefig(
-#         modelPath+'_ICE'+'_'+feat.split('_')[-1]+'.jpg', 
-#         dpi=1000, bbox_inches='tight', pad_inches=0.1
-#     )
 ###############################################################################
 # Statistics & Model Export
 ###############################################################################
@@ -198,4 +160,36 @@ with open(modelPath+'_RF.txt', 'w') as f:
             print('\t* {}: {:.3f}, {:.3f}'.format(i, impDCD[i], impPMD[i]))
         print('* Class report: ')
         print(report)
-
+with open(modelPath+'_RFI.csv', 'w') as f:
+    for i in FEATS:
+        print('{}, {:.3f}, {:.3f}'.format(i, impDCD[i], impPMD[i]))
+###############################################################################
+# Statistics & Model Export
+###############################################################################
+COLS = list(DATA.columns)
+(FEATS, LABLS) = (
+    [i for i in COLS if i[0]=='i'],
+    [i for i in COLS if i[0]!='i']
+)
+FEATS.remove('i_mig')
+FEATS.remove('i_grp')
+col = [i[2] for i in aux.DICE_PARS if i[0]==MTR][0]
+(fig, ax) = plt.subplots(figsize=(3, 10), ncols=1, sharey=True)
+ax.barh(
+    FEATS, [impDCD[i] for i in FEATS], 
+    align='center', zorder=10, 
+    color=col[:-2]+'AA'
+)
+# ax.grid(1)
+ax.set_xlim(0, .5)
+if TICKS_HIDE:
+    ax.axes.xaxis.set_ticklabels([])
+    ax.axes.yaxis.set_ticklabels([])
+    # ax.axes.xaxis.set_visible(False)
+    ax.axes.yaxis.set_visible(False)
+    # ax.xaxis.set_tick_params(width=0)
+    # ax.yaxis.set_tick_params(width=0)
+    ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+    # ax.set_axis_off()
+fig.tight_layout()
+fig.savefig(path.join(PT_IMG, 'FIMP_{}.png'.format(MTR)), dpi=750)

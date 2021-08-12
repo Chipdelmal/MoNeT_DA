@@ -28,7 +28,7 @@ else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-TRACE_NUM = 30000
+TRACE_NUM = 25e3
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -100,7 +100,8 @@ for (yVar, sigma, col, yRange) in ans[:]:
         delayed(dbg.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
             dpi=400, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
-            color=col, hcolor='#000000'+'50', lw=0.1, hlw=0.075, yRange=yRange
+            color=col, hcolor='#000000'+'50', lw=0.1, hlw=0.075, yRange=yRange,
+            ticksHide=False
         ) for (xVar, scale) in pFeats
     )
 # Export full panel -----------------------------------------------------------

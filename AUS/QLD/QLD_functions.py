@@ -4,6 +4,7 @@ from os import path
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
+import numpy as np
 
 ###############################################################################
 # Save Figure
@@ -76,15 +77,11 @@ def exportTracesPlot(
         axTemp.set_aspect(aspect=monet.scaleAspect(STYLE["aspect"], STYLE))
     else:
         axTemp.set_aspect(aspect=STYLE["aspect"])
-    axTemp.axes.xaxis.set_ticklabels([])
-    axTemp.axes.yaxis.set_ticklabels([])
-    axTemp.axes.xaxis.set_visible(False)
-    axTemp.axes.yaxis.set_visible(False)
-    # axTemp.xaxis.set_tick_params(width=0)
-    # axTemp.yaxis.set_tick_params(width=0)
-    axTemp.set_axis_off()
-    # axTemp.xaxis.set_ticks(np.arange(0, STYLE['xRange'][1], 365))
-    # axTemp.yaxis.set_ticks(np.arange(0, STYLE['yRange'][1], STYLE['yRange'][1]/4))
+    # axTemp.axes.xaxis.set_ticklabels()
+    # axTemp.axes.yaxis.set_ticklabels()
+    axTemp.axes.xaxis.set_visible(True)
+    axTemp.axes.yaxis.set_visible(True)
+    # axTemp.set_axis_off()
     axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
     axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
 

@@ -1,4 +1,5 @@
 
+import math
 from os import path
 import numpy as np
 from numpy import random
@@ -66,7 +67,8 @@ def exportPstTracesParallel(
         border=True, borderColor='#322E2D', borderWidth=1, 
         labelPos=(.7, .9), xpsNum=0, digs=3, 
         autoAspect=False, popScaler=1,
-        wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True
+        wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True, 
+        ticksHide=True, transparent=True
     ):
     (ix, repFile, tti, tto, wop, mnf, _, poe, cpt) = exIx
     repDta = pkl.load(repFile)
@@ -85,7 +87,8 @@ def exportPstTracesParallel(
         wop=wop, wopPrint=wopPrint, 
         cpt=cpt, cptPrint=cptPrint,
         poe=poe, poePrint=poePrint,
-        mnf=mnf, mnfPrint=mnfPrint
+        mnf=mnf, mnfPrint=mnfPrint,
+        ticksHide=ticksHide, transparent=True
     )
     return None
 
@@ -212,7 +215,7 @@ def plotDICE(
         dataEffect, xVar, yVar, features, hRows={},
         sampleRate=1, wiggle=False, sd=0, scale='linear', 
         lw=.175, color='#be0aff13', hcolor='#000000', hlw=.175,
-        rangePad=(.975, 1.025), gw=.25, yRange=None
+        rangePad=(.975, 1.025), gw=.25, yRange=None, ticksHide=False
     ):
     (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
     # Get levels and factorial combinations without feature -------------------
@@ -282,6 +285,15 @@ def plotDICE(
             'yRange': yRan
         }
     # Apply styling to axes ---------------------------------------------------
+    if ticksHide:
+        ax.axes.xaxis.set_ticklabels([])
+        ax.axes.yaxis.set_ticklabels([])
+        ax.axes.xaxis.set_visible(False)
+        ax.axes.yaxis.set_visible(False)
+        # axTemp.xaxis.set_tick_params(width=0)
+        # axTemp.yaxis.set_tick_params(width=0)
+        ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+        ax.set_axis_off()
     ax.set_aspect(monet.scaleAspect(1, STYLE))
     ax.set_xlim(STYLE['xRange'])
     ax.set_ylim(STYLE['yRange'])
@@ -300,7 +312,7 @@ def exportDICEParallel(
         AOI, xVar, yVar, dataSample, FEATS, PT_IMG, hRows={}, 
         dpi=500, lw=0.175, scale='linear', wiggle=False, sd=0.1, 
         color='blue', sampleRate=0.5, hcolor='#00000020', hlw=5,
-        yRange=None
+        yRange=None, ticksHide=False
     ):
     prgStr = '{}* Processing [{}:{}:{}]{}'
     print(prgStr.format(monet.CBBL, AOI, yVar, xVar, monet.CEND), end='\r')
@@ -308,7 +320,8 @@ def exportDICEParallel(
     (fig, ax) = plotDICE(
         dataSample, xVar, yVar, FEATS, hRows=hRows, lw=lw,
         scale=scale, wiggle=wiggle, sd=sd, color=color,
-        sampleRate=sampleRate, hcolor=hcolor, hlw=hlw, yRange=yRange
+        sampleRate=sampleRate, hcolor=hcolor, hlw=hlw, yRange=yRange,
+        ticksHide=ticksHide
     )
     fig.savefig(fName, dpi=dpi, bbox_inches='tight', pad=0)
     plt.clf(); plt.cla(); plt.close('all'); plt.gcf()
@@ -391,3 +404,19 @@ def make_colormap(seq):
             cdict['green'].append([item, g1, g2])
             cdict['blue'].append([item, b1, b2])
     return mcolors.LinearSegmentedColormap('CustomMap', cdict)
+
+
+def plotNetworkOnMap(map, mtxTransitions, ptsB, ptsA, c='#dd5fb', lw=.4, la=5):
+    (aNum, bNum) = (ptsA.shape[0], ptsB.shape[0])
+    for j in range(aNum):
+        src = ptsA[j]
+        for i in range(bNum):
+            snk = ptsB[i]
+            map.plot(
+                [src[0], snk[0]], [src[1], snk[1]], latlon=True,
+                lw=math.log(1 + lw * mtxTransitions[j][i]),
+                alpha=min(1, math.log(1 + la * mtxTransitions[j][i])),
+                solid_capstyle='round', c=c,
+                zorder=0
+            )
+    return map

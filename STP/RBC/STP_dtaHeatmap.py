@@ -28,6 +28,7 @@ else:
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
+TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -51,7 +52,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_ren', 'i_res'], 'i_sex'
+    ['i_fch', 'i_fcb'], 'i_res'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -68,15 +69,24 @@ thsStr = str(int(float(aux.THS)*100))
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Contour levels --------------------------------------------------------------
+# Z levels
 if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
+elif MOI == 'WOP':
+    (zmin, zmax) = (0, 2.25*365)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
+elif MOI == 'CPT':
+    (zmin, zmax) = (.4, 1.1)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/25), 'linear')
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
+
 if zmax > 10:
     rval = 0
 else:
     rval = 3
-(lvls, mthd) = (np.arange(zmin*.9, zmax*1.1, (zmax-zmin)/20), 'linear')
 # (zmin, zmax) = (-0.1, max(DATA[MOI]))
 # (lvls, mthd) = (np.arange(-0.1, 1.1, 1.5/20), 'nearest')
 # Filter the dataframe --------------------------------------------------------
@@ -87,7 +97,7 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 ###############################################################################
 fltr = {
     'i_sex': 1,
-    'i_ren': 8,
+    'i_ren': 12,
     'i_res': .6,
     'i_rsg': 0.079,
     'i_gsv': 0.01,
@@ -132,10 +142,10 @@ for sw in sweep:
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface ----------------------
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#555555', linewidths=.5, alpha=.5)
+    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#000000', linewidths=.5, alpha=1)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
-    # cs.cmap.set_under('blue')
+    # cs.cmap.set_under('blue')
     # Color bar ---------------------------------------------------------------
     cbar = fig.colorbar(cs)
     cbar.ax.get_yaxis().labelpad = 25
@@ -158,19 +168,47 @@ for sw in sweep:
     ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
     ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
     # Labels ------------------------------------------------------------------
-    ax.set_xlabel(HD_IND[0])
-    ax.set_ylabel(HD_IND[1])
-    ax.clabel(
-        cc, inline=True, fontsize=10, fmt='%1.{}f'.format(rval),
-        rightside_up=False
-    )
-    pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
-    plt.title(pTitle, fontsize=7.5)
+    if not TICKS_HIDE:
+        ax.set_xlabel(HD_IND[0])
+        ax.set_ylabel(HD_IND[1])
+        pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
+        plt.title(pTitle, fontsize=7.5)
+    if MOI=='WOP':
+        fmt = {}
+        strs = ["{:.2f}".format(i/365) for i in cc.levels]
+        for (l, s) in zip(cc.levels, strs):
+            fmt[l] = s
+        ax.clabel(
+            cc, cc.levels[1::2], inline=True, fontsize=20, fmt=fmt,
+            rightside_up=False, inline_spacing=5
+        )
+    else:
+        ax.clabel(
+            cc, inline=True, fontsize=20, fmt='%1.{}f'.format(rval),
+            rightside_up=True
+        )
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
     ax.set_yscale(ySca)
+    renB = (HD_IND[0]=='i_ren') or (HD_IND[1]=='i_ren')
+    resB = (HD_IND[0]=='i_res') or (HD_IND[1]=='i_res')
+    if renB and resB:
+        ax.xaxis.set_ticks(np.arange(0, 24, 4))
+        ax.yaxis.set_ticks(np.arange(0, 1, 0.2))
     plt.xlim(ran[0][0], ran[0][1])
     plt.ylim(ran[1][0], ran[1][1])
+    if TICKS_HIDE:
+        ax.axes.xaxis.set_ticklabels([])
+        ax.axes.yaxis.set_ticklabels([])
+        # ax.axes.xaxis.set_visible(False)
+        # ax.axes.yaxis.set_visible(False)
+        ax.xaxis.set_tick_params(width=0)
+        ax.yaxis.set_tick_params(width=0)
+        ax.tick_params(
+            left=False, labelleft=False, bottom=False, labelbottom=False
+        )
+        ax.set_axis_off()
+    fig.tight_layout()
     ###########################################################################
     # Export File
     ###########################################################################
