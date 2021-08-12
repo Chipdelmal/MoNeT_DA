@@ -1,4 +1,5 @@
 
+import math
 from os import path
 import numpy as np
 from numpy import random
@@ -403,3 +404,19 @@ def make_colormap(seq):
             cdict['green'].append([item, g1, g2])
             cdict['blue'].append([item, b1, b2])
     return mcolors.LinearSegmentedColormap('CustomMap', cdict)
+
+
+def plotNetworkOnMap(map, mtxTransitions, ptsB, ptsA, c='#dd5fb', lw=.4, la=5):
+    (aNum, bNum) = (ptsA.shape[0], ptsB.shape[0])
+    for j in range(aNum):
+        src = ptsA[j]
+        for i in range(bNum):
+            snk = ptsB[i]
+            map.plot(
+                [src[0], snk[0]], [src[1], snk[1]], latlon=True,
+                lw=math.log(1 + lw * mtxTransitions[j][i]),
+                alpha=min(1, math.log(1 + la * mtxTransitions[j][i])),
+                solid_capstyle='round', c=c,
+                zorder=0
+            )
+    return map

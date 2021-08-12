@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import math
 import numpy as np
+from os import path
 import pandas as pd
 import seaborn as sns
+from sklearn.preprocessing import normalize
 import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
 from mpl_toolkits.basemap import Basemap
@@ -16,15 +19,18 @@ import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('dsk', '265', 30)
+    (USR, REL, CLS) = ('lab', '265', 30)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
+(CLUSTERS, LABELS) = (False, True)
 ###############################################################################
 # Selecting Paths
 ###############################################################################
 # Base Geo Path ---------------------------------------------------------------
 if USR == 'srv':
     PTH_ROT = '/RAID5/marshallShare/STP/SPA/GEO/'
+elif USR == 'lab':
+    PTH_ROT = '/Volumes/marshallShare/STP/SPA/GEO/'
 else:
     PTH_ROT = '/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/'
 # Population files ------------------------------------------------------------
@@ -61,6 +67,13 @@ for (i, nid) in enumerate(clstLst):
         count = count + 1
 df['clst'] = clstLst
 ###############################################################################
+# Read Network
+###############################################################################
+xy = np.genfromtxt(path.join(PTH_ROT, 'Mov/001_STP_XY.csv'), delimiter=',')
+psi = np.genfromtxt(path.join(PTH_ROT, 'Mov/001_STP_MX.csv'), delimiter=',')
+np.fill_diagonal(psi, 0)
+psiN = normalize(psi, axis=1, norm='l2')
+###############################################################################
 # Export
 ###############################################################################
 # df.to_csv(PTH_PTS+'clusters.csv')
@@ -87,15 +100,15 @@ mH = Basemap(
     llcrnrlon=minLong, urcrnrlon=maxLong,
     lat_ts=20, resolution='h', ax=ax
 )
-mH.drawcoastlines(color=COLORS[0], linewidth=2, zorder=1)
-mH.drawcoastlines(color=COLORS[3], linewidth=.25, zorder=2)
+mH.drawcoastlines(color=COLORS[0], linewidth=1, zorder=-3)
+mH.drawcoastlines(color=COLORS[3], linewidth=.25, zorder=-2)
 mL = Basemap(
     projection='merc',
     llcrnrlat=minLat, urcrnrlat=maxLat,
     llcrnrlon=minLong, urcrnrlon=maxLong,
     lat_ts=20, resolution='i', ax=ax
 )
-mL.drawcoastlines(color=COLORS[4], linewidth=10, zorder=0)
+mL.drawcoastlines(color=COLORS[4], linewidth=3, zorder=-1)
 ax.tick_params(
     axis='both', which='both',
     bottom=True, top=False, left=True, right=False,
@@ -108,27 +121,50 @@ ax.spines["left"].set_visible(False)
 (lon, lat) = (list(pts['lon']), list(pts['lat']))
 mH.scatter(
     lon, lat, latlon=True,
-    alpha=.25, marker='.', s=[2],
-    color='#E048B8', zorder=3
+    alpha=.8, marker='o', s=[math.log(1+i/10)/2 for i in pts['pop']],
+    color='#ff006e', zorder=10, 
+    edgecolors='#ffffff', linewidth=.1
 )
-for i in range(len(lon)):
-    (x, y) = mH(lon[i], lat[i])
-    ax.annotate(i, xy=(x, y), size=.2, ha='center', va='center', color='white')
-monet.quickSaveFig(PTH_PTS + 'raw.png', fig, dpi=1000)
+
+relSites = set(aux.SOUTH)
+(lonR, latR, popR) = [
+    [l for (i, l) in enumerate(lon) if (i) in relSites],
+    [l for (i, l) in enumerate(lat) if (i) in relSites],
+    [l for (i, l) in enumerate(pts['pop']) if (i) in relSites]
+]
 mH.scatter(
-    [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
-    alpha=.5, marker='x', s=[5],
-    color='#233090', zorder=3
+    lonR, latR, latlon=True,
+    alpha=.8, marker='o', s=popR,
+    color='#03045e', zorder=10, 
+    edgecolors='#ffffff', linewidth=.1
 )
-for i in range(len(centroid)):
-    (x, y) = mH(centroid[i][0], centroid[i][1])
-    ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
-fun.quickSaveFig(PTH_PTS + 'clusters.png', fig, dpi=1000)
+
+if LABELS:
+    for i in range(len(lon)):
+        (x, y) = mH(lon[i], lat[i])
+        ax.annotate(
+            i, xy=(x, y), size=.2, 
+            ha='center', va='center', color='white',
+            zorder=10
+        )
+plo.plotNetworkOnMap(mL, psiN, xy, xy, c='#04011f55', lw=.1)
+fig.savefig(PTH_PTS + 'raw.png', dpi=2000)
+if CLUSTERS:
+    mH.scatter(
+        [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
+        alpha=.5, marker='x', s=[5],
+        color='#233090', zorder=3
+    )
+    if LABELS:
+        for i in range(len(centroid)):
+            (x, y) = mH(centroid[i][0], centroid[i][1])
+            ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
+    fig.savefig(PTH_PTS + 'clusters.png', dpi=2000)
 # #############################################################################
 # Kernel Heatmap
 # #############################################################################
-kernel = np.genfromtxt(PTH_PTS + kernelName, delimiter=',')
-np.fill_diagonal(kernel, 0)
-fig = plt.figure(figsize=(5, 5))
-plt.imshow(kernel, interpolation='nearest', cmap='Purples', vmax=2e-04, vmin=0)
-fun.quickSaveFig(PTH_PTS + 'heat.png', fig, dpi=1000)
+# kernel = np.genfromtxt(PTH_PTS + kernelName, delimiter=',')
+# np.fill_diagonal(kernel, 0)
+# fig = plt.figure(figsize=(5, 5))
+# plt.imshow(kernel, interpolation='nearest', cmap='Purples', vmax=2e-04, vmin=0)
+# fun.quickSaveFig(PTH_PTS + 'heat.png', fig, dpi=1000)

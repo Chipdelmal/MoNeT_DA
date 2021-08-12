@@ -54,6 +54,7 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+(scalers, HD_DEP, _, cmap) = aux.selectDepVars(MTR, AOI)
 # Time and head --------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
@@ -81,12 +82,12 @@ COLS = list(DATA.columns)
 # Pre-Analysis
 ###############################################################################
 correlation = DATA.corr(method='spearman')
-(f, ax) = plt.subplots(figsize=(10, 8))
-sns.heatmap(
-    correlation, mask=np.zeros_like(correlation, dtype=np.bool), 
-    cmap=sns.diverging_palette(220, 10, as_cmap=True),
-    square=True, ax=ax
-)
+# (f, ax) = plt.subplots(figsize=(10, 8))
+# sns.heatmap(
+#     correlation, mask=np.zeros_like(correlation, dtype=np.bool), 
+#     cmap=sns.diverging_palette(220, 10, as_cmap=True),
+#     square=True, ax=ax
+# )
 # f.show()
 ###############################################################################
 # Split Train/Test
@@ -128,7 +129,7 @@ report = metrics.classification_report(VAL_Y, PRD_Y)
 confusionMat = metrics.plot_confusion_matrix(
     rf, VAL_X, VAL_Y, 
     # display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
-    cmap=cm.Blues, normalize=None
+    cmap=cmap, normalize=None
 )
 plt.savefig(modelPath+'_RF.png', dpi=300)
 # Features importance ---------------------------------------------------------
