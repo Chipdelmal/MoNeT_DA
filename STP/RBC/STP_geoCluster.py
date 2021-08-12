@@ -22,7 +22,8 @@ if monet.isNotebook():
     (USR, REL, CLS) = ('lab', '265', 30)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-(CLUSTERS, LABELS) = (False, True)
+(CLUSTERS, LABELS) = (False, False)
+(SITES_STUDY, SITES_SOUTH) = (True, False)
 ###############################################################################
 # Selecting Paths
 ###############################################################################
@@ -125,25 +126,39 @@ mH.scatter(
     color='#ff006e', zorder=10, 
     edgecolors='#ffffff', linewidth=.1
 )
-
-relSites = set(aux.SOUTH)
-(lonR, latR, popR) = [
-    [l for (i, l) in enumerate(lon) if (i) in relSites],
-    [l for (i, l) in enumerate(lat) if (i) in relSites],
-    [l for (i, l) in enumerate(pts['pop']) if (i) in relSites]
-]
-mH.scatter(
-    lonR, latR, latlon=True,
-    alpha=.8, marker='o', s=popR,
-    color='#03045e', zorder=10, 
-    edgecolors='#ffffff', linewidth=.1
-)
-
+# Sites Highlight -------------------------------------------------------------
+if SITES_SOUTH:
+    relSites = set(aux.SOUTH)
+    (lonR, latR, popR) = [
+        [l for (i, l) in enumerate(lon) if (i) in relSites],
+        [l for (i, l) in enumerate(lat) if (i) in relSites],
+        [l for (i, l) in enumerate(pts['pop']) if (i) in relSites]
+    ]
+    mH.scatter(
+        lonR, latR, latlon=True,
+        alpha=.8, marker='o', s=[math.log(1+i/10)/2 for i in popR],
+        color='#03045e', zorder=10, 
+        edgecolors='#ffffff', linewidth=.1
+    )
+if SITES_STUDY:
+    relSites = set(aux.SITES)
+    (lonR, latR, popR) = [
+        [l for (i, l) in enumerate(lon) if (i) in relSites],
+        [l for (i, l) in enumerate(lat) if (i) in relSites],
+        [l for (i, l) in enumerate(pts['pop']) if (i) in relSites]
+    ]
+    mH.scatter(
+        lonR, latR, latlon=True,
+        alpha=.8, marker='o', s=[math.log(1+i/10)/2 for i in popR],
+        color='#03045e', zorder=10, 
+        edgecolors='#ffffff', linewidth=.1
+    )
+# Labels ----------------------------------------------------------------------
 if LABELS:
     for i in range(len(lon)):
         (x, y) = mH(lon[i], lat[i])
         ax.annotate(
-            i, xy=(x, y), size=.2, 
+            i, xy=(x, y), size=.1, 
             ha='center', va='center', color='white',
             zorder=10
         )
