@@ -19,11 +19,11 @@ import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('lab', '265', 30)
+    (USR, REL, CLS) = ('dsk', '265', 30)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 (CLUSTERS, LABELS) = (False, False)
-(SITES_STUDY, SITES_SOUTH) = (False, True)
+(SITES_STUDY, SITES_SOUTH) = (False, False)
 ###############################################################################
 # Selecting Paths
 ###############################################################################
@@ -70,8 +70,8 @@ df['clst'] = clstLst
 ###############################################################################
 # Read Network
 ###############################################################################
-xy = np.genfromtxt(path.join(PTH_ROT, 'Mov/001_STP_XY.csv'), delimiter=',')
-psi = np.genfromtxt(path.join(PTH_ROT, 'Mov/001_STP_MX.csv'), delimiter=',')
+xy = np.genfromtxt(path.join(PTH_ROT, 'mov/001_STP_XY.csv'), delimiter=',')
+psi = np.genfromtxt(path.join(PTH_ROT, 'mov/001_STP_MX.csv'), delimiter=',')
 np.fill_diagonal(psi, 0)
 psiN = normalize(psi, axis=1, norm='l2')
 ###############################################################################
@@ -127,7 +127,7 @@ mH.scatter(
     edgecolors='#ffffff', linewidth=.1
 )
 # Sites Highlight -------------------------------------------------------------
-PREP='M_CLEAN'
+prep='M_CLEAN'
 if SITES_SOUTH:
     relSites = set(aux.SOUTH)
     (lonR, latR, popR) = [
@@ -141,7 +141,7 @@ if SITES_SOUTH:
         color='#03045e', zorder=10, 
         edgecolors='#ffffff', linewidth=.1
     )
-    prep='M_SITES'
+    prep='M_SOUTH'
 if SITES_STUDY:
     relSites = set(aux.SITES)
     (lonR, latR, popR) = [
@@ -155,7 +155,7 @@ if SITES_STUDY:
         color='#03045e', zorder=10, 
         edgecolors='#ffffff', linewidth=.1
     )
-    prep='M_SOUTH'
+    prep='M_SITES'
 # Labels ----------------------------------------------------------------------
 if LABELS:
     for i in range(len(lon)):
@@ -166,7 +166,9 @@ if LABELS:
             zorder=10
         )
 plo.plotNetworkOnMap(mL, psiN, xy, xy, c='#04011f55', lw=.1)
-fig.savefig(PTH_PTS + PREP +'.png', dpi=2000)
+fig.savefig(
+    PTH_PTS + prep +'.png', dpi=2000, bbox_inches='tight', pad_inches=0
+)
 if CLUSTERS:
     mH.scatter(
         [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
@@ -177,7 +179,10 @@ if CLUSTERS:
         for i in range(len(centroid)):
             (x, y) = mH(centroid[i][0], centroid[i][1])
             ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
-    fig.savefig(PTH_PTS + 'clusters.png', dpi=2000)
+    fig.savefig(
+        PTH_PTS + 'clusters.png', dpi=2500, 
+        bbox_inches='tight', pad_inches=0
+    )
 # #############################################################################
 # Kernel Heatmap
 # #############################################################################
