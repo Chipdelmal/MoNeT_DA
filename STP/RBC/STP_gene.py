@@ -3,7 +3,7 @@
 
 import MoNeT_MGDrivE as monet
 import STP_gene_LDR as LDR
-import STP_gene_LDR as SDR
+import STP_gene_SDR as SDR
 
 ###############################################################################
 # Drive

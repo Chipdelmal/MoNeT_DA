@@ -49,7 +49,7 @@ for exp in EXPS:
     tS = datetime.now()
     monet.printExperimentHead(
         PT_PRE, PT_IMG, tS, 
-        '{} PreTraces [{}:{}:{}]'.format(aux.XP_ID, aux.DRV, exp, AOI)
+        '{} PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
     )
     ###########################################################################
     # Load preprocessed files lists

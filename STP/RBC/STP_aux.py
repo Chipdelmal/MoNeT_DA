@@ -19,7 +19,7 @@ OVW = True
     True, 0, False
 )
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
-    'STP', 'LDR',
+    'STP', 'LDR/SDR',
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)

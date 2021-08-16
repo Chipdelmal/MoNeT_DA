@@ -14,7 +14,7 @@ from more_itertools import locate
 # os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV) = ('dsk2', 'HLT', 'PAN', 'LDR')
+    (USR, AOI, LND, DRV) = ('lab', 'HLT', 'PAN', 'SDR')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -40,7 +40,7 @@ for exp in EXPS:
     tS = datetime.now()
     monet.printExperimentHead(
         PT_DTA, PT_PRE, tS, 
-        '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, aux.DRV, exp, AOI)
+        '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
     )
     ###########################################################################
     # Load folders
