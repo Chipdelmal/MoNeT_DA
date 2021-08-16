@@ -59,12 +59,12 @@ for mtr in ['TTI', 'TTO', 'WOP']:
     dataCols = [k for k in dta.columns if k[0]=='i']+[aux.THS]
     dta = dta[dataCols]
     dta = dta.rename(columns={aux.THS: mtr})
-    dataFrames.append(dta)
+    dataFrames.append(dta, sort=True)
 for mtr in ['POE', 'CPT']:
     print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
     dta = pd.read_csv(pth)
-    dataFrames.append(dta)
+    dataFrames.append(dta, sort=True)
 for mtr in ['MNX', ]:
     print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
@@ -72,7 +72,7 @@ for mtr in ['MNX', ]:
     dataCols = [k for k in dta.columns if k[0]=='i']+['min']
     dta = dta[dataCols]
     dta = dta.rename(columns={'min': 'MNF'})
-    dataFrames.append(dta)
+    dataFrames.append(dta, sort=True)
 fullDataframe = reduce(lambda x, y: pd.merge(x, y, ), dataFrames)
 ###############################################################################
 # Export
