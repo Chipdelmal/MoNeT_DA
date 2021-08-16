@@ -29,7 +29,7 @@ else:
 ###############################################################################
 # Paths
 ###############################################################################
-(drive, land) = (
+(drive, land) = ( 
     drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
