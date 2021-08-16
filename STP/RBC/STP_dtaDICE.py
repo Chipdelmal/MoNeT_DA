@@ -39,7 +39,7 @@ else:
 ###############################################################################
 EXPS = aux.getExps(LND)
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
@@ -67,7 +67,7 @@ COLS = list(DATA.columns)
 tS = datetime.now()
 monet.printExperimentHead(
     PT_SUMS, PT_IMG, tS,
-    '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
+    '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, DRV, QNT, AOI, aux.THS)
 )
 ###############################################################################
 # DICE Plot

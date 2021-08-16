@@ -21,7 +21,7 @@ if monet.isNotebook():
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     JOB = aux.JOB_SRV
-(EXPS, DRV, GRID_REF) = (aux.getExps(LND), 'LDR', False)
+(EXPS, GRID_REF) = (aux.getExps(LND), False)
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -31,7 +31,7 @@ for exp in EXPS:
     # Setup paths and drive
     # #########################################################################
     (drive, land) = (
-        drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
         lnd.landSelector(exp, LND)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
@@ -41,7 +41,7 @@ for exp in EXPS:
     tS = datetime.now()
     monet.printExperimentHead(
         PT_PRE, PT_OUT, tS, 
-        aux.XP_ID+'{} PstFraction [{}:{}:{}]'.format(fldr, exp, AOI)
+        aux.XP_ID+' PstFraction [{}:{}:{}]'.format(fldr, exp, AOI)
     )
     # #########################################################################
     # Base experiments
