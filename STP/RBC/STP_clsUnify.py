@@ -32,7 +32,7 @@ else:
 # Paths
 ###############################################################################
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
@@ -45,7 +45,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} ClsUnify [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
+    '{} ClsUnify [{}:{}:{}:{}]'.format(aux.XP_ID, DRV, QNT, AOI, aux.THS)
 )
 ###############################################################################
 # Merge Dataframes
@@ -59,12 +59,12 @@ for mtr in ['TTI', 'TTO', 'WOP']:
     dataCols = [k for k in dta.columns if k[0]=='i']+[aux.THS]
     dta = dta[dataCols]
     dta = dta.rename(columns={aux.THS: mtr})
-    dataFrames.append(dta)
+    dataFrames.append(dta, sort=True)
 for mtr in ['POE', 'CPT']:
     print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
     dta = pd.read_csv(pth)
-    dataFrames.append(dta)
+    dataFrames.append(dta, sort=True)
 for mtr in ['MNX', ]:
     print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
     pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
@@ -72,7 +72,7 @@ for mtr in ['MNX', ]:
     dataCols = [k for k in dta.columns if k[0]=='i']+['min']
     dta = dta[dataCols]
     dta = dta.rename(columns={'min': 'MNF'})
-    dataFrames.append(dta)
+    dataFrames.append(dta, sort=True)
 fullDataframe = reduce(lambda x, y: pd.merge(x, y, ), dataFrames)
 ###############################################################################
 # Export

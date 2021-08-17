@@ -67,7 +67,7 @@ COLS = list(DATA.columns)
 tS = datetime.now()
 monet.printExperimentHead(
     PT_SUMS, PT_IMG, tS,
-    '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
+    '{} ClsDICE [{}:{}:{}:{}]'.format(aux.XP_ID, DRV, QNT, AOI, aux.THS)
 )
 ###############################################################################
 # DICE Plot
