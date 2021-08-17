@@ -38,7 +38,7 @@ EXPS = aux.getExps(LND)
     'CLS_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(aux.THS)*100)),
 )
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
@@ -51,7 +51,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} ClsPreProcess[{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI)
+    '{} ClsPreProcess[{}:{}:{}]'.format(aux.XP_ID, DRV, QNT, AOI)
 )
 ###############################################################################
 # Load DF

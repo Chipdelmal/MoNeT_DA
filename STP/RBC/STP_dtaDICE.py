@@ -39,7 +39,7 @@ else:
 ###############################################################################
 EXPS = aux.getExps(LND)
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
