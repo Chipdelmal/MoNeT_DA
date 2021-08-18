@@ -15,7 +15,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, TRC) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'HLT')
+    (USR, LND, AOI, DRV, QNT, TRC) = ('lab', 'PAN', 'HLT', 'SDR', '50', 'HLT')
 else:
     (USR, LND, AOI, DRV, QNT, TRC) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -26,14 +26,14 @@ JOB = aux.JOB_DSK
 if USR=='srv':
     JOB = aux.JOB_SRV
 # Experiments -----------------------------------------------------------------
-(EXPS, DRV) = (aux.getExps(LND), 'LDR')
+EXPS = aux.getExps(LND)
 exp = EXPS[0]
 ###############################################################################
 # Paths
 ###############################################################################
 EXPS = aux.getExps(LND)
 (drive, land) = (
-    drv.driveSelector(aux.DRV, TRC, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, TRC, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, EXPS[0], LND, DRV)
