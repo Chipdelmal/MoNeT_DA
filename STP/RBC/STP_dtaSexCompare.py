@@ -21,11 +21,12 @@ warnings.filterwarnings("ignore",category=UserWarning)
 plt.ioff()
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'SDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
+TICKS_HIDE = False
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -36,7 +37,7 @@ else:
 ###############################################################################
 EXPS = aux.getExps(LND)
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
@@ -123,10 +124,9 @@ sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_NG'], ax=ax[1], size=.35, alpha=.35, 
 sns.stripplot(x=mrgDF['CPT_ML']-mrgDF['CPT_GV'], ax=ax[2], size=.35, alpha=.35, color=colTrpl[2])
 for a in ax:
     a.set_xlim(0, 1)
-    a.axis("off")
-    a.set_xlim(0, 1)
     a.set_ylim(-.125, .125)
-    a.xaxis.set_ticklabels([])
+    if TICKS_HIDE:
+        a.xaxis.set_ticklabels([])
 fig.savefig(
     path.join(PT_IMG, 'SEX_COMP.png'),
     dpi=750, bbox_inches='tight', pad_inches=0
@@ -151,10 +151,11 @@ for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
         ax=ax[i], size=.35, color=dta[1], alpha=.5, zorder=1
     )
 for a in ax:
-    a.axis("off")
     a.set_xlim(0, 5*365)
     a.set_ylim(-.125, .125)
-    a.xaxis.set_ticklabels([])
+    if TICKS_HIDE:
+        a.axis("off")
+        a.xaxis.set_ticklabels([])
 fig.savefig(
     path.join(PT_IMG, 'SEX_DISTR_WOP.png'), 
     dpi=750, bbox_inches='tight', pad_inches=0
@@ -168,10 +169,11 @@ sns.stripplot(x=abs(mrgDF['WOP_ML']-mrgDF['WOP_ML']), ax=ax[0], size=.35, alpha=
 sns.stripplot(x=abs(mrgDF['WOP_NG']-mrgDF['WOP_ML']), ax=ax[1], size=.35, alpha=.35, color=colTrpl[1])
 sns.stripplot(x=abs(mrgDF['WOP_GV']-mrgDF['WOP_ML']), ax=ax[2], size=.35, alpha=.35, color=colTrpl[2])
 for a in ax:
-    a.axis("off")
     a.set_xlim(0, 2.5*365)
     a.set_ylim(-.125, .125)
-    a.xaxis.set_ticklabels([])
+    if TICKS_HIDE:
+        a.axis("off")
+        a.xaxis.set_ticklabels([])
 fig.savefig(
     path.join(PT_IMG, 'SEX_COMP_WOP.png'),
     dpi=750, bbox_inches='tight', pad_inches=0
