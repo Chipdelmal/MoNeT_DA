@@ -16,11 +16,16 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, NME, TRC) = ('dsk', 'PAN', 'HLT', '50', '', 'HLT')
+    (USR, LND, AOI, DRV, QNT, NME, TRC) = (
+        'lab', 'PAN', 'HLT',
+        'SDR', '50', 'BD', 
+        'HLT'
+    )
 else:
     (USR, LND, AOI, DRV, QNT, NME, TRC) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
-	sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7]
+	    sys.argv[4], sys.argv[5], sys.argv[6], 
+        sys.argv[7]
     )
 # Filename --------------------------------------------------------------------
 if NME == 'SX':
@@ -40,7 +45,7 @@ else:
 ###############################################################################
 EXPS = aux.getExps(LND)
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, _, _, PT_PRE, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)

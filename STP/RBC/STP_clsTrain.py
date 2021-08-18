@@ -176,11 +176,12 @@ FEATS.remove('i_grp')
 col = [i[2] for i in aux.DICE_PARS if i[0]==MTR][0]
 (fig, ax) = plt.subplots(figsize=(3, 10), ncols=1, sharey=True)
 ax.barh(
-    FEATS, [impDCD[i] for i in FEATS], 
+    sorted(FEATS, reverse=True), 
+    [impDCD[i] for i in sorted(FEATS, reverse=True)], 
     align='center', zorder=10, 
     color=col[:-2]+'AA'
 )
-# ax.grid(1)
+ax.grid(1)
 ax.set_xlim(0, .5)
 if TICKS_HIDE:
     ax.axes.xaxis.set_ticklabels([])
