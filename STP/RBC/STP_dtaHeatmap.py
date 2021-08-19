@@ -28,7 +28,7 @@ else:
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
-TICKS_HIDE = False
+TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -52,7 +52,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_fch', 'i_fcb'], 'i_ren'
+    ['i_fch', 'i_fcb'], 'i_res'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -74,10 +74,10 @@ if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (-5, 2.25*365)
+    (zmin, zmax) = (-5, 5*365)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
 elif MOI == 'CPT':
-    (zmin, zmax) = (.4, 1.1)
+    (zmin, zmax) = (0, 1.05)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/25), 'linear')
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
@@ -98,11 +98,11 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 fltr = {
     'i_sex': 1,
     'i_ren': 12,
-    'i_res': .6,
+    'i_res': .5,
     'i_rsg': 0.079,
     'i_gsv': 0.01,
     'i_fch': 0.175,
-    'i_fcb': 0.1169999999999999,
+    'i_fcb': 0.117,
     'i_fcr': 0,
     'i_hrm': 1.0,
     'i_hrf': 0.956,
@@ -111,6 +111,7 @@ fltr = {
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
 sweep = uqVal[kSweep]
+sw = sweep[0]
 for sw in sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]

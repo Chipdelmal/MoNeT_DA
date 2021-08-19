@@ -19,11 +19,11 @@ import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('dsk', '265', 30)
+    (USR, REL, CLS) = ('lab', '265', 30)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 (CLUSTERS, LABELS) = (False, False)
-(SITES_STUDY, SITES_SOUTH) = (False, False)
+(SITES_STUDY, SITES_SOUTH) = (False, True)
 ###############################################################################
 # Selecting Paths
 ###############################################################################

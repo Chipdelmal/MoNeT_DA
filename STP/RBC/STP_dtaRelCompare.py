@@ -26,7 +26,7 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'SDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -41,7 +41,7 @@ else:
 ###############################################################################
 EXPS = aux.getExps(LND)
 (drive, land) = (
-    drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     lnd.landSelector(EXPS[0], LND)
 )
 (PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
@@ -87,6 +87,7 @@ resVals = list(DATA[ks]['i_res'].unique())
 ###############################################################################
 # Plot
 ###############################################################################
+resVals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 clist = [
     '#000000', '#03045e', '#6247aa', '#815ac0', '#c19ee0', '#d6e3f8'
 ]
@@ -98,7 +99,7 @@ clist.reverse()
 rvb = monet.colorPaletteFromHexList(clist)
 colors = rvb(np.linspace(0, 1, len(resVals)))
 (fig, ax) = plt.subplots(figsize=(10, 10))
-fltr['i_res'] = 0.25
+fltr['i_res'] = 0.5
 for (i, res) in enumerate(resVals):
     fltr['i_res'] = res
     keys = list(fltr.keys())
@@ -116,7 +117,7 @@ leg = [Patch(facecolor=colors[len(resVals)-(i+1)], edgecolor=list(colors[len(res
 ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
 ax.grid(1)
 ax.set_xlim(0, 24)
-ax.set_ylim(0, 1.75*365)
+ax.set_ylim(0, 3*365) # CHANGED!!!!!!!!
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
 ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
@@ -166,7 +167,7 @@ ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,
 ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
 ax.grid(1)
 ax.set_xlim(0, 1)
-ax.set_ylim(0, 1.75*365)
+ax.set_ylim(0, 3*365)
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
 ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
