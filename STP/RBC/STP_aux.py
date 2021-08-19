@@ -209,4 +209,3 @@ def selectPath(USR, EXP, LND, DRV=None):
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
 
 
-
