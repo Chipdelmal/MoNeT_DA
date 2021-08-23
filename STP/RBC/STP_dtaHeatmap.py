@@ -52,7 +52,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_fch', 'i_fcb'], 'i_res'
+    ['i_fch', 'i_fcb'], 'i_sex'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -235,3 +235,9 @@ for sw in sweep:
     plt.cla() 
     plt.close(fig)
     plt.gcf()
+
+
+DATA[
+    (DATA['i_ren']==12) &
+    (DATA['i_res']==0.5)
+]
