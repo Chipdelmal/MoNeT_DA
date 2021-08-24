@@ -16,6 +16,7 @@ import STP_gene as drv
 import STP_land as lnd
 import STP_auxDebug as dbg
 from treeinterpreter import treeinterpreter as ti
+# http://blog.datadive.net/random-forest-interpretation-with-scikit-learn/
 
 if monet.isNotebook():
     (USR, LND, AOI, QNT, DRV, MTR) = ('lab', 'PAN', 'HLT', '50', 'LDR', 'CPT')
@@ -73,7 +74,6 @@ vct = [[*sex, fcb, fch, fcr, 0, gsv, hrf, hrm, 0, ren, res, rsg]]
 {ix: i.predict(vct)[0] for (ix, i) in zip(MDLS, mdls)}
 {ix: ti.predict(i, np.asarray(vct)) for (ix, i) in zip(MDLS, mdls)}
 # -----------------------------------------------------------------------------
-i=0
 rf = mdls[1]
 pred = rf.predict_log_proba(vct)
 (prediction, biases, contributions) = ti.predict(rf, np.asarray(vct))
@@ -82,5 +82,5 @@ predLog = ['{:.3f}'.format(100*j) for j in pred[i]]
 predProb = ['{:.3f}'.format(j) for j in prediction[i]]
 print('* Class: {}'.format(predProb))
 for (c, feature) in zip(contributions[0], FEATS):
-    ptest = '{:.4f}'.format(c[i]).zfill(3)
+    ptest = '{:.4f}'.format(c[0]).zfill(3)
     print('\t{}: {}'.format(feature, ptest))
