@@ -22,7 +22,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'SDR', '50', 'WOP')
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -99,7 +99,7 @@ fltr = {
     'i_sex': 1,
     'i_ren': 12,
     'i_res': .5,
-    'i_rsg': 0.079,
+    'i_rsg': 0,
     'i_gsv': 0.01,
     'i_fch': 0.175,
     'i_fcb': 0.117,
