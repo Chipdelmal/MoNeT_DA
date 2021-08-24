@@ -126,6 +126,7 @@ PRD_Y = rf.predict(VAL_X)
     metrics.jaccard_score(VAL_Y, PRD_Y, average='weighted')
 )
 report = metrics.classification_report(VAL_Y, PRD_Y)
+plt.rcParams.update({'font.size': 7})
 confusionMat = metrics.plot_confusion_matrix(
     rf, VAL_X, VAL_Y, 
     # display_labels=list(range(len(set(outputs[outputs.columns[0]])))),
