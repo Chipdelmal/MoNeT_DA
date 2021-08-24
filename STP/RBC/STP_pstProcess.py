@@ -16,7 +16,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV, QNT) = ('dsk', 'HLT', 'PAN', 'LDR', '50')
+    (USR, AOI, LND, DRV, QNT) = ('lab', 'HLT', 'PAN', 'LDR', '50')
     JOB = aux.JOB_DSK
     CHUNKS = JOB
 else:
@@ -88,3 +88,5 @@ for dfPathsSet in dfPathsPieces:
     # Write combined dataframe ------------------------------------------------
     fName = dfPathsSet[0].split('-')[0]+'.csv'
     dfFull.to_csv(fName, index=False)
+
+

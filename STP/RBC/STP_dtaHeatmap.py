@@ -22,7 +22,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'SDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -52,7 +52,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 # Select surface variables
 ###############################################################################
 (HD_IND, kSweep) = (
-    ['i_ren', 'i_res'], 'i_sex'
+    ['i_fch', 'i_fcb'], 'i_sex'
 )
 (xSca, ySca) = ('linear', 'linear')
 # Scalers and sampling --------------------------------------------------------
@@ -74,10 +74,10 @@ if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (0, 2.25*365)
+    (zmin, zmax) = (-5, 5*365)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
 elif MOI == 'CPT':
-    (zmin, zmax) = (.4, 1.1)
+    (zmin, zmax) = (0, 1.05)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/25), 'linear')
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
@@ -98,11 +98,11 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 fltr = {
     'i_sex': 1,
     'i_ren': 12,
-    'i_res': .6,
+    'i_res': .5,
     'i_rsg': 0.079,
     'i_gsv': 0.01,
     'i_fch': 0.175,
-    'i_fcb': 0.1169999999999999,
+    'i_fcb': 0.117,
     'i_fcr': 0,
     'i_hrm': 1.0,
     'i_hrf': 0.956,
@@ -111,6 +111,7 @@ fltr = {
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
 sweep = uqVal[kSweep]
+sw = sweep[0]
 for sw in sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]
@@ -145,7 +146,7 @@ for sw in sweep:
     cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#000000', linewidths=.5, alpha=1)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
-    # cs.cmap.set_under('blue')
+    # cs.cmap.set_under('white')
     # Color bar ---------------------------------------------------------------
     cbar = fig.colorbar(cs)
     cbar.ax.get_yaxis().labelpad = 25
@@ -234,3 +235,9 @@ for sw in sweep:
     plt.cla() 
     plt.close(fig)
     plt.gcf()
+
+
+DATA[
+    (DATA['i_ren']==12) &
+    (DATA['i_res']==0.5)
+]

@@ -21,12 +21,12 @@ warnings.filterwarnings("ignore",category=UserWarning)
 plt.ioff()
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'SDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-TICKS_HIDE = False
+TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -106,10 +106,11 @@ for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
         ax=ax[i], size=.35, color=dta[1], alpha=.5, zorder=1
     )
 for a in ax:
-    a.axis("off")
     a.set_xlim(0, 1)
     a.set_ylim(-.125, .125)
-    a.xaxis.set_ticklabels([])
+    if TICKS_HIDE:
+        a.axis("off")
+        a.xaxis.set_ticklabels([])
 fig.savefig(
     path.join(PT_IMG, 'SEX_DISTR.png'), 
     dpi=750, bbox_inches='tight', pad_inches=0
@@ -126,6 +127,7 @@ for a in ax:
     a.set_xlim(0, 1)
     a.set_ylim(-.125, .125)
     if TICKS_HIDE:
+        a.axis("off")
         a.xaxis.set_ticklabels([])
 fig.savefig(
     path.join(PT_IMG, 'SEX_COMP.png'),
