@@ -3,23 +3,23 @@
 
 from os import path
 import compress_pickle as pkl
+import STP_aux as aux
 
-def landSelector(EXP, LND):
+
+def landSelector(EXP, LND, USR='lab'):
     if (LND=='PAN'):
         PAN = ([0], )
         return PAN
+    else:
+        if (EXP=='265SP') or (EXP=='265DP'):
+            PT = aux.selectPathGeo(USR)
+            PAN = pkl.load(path.join(PT, 'clusters_002.bz'))
+            return PAN
+        elif (EXP=='265SS') or (EXP=='265DS'):
+            PT = aux.selectPathGeo(USR)
+            SPA = pkl.load(path.join(PT, 'clusters_010.bz'))
+            return SPA
 
-    # if (EXP == '265'):
-    #     pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
-    #     STP = pkl.load(pth+ '/GEO/cluster_1/clusters.bz')
-    # elif (EXP == '265'):
-    #     pth = ''.join(PT_ROT.split('/'+REL)).replace('/sim/', '')
-    #     STP = pkl.load(pth+ '/GEO/cluster_1/SPAN/clusters.bz')
-    #     # Return --------------------------------------------------------------
-    #     return STP
-    # elif (EXP=='PAN'):
-    #     PAN = ([0], )
-    #     return PAN
 
 
 # def landPopSelector(REL, PT_ROT):

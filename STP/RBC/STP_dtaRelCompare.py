@@ -31,6 +31,7 @@ else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
+TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -120,7 +121,8 @@ ax.set_xlim(0, 24)
 ax.set_ylim(0, 3*365) # CHANGED!!!!!!!!
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
-ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+if TICKS_HIDE:
+    ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
 plt.tight_layout()
 fig.savefig(    
     path.join(PT_IMG, 'REN-RES_traces.png'),
@@ -170,7 +172,8 @@ ax.set_xlim(0, 1)
 ax.set_ylim(0, 3*365)
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
-ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+if TICKS_HIDE:
+    ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
 plt.tight_layout()
 fig.savefig(    
     path.join(PT_IMG, 'RES-REN_traces.png'),

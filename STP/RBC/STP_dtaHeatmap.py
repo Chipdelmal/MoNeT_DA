@@ -22,13 +22,17 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'SDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
 TICKS_HIDE = True
+(HD_IND, kSweep) = (
+    ['i_ren', 'i_res'], 'i_sex'
+)
+(xSca, ySca) = ('linear', 'linear')
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -51,11 +55,6 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 ###############################################################################
 # Select surface variables
 ###############################################################################
-(HD_IND, kSweep) = (
-    ['i_fch', 'i_fcb'], 'i_sex'
-)
-(xSca, ySca) = ('linear', 'linear')
-# Scalers and sampling --------------------------------------------------------
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI, AOI)
 (ngdx, ngdy) = (1000, 1000)
 ###############################################################################

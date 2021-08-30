@@ -148,7 +148,7 @@ def getExps(LND):
     if LND=='PAN':
         return ('000000', )
     else:
-        return ('265_S', '265_P')
+        return ('265SP', '265SS', '265DP', '265DS')
 
 # #############################################################################
 # Names and patterns
@@ -207,5 +207,15 @@ def selectPath(USR, EXP, LND, DRV=None):
     fldrList = [PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR]
     [monet.makeFolder(i) for i in fldrList]
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
+
+
+def selectPathGeo(USR):
+    if USR == 'srv':
+        PTH_ROT = '/RAID5/marshallShare/STP_Grid/GEO/cluster_1/'
+    elif USR == 'lab':
+        PTH_ROT = '/Volumes/marshallShare/STP_Grid/GEO/cluster_1/'
+    else:
+        PTH_ROT = '/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/'
+    return PTH_ROT
 
 
