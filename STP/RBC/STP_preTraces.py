@@ -29,8 +29,8 @@ for exp in EXPS:
     # Setting up paths
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(aux.DRV, AOI, popSize=aux.POP_SIZE),
-        lnd.landSelector(exp, LND)
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
+        lnd.landSelector(exp, LND, USR=USR)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(

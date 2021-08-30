@@ -50,6 +50,7 @@ for exp in EXPS:
     (expDirsMean, expDirsTrac) = monet.getExpPaths(
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
+    # print(land)
     (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
     expIter = list(zip(list(range(expNum)), expDirsMean, expDirsTrac))
     # Check for potential miss-matches in experiments folders -----------------

@@ -21,12 +21,12 @@ if monet.isNotebook():
     (USR, AOI, LND, DRV, QNT, THS) = ('dsk', 'HLT', 'PAN', 'LDR', '50', '0.1')
     JOB = aux.JOB_DSK
 else:
-    (USR, AOI, LND, QNT, THS) = (
+    (USR, AOI, LND, DRV, QNT, THS) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
     JOB = aux.JOB_SRV
-SUBSAMPLE = 0.005
+SUBSAMPLE = 1
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###############################################################################
@@ -39,11 +39,11 @@ for exp in EXPS:
     ###########################################################################
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
-        lnd.landSelector(exp, LND)
+        lnd.landSelector(exp, LND, USR=USR)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, exp, LND
+        USR, exp, LND, DRV
     )
     PT_IMG = PT_IMG + 'pstTraces/'
     monet.makeFolder(PT_IMG)
