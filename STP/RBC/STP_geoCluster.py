@@ -19,37 +19,33 @@ import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('lab', '265', 30)
+    (USR, REL, CLS) = ('lab', '265', 20)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-(CLUSTERS, LABELS) = (False, False)
-(SITES_STUDY, SITES_SOUTH) = (False, True)
+CLUSTER_EXPORT = True
+(CLUSTERS, LABELS) = (True, True)
+(SITES_STUDY, SITES_SOUTH) = (False, False)
 ###############################################################################
 # Selecting Paths
 ###############################################################################
 # Base Geo Path ---------------------------------------------------------------
-if USR == 'srv':
-    PTH_ROT = '/RAID5/marshallShare/STP/SPA/GEO/'
-elif USR == 'lab':
-    PTH_ROT = '/Volumes/marshallShare/STP/SPA/GEO/'
-else:
-    PTH_ROT = '/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/'
+PTH_ROT = aux.selectPathGeo(USR)
 # Population files ------------------------------------------------------------
-if REL == '265':
-    PTH_PTS = PTH_ROT + 'cluster_1/'
-    filename = 'stp_cluster_sites_pop_v5_fixed.csv'
-    kernelName = 'kernel_cluster_v6a.csv'
-    notAccessible = {51, 239}
-elif REL == '106':
-    PTH_PTS = PTH_ROT + 'cluster_2/'
-    filename = 'stp_cluster_sites_pop_01_v5_fixed.csv'
-    kernelName = 'kernel_cluster_01_v5.csv'
-    notAccessible = {32, 99, 102}
-elif REL == '505':
-    PTH_PTS = PTH_ROT + 'regular/'
-    filename = 'stp_all_sites_pop_v5_fixed.csv'
-    kernelName = 'kernel_1_1029.csv'
-    notAccessible = {81, 360, 400, 405, 419}
+# if REL == '265':
+PTH_PTS = PTH_ROT #+ 'cluster_1/'
+filename = 'stp_cluster_sites_pop_v5_fixed.csv'
+kernelName = 'kernel_cluster_v6a.csv'
+notAccessible = {51, 239}
+# elif REL == '106':
+#     PTH_PTS = PTH_ROT + 'cluster_2/'
+#     filename = 'stp_cluster_sites_pop_01_v5_fixed.csv'
+#     kernelName = 'kernel_cluster_01_v5.csv'
+#     notAccessible = {32, 99, 102}
+# elif REL == '505':
+#     PTH_PTS = PTH_ROT + 'regular/'
+#     filename = 'stp_all_sites_pop_v5_fixed.csv'
+#     kernelName = 'kernel_1_1029.csv'
+#     notAccessible = {81, 360, 400, 405, 419}
 ###############################################################################
 # ID clusters
 ###############################################################################
@@ -77,7 +73,7 @@ psiN = normalize(psi, axis=1, norm='l2')
 ###############################################################################
 # Export
 ###############################################################################
-# df.to_csv(PTH_PTS+'clusters.csv')
+df.to_csv(PTH_PTS+'clusters_'+str(CLS).zfill(3)+'.csv')
 # sns.scatterplot(data=df, x="lon", y="lat", style="clst")
 clstIDs = list(sorted(set(df['clst'])))
 centroid = []
@@ -86,7 +82,7 @@ for clstID in clstIDs:
     tmpDF = df[df['clst'] == clstID]
     centroid.append([np.mean(i) for i in (tmpDF['lon'], tmpDF['lat'])])
     groupings.append(list(tmpDF['id']))
-pkl.dump(groupings, PTH_PTS + 'clusters', compression='bz2')
+pkl.dump(groupings, PTH_PTS+'clusters_'+str(CLS).zfill(3), compression='bz2')
 # #############################################################################
 # Export Map
 # #############################################################################
@@ -127,7 +123,7 @@ mH.scatter(
     edgecolors='#ffffff', linewidth=.1
 )
 # Sites Highlight -------------------------------------------------------------
-prep='M_CLEAN'
+prep='M_CLEAN_'
 if SITES_SOUTH:
     relSites = set(aux.SOUTH)
     (lonR, latR, popR) = [
@@ -141,7 +137,7 @@ if SITES_SOUTH:
         color='#03045e', zorder=10, 
         edgecolors='#ffffff', linewidth=.1
     )
-    prep='M_SOUTH'
+    prep='M_SOUTH_'
 if SITES_STUDY:
     relSites = set(aux.SITES)
     (lonR, latR, popR) = [
@@ -152,37 +148,42 @@ if SITES_STUDY:
     mH.scatter(
         lonR, latR, latlon=True,
         alpha=.8, marker='o', s=[math.log(1+i/10)/2 for i in popR],
-        color='#03045e', zorder=10, 
+        color='#03045e', zorder=8, 
         edgecolors='#ffffff', linewidth=.1
     )
-    prep='M_SITES'
+    prep='M_SITES_'
 # Labels ----------------------------------------------------------------------
 if LABELS:
     for i in range(len(lon)):
         (x, y) = mH(lon[i], lat[i])
         ax.annotate(
-            i, xy=(x, y), size=.1, 
+            i, xy=(x, y), size=1, 
             ha='center', va='center', color='white',
-            zorder=10
+            zorder=10, fontsize=0.5
         )
 plo.plotNetworkOnMap(mL, psiN, xy, xy, c='#04011f55', lw=.1)
-fig.savefig(
-    PTH_PTS + prep +'.png', dpi=2000, bbox_inches='tight', pad_inches=0
-)
 if CLUSTERS:
     mH.scatter(
         [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
-        alpha=.5, marker='x', s=[5],
-        color='#233090', zorder=3
+        alpha=.5, marker='x', s=10,
+        color='#233090', zorder=11
     )
     if LABELS:
         for i in range(len(centroid)):
             (x, y) = mH(centroid[i][0], centroid[i][1])
-            ax.annotate(i, xy=(x, y), size=2, ha='center', va='center')
+            ax.annotate(
+                i, xy=(x, y), size=2, 
+                ha='center', va='center', zorder=12
+            )
     fig.savefig(
-        PTH_PTS + 'clusters.png', dpi=2500, 
+        PTH_PTS + 'clusters_'+str(CLS).zfill(3)+'.png', dpi=2500, 
         bbox_inches='tight', pad_inches=0
     )
+fig.savefig(
+    PTH_PTS+prep+str(CLS).zfill(3)+'.png', 
+    dpi=2000, bbox_inches='tight', pad_inches=0
+)
+plt.close('all')
 # #############################################################################
 # Kernel Heatmap
 # #############################################################################

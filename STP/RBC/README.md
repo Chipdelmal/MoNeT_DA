@@ -72,7 +72,7 @@ This will probably take a while, depending on how many experiments were run.
 * https://github.com/parrt/random-forest-importances
 * https://explained.ai/rf-importance/index.html
 * https://github.com/parrt/random-forest-importances/blob/master/src/rfpimp.py
-* https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance_multicollinear.html#sphx-glr-auto-examples-inspection-plot-permutation-importance-multicollinear-py
+* https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance_multicollinearhtml#sphx-glr-auto-examples-inspection-plot-permutation-importance-multicollinear-py
 * https://pdpbox.readthedocs.io/en/latest/pdp_plot.html
 * https://github.com/blent-ai/ALEPython
 * https://towardsdatascience.com/explaining-feature-importance-by-example-of-a-random-forest-d9166011959e
