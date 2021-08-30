@@ -148,7 +148,7 @@ def getExps(LND):
     if LND=='PAN':
         return ('000000', )
     else:
-        return ('265SP', '265SS', '265DP', '265DS')
+        return ('265_SP', '265_SS', '265_DP', '265_DS')
 
 # #############################################################################
 # Names and patterns

@@ -14,7 +14,7 @@ from more_itertools import locate
 # os.system("taskset -p 0xff %d" % os.getpid())
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV) = ('lab', 'HLT', 'PAN', 'SDR')
+    (USR, AOI, LND, DRV) = ('lab', 'HLT', 'SPA', 'LDR')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -30,7 +30,7 @@ for exp in EXPS:
     ###########################################################################
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
-        lnd.landSelector(exp, LND)
+        lnd.landSelector(exp, LND, USR=USR)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
