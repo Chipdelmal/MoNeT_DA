@@ -16,7 +16,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV, QNT) = ('lab', 'HLT', 'PAN', 'LDR', '50')
+    (USR, AOI, LND, DRV, QNT) = ('lab', 'HLT', 'SPA', 'LDR', '50')
     JOB = aux.JOB_DSK
     CHUNKS = JOB
 else:
@@ -79,14 +79,14 @@ for exp in EXPS:
             tap=aux.TAP, thp=(.05, .95)
         ) for exIx in expIter
     )
-###############################################################################
-# Merge dataframes chunks
-###############################################################################
-dfPathsPieces = list(zip(*dfPaths))[:-1]
-for dfPathsSet in dfPathsPieces:
-    dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
-    # Write combined dataframe ------------------------------------------------
-    fName = dfPathsSet[0].split('-')[0]+'.csv'
-    dfFull.to_csv(fName, index=False)
+    ###########################################################################
+    # Merge dataframes chunks
+    ###########################################################################
+    dfPathsPieces = list(zip(*dfPaths))[:-1]
+    for dfPathsSet in dfPathsPieces:
+        dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
+        # Write combined dataframe --------------------------------------------
+        fName = dfPathsSet[0].split('-')[0]+'.csv'
+        dfFull.to_csv(fName, index=False)
 
 
