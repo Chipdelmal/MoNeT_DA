@@ -16,7 +16,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'SDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'SPA', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -45,7 +45,7 @@ PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} ClsUnify [{}:{}:{}:{}]'.format(aux.XP_ID, DRV, QNT, AOI, aux.THS)
+    '{} ClsUnify [{}:{}:{}:{}]'.format(DRV, DRV, QNT, AOI, aux.THS)
 )
 ###############################################################################
 # Merge Dataframes

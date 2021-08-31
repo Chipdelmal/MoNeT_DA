@@ -23,7 +23,7 @@ python STP_clsCompile.py $USR $LND 'HLT' $DRV $QNT 'MNX'
 ###############################################################################
 # Unify dataframes
 ###############################################################################
-# python STP_clsUnify.py $USR $LND 'HLT' $DRV $QNT
+python STP_clsUnify.py $USR $LND 'HLT' $DRV $QNT
 # python STP_dtaAmend.py $USR $LND 'HLT' $DRV $QNT
 # python STP_clsPreprocess.py $USR $LND 'HLT' $DRV $QNT
 # python STP_dtaDICE.py $USR $LND 'HLT' $DRV $QNT
