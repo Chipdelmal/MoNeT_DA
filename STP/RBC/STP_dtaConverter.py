@@ -81,18 +81,20 @@ zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
 print(outSorting)
 # Transform to fnames ---------------------------------------------------------
 (expsIter, skipped, counter) = ([], 0, 0)
-ix = 0
+ix = 15
 for ix in range(expsNum):
     print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
     ins = [
-        row[i] if isinstance(row[i], str)
+        row[i] if row[i] in {'265_SS', '265_SP', '265_DP', '265_DS'}
         else str(int(row[i]*zipper[i][0])).zfill(zipper[i][1])
         for i in zipper
     ]
     (mig, grp) = (ins[-1], ins[-2])
     fname = aux.XP_PTRN.format(*ins[:-2], TRC, ins[-2], 'srp', 'bz')
-    fpath = path.join(PT_PRE, fname)
+    prePath = PT_PRE.split('/')
+    prePath[-3] = mig
+    fpath = path.join('/'.join(prePath), fname)
     if path.isfile(fpath):
         (tti, tto, wop, poe, _, cpt, mnf) = [row[i] for i in outSorting]
         expsIter.append([
@@ -101,6 +103,7 @@ for ix in range(expsNum):
         ])
         counter = counter + 1
     else:
+        print(fpath)
         skipped = skipped + 1
 print('{}* Skipped (no PRE): {}/{}{}'.format(CBBL, skipped, expsNum, CEND))
 ###############################################################################
