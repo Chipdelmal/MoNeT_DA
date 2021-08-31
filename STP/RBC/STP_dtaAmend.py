@@ -34,7 +34,7 @@ EXPS = aux.getExps(LND)
 EXPS = aux.getExps(LND)
 (drive, land) = (
     drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
-    lnd.landSelector(EXPS[0], LND)
+    lnd.landSelector(EXPS[0], LND, USR=USR)
 )
 (PT_ROT, _, _, _, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
