@@ -3,6 +3,7 @@
 USR=$1
 DRV=$2
 LND=$3
+DCE=$4
 QNT='50'
 THS='0.1'
 ###############################################################################
@@ -24,6 +25,8 @@ python STP_clsCompile.py $USR $LND 'HLT' $DRV $QNT 'MNX'
 # Unify dataframes
 ###############################################################################
 python STP_clsUnify.py $USR $LND 'HLT' $DRV $QNT
-# python STP_dtaAmend.py $USR $LND 'HLT' $DRV $QNT
+python STP_dtaAmend.py $USR $LND 'HLT' $DRV $QNT
 # python STP_clsPreprocess.py $USR $LND 'HLT' $DRV $QNT
-# python STP_dtaDICE.py $USR $LND 'HLT' $DRV $QNT
+if [[ "$DCE" = "True" ]]; then
+    python STP_dtaDICE.py $USR $LND 'HLT' $DRV $QNT
+fi
