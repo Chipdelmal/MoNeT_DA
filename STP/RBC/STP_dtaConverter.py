@@ -17,8 +17,8 @@ warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT, NME, TRC) = (
-        'lab', 'PAN', 'HLT',
-        'SDR', '50', 'BD', 
+        'lab', 'SPA', 'HLT',
+        'LDR', '50', 'BD', 
         'HLT'
     )
 else:
@@ -85,7 +85,11 @@ ix = 0
 for ix in range(expsNum):
     print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
-    ins = [str(int(row[i]*zipper[i][0])).zfill(zipper[i][1]) for i in zipper]
+    ins = [
+        row[i] if isinstance(row[i], str)
+        else str(int(row[i]*zipper[i][0])).zfill(zipper[i][1])
+        for i in zipper
+    ]
     (mig, grp) = (ins[-1], ins[-2])
     fname = aux.XP_PTRN.format(*ins[:-2], TRC, ins[-2], 'srp', 'bz')
     fpath = path.join(PT_PRE, fname)
@@ -103,3 +107,5 @@ print('{}* Skipped (no PRE): {}/{}{}'.format(CBBL, skipped, expsNum, CEND))
 # Export iter
 ###############################################################################
 dump(expsIter, path.join(PT_OUT, 'DTA_PST.job'))
+
+
