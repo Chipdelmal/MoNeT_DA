@@ -14,7 +14,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MTR) = ('dsk', 'PAN', 'HLT', 'LDR', '50', 'CPT')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('lab', 'SPA', 'HLT', 'LDR', '50', 'CPT')
 else:
     (USR, LND, AOI, DRV, QNT, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -26,6 +26,7 @@ if USR=='dsk':
     JOB = aux.JOB_DSK
 else:
     JOB = aux.JOB_SRV
+exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
     # Paths
@@ -49,24 +50,30 @@ for exp in EXPS:
     ###########################################################################
     # Flatten CSVs
     ###########################################################################
-    fName = [sorted(glob('{}/*{}*{}*qnt.csv'.format(i, AOI, MTR)))[0] for i in PT_SUMS]
+    fName = [sorted(glob('{}/*{}*{}*qnt.csv'.format(i, AOI, MTR))) for i in PT_SUMS]
+    fName = [i for i in fName if len(i) > 0]
     dfList = [pd.read_csv(i, sep=',') for i in fName]
     for (df, exp) in zip(dfList, EXPS):
-        df['i_mig'] = [int(exp)]*df.shape[0]
+        if exp[:3] == '265':
+            df['i_mig'] = [exp]*df.shape[0]
+        else:
+            df['i_mig'] = [int(exp)]*df.shape[0]
     dfMerged = pd.concat(dfList)
     # Sorting columns ---------------------------------------------------------
     outLabels = [x for x in list(dfMerged.columns) if len(x.split('_')) <= 1]
     inLabels = [i[0] for i in aux.DATA_HEAD]
     inLabels.append('i_mig')
     dfMerged = dfMerged.reindex(inLabels+outLabels, axis=1)
-    dfMerged = dfMerged[dfMerged['i_grp']==0]
+    if not (exp[:3] == '265'):
+        dfMerged = dfMerged[dfMerged['i_grp']==0]
     dfMerged.to_csv(
         path.join(PT_OUT, 'RAW_'+path.split(fName[0])[-1]), 
         index=False
     )
     # Scaling -----------------------------------------------------------------
     for keyLabel in inLabels:
-        dfMerged[keyLabel] = (dfMerged[keyLabel]/aux.DATA_SCA[keyLabel])
+        if not (keyLabel == 'i_mig'):
+            dfMerged[keyLabel] = (dfMerged[keyLabel]/aux.DATA_SCA[keyLabel])
     typesDict = {k: aux.DATA_TYPE[k] for k in dfMerged.columns if k[0]=='i'}
     dfMerged = dfMerged.astype(typesDict)
     dfMerged.to_csv(
