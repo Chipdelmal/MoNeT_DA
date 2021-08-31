@@ -16,7 +16,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV) = ('dsk2', 'HLT', 'PAN', 'LDR')
+    (USR, AOI, LND, DRV) = ('lab', 'HLT', 'SPA', 'LDR')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -102,3 +102,17 @@ for exp in EXPS:
                 exIx, PT_OUT
             ) for exIx in expIter
         )
+
+# (drive, land) = (
+#     drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
+#     lnd.landSelector(exp, LND, USR=USR)
+# )
+# (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+# (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
+#     USR, exp, LND, DRV
+# )
+# dta = pkl.load(
+#     PT_PRE+
+#     'E_01_04_00750_000790000000_000100000000_0017500_0011700_0000000_0100000_0095600-HLT_03_srp.bz'
+# )['landscapes'][0].shape
+# print(dta)
