@@ -21,8 +21,8 @@ if AOI == 'HLT':
 multi = {'CRS', 'CRX', 'CRY', 'SDR', 'SDX', 'SDY'}
 if DRV in multi:
     append = (
-        '-Classic_Adult_Het', '-Classic_Adult_Hom', 
-        '-Classic_Egg_Het', '-Classic_Egg_Het'
+        '_Adult_Het', '_Adult_Hom', 
+        '_Egg_Het', '_Egg_Hom'
     )
 else:
     append = ('', )
