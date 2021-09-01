@@ -71,6 +71,10 @@ def selectPath(USR, DRV, EXP):
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/SDP/{}/{}/'.format(
             DRV, EXP
         )
+    elif USR == 'lab':
+         PATH_ROOT = '/Volumes/marshallShare/SplitDrive_Suppression/theoretical/{}/{}/'.format(
+            DRV, EXP
+        )
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
