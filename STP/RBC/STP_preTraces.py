@@ -43,7 +43,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .5, "alpha": .5, "dpi": 100, "legend": True,
+            "width": .5, "alpha": .5, "dpi": 500, "legend": True,
             "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
     tS = datetime.now()
@@ -76,8 +76,8 @@ for exp in EXPS:
         ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------
-    sumDta = pkl.load(fLists[-1][0])
-    monet.exportGeneLegend(
-        sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-        PT_IMG+'/legend_{}.png'.format(AOI), 500
-    )
+    # sumDta = pkl.load(fLists[-1][0])
+    # monet.exportGeneLegend(
+    #     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+    #     PT_IMG+'/legend_{}.png'.format(AOI), 500
+    # )

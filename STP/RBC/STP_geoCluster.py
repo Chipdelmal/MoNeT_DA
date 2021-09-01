@@ -19,11 +19,11 @@ import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('lab', '265', 15)
+    (USR, REL, CLS) = ('lab', '265', 2)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 CLUSTER_EXPORT = True
-(CLUSTERS, LABELS) = (True, True)
+(CLUSTERS, LABELS) = (True, False)
 (SITES_STUDY, SITES_SOUTH) = (False, False)
 ###############################################################################
 # Selecting Paths
@@ -181,7 +181,7 @@ if CLUSTERS:
     )
 fig.savefig(
     PTH_PTS+prep+str(CLS).zfill(3)+'.png', 
-    dpi=2000, bbox_inches='tight', pad_inches=0
+    dpi=2500, bbox_inches='tight', pad_inches=0
 )
 plt.close('all')
 # #############################################################################
