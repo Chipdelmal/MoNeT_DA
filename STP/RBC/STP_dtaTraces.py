@@ -15,7 +15,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, TRC) = ('lab', 'PAN', 'HLT', 'SDR', '50', 'HLT')
+    (USR, LND, AOI, DRV, QNT, TRC) = ('lab', 'SPA', 'HLT', 'LDR', '50', 'HLT')
 else:
     (USR, LND, AOI, DRV, QNT, TRC) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -40,6 +40,7 @@ PT_OUT = path.join(path.split(path.split(PT_ROT)[0])[0], 'ML')
 PT_IMG = PT_IMG + 'dtaTraces/'
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+PT_ROTs = [aux.selectPath(USR, exp, LND, DRV)[0] for exp in EXPS]
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
@@ -51,29 +52,36 @@ monet.printExperimentHead(
 ###############################################################################
 expsIter = load(path.join(PT_OUT, 'DTA_PST.job'))
 ###############################################################################
-# Style
+# Subset by Folder
 ###############################################################################
-(CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
-STYLE = {
-    "width": .5, "alpha": .5, "dpi": 300, "legend": True,
-    "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
-}
-###############################################################################
-# Plot
-###############################################################################
-(fNum, digs) = monet.lenAndDigits(expsIter)
-Parallel(n_jobs=JOB)(
-    delayed(dbg.exportPstTracesParallel)(
-        exIx, fNum,
-        aux.STABLE_T, 0, QNT, STYLE, PT_IMG,
-        digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
-        poePrint=False, mnfPrint=False, ticksHide=True,
-        transparent=True
-    ) for exIx in expsIter
-)
+for pt_root in PT_ROTs:
+    pt_img = path.join(pt_root, 'img', 'dtaTraces')
+    monet.makeFolder(pt_img)
+    subset = [exp for exp in expsIter if exp[1].find(pt_root)==0]
+    ###############################################################################
+    # Style
+    ###############################################################################
+    (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
+    STYLE = {
+        "width": .5, "alpha": .5, "dpi": 300, "legend": True,
+        "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
+    }
+    ###############################################################################
+    # Plot
+    ###############################################################################
+    (fNum, digs) = monet.lenAndDigits(subset)
+    Parallel(n_jobs=JOB)(
+        delayed(dbg.exportPstTracesParallel)(
+            exIx, fNum,
+            aux.STABLE_T, 0, QNT, STYLE, pt_img,
+            digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
+            poePrint=False, mnfPrint=False, ticksHide=True,
+            transparent=True
+        ) for exIx in subset
+    )
 # Export gene legend ------------------------------------------------------
-repDta = pkl.load(expsIter[0][1])
-monet.exportGeneLegend(
-    repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-    PT_IMG+'/legend_{}.png'.format(TRC), 500
-)
+# repDta = pkl.load(expsIter[0][1])
+# monet.exportGeneLegend(
+#     repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+#     PT_IMG+'/legend_{}.png'.format(TRC), 500
+# )
