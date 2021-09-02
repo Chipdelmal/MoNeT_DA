@@ -22,7 +22,7 @@ else:
 multi = {'CRS', 'CRX', 'CRY', 'SDR', 'SDX', 'SDY'}
 if DRV in multi:
     append = (
-        '_Adult_Het', '_Adult_Hom', 
+        '_Adult_Het', '_Adult_Hom',
         '_Egg_Het', '_Egg_Hom'
     )
 else:
@@ -42,7 +42,7 @@ for exp in EXPS:
         )
         (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
         (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-            USR, fldr, exp
+            USR, fldr+app, exp
         )
         PT_IMG = PT_IMG + 'preTraces/'
         monet.makeFolder(PT_IMG)
