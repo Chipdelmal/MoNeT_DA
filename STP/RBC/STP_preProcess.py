@@ -76,7 +76,7 @@ for exp in EXPS:
             exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
             fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
-            cmpr='bz2', nodeDigits=nodeDigits,
+            cmpr='bz2', nodeDigits=2,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP
         ) for exIx in expIter
