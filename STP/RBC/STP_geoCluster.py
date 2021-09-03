@@ -14,18 +14,20 @@ from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.cluster import KMeans
 import compress_pickle as pkl
+from descartes import PolygonPatch
+import shapely
 import STP_aux as aux
 import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('lab', '265', 2)
+    (USR, REL, CLS) = ('lab', '265', 15)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 STP_ONLY = True
-CLUSTER_EXPORT = True
+CLUSTER_EXPORT = False
 (CLUSTERS, LABELS) = (False, False)
-(SITES_STUDY, SITES_SOUTH) = (False, True)
+(SITES_STUDY, SITES_SOUTH) = (True, False)
 ###############################################################################
 # Selecting Paths
 ###############################################################################
@@ -126,7 +128,7 @@ mH.scatter(
     lon, lat, latlon=True,
     alpha=.8, marker='o', s=[math.log(1+i/10)/.2 for i in pts['pop']],
     color='#ff006e', zorder=10, 
-    edgecolors='#ffffff', linewidth=.25
+    edgecolors='#ffffff', linewidth=.5
 )
 # Sites Highlight -------------------------------------------------------------
 prep=prepL+'M_CLEAN_'
@@ -141,7 +143,7 @@ if SITES_SOUTH:
         lonR, latR, latlon=True,
         alpha=.8, marker='o', s=[math.log(1+i/10)/.2 for i in popR],
         color='#03045e', zorder=10, 
-        edgecolors='#ffffff', linewidth=.1
+        edgecolors='#ffffff', linewidth=.5
     )
     prep=prepL+'M_SOUTH_'
 if SITES_STUDY:
@@ -155,7 +157,7 @@ if SITES_STUDY:
         lonR, latR, latlon=True,
         alpha=.8, marker='o', s=[math.log(1+i/10)/.2 for i in popR],
         color='#03045e', zorder=10, 
-        edgecolors='#ffffff', linewidth=.1
+        edgecolors='#ffffff', linewidth=.5
     )
     prep=prepL+'M_SITES_'
 # Labels ----------------------------------------------------------------------
@@ -168,27 +170,52 @@ if LABELS:
             zorder=10, fontsize=0.5
         )
 plo.plotNetworkOnMap(mL, psiN, xy, xy, c='#04011f55', lw=.1)
-if CLUSTERS:
-    mH.scatter(
-        [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
-        alpha=.5, marker='x', s=60,
-        color='#233090', zorder=11
-    )
-    if LABELS:
-        for i in range(len(centroid)):
-            (x, y) = mH(centroid[i][0], centroid[i][1])
-            ax.annotate(
-                i, xy=(x, y), size=2, 
-                ha='center', va='center', zorder=12
-            )
-    fig.savefig(
-        PTH_PTS + prep + 'clusters_'+str(CLS).zfill(3)+'.png', 
-        dpi=2000, 
-        bbox_inches='tight', pad_inches=0
-    )
 fig.savefig(
     PTH_PTS+prep+str(CLS).zfill(3)+'.png', 
     dpi=2000, bbox_inches='tight', pad_inches=0
+)
+if CLUSTERS:
+    mH.scatter(
+        [i[0] for i in centroid], [i[1] for i in centroid], latlon=True,
+        alpha=.5, marker='2', s=75,
+        color='#233090', zorder=11
+    )
+if LABELS:
+    for i in range(len(centroid)):
+        (x, y) = mH(centroid[i][0], centroid[i][1])
+        ax.annotate(
+            i, xy=(x, y), size=2, 
+            ha='center', va='center', zorder=12
+        )
+fig.savefig(
+    PTH_PTS + prep + 'comms_'+str(CLS).zfill(3)+'.png', 
+    dpi=2000, 
+    bbox_inches='tight', pad_inches=0
+)
+r=.03
+CLS_LB = list(df['clst'])
+X = xy
+D = plo.disjoint_polygons(X, radius=r, n_angles=50)
+for j in list(set(CLS_LB)):
+    matches = [key for key, val in enumerate(CLS_LB) if val in set([j])]
+    base = D.geometry[matches[0]]
+    for i in range(len(matches)):
+        base = base.union(D.geometry[matches[i]].buffer(.01*r))
+        mpoly = shapely.ops.transform(mH, base)
+    ax.add_patch(
+        PolygonPatch(
+            mpoly, fc="none", ec='#6347ff', lw=1.25, alpha=.2, zorder=1
+        )
+    )
+    ax.add_patch(
+        PolygonPatch(
+            mpoly, fc="none", ec='#ffffff', lw=.35, alpha=1, zorder=2
+        )
+    )
+fig.savefig(
+    PTH_PTS + prep + 'clusters_'+str(CLS).zfill(3)+'.png', 
+    dpi=2000, 
+    bbox_inches='tight', pad_inches=0
 )
 plt.close('all')
 # #############################################################################
@@ -199,3 +226,4 @@ plt.close('all')
 # fig = plt.figure(figsize=(5, 5))
 # plt.imshow(kernel, interpolation='nearest', cmap='Purples', vmax=2e-04, vmin=0)
 # fun.quickSaveFig(PTH_PTS + 'heat.png', fig, dpi=1000)
+
