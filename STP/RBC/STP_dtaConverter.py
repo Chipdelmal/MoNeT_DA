@@ -13,12 +13,12 @@ import STP_land as lnd
 import STP_auxDebug as dbg
 from more_itertools import locate
 import warnings
-warnings.filterwarnings("ignore",category=UserWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT, NME, TRC) = (
         'lab', 'SPA', 'HLT',
-        'LDR', '50', 'BD', 
+        'LDR', '50', 'None', 
         'HLT'
     )
 else:
@@ -81,7 +81,7 @@ zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
 print(outSorting)
 # Transform to fnames ---------------------------------------------------------
 (expsIter, skipped, counter) = ([], 0, 0)
-ix = 15
+ix = 2
 for ix in range(expsNum):
     print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
