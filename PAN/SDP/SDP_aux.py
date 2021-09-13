@@ -29,7 +29,7 @@ import MoNeT_MGDrivE as monet
         [.05, .10, .25, .50, .75, .90, .95],
         [int((i+1)*365-1) for i in range(5)]
     )
-(JOB_DSK, JOB_SRV) = (4, 40)
+(JOB_DSK, JOB_SRV) = (4, 30)
 
 # #############################################################################
 # Names and patterns
