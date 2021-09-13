@@ -67,6 +67,18 @@ def selectPath(USR, DRV, EXP):
         PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/theoretical/{}/{}/'.format(
             DRV, EXP
         )
+    elif USR == 'srvA':
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized1/{}/{}/'.format(
+            DRV, EXP
+        )
+    elif USR == 'srvB':
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized2/{}/{}/'.format(
+            DRV, EXP
+        )
+    elif USR == 'srvC':
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized3/{}/{}/'.format(
+            DRV, EXP
+        )
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/SDP/{}/{}/'.format(
             DRV, EXP
