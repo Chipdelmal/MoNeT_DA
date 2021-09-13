@@ -72,11 +72,11 @@ def selectPath(USR, DRV, EXP):
             DRV, EXP
         )
     elif USR == 'srvB':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized2/{}/{}/'.format(
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized3/{}/{}/'.format(
             DRV, EXP
         )
     elif USR == 'srvC':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized3/{}/{}/'.format(
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized7/{}/{}/'.format(
             DRV, EXP
         )
     elif USR == 'dsk':
