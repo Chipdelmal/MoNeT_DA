@@ -9,6 +9,7 @@ from more_itertools import locate
 import MoNeT_MGDrivE as monet
 import matplotlib.colors as mcolors
 from sklearn.preprocessing import LabelBinarizer
+from mpl_toolkits.basemap import Basemap
 import geopandas as geop
 from shapely import geometry
 from shapely.ops import polygonize
@@ -500,3 +501,150 @@ def plot_buffer(X, G, title):
     for i, gi in enumerate(G.geometry): # Add continents
         ax.add_patch(PolygonPatch(gi, color='orange', ec='orange', lw=3, alpha=.4))
     ax.set_axis_off()
+
+
+# #############################################################################
+# Videos
+# #############################################################################
+def plotMap(
+        fig, ax, pts, BLAT, BLNG, 
+        drawCoasts=True, ptColor='#66ff00'
+):
+    # Hi-Res Basemap ----------------------------------------------------------
+    mH = Basemap(
+        projection='merc', ax=ax, lat_ts=20, resolution='h',
+        llcrnrlat=BLAT[0], urcrnrlat=BLAT[1],
+        llcrnrlon=BLNG[0], urcrnrlon=BLNG[1],
+    )
+    mL = Basemap(
+        projection='merc', ax=ax, lat_ts=20, resolution='i',
+        llcrnrlat=BLAT[0], urcrnrlat=BLAT[1],
+        llcrnrlon=BLNG[0], urcrnrlon=BLNG[1],
+    )
+    if drawCoasts:
+        mH.drawcoastlines(color=COLORS[0], linewidth=5, zorder=-2)
+        mH.drawcoastlines(color=COLORS[3], linewidth=.5, zorder=-1)
+        mL.drawcoastlines(color=COLORS[4], linewidth=15, zorder=-3)
+    # Lo-Res Basemap ----------------------------------------------------------
+    mH.scatter(
+        list(pts['lon']), list(pts['lat']), latlon=True,
+        alpha=.05, marker='.', 
+        s=popsToPtSize(list(pts['pop']), offset=10, amplitude=10),
+        color=ptColor, zorder=3
+    )
+    # Ax parameters -----------------------------------------------------------
+    ax.tick_params(
+        axis='both', which='both',
+        bottom=True, top=False, left=True, right=False,
+        labelbottom=True, labelleft=True
+    )
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    # Return values -----------------------------------------------------------
+    return (fig, ax, mL)
+
+
+def floatToHex(a, minVal=0, maxVal=1):
+    intVal = int(np.interp(a, (minVal, maxVal), (0, 255)))
+    return intVal
+
+
+def popsToPtSize(pops, offset=10, amplitude=10):
+    # return [max(offset, amplitude * math.log(i, 1.1)) for i in pops]
+    return [max(offset, amplitude * (i**(1/2.5))) for i in pops]
+
+
+def plotPopsOnMap(
+    fig, ax, mapR, 
+    lngs, lats, fractions, pops, 
+    color='#ed174b', marker=(6, 0), edgecolor='#ffffff',
+    offset=10, amplitude=10, alpha=.85
+):
+    # print(fractions)
+    colors = [color + '%02x' % floatToHex(i*alpha) for i in fractions]
+    mapR.scatter(
+        lngs, lats, 
+        latlon=True, marker=marker,
+        s=popsToPtSize(pops, offset=offset, amplitude=amplitude),
+        c=colors, ax=ax, edgecolors=edgecolor
+    )
+    return (fig, ax, mapR)
+
+
+def plotGenePopsOnMap(
+    fig, ax, mapR,
+    lngs, lats, colors, 
+    GC_FRA, time, edgecolor='#ffffff',
+    marker=(6, 0), offset=10, amplitude=10, alpha=.85
+):
+    geneFraSlice = np.asarray([i[time] for i in GC_FRA]).T
+    for gIx in range(geneFraSlice.shape[0]-1):
+        (fig, ax, mapR) = plotPopsOnMap(
+            fig, ax, mapR, 
+            lngs, lats, geneFraSlice[gIx], geneFraSlice[-1],
+            color=colors[gIx], marker=marker,
+            offset=offset, amplitude=amplitude,
+            alpha=alpha, edgecolor=edgecolor
+        )
+    return (fig, ax, mapR)
+
+
+
+def plotMapFrame(
+    time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
+    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0), DPI=250, 
+    edgecolor='#ffffff'
+):
+    print('* Exporting {}'.format(str(time).zfill(4)), end='\r')
+    # Create map --------------------------------------------------------------
+    (fig, ax) = plt.subplots(figsize=(10, 10))
+    (fig, ax, mapR) = plotMap(
+        fig, ax, UA_sites, BLAT, BLNG, ptColor='#6347ff'
+    )
+    # Pops --------------------------------------------------------------------
+    (fig, ax, mapR) = plotGenePopsOnMap(
+        fig, ax, mapR,
+        lngs, lats, DRV_COL, 
+        GC_FRA, time, edgecolor=edgecolor,
+        marker=marker, offset=offset, amplitude=amplitude, alpha=alpha
+    )
+    ax.text(
+        0.75, 0.1, str(time).zfill(4), 
+        horizontalalignment='center', verticalalignment='center', 
+        transform=ax.transAxes, fontsize=30
+    )
+    quickSaveFig(
+        '{}/{}.png'.format(EXP_VID, str(time).zfill(4)),
+        fig, dpi=DPI
+    )
+    plt.close(fig)
+
+
+def geneCountsToFractions(popCountsArray):
+    totalPop = popCountsArray[:, -1]
+    geneFractions = [
+        zeroDivide(popCountsArray[:, i], totalPop) 
+        for i in range(len(popCountsArray[0])-1)
+    ]
+    geneFractions.append(totalPop)
+    return np.asarray(geneFractions).T
+
+
+def aggCentroids(AGG_lonlats):
+    centroids = [(np.mean(i[:, 0]), np.mean(i[:, 1])) for i in AGG_lonlats]
+    return np.asarray(centroids)
+
+
+def zeroDivide(a, b):
+    return np.divide(a, b, out=np.zeros_like(a), where=b != 0)
+
+
+def quickSaveFig(filename, fig, dpi=750, transparent=True):
+    fig.savefig(
+         filename,
+         dpi=dpi, facecolor=None, edgecolor=None,
+         orientation='portrait', papertype=None, format='png',
+         transparent=transparent, bbox_inches='tight', pad_inches=.02
+     )
