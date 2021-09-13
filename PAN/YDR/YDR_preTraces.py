@@ -75,8 +75,8 @@ for exp in EXPS:
             xpNum=xpNum, digs=digs, 
             border=True, borderColor='#8184a7AA', borderWidth=2,
             transparent=True, 
-            vLines=[0, 0, 0, 1825, 365*10],
-            hLines=[0, 2500, 5000]
+            vLines=[0, 0, 0, 365*2.5, 365*5, 365*7.5, 365*10],
+            hLines=[0, 1250, 2500, 3750, 5000]
         ) for exIx in range(0, len(fLists))
     )
     # Export gene legend ------------------------------------------------------

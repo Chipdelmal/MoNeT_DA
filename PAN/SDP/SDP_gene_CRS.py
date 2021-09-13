@@ -73,4 +73,4 @@ def driveParameters(TYPE, popSize):
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*CRS_WLD)
         yRange = popSize
-    return (aggD, yRange, 'CRISPR')
+    return (aggD, yRange, 'CRISPR-Classic')
