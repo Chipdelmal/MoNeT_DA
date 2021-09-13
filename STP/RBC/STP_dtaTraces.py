@@ -54,6 +54,7 @@ expsIter = load(path.join(PT_OUT, 'DTA_PST.job'))
 ###############################################################################
 # Subset by Folder
 ###############################################################################
+pt_root = PT_ROTs[1]
 for pt_root in PT_ROTs:
     pt_img = path.join(pt_root, 'img', 'dtaTraces')
     monet.makeFolder(pt_img)
@@ -64,8 +65,9 @@ for pt_root in PT_ROTs:
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
         "width": .5, "alpha": .5, "dpi": 300, "legend": True,
-        "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
+        "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1)
     }
+    print('YRAN: {}'.format(STYLE))
     ###############################################################################
     # Plot
     ###############################################################################

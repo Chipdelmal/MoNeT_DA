@@ -80,7 +80,7 @@ for exp in EXPS:
         Parallel(n_jobs=JOB)(
             delayed(monet.exportPreTracesPlotWrapper)(
                 exIx, fLists, STYLE, PT_IMG,
-                xpNum=xpNum, digs=digs, border=False,
+                xpNum=xpNum, digs=digs, border=True,
                 transparent=True
             ) for exIx in range(0, len(fLists))
         )

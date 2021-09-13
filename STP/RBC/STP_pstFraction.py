@@ -16,7 +16,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV) = ('lab', 'HLT', 'SPA', 'LDR')
+    (USR, AOI, LND, DRV) = ('lab', 'HLT', 'SPA', 'SDR')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -113,6 +113,6 @@ for exp in EXPS:
 # )
 # dta = pkl.load(
 #     PT_PRE+
-#     'E_01_04_00750_000790000000_000100000000_0017500_0011700_0000000_0100000_0095600-HLT_03_srp.bz'
-# )['landscapes'][0].shape
+#     'E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000-HLT_00_sum.bz'
+# )['population']
 # print(dta)
