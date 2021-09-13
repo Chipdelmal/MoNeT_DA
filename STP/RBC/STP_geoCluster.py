@@ -21,7 +21,7 @@ import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('lab', '265', 15)
+    (USR, REL, CLS) = ('lab', '265', 75)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 STP_ONLY = True
