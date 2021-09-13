@@ -81,7 +81,7 @@ for exp in EXPS:
             delayed(monet.exportPreTracesPlotWrapper)(
                 exIx, fLists, STYLE, PT_IMG,
                 xpNum=xpNum, digs=digs, border=True,
-                transparent=True
+                transparent=False
             ) for exIx in range(0, len(fLists))
         )
         # Export gene legend ------------------------------------------------------
