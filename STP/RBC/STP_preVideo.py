@@ -22,10 +22,12 @@ warnings.filterwarnings("ignore", category=UserWarning)
 if monet.isNotebook():
     (USR, AOI, LND, DRV, exp) = ('lab', 'HLT', 'SPA', 'LDR', '265_SS')
     EXP = 'E_01_12_00500_000790000000_000100000000_0017500_0011700_0000000_0100000_0095600'
-    JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV, exp) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     EXP = sys.argv[6]
+# Setup number of cores -------------------------------------------------------
+JOB = aux.JOB_DSK
+if USR=='srv':
     JOB = aux.JOB_SRV
 (TMIN, TMAX) = (1, 5*365)
 ###############################################################################
@@ -90,5 +92,5 @@ monet.printExperimentHead(PT_ROT, PT_VID, tS, 'STP PreVideo '+AOI)
 Parallel(n_jobs=JOB)(
     delayed(dbg.plotMapFrame)(
         time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
-        offset=1, amplitude=90, alpha=.5, marker=(6, 0), edgecolor='#ffffff55'
+        offset=1, amplitude=90, alpha=.5, marker=(6, 0), edgecolor='#ffffff88'
     ) for time in range(TMIN, TMAX))

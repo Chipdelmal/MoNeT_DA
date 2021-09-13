@@ -3,6 +3,7 @@ import sys
 from os import path
 import subprocess
 import STP_aux as aux
+import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
@@ -11,7 +12,7 @@ if monet.isNotebook():
 else:
     (USR, AOI, LND, DRV, exp) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     EXP = sys.argv[6]
-rate = 45
+rate = 30
 ###############################################################################
 # User select
 ###############################################################################
