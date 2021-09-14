@@ -33,6 +33,7 @@ inPath = PT_VID + '/' + idName + '/' + '%04d.png'
 sp = subprocess.Popen([
     'ffmpeg',
     # '-loglevel', '+info',
+    '-y',
     '-start_number', '1',
     '-r', str(rate),
     '-f', 'image2',

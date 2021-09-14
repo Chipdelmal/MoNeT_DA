@@ -594,8 +594,8 @@ def plotGenePopsOnMap(
 
 def plotMapFrame(
     time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
-    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0), DPI=250, 
-    edgecolor='#ffffff'
+    offset=2.5, amplitude=2, alpha=.35, marker=(6, 0), DPI=500, 
+    edgecolor='#ffffff', plotTime=False
 ):
     print('* Exporting {}'.format(str(time).zfill(4)), end='\r')
     # Create map --------------------------------------------------------------
@@ -610,11 +610,12 @@ def plotMapFrame(
         GC_FRA, time, edgecolor=edgecolor,
         marker=marker, offset=offset, amplitude=amplitude, alpha=alpha
     )
-    ax.text(
-        0.75, 0.1, str(time).zfill(4), 
-        horizontalalignment='center', verticalalignment='center', 
-        transform=ax.transAxes, fontsize=30
-    )
+    if plotTime:
+        ax.text(
+            0.75, 0.1, str(time).zfill(4), 
+            horizontalalignment='center', verticalalignment='center', 
+            transform=ax.transAxes, fontsize=30
+        )
     quickSaveFig(
         '{}/{}.png'.format(EXP_VID, str(time).zfill(4)),
         fig, dpi=DPI
