@@ -92,5 +92,5 @@ monet.printExperimentHead(PT_ROT, PT_VID, tS, 'STP PreVideo '+AOI)
 Parallel(n_jobs=JOB)(
     delayed(dbg.plotMapFrame)(
         time, UA_sites, BLAT, BLNG, DRV_COL, GC_FRA, lngs, lats, EXP_VID,
-        offset=1, amplitude=90, alpha=.5, marker=(6, 0), edgecolor='#ffffff88'
+        offset=1, amplitude=50, alpha=.40, marker=(6, 0), edgecolor='#ffffff88'
     ) for time in range(TMIN, TMAX))

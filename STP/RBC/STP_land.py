@@ -27,7 +27,10 @@ def landSelector(EXP, LND, USR='lab'):
 
 
 def landPopSelector(REL, PT_ROT):
-    if (REL=='265_SP') or (REL=='265_DP') or (REL=='265_SS') or (REL=='265_DS'):
+    if (
+        (REL=='265_SP') or (REL=='265_DP') or (REL=='265_SS') or 
+        (REL=='265_DS') or (EXP=='265_SF') or (EXP=='265_DF')
+    ):
         PT_UAS = path.join(
             ''.join(PT_ROT.split('/'+REL)).replace('/sim/', ''),
             'GEO', 'cluster_1', 'stp_cluster_sites_pop_v5_fixed.csv'
