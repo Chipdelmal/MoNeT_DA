@@ -9,7 +9,7 @@ from more_itertools import locate
 import MoNeT_MGDrivE as monet
 import matplotlib.colors as mcolors
 from sklearn.preprocessing import LabelBinarizer
-# from mpl_toolkits.basemap import Basemap
+from mpl_toolkits.basemap import Basemap
 import geopandas as geop
 from shapely import geometry
 from shapely.ops import polygonize
