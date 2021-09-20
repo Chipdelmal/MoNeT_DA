@@ -17,8 +17,8 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT, NME, TRC) = (
-        'lab', 'SPA', 'HLT',
-        'LDR', '50', 'None', 
+        'lab', 'PAN', 'HLT',
+        'LDR', '50', 'BD', 
         'HLT'
     )
 else:
@@ -85,8 +85,9 @@ ix = 2
 for ix in range(expsNum):
     print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
+    i=0
     ins = [
-        row[i] if row[i] in {'265_SS', '265_SP', '265_DP', '265_DS'}
+        row[i] if row[i] in {'265_SS', '265_SP', '265_SF', '265_DP', '265_DS', '265_DF'}
         else str(int(row[i]*zipper[i][0])).zfill(zipper[i][1])
         for i in zipper
     ]
