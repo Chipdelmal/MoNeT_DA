@@ -21,6 +21,7 @@ else:
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
+TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 JOB = aux.JOB_DSK
 if USR=='srv':
@@ -54,7 +55,7 @@ expsIter = load(path.join(PT_OUT, 'DTA_PST.job'))
 ###############################################################################
 # Subset by Folder
 ###############################################################################
-pt_root = PT_ROTs[1]
+pt_root = PT_ROTs[0]
 for pt_root in PT_ROTs:
     pt_img = path.join(pt_root, 'img', 'dtaTraces')
     monet.makeFolder(pt_img)
@@ -67,7 +68,7 @@ for pt_root in PT_ROTs:
         "width": .5, "alpha": .5, "dpi": 300, "legend": True,
         "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1)
     }
-    print('YRAN: {}'.format(STYLE))
+    # print('YRAN: {}'.format(STYLE))
     ###############################################################################
     # Plot
     ###############################################################################
@@ -77,8 +78,8 @@ for pt_root in PT_ROTs:
             exIx, fNum,
             aux.STABLE_T, 0, QNT, STYLE, pt_img,
             digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
-            poePrint=False, mnfPrint=False, ticksHide=True,
-            transparent=True
+            poePrint=False, mnfPrint=False, ticksHide=TICKS_HIDE,
+            transparent=True, sampRate=aux.SAMP_RATE
         ) for exIx in subset
     )
 # Export gene legend ------------------------------------------------------
