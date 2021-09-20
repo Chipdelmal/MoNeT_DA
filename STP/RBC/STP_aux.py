@@ -13,10 +13,10 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 OVW = True
 (JOB_DSK, JOB_SRV) = (8, 40)
-(POP_SIZE, XRAN, FZ, STABLE_T, MLR) = (
+(POP_SIZE, XRAN, FZ, STABLE_T, MLR, SAMP_RATE) = (
     1000000*1.25, # 2e6*1.5/2, 
     (0, 5*int(365)), 
-    True, 0, False
+    True, 0, False, 2
 )
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR/SDR',

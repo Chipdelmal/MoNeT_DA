@@ -74,7 +74,8 @@ for exp in EXPS:
     expIter = list(zip(dfPaths, fPathsChunks))
     Parallel(n_jobs=JOB)(
         delayed(dbg.pstProcessParallel)(
-            exIx, header, xpidIx, qnt=qnt, 
+            exIx, header, xpidIx, 
+            qnt=qnt, sampRate=aux.SAMP_RATE,
             thi=aux.THI, tho=aux.THO, thw=aux.THW, 
             tap=aux.TAP, thp=(.05, .95)
         ) for exIx in expIter
