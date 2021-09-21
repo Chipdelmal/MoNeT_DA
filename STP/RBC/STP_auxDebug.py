@@ -54,7 +54,7 @@ def preProcessParallel(
 def exportPreTracesParallel(
             exIx, STYLE, PT_IMG,
             border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
-            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1
+            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1, sampRate=1
         ):
     monet.printProgress(exIx[0], xpNum, digs)
     repFilePath = exIx[1][1]
@@ -62,7 +62,8 @@ def exportPreTracesParallel(
     name = path.splitext(repFilePath.split('/')[-1])[0][:-4]
     monet.exportTracesPlot(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
-        border=border, borderColor=borderColor, borderWidth=borderWidth
+        border=border, borderColor=borderColor, borderWidth=borderWidth,
+        sampRate=aux.SAMP_RATE
     )
     return None
 
@@ -200,7 +201,7 @@ def pstProcessParallel(
             repRto, sampRate=sampRate,
             thi=thi, tho=tho, thw=thw, tap=tap
         )
-        print(mtrsReps['RAP'])
+        # print(mtrsReps['RAP'])
         #######################################################################
         # Calculate Quantiles
         #######################################################################
