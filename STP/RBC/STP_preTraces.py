@@ -14,7 +14,7 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV) = ('dsk', 'HLT', 'PAN', 'LDR')
+    (USR, AOI, LND, DRV) = ('lab', 'HLT', 'PAN', 'LDR')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

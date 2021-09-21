@@ -23,21 +23,30 @@ warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    iVars = ['i_ren', 'i_res', 'i_sex']
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
+    iVars = [sys.argv[7], sys.argv[8], sys.argv[9]]
 TICKS_HIDE = True
 (HD_IND, kSweep) = (
-    ['i_ren', 'i_res'], 'i_sex'
+    [iVars[0], iVars[1]], iVars[2]
 )
-(xSca, ySca) = ('linear', 'linear')
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
 else:
     JOB = aux.JOB_SRV
+###############################################################################
+# Params Scaling
+###############################################################################
+(xSca, ySca) = ('linear', 'linear')
+if HD_IND[0] in {'i_gsv'}:
+    xSca = 'log'
+if HD_IND[1] in {'i_gsv'}:
+    ySca = 'log'
 ###############################################################################
 # Paths
 ###############################################################################
@@ -235,8 +244,7 @@ for sw in sweep:
     plt.close(fig)
     plt.gcf()
 
-
-DATA[
-    (DATA['i_ren']==12) &
-    (DATA['i_res']==0.5)
-]
+# DATA[
+#     (DATA['i_ren']==12) &
+#     (DATA['i_res']==0.5)
+# ]
