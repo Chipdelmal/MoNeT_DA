@@ -33,7 +33,7 @@ Analyses scripts are saved in a geographic structure, adhering as much as possib
 ## Authors
 
 * Project Lead: [Héctor M. Sánchez C.](https://www.researchgate.net/profile/Hector_Sanchez_Castellanos)
-* Current Contributors: Kendall Dimson
+* Current Contributors: Kendall Dimson, Xingli Yu, Lillian Weng, Joanna Yoo, Ayden Salazar
 * Former Contributors: Jared Bennett, Agastya Mondal, Chris De Leon, Ameek Bindra, Víctor Ferman, Sean L. Wu, Gillian Chu, Maya Shen, Yunwen Ji, Sarafina Smith, Biyonka Liang, Sabrina Wong
 * PIs: [John M. Marshall](https://www.researchgate.net/profile/John_Marshall8), [David L. Smith](http://www.healthdata.org/about/david-smith)
 
