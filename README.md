@@ -23,6 +23,7 @@ Analyses scripts are saved in a geographic structure, adhering as much as possib
   * [tGD](./PAN/tGD): Second iteration of the tGD
   * [YDR](./PAN/YDR): Y-Linked Drive
   * [v2](./PAN/v2): Plots for the MGDrivE2 paper
+* [NET](./NET): Networks landscape analysis
 * [PYF](./PYF): French Polynesia 
 * [STP](./STP): São Tomé and Príncipe
  * [SvR](./STP/SvR): Suppression versus replacement (both: panmictic and spatial)
