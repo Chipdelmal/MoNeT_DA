@@ -24,7 +24,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('lab', 'SPA', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -115,7 +115,7 @@ wopLim = (0, 10*365)
 mnfLim = (0, 1)
 # Filter and return dataframe -------------------------------------------------
 constrained = DATA[
-    DATA['i_grp'] == 0 &
+    (DATA['i_grp'] == 0) &
     (DATA['i_sex'] == sexLim)           &
     np.isclose(DATA['i_fch'], 0.175)    &
     np.isclose(DATA['i_fcb'], 0.117)    &
