@@ -118,7 +118,8 @@ for exp in EXPS:
         delayed(dbg.exportPstTracesParallel)(
             exIx, expsNum,
             aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
-            digs=digs, border=True, autoAspect=True, labelPos=(.8, .2)
+            digs=digs, border=True, autoAspect=True, labelPos=(.8, .2),
+            sampRate=aux.SAMP_RATE
         ) for exIx in expsIter
     )
     # Export gene legend ------------------------------------------------------

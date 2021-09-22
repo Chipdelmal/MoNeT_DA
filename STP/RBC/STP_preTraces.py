@@ -72,7 +72,8 @@ for exp in EXPS:
         delayed(dbg.exportPreTracesParallel)(
             exIx, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, autoAspect=True,
-            border=True, borderColor='#8184a7AA', borderWidth=2
+            border=True, borderColor='#8184a7AA', borderWidth=2,
+            sampRate=aux.SAMP_RATE
         ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------
