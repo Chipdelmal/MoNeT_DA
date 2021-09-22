@@ -26,7 +26,7 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'SDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -88,7 +88,7 @@ resVals = list(DATA[ks]['i_res'].unique())
 ###############################################################################
 # Plot
 ###############################################################################
-resVals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+# resVals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 clist = [
     '#000000', '#03045e', '#6247aa', '#815ac0', '#c19ee0', '#d6e3f8'
 ]
@@ -118,7 +118,7 @@ leg = [Patch(facecolor=colors[len(resVals)-(i+1)], edgecolor=list(colors[len(res
 ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
 ax.grid(1)
 ax.set_xlim(0, 24)
-ax.set_ylim(0, 3*365) # CHANGED!!!!!!!!
+ax.set_ylim(0, 6*365) # CHANGED!!!!!!!!
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
 if TICKS_HIDE:
@@ -169,7 +169,7 @@ ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,
 ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
 ax.grid(1)
 ax.set_xlim(0, 1)
-ax.set_ylim(0, 3*365)
+ax.set_ylim(0, 6*365)
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
 if TICKS_HIDE:

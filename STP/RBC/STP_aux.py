@@ -15,10 +15,10 @@ OVW = True
 (JOB_DSK, JOB_SRV) = (8, 40)
 (POP_SIZE, XRAN, FZ) = (
     1000000*1.25, # 2e6*1.5/2, 
-    (0, 5*int(365)), 
+    (0, 10*int(365)), 
     True
 ) 
-(STABLE_T, MLR, SAMP_RATE) = (0, False, 1)
+(STABLE_T, MLR, SAMP_RATE) = (0, False, 2)
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR/SDR',
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'

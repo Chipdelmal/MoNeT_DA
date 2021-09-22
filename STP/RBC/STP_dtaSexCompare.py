@@ -153,7 +153,7 @@ for (i, dta) in enumerate(zip(dtaTrpl, colTrpl)):
         ax=ax[i], size=.35, color=dta[1], alpha=.5, zorder=1
     )
 for a in ax:
-    a.set_xlim(0, 5*365)
+    a.set_xlim(0, 10*365)
     a.set_ylim(-.125, .125)
     if TICKS_HIDE:
         a.axis("off")
@@ -171,7 +171,7 @@ sns.stripplot(x=abs(mrgDF['WOP_ML']-mrgDF['WOP_ML']), ax=ax[0], size=.35, alpha=
 sns.stripplot(x=abs(mrgDF['WOP_NG']-mrgDF['WOP_ML']), ax=ax[1], size=.35, alpha=.35, color=colTrpl[1])
 sns.stripplot(x=abs(mrgDF['WOP_GV']-mrgDF['WOP_ML']), ax=ax[2], size=.35, alpha=.35, color=colTrpl[2])
 for a in ax:
-    a.set_xlim(0, 2.5*365)
+    a.set_xlim(0, 5*365)
     a.set_ylim(-.125, .125)
     if TICKS_HIDE:
         a.axis("off")
