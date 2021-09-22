@@ -200,7 +200,7 @@ def pstProcessParallel(
             repRto, sampRate=sampRate,
             thi=thi, tho=tho, thw=thw, tap=tap
         )
-        print(mtrsReps['RAP'])
+        # print(mtrsReps['RAP'])
         #######################################################################
         # Calculate Quantiles
         #######################################################################
