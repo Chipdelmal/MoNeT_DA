@@ -105,7 +105,7 @@ constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 # Filter Output with Constraints
 ###############################################################################
 # Design constraints ----------------------------------------------------------
-(sexLim, renLim, resLim) = (1, 12, .6)
+(sexLim, renLim, resLim) = (1, 12, 1)
 # Goals constraints -----------------------------------------------------------
 cptLim = (-0.1, 1.1)
 poeLim = (-.1, 1)
@@ -125,7 +125,7 @@ constrained = DATA[
     np.isclose(DATA['i_rsg'], 0.079)    &
     np.isclose(DATA['i_gsv'], 1.e-02)   &
     (2 <= DATA['i_ren'])    & (DATA['i_ren'] <= renLim)         &
-    (.2 <= DATA['i_res'])    & (DATA['i_res'] <= resLim)
+    (.05 <= DATA['i_res'])    & (DATA['i_res'] <= resLim)
 ]
 # print(DATA['i_fcb'].unique())
 constrained.shape

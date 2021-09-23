@@ -12,6 +12,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 OVW = True
+SPA_EXP = {'265_SS', '265_SP', '265_SF', '265_DP', '265_DS', '265_DF'}
 (JOB_DSK, JOB_SRV) = (8, 40)
 (POP_SIZE, XRAN, FZ) = (
     1000000*1.25, # 2e6*1.5/2, 
@@ -50,7 +51,7 @@ REF_FILE = 'E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000
         'i_rsg': 12,    'i_gsv': 12,  
         'i_fch': 7,     'i_fcb': 7,     'i_fcr': 7,
         'i_hrm': 7,     'i_hrf': 7,   
-        'i_grp': 2,     'i_mig': 7
+        'i_grp': 2,     'i_mig': 6
     }
 )
 (THI, THO, THW, TAP) = (
