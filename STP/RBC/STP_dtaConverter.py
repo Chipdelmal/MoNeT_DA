@@ -78,16 +78,19 @@ expsNum = DATA.shape[0]
 catSorting = [i for i in list(DATA.columns) if i[0]=='i']
 outSorting = [i for i in list(DATA.columns) if i[0]!='i']
 zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
-print(outSorting)
+# print(outSorting)
 # Transform to fnames ---------------------------------------------------------
 (expsIter, skipped, counter) = ([], 0, 0)
 ix = 2
+# Check for padding!!!!!!!!!!! (inconsistent) ---------------------------------
+if LND=='PAN':
+    zipper['i_grp'] = (zipper['i_grp'][0], 2)
 for ix in range(expsNum):
     print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
     i=0
     ins = [
-        row[i] if row[i] in {'265_SS', '265_SP', '265_SF', '265_DP', '265_DS', '265_DF'}
+        row[i] if row[i] in aux.SPA_EXP
         else str(int(row[i]*zipper[i][0])).zfill(zipper[i][1])
         for i in zipper
     ]
