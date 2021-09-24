@@ -72,3 +72,16 @@ for exp in EXPS:
             fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
             repsRatios = monet.getPopRepsRatios(base, trace, 1)
             np.save(fName, repsRatios)
+
+# exp = 'E_099_099_007_000_100_0000001_0000001_12-HLT_00_rto.npy'
+# PTH = '/Volumes/marshallShare/yLinked2/shredder/autosomal/001/POSTPROCESS/'
+# pop = np.load(PTH+exp)
+# tmp = [np.where(i<0.01)[0] for i in pop]
+# np.mean(
+#     (np.asanyarray([i[0] for i in tmp if (i.shape[0]!=0)])-12*7)/7
+# )
+
+# rat = [np.where(i[12*7:]>0.95)[0] for i in pop]
+# np.mean(
+#     (np.asanyarray([i[0] for i in rat if (i.shape[0]!=0)])-12*7)/7
+# )
