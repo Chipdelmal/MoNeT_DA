@@ -9,8 +9,8 @@ THS='0.1'
 ###############################################################################
 # Processing data
 ###############################################################################
-python STP_preProcess.py $1 'HLT' $LND $DRV
-python STP_pstFraction.py $1 'HLT' $LND $DRV
+# python STP_preProcess.py $1 'HLT' $LND $DRV
+# python STP_pstFraction.py $1 'HLT' $LND $DRV
 python STP_pstProcess.py $1 'HLT' $LND $DRV $QNT
 ###############################################################################
 # Generate dataframes
