@@ -122,14 +122,15 @@ def pstFractionParallel(exIx, PT_OUT):
 # PstProcess Updates
 ###############################################################################
 def calcMetrics(
-        repRto, sampRate=1,
+        repRto, 
+        sampRate=1, offset=0,
         thi=.25, tho=.25, thw=.25, tap=50, thp=(.025, .975),
         finalDay=-1
     ):
     (minS, maxS, _, _) = monet.calcMinMax(repRto)
     mtrRep = {
-        'TTI': monet.calcTTI(repRto, thi, sampRate=sampRate),
-        'TTO': monet.calcTTO(repRto, tho, sampRate=sampRate),
+        'TTI': monet.calcTTI(repRto, thi, sampRate=sampRate, offset=offset),
+        'TTO': monet.calcTTO(repRto, tho, sampRate=sampRate, offset=offset),
         'WOP': monet.calcWOP(repRto, thw, sampRate=sampRate),
         'MIN': minS, 'MAX': maxS,
         'RAP': monet.getRatioAtTime(repRto, tap, sampRate=sampRate),
@@ -169,7 +170,7 @@ def calcMtrQnts(mtrsReps, qnt=0.5):
 
 
 def pstProcessParallel(
-        exIx, header, xpidIx, sampRate=1,
+        exIx, header, xpidIx, sampRate=1, offset=0,
         thi=.25, tho=.25, thw=.25, tap=50, thp=(.025, .975),
         finalDay=-1, qnt=0.5, POE=True, CPT=True,
         DF_SORT=['TTI', 'TTO', 'WOP', 'RAP', 'MIN', 'POE', 'CPT']
@@ -198,10 +199,10 @@ def pstProcessParallel(
         # Calculate Metrics
         #######################################################################
         mtrsReps = calcMetrics(
-            repRto, sampRate=sampRate,
+            repRto, sampRate=sampRate, offset=offset,
             thi=thi, tho=tho, thw=thw, tap=tap
         )
-        # print(mtrsReps['RAP'])
+        print(mtrsReps['TTI'])
         #######################################################################
         # Calculate Quantiles
         #######################################################################

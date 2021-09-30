@@ -25,7 +25,10 @@ else:
     )
     JOB = aux.JOB_SRV
     CHUNKS = JOB
-(EXPS) = aux.getExps(LND)
+###############################################################################
+# Get Experiments and Offset
+###############################################################################
+(EXPS, REL_START) = (aux.getExps(LND), lnd.landRelSelector(LND))
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -75,7 +78,7 @@ for exp in EXPS:
     Parallel(n_jobs=JOB)(
         delayed(dbg.pstProcessParallel)(
             exIx, header, xpidIx, 
-            qnt=qnt, sampRate=aux.SAMP_RATE,
+            qnt=qnt, sampRate=aux.SAMP_RATE, offset=0,
             thi=aux.THI, tho=aux.THO, thw=aux.THW, 
             tap=aux.TAP, thp=(.05, .95)
         ) for exIx in expIter
@@ -89,5 +92,6 @@ for exp in EXPS:
         # Write combined dataframe --------------------------------------------
         fName = dfPathsSet[0].split('-')[0]+'.csv'
         dfFull.to_csv(fName, index=False)
+
 
 

@@ -124,8 +124,8 @@ constrained = DATA[
     np.isclose(DATA['i_hrf'], 0.956)    &
     np.isclose(DATA['i_rsg'], 0.079)    &
     np.isclose(DATA['i_gsv'], 1.e-02)   &
-    (2 <= DATA['i_ren'])    & (DATA['i_ren'] <= renLim)         &
-    (.05 <= DATA['i_res'])    & (DATA['i_res'] <= resLim)
+    (2 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
+    (.05 <= DATA['i_res'])      & (DATA['i_res'] <= resLim)
 ]
 # print(DATA['i_fcb'].unique())
 constrained.shape

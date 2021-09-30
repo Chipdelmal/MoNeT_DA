@@ -38,4 +38,9 @@ def landPopSelector(REL, PT_ROT):
     return (PT_UAS, path.join(PT_ROT, 'video'))
 
 
-
+def landRelSelector(LND):
+    if LND=='PAN':
+        relStart = 5
+    else:
+        relStart = 100
+    return relStart

@@ -18,7 +18,7 @@ SPA_EXP = {'265_SS', '265_SP', '265_SF', '265_DP', '265_DS', '265_DF'}
     1000000*1.25, # 2e6*1.5/2, 
     (0, 10*int(365)), 
     True
-) 
+)
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 2)
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR/SDR',

@@ -244,7 +244,3 @@ for sw in sweep:
     plt.close(fig)
     plt.gcf()
 
-# DATA[
-#     (DATA['i_ren']==12) &
-#     (DATA['i_res']==0.5)
-# ]
