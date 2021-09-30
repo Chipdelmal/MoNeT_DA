@@ -10,14 +10,10 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
 
-XP_ID = 'YDR'
-(XP_HOM, XP_SHR) = (
-    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}',
-    'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
-)
+XP_ID = 'EPI'
+XP_PAT = 'E_{}_{}.{}'
 (POP_SIZE, XRAN, FZ, STABLE_T) = (20e3*1.25, (0, (365*10)), False, 0)
-# EXPS = ('000', '002', '004', '006', '008')
-EXPS = ('001', )
+EXPS = ('Set01', )
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST, MLR) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'), 
@@ -37,10 +33,7 @@ FRATE = 30
 # Experiment-Specific Path Functions
 # #############################################################################
 def getXPPattern(SET):
-    if SET == 'homing':
-        return XP_HOM
-    else:
-        return XP_SHR
+    return XP_PAT
 
 
 def patternForReleases(SET, ren, AOI, ftype, ext='bz'):
@@ -71,11 +64,11 @@ def getSummaryHeader(SET):
 # #############################################################################
 # Paths and Style
 # #############################################################################
-def selectPath(USR, SET, DRV, EXP):
+def selectPath(USR, SET):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/EPIv2_Demo/epiout/{}/'.format(SET, DRV, EXP)
+        PATH_ROOT = '/RAID5/marshallShare/EPIv2_Demo/epiout/{}/'.format(SET)
     elif USR == 'lab':
-        PATH_ROOT = '/Volumes/marshallShare/EPIv2_Demo/epiout/{}/'.format(SET, DRV, EXP)
+        PATH_ROOT = '/Volumes/marshallShare/EPIv2_Demo/epiout/{}/'.format(SET)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
