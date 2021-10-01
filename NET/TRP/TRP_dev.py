@@ -2,9 +2,10 @@
 import numpy as np
 from os import path
 import networkx as nx
-import cdlib.algorithms as cd
+# import cdlib.algorithms as cd
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.preprocessing import normalize
 from sklearn.cluster import AgglomerativeClustering
 import TRP_aux as aux
@@ -17,6 +18,7 @@ TRAPS_NUM = 10
 pth = path.join(PT_DTA, EXP_FNAME)
 migMat = np.genfromtxt(pth+'_MX.csv', delimiter=',')
 sites = np.genfromtxt(pth+'_XY.csv', delimiter=',')
+sitesNum = sites.shape[0]
 ###############################################################################
 # Transitions Matrix and Base Netowrk
 ###############################################################################
@@ -45,7 +47,46 @@ trapDists = np.asarray([
     [np.linalg.norm(site-trap) for site in sites]
     for trap in traps
 ]).T
+# Traps attractiveness --------------------------------------------------------
 trapProbs = np.asarray([
-    [aux.trapProbability(i, b=0.1) for i in dist] 
+    [aux.trapProbability(i, b=0.5) for i in dist] 
     for dist in trapDists
 ])
+# Traps identity --------------------------------------------------------------
+trapIdentity = np.identity(TRAPS_NUM)
+# Traps escape ----------------------------------------------------------------
+trapEscape = np.asarray([
+    [aux.trapProbability(i, b=10) for i in dist] 
+    for dist in trapDists
+]).T
+###############################################################################
+# Assemble matrix
+###############################################################################
+(n, m) = (sitesNum, TRAPS_NUM)
+tau = np.empty((n+m, n+m))
+# BB Section --------------------------------------------------------------
+BB = psiN
+for i in range(n):
+    for j in range(n):
+        tau[i, j] = BB[i, j]
+# BQ Section --------------------------------------------------------------
+BQ = trapProbs.T
+for i in range(n):
+    for j in range(m):
+        tau[i, j + n] = BQ[j, i]
+# QB Section --------------------------------------------------------------
+QB = trapEscape.T
+for i in range(n):
+    for j in range(m):
+        tau[j+n, i] = QB[i, j]
+# QQ Section --------------------------------------------------------------
+QQ = trapIdentity
+for i in range(m):
+    for j in range(m):
+        tau[i+n, j+n] = QQ[i, j]
+###############################################################################
+# Normalize and plot matrix
+###############################################################################
+plt.imshow(tau, vmax=1e-2, interpolation='nearest')
+tauN = normalize(tau, axis=1, norm='l2')
+plt.imshow(tauN, vmax=1e-2, interpolation='nearest')
