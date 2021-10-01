@@ -4,9 +4,11 @@
 from collections import OrderedDict
 import MoNeT_MGDrivE as monet
 
-
+STATES_NUM = 36
 EPI_STATES = ('S', 'T', 'D', 'A', 'U', 'P', 'ICA', 'IB', 'ID', 'clin_inc')
-epi = monet.flatten_list([[j+str(i) for i in range(36+1)] for j in EPI_STATES])
+epiLabels = monet.flatten_list(
+    [[j+str(i) for i in range(STATES_NUM+1)] for j in EPI_STATES]
+)
 locus = (0, )
 ###############################################################################
 # Ecology genotype counts
@@ -14,7 +16,7 @@ locus = (0, )
 HUM_DICT = OrderedDict((
     ('S', (('S', locus), )),
 ))
-HUM_S = monet.geneFrequencies(HUM_DICT, epi)
+HUM_S = monet.geneFrequencies(HUM_DICT, epiLabels)
 
 ###############################################################################
 # Health genotype counts
