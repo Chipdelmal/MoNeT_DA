@@ -87,6 +87,12 @@ for i in range(m):
 ###############################################################################
 # Normalize and plot matrix
 ###############################################################################
-plt.imshow(tau, vmax=1e-2, interpolation='nearest')
 tauN = normalize(tau, axis=1, norm='l2')
-plt.imshow(tauN, vmax=1e-2, interpolation='nearest')
+# plt.imshow(tau, vmax=1e-2, interpolation='nearest')
+(fig, ax) = plt.subplots(figsize=(15, 15))
+ax.imshow(tauN, vmax=1e-2, cmap='Purples', interpolation='nearest')
+fig.savefig('./out.png', dpi=500)
+
+
+plt.scatter(sites.T[0], sites.T[1], marker='^')
+plt.scatter(traps.T[0], traps.T[1], marker='o')
