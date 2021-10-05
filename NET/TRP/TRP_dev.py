@@ -9,6 +9,9 @@ import seaborn as sns
 from sklearn.preprocessing import normalize
 from sklearn.cluster import AgglomerativeClustering
 import TRP_aux as aux
+import random
+
+random.seed(10)
 
 TRAPS_NUM = 10
 (PT_DTA, EXP_FNAME) = ('/Volumes/marshallShare/Mov/dta', '00X')
@@ -49,7 +52,7 @@ trapDists = np.asarray([
 ]).T
 # Traps attractiveness --------------------------------------------------------
 trapProbs = np.asarray([
-    [aux.trapProbability(i, b=0.5) for i in dist] 
+    [aux.trapProbability(i, b=0.1) for i in dist] 
     for dist in trapDists
 ])
 # Traps identity --------------------------------------------------------------
@@ -90,9 +93,9 @@ for i in range(m):
 tauN = normalize(tau, axis=1, norm='l2')
 # plt.imshow(tau, vmax=1e-2, interpolation='nearest')
 (fig, ax) = plt.subplots(figsize=(15, 15))
-ax.imshow(tauN, vmax=1e-2, cmap='Purples', interpolation='nearest')
-fig.savefig('./out.png', dpi=500)
-
-
+# ax.imshow(tauN, vmax=1e-2, cmap='Purples', interpolation='nearest')
+# fig.savefig('./out.png', dpi=500)
+(fig, ax) = aux.plotNetwork(fig, ax, tauN, traps, sites, [0], c='#2B62F7')
+(fig, ax) = aux.plotNetwork(fig, ax, tauN, sites, sites, [0], c='#FB3264')
 plt.scatter(sites.T[0], sites.T[1], marker='^')
 plt.scatter(traps.T[0], traps.T[1], marker='o')
