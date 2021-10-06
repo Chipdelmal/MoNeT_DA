@@ -14,7 +14,7 @@ import random
 
 random.seed(10)
 
-TRAPS_NUM = 15
+TRAPS_NUM = 20
 (PT_DTA, EXP_FNAME) = ('/Volumes/marshallShare/Mov/dta', '00X')
 ###############################################################################
 # Read migration matrix and pop sites
@@ -115,4 +115,4 @@ plt.tick_params(
     bottom=False, top=False, left=False, right=False,
     labelbottom=False, labeltop=False, labelleft=False, labelright=False
 ) # labels along the bottom edge are off
-fig.savefig('./trapsNetwork.png', dpi=250, bbox_inches='tight')
+fig.savefig('./'+EXP_FNAME+'_trapsNetwork.png', dpi=250, bbox_inches='tight')
