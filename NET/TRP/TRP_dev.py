@@ -14,7 +14,7 @@ import random
 
 random.seed(10)
 
-TRAPS_NUM = 10
+TRAPS_NUM = 15
 (PT_DTA, EXP_FNAME) = ('/Volumes/marshallShare/Mov/dta', '00X')
 ###############################################################################
 # Read migration matrix and pop sites
@@ -96,19 +96,23 @@ np.apply_along_axis(sum, 1, tauN)
 # Plot matrix
 ###############################################################################
 # plt.imshow(tau, vmax=1e-2, interpolation='nearest')
-(fig, ax) = plt.subplots(figsize=(15, 15))
-plt.imshow(tauN, vmax=1e-1, cmap='Purples', interpolation='nearest')
-fig.savefig('./out.png', dpi=500)
+# (fig, ax) = plt.subplots(figsize=(15, 15))
+# plt.imshow(tauN, vmax=1e-1, cmap='Purples', interpolation='nearest')
+# fig.savefig('./out.png', dpi=500)
 ###############################################################################
 # Plot landscape
 ###############################################################################
 BBN = tauN[:sitesNum, :sitesNum]
 BQN = tauN[:sitesNum, sitesNum:]
-(LW, ALPHA, SCA) = (.125, .15, 50)
+(LW, ALPHA, SCA) = (.125, .2, 50)
 (fig, ax) = plt.subplots(figsize=(15, 15))
 (fig, ax) = aux.plotNetwork(fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW, alpha=ALPHA)
-(fig, ax) = aux.plotNetwork(fig, ax, tauN*SCA, sites, sites, [0], c='#2B62F7', lw=LW, alpha=ALPHA)
-plt.scatter(sites.T[0], sites.T[1], marker='^', color='#ef233c99', s=25)
-plt.scatter(traps.T[0], traps.T[1], marker='o', color='#03045e99', s=25)
-fig.savefig('./trapsNetwork.png', dpi=500)
-
+(fig, ax) = aux.plotNetwork(fig, ax, BBN*SCA, sites, sites, [0], c='#2B62F7', lw=LW, alpha=ALPHA)
+plt.scatter(sites.T[0], sites.T[1], marker='^', color='#ef233cDB', s=50, zorder=10)
+plt.scatter(traps.T[0], traps.T[1], marker='o', color='#03045eDB', s=50, zorder=10)
+plt.tick_params(
+    axis='both', which='both',
+    bottom=False, top=False, left=False, right=False,
+    labelbottom=False, labeltop=False, labelleft=False, labelright=False
+) # labels along the bottom edge are off
+fig.savefig('./trapsNetwork.png', dpi=250, bbox_inches='tight')
