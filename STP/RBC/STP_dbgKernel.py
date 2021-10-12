@@ -4,7 +4,7 @@ import numpy as np
 
 
 (kernelPath, kernelName) = (
-    '/home/chipdelmal/Documents/WorkSims/STP_Grid/GEO_v2_Debug/',
+    '/Volumes/marshallShare/STP_Grid/GEO_v2_Debug/',
     'kernel_cluster_v6a.csv'
 )
 relSites = (
@@ -12,13 +12,13 @@ relSites = (
     104, 111, 131, 102, 93, 96, 90, 115, 116, 132, 123, 129, 
     141, 109, 156, 169,
 
-    50
+    109
 )
 ###############################################################################
 # Read Kernel and Init New Kernel
 ###############################################################################
 bKrnl = np.genfromtxt(path.join(kernelPath, kernelName), delimiter=',')
-sNum = len(relSites)+1
+sNum = len(relSites)
 nKrnl = np.zeros((sNum, sNum))
 ###############################################################################
 # Fill new matrix
