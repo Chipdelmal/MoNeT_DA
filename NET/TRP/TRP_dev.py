@@ -15,7 +15,11 @@ import random
 random.seed(10)
 
 TRAPS_NUM = 20
-(PT_DTA, EXP_FNAME) = ('/Volumes/marshallShare/Mov/dta', '00X')
+(PT_DTA, PT_IMG, EXP_FNAME) = (
+    '/Volumes/marshallShare/Mov/dta',
+    '/Volumes/marshallShare/Mov/trp',
+    '300'
+)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -96,9 +100,12 @@ np.apply_along_axis(sum, 1, tauN)
 # Plot matrix
 ###############################################################################
 # plt.imshow(tau, vmax=1e-2, interpolation='nearest')
-# (fig, ax) = plt.subplots(figsize=(15, 15))
-# plt.imshow(tauN, vmax=1e-1, cmap='Purples', interpolation='nearest')
-# fig.savefig('./out.png', dpi=500)
+(fig, ax) = plt.subplots(figsize=(15, 15))
+plt.imshow(tauN, vmax=1e-1, cmap='Purples', interpolation='nearest')
+fig.savefig(
+    path.join(PT_IMG, EXP_FNAME+'_trapsMatrix.png'), 
+    dpi=500, bbox_inches='tight'
+)
 ###############################################################################
 # Plot landscape
 ###############################################################################
@@ -115,4 +122,7 @@ plt.tick_params(
     bottom=False, top=False, left=False, right=False,
     labelbottom=False, labeltop=False, labelleft=False, labelright=False
 ) # labels along the bottom edge are off
-fig.savefig('./'+EXP_FNAME+'_trapsNetwork.png', dpi=250, bbox_inches='tight')
+fig.savefig(
+    path.join(PT_IMG, EXP_FNAME+'_trapsNetwork.png'), 
+    dpi=250, bbox_inches='tight'
+)
