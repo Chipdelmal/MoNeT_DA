@@ -5,11 +5,6 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import matplotlib.pyplot as plt
-
-def trapProbability(dist, A=1, b=1):
-    prob = A * exp(-b * dist)
-    return prob
 
 
 def unifyTransitionsMatrix(BB, BQ, QB, QQ):
