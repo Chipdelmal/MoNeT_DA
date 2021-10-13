@@ -16,10 +16,10 @@ TRAPS_NUM = 20
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/Volumes/marshallShare/Mov/dta',
     '/Volumes/marshallShare/Mov/trp',
-    '300'
+    '001'
 )
 kPars = {
-    'Trap': {'A': 0.5, 'b': 0.75},
+    'Trap': {'A': 0.1, 'b': 0.75},
     'Escape': {'A': 0, 'b': 100}
 }
 ###############################################################################
@@ -47,6 +47,7 @@ trapDists = fun.calcTrapToSitesDistance(traps, sites)
 tProbs = fun.calcTrapsSections(trapDists, params=kPars)
 tauN = fun.assembleTrapMigration(psiN, tProbs)
 np.apply_along_axis(sum, 1, tauN)
+# np.apply_along_axis(sum, 1, F)
 ###############################################################################
 # Plot matrix
 ###############################################################################
@@ -76,3 +77,72 @@ fig.savefig(
     path.join(PT_IMG, EXP_FNAME+'_trapsNetwork.png'), 
     dpi=250, bbox_inches='tight'
 )
+
+###############################################################################
+# Calculate metrics
+###############################################################################
+# Re-arrange matrix in canonical form -----------------------------------------
+canO = list(range(sitesNum, sitesNum+TRAPS_NUM))+list(range(0, sitesNum))
+tauCan = np.asarray([[tauN[i][j] for j in canO] for i in canO])
+# plt.imshow(tauCan, vmax=1e-1, cmap='Purples', interpolation='nearest')
+A = tauCan[TRAPS_NUM:, :TRAPS_NUM]
+B = tauCan[TRAPS_NUM:, TRAPS_NUM:]
+F = np.linalg.inv(np.subtract(np.identity(B.shape[0]), B))
+daysTillTrapped = np.apply_along_axis(sum, 1, F)
+sum(daysTillTrapped)
+
+###############################################################################
+# Verify metrics
+###############################################################################
+# tst = np.linalg.matrix_power(tauN, 1000000000)
+# # plt.imshow(tst[:sitesNum, -TRAPS_NUM:].T, cmap='Purples', interpolation='nearest')
+# catchesA = tst[:sitesNum, -TRAPS_NUM:]
+# catchesB = np.matmul(F, A)
+# plt.imshow(F, cmap='Purples', interpolation='nearest')
+
+###############################################################################
+# Debug math
+###############################################################################
+# tst = np.asarray(
+#     [
+#         [0, .5, 0, .5, 0],
+#         [.5, 0, .5, 0, 0],
+#         [0, .5, 0, 0, .5],
+#         [0, 0, 0, 1, 0],
+#         [0, 0, 0, 0, 1]
+#     ]
+# )
+# tst = np.asarray(
+#     [
+#         [0, .5, 0],
+#         [.5, 0, .5],
+#         [0, .5, 0]
+#     ]
+# )
+# n = np.linalg.inv(np.subtract(np.identity(3), tst))
+# r = np.asarray(
+#     [
+#         [.5, 0],
+#         [0, 0],
+#         [0, .5]
+#     ]
+# )
+# np.matmul(n, r)
+
+
+psiN = np.asarray(
+    [
+        [0, .5, 0],
+        [.5, 0, .5],
+        [0, .5, 0]
+    ]
+)
+trap = np.asarray([
+    [.5, 0],
+    [0, 0],
+    [0, .5]
+])
+N = np.linalg.inv(np.subtract(np.identity(psiN.shape[0]), psiN))
+np.matmul(N, trap)
+
+tauN[:sitesNum, -TRAPS_NUM:]
