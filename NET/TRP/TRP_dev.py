@@ -12,14 +12,14 @@ from sklearn.cluster import AgglomerativeClustering
 import TRP_aux as aux
 import TRP_fun as fun
 
-TRAPS_NUM = 20
+TRAPS_NUM = 1
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/Volumes/marshallShare/Mov/dta',
     '/Volumes/marshallShare/Mov/trp',
     '001'
 )
 kPars = {
-    'Trap': {'A': 0.1, 'b': 0.75},
+    'Trap': {'A': 0.1, 'b': 2},
     'Escape': {'A': 0, 'b': 100}
 }
 ###############################################################################
@@ -88,61 +88,6 @@ tauCan = np.asarray([[tauN[i][j] for j in canO] for i in canO])
 A = tauCan[TRAPS_NUM:, :TRAPS_NUM]
 B = tauCan[TRAPS_NUM:, TRAPS_NUM:]
 F = np.linalg.inv(np.subtract(np.identity(B.shape[0]), B))
-daysTillTrapped = np.apply_along_axis(sum, 1, F)
-sum(daysTillTrapped)
+daysTillTrapped = np.apply_along_axis(np.mean, 1, F)
+np.mean(daysTillTrapped)
 
-###############################################################################
-# Verify metrics
-###############################################################################
-# tst = np.linalg.matrix_power(tauN, 1000000000)
-# # plt.imshow(tst[:sitesNum, -TRAPS_NUM:].T, cmap='Purples', interpolation='nearest')
-# catchesA = tst[:sitesNum, -TRAPS_NUM:]
-# catchesB = np.matmul(F, A)
-# plt.imshow(F, cmap='Purples', interpolation='nearest')
-
-###############################################################################
-# Debug math
-###############################################################################
-# tst = np.asarray(
-#     [
-#         [0, .5, 0, .5, 0],
-#         [.5, 0, .5, 0, 0],
-#         [0, .5, 0, 0, .5],
-#         [0, 0, 0, 1, 0],
-#         [0, 0, 0, 0, 1]
-#     ]
-# )
-# tst = np.asarray(
-#     [
-#         [0, .5, 0],
-#         [.5, 0, .5],
-#         [0, .5, 0]
-#     ]
-# )
-# n = np.linalg.inv(np.subtract(np.identity(3), tst))
-# r = np.asarray(
-#     [
-#         [.5, 0],
-#         [0, 0],
-#         [0, .5]
-#     ]
-# )
-# np.matmul(n, r)
-
-
-psiN = np.asarray(
-    [
-        [0, .5, 0],
-        [.5, 0, .5],
-        [0, .5, 0]
-    ]
-)
-trap = np.asarray([
-    [.5, 0],
-    [0, 0],
-    [0, .5]
-])
-N = np.linalg.inv(np.subtract(np.identity(psiN.shape[0]), psiN))
-np.matmul(N, trap)
-
-tauN[:sitesNum, -TRAPS_NUM:]
