@@ -13,7 +13,7 @@ from sklearn.cluster import AgglomerativeClustering
 import TRP_aux as aux
 import TRP_fun as fun
 
-TRAPS_NUM = 3
+TRAPS_NUM = 4
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/Volumes/marshallShare/Mov/dta',
     '/Volumes/marshallShare/Mov/trp/Benchmark',
@@ -28,16 +28,12 @@ kPars = {
 # Debug check
 ############################################################################### 
 if monet.isNotebook():
-    dbg = True
+    (dbg, randTrap) = (True, True)
     (USR, DRV) = ('dsk', 'SDR')
-    randTrap = True
 else:
-    dbg = False
-    traps = np.asarray([
-        [float(argv[1]), float(argv[2])]
-    ])
+    (dbg, randTrap) = (False, False)
+    traps = np.asarray([[float(argv[1]), float(argv[2])]])
     TRAPS_NUM = traps.shape[0]
-    randTrap = False
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -53,9 +49,9 @@ psiN = migMat # fun.deleteLoopsFromMatrix(migMat)
 ###############################################################################
 # Generate some trap locations and calculate distances
 ###############################################################################
-(minX, minY) = np.apply_along_axis(min, 0, sites)
-(maxX, maxY) = np.apply_along_axis(max, 0, sites)
 if randTrap:
+    (minX, minY) = np.apply_along_axis(min, 0, sites)
+    (maxX, maxY) = np.apply_along_axis(max, 0, sites)
     traps = fun.placeTrapsRanUnif(TRAPS_NUM, (minX, maxX), (minY, maxY))
 trapDists = fun.calcTrapToSitesDistance(traps, sites)
 ###############################################################################
