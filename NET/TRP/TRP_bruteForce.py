@@ -14,11 +14,12 @@ import TRP_aux as aux
 import TRP_fun as fun
 
 TRAPS_NUM = 1
-STEP = .5
+STEPS = 50
+delta = 0.01
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/Volumes/marshallShare/Mov/dta',
     '/Volumes/marshallShare/Mov/trp/Benchmark',
-    '00X'
+    '001'
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
@@ -44,8 +45,8 @@ psiN = migMat # fun.deleteLoopsFromMatrix(migMat)
 # Generate some trap locations and calculate distances
 ###############################################################################
 (xGrid, yGrid) = (
-    np.arange(minX, maxX+STEP, STEP), 
-    np.arange(minY, maxY+STEP, STEP)
+    np.arange(minX-delta, maxX+2*delta, (maxX-minX)/STEPS), 
+    np.arange(minY-delta, maxY+2*delta, (maxY-minY)/STEPS)
 ) 
 fits = np.zeros((len(xGrid), len(yGrid)))
 (cntr, total) = (0, fits.shape[0]*fits.shape[1])
@@ -118,7 +119,7 @@ plt.scatter(
 for point in fitsDict:
     plt.scatter(
         point[0], point[1], 
-        marker='s', color=rvb((point[2]-best)/(.35*(worst-best))), 
+        marker='s', color=rvb((point[2]-best)/(.25*(worst-best))), 
         alpha=.5,
         s=250, zorder=-5,
         linewidths=0, edgecolors='k'
@@ -135,6 +136,9 @@ ax.text(
     fontsize=50, color='#000000DD',
     transform=ax.transAxes, zorder=15
 )
+ax.set_aspect('equal')
+ax.set_xlim(minX-.1, maxX+.1)
+ax.set_ylim(minY-.1, maxY+.1)
 ###############################################################################
 # Export figure
 ###############################################################################
@@ -142,5 +146,5 @@ fig.savefig(
     path.join(PT_IMG, '{}-BF-trapsNetwork.png'.format(EXP_FNAME)), 
     dpi=250, bbox_inches='tight'
 )
-
+plt.close()
 
