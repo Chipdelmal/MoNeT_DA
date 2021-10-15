@@ -19,7 +19,7 @@ delta = 0.01
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/Volumes/marshallShare/Mov/dta',
     '/Volumes/marshallShare/Mov/trp/Benchmark',
-    '001'
+    '00X'
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
@@ -81,7 +81,10 @@ for (r, x) in enumerate(xGrid):
         #######################################################################
         # Print message
         #######################################################################
-        print('Processed {}/{}: {:.2f}'.format(cntr, total, daysSum))
+        print(
+            '* Processed {}/{}: {:.2f}'.format(cntr, total, daysSum), 
+            end='\r'
+        )
 # plt.imshow(fits, vmin=0, vmax=20, cmap='Purples', interpolation='nearest')
 ###############################################################################
 # Get best location
@@ -104,7 +107,7 @@ BBN = tauN[:sitesNum, :sitesNum]
 BQN = tauN[:sitesNum, sitesNum:]
 (LW, ALPHA, SCA) = (.125, .5, 50)
 (fig, ax) = plt.subplots(figsize=(15, 15))
-(fig, ax) = aux.plotNetwork(fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*2.5, alpha=.85)
+(fig, ax) = aux.plotNetwork(fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9)
 (fig, ax) = aux.plotNetwork(fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA)
 plt.scatter(
     sites.T[0], sites.T[1], 
