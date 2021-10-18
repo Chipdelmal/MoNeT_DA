@@ -88,3 +88,16 @@ def assembleTrapMigration(psiN, tProbs):
     tauN = normalize(tau, axis=1, norm='l1')
     np.apply_along_axis(sum, 1, tauN)
     return tauN
+
+
+def reshapeInCanonicalForm(tau, sitesN, trapsN):
+    canO = list(range(sitesN, sitesN+trapsN))+list(range(0, sitesN))
+    tauCan = np.asarray([[tau[i][j] for j in canO] for i in canO])
+    return tauCan
+
+
+def getMarkovAbsorbing(tauCan, trapsN):
+    A = tauCan[trapsN:, :trapsN]
+    B = tauCan[trapsN:, trapsN:]
+    F = np.linalg.inv(np.subtract(np.identity(B.shape[0]), B))
+    return F

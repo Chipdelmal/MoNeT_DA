@@ -1,13 +1,11 @@
 
-import math
 import numpy as np
 from os import path
 from sys import argv
-import networkx as nx
+# import networkx as nx
 # import cdlib.algorithms as cd
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.preprocessing import normalize
 from sklearn.cluster import AgglomerativeClustering
 import TRP_aux as aux
@@ -15,14 +13,15 @@ import TRP_fun as fun
 
 TRAPS_NUM = 4
 (PT_DTA, PT_IMG, EXP_FNAME) = (
-    '/Volumes/marshallShare/Mov/dta',
+    '/home/chipdelmal/Documents/WorkSims/Mov/dta', # '/Volumes/marshallShare/Mov/dta',
     '/Volumes/marshallShare/Mov/trp/Benchmark',
-    '100'
+    '002'
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
 }
+
 
 ###############################################################################
 # Debug check

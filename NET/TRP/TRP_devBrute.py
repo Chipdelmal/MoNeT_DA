@@ -14,11 +14,13 @@ import TRP_aux as aux
 import TRP_fun as fun
 
 TRAPS_NUM = 1
-STEPS = 50
+STEPS = 120
 delta = 0.01
 (PT_DTA, PT_IMG, EXP_FNAME) = (
-    '/Volumes/marshallShare/Mov/dta',
-    '/Volumes/marshallShare/Mov/trp/Benchmark',
+    '/home/chipdelmal/Documents/WorkSims/Mov/dta',
+    '/home/chipdelmal/Documents/WorkSims/Mov/trp',
+    #'/Volumes/marshallShare/Mov/dta',
+    #'/Volumes/marshallShare/Mov/trp/Benchmark',
     '00X'
 )
 kPars = {
@@ -61,17 +63,12 @@ for (r, x) in enumerate(xGrid):
         #######################################################################
         tProbs = fun.calcTrapsSections(trapDists, params=kPars)
         tauN = fun.assembleTrapMigration(psiN, tProbs)
-        np.apply_along_axis(sum, 1, tauN)
-        # np.apply_along_axis(sum, 1, F)
         #######################################################################
         # Calculate metrics
         #######################################################################
         # Re-arrange matrix in canonical form ---------------------------------
-        canO = list(range(sitesNum, sitesNum+TRAPS_NUM))+list(range(0, sitesNum))
-        tauCan = np.asarray([[tauN[i][j] for j in canO] for i in canO])
-        A = tauCan[TRAPS_NUM:, :TRAPS_NUM]
-        B = tauCan[TRAPS_NUM:, TRAPS_NUM:]
-        F = np.linalg.inv(np.subtract(np.identity(B.shape[0]), B))
+        tauCan = fun.reshapeInCanonicalForm(tauN, sitesNum, TRAPS_NUM)
+        F = fun.getMarkovAbsorbing(tauCan, TRAPS_NUM)
         daysTillTrapped = np.apply_along_axis(np.max, 1, F)
         daysSum = np.mean(daysTillTrapped)
         # Arrange fits --------------------------------------------------------
@@ -119,12 +116,12 @@ plt.scatter(
     marker='X', color='#f72585EE', s=500, zorder=20,
     edgecolors='w', linewidths=2
 )
-for point in fitsDict:
+for point in fitsDict[:]:
     plt.scatter(
         point[0], point[1], 
-        marker='s', color=rvb((point[2]-best)/(.25*(worst-best))), 
+        marker='s', color=rvb((point[2]-best)/(.085*(worst-best))), 
         alpha=.5,
-        s=250, zorder=-5,
+        s=50, zorder=-5,
         linewidths=0, edgecolors='k'
     )
 plt.tick_params(
