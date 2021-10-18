@@ -21,7 +21,7 @@ delta = 0.01
     '/home/chipdelmal/Documents/WorkSims/Mov/trp',
     #'/Volumes/marshallShare/Mov/dta',
     #'/Volumes/marshallShare/Mov/trp/Benchmark',
-    '00X'
+    '100'
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
@@ -124,11 +124,11 @@ for point in fitsDict[:]:
         s=50, zorder=-5,
         linewidths=0, edgecolors='k'
     )
-plt.tick_params(
-    axis='both', which='both',
-    bottom=False, top=False, left=False, right=False,
-    labelbottom=False, labeltop=False, labelleft=False, labelright=False
-)
+# plt.tick_params(
+#     axis='both', which='both',
+#     bottom=False, top=False, left=False, right=False,
+#     labelbottom=False, labeltop=False, labelleft=False, labelright=False
+# )
 ax.text(
     0.5, 1.035, 'Avg Max Days: {:.2f}'.format(best),
     horizontalalignment='center',

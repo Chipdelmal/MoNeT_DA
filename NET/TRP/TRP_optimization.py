@@ -2,7 +2,6 @@
 import math
 import numpy as np
 from os import path
-from sys import argv
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
 from deap import base, creator, algorithms, tools
@@ -10,19 +9,20 @@ import TRP_aux as aux
 import TRP_fun as fun
 import TRP_gaFun as ga
 
-TRAPS_NUM = 2
+TRAPS_NUM = 1
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
-    '/Volumes/marshallShare/Mov/trp/Benchmark',
+    '/home/chipdelmal/Documents/WorkSims/Mov/trp',
     '100'
 )
-POP_SIZE = 50
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
 }
-
-
+###############################################################################
+# GA Settings
+############################################################################### 
+(POP_SIZE, GENS) = (50, 50)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -40,6 +40,7 @@ sitesNum = sites.shape[0]
 toolbox = base.Toolbox()
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMin)
+# toolbox.register("map", pool.map)
 toolbox.register(
     "initChromosome", ga.initChromosome, 
     trapsNum=TRAPS_NUM, xRan=xMinMax, yRan=yMinMax
@@ -61,24 +62,68 @@ toolbox.register(
     sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.max, np.mean)
 )
 ###############################################################################
-# Init Population
+# Registering functions for GA stats
 ############################################################################### 
 pop = toolbox.populationCreator(n=POP_SIZE)
 hof = tools.HallOfFame(1)
 stats = tools.Statistics(lambda ind: ind.fitness.values)   
-stats.register("avg", np.mean)
 stats.register("min", np.min)
+stats.register("avg", np.mean)
 stats.register("max", np.max)
-stats.register("best", lambda fitnessValues: fitnessValues.index(max(fitnessValues)))
+stats.register("best", lambda fitnessValues: fitnessValues.index(min(fitnessValues)))
+stats.register("pos", lambda fitnessValues: pop[fitnessValues.index(min(fitnessValues))])
 ###############################################################################
-# Init Population
+# Running GA
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
-    pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=10, 
+    pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=GENS, 
     stats=stats, halloffame=hof, verbose=True
 )
 ###############################################################################
 # Get Results
 ############################################################################### 
-(maxFits, meanFits, bestIndx) = logbook.select("max", "avg", "best")
+(maxFits, meanFits, bestIndx, minFits) = logbook.select(
+    "max", "avg", "best", "min"
+)
 best = pop[bestIndx[0]]
+trapsLocs = list(np.array_split(best, len(best)/2))
+print(best)
+###############################################################################
+# Plot landscape
+###############################################################################
+rvb = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
+BBN = migMat[:sitesNum, :sitesNum]
+BQN = migMat[:sitesNum, sitesNum:]
+(LW, ALPHA, SCA) = (.125, .5, 50)
+(fig, ax) = plt.subplots(figsize=(15, 15))
+# (fig, ax) = aux.plotNetwork(fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9)
+# (fig, ax) = aux.plotNetwork(fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA)
+plt.scatter(
+    sites.T[0], sites.T[1], 
+    marker='^', color='#03045eDB', 
+    s=250, zorder=20, edgecolors='w', linewidths=2
+)
+for trap in trapsLocs:
+    plt.scatter(
+        trap[0], trap[1], 
+        marker='X', color='#f72585EE', s=500, zorder=20,
+        edgecolors='w', linewidths=2
+    )
+ax.text(
+    0.5, 1.035, 'Avg Max Days: {:.2f}'.format(minFits[-1]),
+    horizontalalignment='center',
+    verticalalignment='center',
+    fontsize=50, color='#000000DD',
+    transform=ax.transAxes, zorder=15
+)
+ax.set_aspect('equal')
+ax.set_xlim(minX-.1, maxX+.1)
+ax.set_ylim(minY-.1, maxY+.1)
+fig.savefig(
+    path.join(
+        PT_IMG, 
+        '{}_{}-GA-trapsNetwork.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+    ), 
+    dpi=250, bbox_inches='tight'
+)
+plt.close()
