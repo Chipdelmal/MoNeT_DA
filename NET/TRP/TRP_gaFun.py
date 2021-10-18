@@ -21,7 +21,7 @@ def initChromosome(trapsNum, xRan, yRan):
     xCoords = np.random.uniform(xRan[0], xRan[1], trapsNum)
     yCoords = np.random.uniform(yRan[0], yRan[1], trapsNum)
     chromosome = [val for pair in zip(xCoords, yCoords) for val in pair]
-    return np.asarray(chromosome)
+    return chromosome
 
 
 ###############################################################################
@@ -55,7 +55,10 @@ def mutateChromosome(
 # chromA = initChromosome(4, (-10, 10), (-10, 10))
 # chromB = initChromosome(4, (-10, 10), (-10, 10))
 
-
+kPars = {
+    'Trap': {'A': 0.5, 'b': 1},
+    'Escape': {'A': 0, 'b': 100}
+}
 
 
 ###############################################################################
@@ -63,8 +66,8 @@ def mutateChromosome(
 ###############################################################################
 def calcFitness(
         chromosome, 
-        sites, psi, 
-        kPars, fitFuns=(np.max, np.mean)
+        sites=[[0, 0]], psi=[[1]], 
+        kPars=kPars, fitFuns=(np.max, np.mean)
     ):
     # Calc required vars (pre-compute for speed) ------------------------------
     dims = 2
@@ -80,7 +83,7 @@ def calcFitness(
     # Calculate fitness -------------------------------------------------------
     daysTillTrapped = np.apply_along_axis(fitFuns[0], 1, F)
     fitness = fitFuns[1](daysTillTrapped)
-    return fitness
+    return [float(fitness)]
 
 
 # chromosome = chromA

@@ -10,17 +10,18 @@ import TRP_aux as aux
 import TRP_fun as fun
 import TRP_gaFun as ga
 
-TRAPS_NUM = 4
+TRAPS_NUM = 2
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
     '/Volumes/marshallShare/Mov/trp/Benchmark',
     '100'
 )
-POP_SIZE = 100
+POP_SIZE = 50
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
 }
+
 
 ###############################################################################
 # Read migration matrix and pop sites
@@ -57,9 +58,27 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 # toolbox.register('evaluate', ga.calculateFitness, CLS_SET=CLS_SET, COM_SET=COM_SET)
 toolbox.register(
     "evaluate", ga.calcFitness, 
-    sites=sites, psi=migMat, kPars=kPars
+    sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.max, np.mean)
 )
 ###############################################################################
 # Init Population
 ############################################################################### 
-population = toolbox.populationCreator(n=POP_SIZE)
+pop = toolbox.populationCreator(n=POP_SIZE)
+hof = tools.HallOfFame(1)
+stats = tools.Statistics(lambda ind: ind.fitness.values)   
+stats.register("avg", np.mean)
+stats.register("min", np.min)
+stats.register("max", np.max)
+stats.register("best", lambda fitnessValues: fitnessValues.index(max(fitnessValues)))
+###############################################################################
+# Init Population
+############################################################################### 
+(pop, logbook) = algorithms.eaSimple(
+    pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=10, 
+    stats=stats, halloffame=hof, verbose=True
+)
+###############################################################################
+# Get Results
+############################################################################### 
+(maxFits, meanFits, bestIndx) = logbook.select("max", "avg", "best")
+best = pop[bestIndx[0]]
