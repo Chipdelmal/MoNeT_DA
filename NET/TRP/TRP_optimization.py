@@ -5,11 +5,10 @@ from os import path
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
 from deap import base, creator, algorithms, tools
-import TRP_aux as aux
-import TRP_fun as fun
+import pickle as pkl
 import TRP_gaFun as ga
 
-TRAPS_NUM = 1
+TRAPS_NUM = 4
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
     '/home/chipdelmal/Documents/WorkSims/Mov/trp',
@@ -22,7 +21,7 @@ kPars = {
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (50, 50)
+(POP_SIZE, GENS) = (25, 50)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -40,7 +39,6 @@ sitesNum = sites.shape[0]
 toolbox = base.Toolbox()
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMin)
-# toolbox.register("map", pool.map)
 toolbox.register(
     "initChromosome", ga.initChromosome, 
     trapsNum=TRAPS_NUM, xRan=xMinMax, yRan=yMinMax
@@ -56,7 +54,6 @@ toolbox.register(
 toolbox.register("mate", tools.cxUniform, indpb=0.25)
 toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
 toolbox.register("select", tools.selTournament, tournsize=3)
-# toolbox.register('evaluate', ga.calculateFitness, CLS_SET=CLS_SET, COM_SET=COM_SET)
 toolbox.register(
     "evaluate", ga.calcFitness, 
     sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.max, np.mean)
@@ -82,22 +79,23 @@ stats.register("pos", lambda fitnessValues: pop[fitnessValues.index(min(fitnessV
 ###############################################################################
 # Get Results
 ############################################################################### 
-(maxFits, meanFits, bestIndx, minFits) = logbook.select(
-    "max", "avg", "best", "min"
+pklPath = path.join(
+    PT_IMG, '{}_{}-GA.pkl'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+)
+with open(pklPath, "wb") as file:
+    pkl.dump(logbook, file)
+(maxFits, meanFits, bestIndx, minFits, bestPos) = logbook.select(
+    "max", "avg", "best", "min", "pos"
 )
 best = pop[bestIndx[0]]
 trapsLocs = list(np.array_split(best, len(best)/2))
-print(best)
 ###############################################################################
 # Plot landscape
 ###############################################################################
-rvb = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
 BBN = migMat[:sitesNum, :sitesNum]
 BQN = migMat[:sitesNum, sitesNum:]
 (LW, ALPHA, SCA) = (.125, .5, 50)
 (fig, ax) = plt.subplots(figsize=(15, 15))
-# (fig, ax) = aux.plotNetwork(fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9)
-# (fig, ax) = aux.plotNetwork(fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA)
 plt.scatter(
     sites.T[0], sites.T[1], 
     marker='^', color='#03045eDB', 
@@ -106,16 +104,16 @@ plt.scatter(
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 
-        marker='X', color='#f72585EE', s=500, zorder=20,
+        marker="D", color='#f72585EE', s=500, zorder=20,
         edgecolors='w', linewidths=2
     )
-ax.text(
-    0.5, 1.035, 'Avg Max Days: {:.2f}'.format(minFits[-1]),
-    horizontalalignment='center',
-    verticalalignment='center',
-    fontsize=50, color='#000000DD',
-    transform=ax.transAxes, zorder=15
+plt.tick_params(
+    axis='both', which='both',
+    bottom=False, top=False, left=False, right=False,
+    labelbottom=False, labeltop=False, labelleft=False, labelright=False
 )
+ax.patch.set_facecolor('white')
+ax.patch.set_alpha(0)
 ax.set_aspect('equal')
 ax.set_xlim(minX-.1, maxX+.1)
 ax.set_ylim(minY-.1, maxY+.1)
@@ -124,6 +122,6 @@ fig.savefig(
         PT_IMG, 
         '{}_{}-GA-trapsNetwork.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
     ), 
-    dpi=250, bbox_inches='tight'
+    dpi=250, bbox_inches='tight', transparent=True
 )
 plt.close()
