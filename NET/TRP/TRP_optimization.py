@@ -8,7 +8,7 @@ from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
 
-TRAPS_NUM = 4
+TRAPS_NUM = 1
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
     '/home/chipdelmal/Documents/WorkSims/Mov/trp',
@@ -21,7 +21,7 @@ kPars = {
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (25, 50)
+(POP_SIZE, GENS) = (30, 50)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -68,7 +68,7 @@ stats.register("min", np.min)
 stats.register("avg", np.mean)
 stats.register("max", np.max)
 stats.register("best", lambda fitnessValues: fitnessValues.index(min(fitnessValues)))
-stats.register("pos", lambda fitnessValues: pop[fitnessValues.index(min(fitnessValues))])
+stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnessValues))])
 ###############################################################################
 # Running GA
 ############################################################################### 
@@ -84,8 +84,8 @@ pklPath = path.join(
 )
 with open(pklPath, "wb") as file:
     pkl.dump(logbook, file)
-(maxFits, meanFits, bestIndx, minFits, bestPos) = logbook.select(
-    "max", "avg", "best", "min", "pos"
+(maxFits, meanFits, bestIndx, minFits, traps) = logbook.select(
+    "max", "avg", "best", "min", "traps"
 )
 best = pop[bestIndx[0]]
 trapsLocs = list(np.array_split(best, len(best)/2))

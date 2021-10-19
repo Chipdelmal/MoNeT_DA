@@ -30,6 +30,7 @@ kPars = {
 }
 (dbg, randTrap) = (True, True)
 (USR, DRV) = ('dsk', 'SDR')
+LAY_TRAP = False
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -101,23 +102,25 @@ tauN = fun.assembleTrapMigration(psiN, tProbs)
 # Plot landscape
 ###############################################################################
 rvb = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
+m = interp1d([best, worst],[1.85, -12])
 BBN = tauN[:sitesNum, :sitesNum]
 BQN = tauN[:sitesNum, sitesNum:]
 (LW, ALPHA, SCA) = (.125, .5, 50)
 (fig, ax) = plt.subplots(figsize=(15, 15))
-# (fig, ax) = aux.plotNetwork(fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9)
 (fig, ax) = aux.plotNetwork(fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA)
+if LAY_TRAP:
+    (fig, ax) = aux.plotNetwork(fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9)
 plt.scatter(
     sites.T[0], sites.T[1], 
     marker='^', color='#03045eDB', 
     s=250, zorder=20, edgecolors='w', linewidths=2
 )
-# plt.scatter(
-#     traps.T[0], traps.T[1], 
-#     marker='X', color='#f72585EE', s=500, zorder=20,
-#     edgecolors='w', linewidths=2
-# )
-m = interp1d([best, worst],[1.85, -10])
+if LAY_TRAP:
+    plt.scatter(
+        traps.T[0], traps.T[1], 
+        marker='X', color='#f72585EE', s=500, zorder=20,
+        edgecolors='w', linewidths=2
+    )
 for point in fitsDict[:]:
     csca = 1/(1+math.exp(m(point[2])))
     plt.scatter(
@@ -132,13 +135,14 @@ plt.tick_params(
     bottom=False, top=False, left=False, right=False,
     labelbottom=False, labeltop=False, labelleft=False, labelright=False
 )
-# ax.text(
-#     0.5, 1.035, 'Avg Max Days: {:.2f}'.format(best),
-#     horizontalalignment='center',
-#     verticalalignment='center',
-#     fontsize=50, color='#000000DD',
-#     transform=ax.transAxes, zorder=15
-# )
+if LAY_TRAP:
+    ax.text(
+        0.5, 1.035, 'Avg Max Days: {:.2f}'.format(best),
+        horizontalalignment='center',
+        verticalalignment='center',
+        fontsize=50, color='#000000DD',
+        transform=ax.transAxes, zorder=15
+    )
 ax.set_aspect('equal')
 ax.set_xlim(minX-.1, maxX+.1)
 ax.set_ylim(minY-.1, maxY+.1)
