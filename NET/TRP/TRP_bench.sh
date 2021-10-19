@@ -1,6 +1,4 @@
-
-
-#!/bin/bapy
+#!/bin/bash
 
 
 python TRP_dev.py '10' '-10'

@@ -1,4 +1,5 @@
 
+from sys import argv
 import pandas as pd
 import numpy as np
 from os import path
@@ -8,11 +9,12 @@ from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
 
-TRAPS_NUM = 3
-(PT_DTA, PT_IMG, EXP_FNAME) = (
+
+(EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
+# (EXP_FNAME, TRAPS_NUM) = ('002', 2)
+(PT_DTA, PT_IMG) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
-    '/home/chipdelmal/Documents/WorkSims/Mov/trp',
-    '200'
+    '/home/chipdelmal/Documents/WorkSims/Mov/trp'
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
@@ -73,7 +75,7 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 # Running GA
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
-    pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=GENS, 
+    pop, toolbox, cxpb=0.5, mutpb=0.25, ngen=GENS, 
     stats=stats, halloffame=hof, verbose=True
 )
 ###############################################################################
