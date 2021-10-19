@@ -5,14 +5,14 @@ import numpy as np
 import numpy.random as rand
 import TRP_fun as fun
 
-(PT_DTA, EXP_FNAME) = (
-    '/home/chipdelmal/Documents/WorkSims/Mov/dta',
-    #'/Volumes/marshallShare/Mov/dta',
-    '002'
-)
-pth = path.join(PT_DTA, EXP_FNAME)
-migMat = np.genfromtxt(pth+'_MX.csv', delimiter=',')
-sites = np.genfromtxt(pth+'_XY.csv', delimiter=',')
+# (PT_DTA, EXP_FNAME) = (
+#     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
+#     #'/Volumes/marshallShare/Mov/dta',
+#     '002'
+# )
+# pth = path.join(PT_DTA, EXP_FNAME)
+# migMat = np.genfromtxt(pth+'_MX.csv', delimiter=',')
+# sites = np.genfromtxt(pth+'_XY.csv', delimiter=',')
 
 ###############################################################################
 # Initialization
@@ -23,9 +23,8 @@ def initChromosome(trapsNum, xRan, yRan):
     chromosome = [val for pair in zip(xCoords, yCoords) for val in pair]
     return chromosome
 
-
 ###############################################################################
-# Mutation
+# Mutation and Crossover
 ###############################################################################
 def mutateChromosome(
         chromosome, 
@@ -35,39 +34,14 @@ def mutateChromosome(
     mutChrom = chromosome + randDraw
     return mutChrom
 
-
-# trapsN = 4
-# chromA = initChromosome(4, (-10, 10), (-10, 10))
-# chromB = initChromosome(4, (-10, 10), (-10, 10))
-
-# chromosome = chromA
-# (mu, sigma) = (0, 0.1)
-
-# rands = rand.normal(loc=mu, scale=sigma, size=len(chromA))
-# chromA+rands
-
-
-###############################################################################
-# Crossover
-###############################################################################
-
-# trapsN = 4
-# chromA = initChromosome(4, (-10, 10), (-10, 10))
-# chromB = initChromosome(4, (-10, 10), (-10, 10))
-
-kPars = {
-    'Trap': {'A': 0.5, 'b': 1},
-    'Escape': {'A': 0, 'b': 100}
-}
-
-
 ###############################################################################
 # Fitness
 ###############################################################################
 def calcFitness(
         chromosome, 
         sites=[[0, 0]], psi=[[1]], 
-        kPars=kPars, fitFuns=(np.max, np.mean)
+        kPars={'Trap': {'A': 0.5, 'b': 1}, 'Escape': {'A': 0, 'b': 100}}, 
+        fitFuns=(np.max, np.mean)
     ):
     # Calc required vars (pre-compute for speed) ------------------------------
     dims = 2
@@ -85,14 +59,3 @@ def calcFitness(
     fitness = fitFuns[1](daysTillTrapped)
     return [float(fitness)]
 
-
-# chromosome = chromA
-# sites = sites
-# psi = migMat
-# dims = 2
-# kPars = {
-#     'Trap': {'A': 0.5, 'b': 1},
-#     'Escape': {'A': 0, 'b': 100}
-# }
-# fitFuns = (np.max, np.mean)
-# calcFitness(chromosome, sites, psi, kPars=kPars)

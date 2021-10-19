@@ -1,5 +1,5 @@
 
-import math
+import pandas as pd
 import numpy as np
 from os import path
 import MoNeT_MGDrivE as monet
@@ -8,11 +8,11 @@ from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
 
-TRAPS_NUM = 1
+TRAPS_NUM = 3
 (PT_DTA, PT_IMG, EXP_FNAME) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
     '/home/chipdelmal/Documents/WorkSims/Mov/trp',
-    '100'
+    '200'
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
@@ -21,7 +21,7 @@ kPars = {
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (30, 50)
+(POP_SIZE, GENS) = (25, 100)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -80,18 +80,23 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 # Get Results
 ############################################################################### 
 pklPath = path.join(
-    PT_IMG, '{}_{}-GA.pkl'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+    PT_IMG, '{}_{}-GA'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
-with open(pklPath, "wb") as file:
-    pkl.dump(logbook, file)
 (maxFits, meanFits, bestIndx, minFits, traps) = logbook.select(
     "max", "avg", "best", "min", "traps"
 )
-best = pop[bestIndx[0]]
-trapsLocs = list(np.array_split(best, len(best)/2))
+outList = [
+    i for i in zip(minFits, meanFits, maxFits, [list(j) for j in traps])
+]
+outDF = pd.DataFrame(outList, columns=['min', 'mean', 'max', 'traps'])
+outDF.to_csv(pklPath+'.csv', index=False)
+with open(pklPath+'.pkl', "wb") as file:
+    pkl.dump(outDF, file)
 ###############################################################################
 # Plot landscape
 ###############################################################################
+best = pop[bestIndx[0]]
+trapsLocs = list(np.array_split(best, len(best)/2))
 BBN = migMat[:sitesNum, :sitesNum]
 BQN = migMat[:sitesNum, sitesNum:]
 (LW, ALPHA, SCA) = (.125, .5, 50)
@@ -104,7 +109,7 @@ plt.scatter(
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 
-        marker="D", color='#f72585EE', s=500, zorder=20,
+        marker="X", color='#f72585EE', s=1000, zorder=20,
         edgecolors='w', linewidths=2
     )
 plt.tick_params(
