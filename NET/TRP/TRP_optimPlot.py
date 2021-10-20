@@ -37,7 +37,8 @@ sitesNum = sites.shape[0]
 (maxX, maxY) = np.apply_along_axis(max, 0, sites)
 (xMinMax, yMinMax) = ((minX, maxX), (minY, maxY))
 # Get traps -------------------------------------------------------------------
-trapsHistory= dta['traps']
+trapsHistory = dta['traps']
+minHistory = dta['min']
 ###############################################################################
 # Plot landscape
 ###############################################################################
@@ -61,6 +62,13 @@ for i in range(len(trapsHistory)):
             marker="X", color='#f72585EE', s=500, zorder=20,
             edgecolors='w', linewidths=2
         )
+    ax.text(
+        0.5, 0.5, '{:.2f}'.format(minHistory[i]),
+        horizontalalignment='center',
+        verticalalignment='center',
+        fontsize=200, color='#00000033',
+        transform=ax.transAxes, zorder=50
+    )
     plt.tick_params(
         axis='both', which='both',
         bottom=False, top=False, left=False, right=False,

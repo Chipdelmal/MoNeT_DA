@@ -13,17 +13,24 @@ import TRP_gaFun as ga
 (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
 # (EXP_FNAME, TRAPS_NUM) = ('001', 2)
 (PT_DTA, PT_IMG) = (
-    '/home/chipdelmal/Documents/WorkSims/Mov/dta',
-    '/home/chipdelmal/Documents/WorkSims/Mov/trp'
+    '/Volumes/marshallShare/Mov/dta', # '/home/chipdelmal/Documents/WorkSims/Mov/dta',
+    '/Volumes/marshallShare/Mov/trp'
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
 }
+print('* Running: {}-{}'.format(EXP_FNAME, TRAPS_NUM))
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (25, 200)
+(POP_SIZE, GENS) = (30, 500)
+(MATE, MUTATE, SELECT) = (
+    {'mate': .25}, 
+    {'mean': 0, 'sd': 1.5, 'ipb': .2},
+    {'tSize': 3}
+)
+(CXPB, MUTPB) = (0.5, 0.25)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -53,9 +60,18 @@ toolbox.register(
     "populationCreator", tools.initRepeat, 
     list, toolbox.individualCreator
 )
-toolbox.register("mate", tools.cxUniform, indpb=0.25)
-toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1.5, indpb=0.2)
-toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register(
+    "mate", tools.cxUniform, 
+    indpb=MATE['mate']
+)
+toolbox.register(
+    "mutate", tools.mutGaussian, 
+    mu=MUTATE['mean'], sigma=MUTATE['sd'], indpb=MUTATE['ipb']
+)
+toolbox.register(
+    "select", tools.selTournament, 
+    tournsize=SELECT['tSize']
+)
 toolbox.register(
     "evaluate", ga.calcFitness, 
     sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.max, np.mean)
@@ -75,7 +91,7 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 # Running GA
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
-    pop, toolbox, cxpb=0.5, mutpb=0.25, ngen=GENS, 
+    pop, toolbox, cxpb=CXPB, mutpb=MUTPB, ngen=GENS, 
     stats=stats, halloffame=hof, verbose=True
 )
 ###############################################################################
