@@ -9,7 +9,6 @@ from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
 
-
 (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
 # (EXP_FNAME, TRAPS_NUM) = ('001', 2)
 (PT_DTA, PT_IMG) = (
@@ -26,8 +25,8 @@ print('* Running: {}-{}'.format(EXP_FNAME, TRAPS_NUM))
 ############################################################################### 
 (POP_SIZE, GENS) = (30, 500)
 (MATE, MUTATE, SELECT) = (
-    {'mate': .25}, 
-    {'mean': 0, 'sd': 1.5, 'ipb': .2},
+    {'mate': .25, 'cxpb': 0.5}, 
+    {'mean': 0, 'sd': 1.5, 'ipb': .2, 'mutpb': .25},
     {'tSize': 3}
 )
 (CXPB, MUTPB) = (0.5, 0.25)
@@ -46,7 +45,7 @@ sitesNum = sites.shape[0]
 # Registering functions for GA
 ############################################################################### 
 toolbox = base.Toolbox()
-creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+creator.create("FitnessMin", base.Fitness, weights=(-1.0, ))
 creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox.register(
     "initChromosome", ga.initChromosome, 
@@ -91,7 +90,7 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 # Running GA
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
-    pop, toolbox, cxpb=CXPB, mutpb=MUTPB, ngen=GENS, 
+    pop, toolbox, cxpb=MATE['cxpb'], mutpb=MUTATE['mutpb'], ngen=GENS, 
     stats=stats, halloffame=hof, verbose=True
 )
 ###############################################################################

@@ -9,15 +9,21 @@ import pickle as pkl
 import TRP_gaFun as ga
 import MoNeT_MGDrivE as monet
 from deap import base, creator, algorithms, tools
+from PIL import Image
 
 
 (PT_DTA, PT_IMG, EXP_FNAME, TRAPS_NUM) = (
-    '/home/chipdelmal/Documents/WorkSims/Mov/dta',
-    '/home/chipdelmal/Documents/WorkSims/Mov/trp/',
-    '100', '02'
+    '/Volumes/marshallShare/Mov/dta',
+    '/Volumes/marshallShare/Mov/trp',
+    '300', '50'
 )
 fName = '{}_{}-GA'.format(EXP_FNAME, TRAPS_NUM)
 (LW, ALPHA, SCA) = (.125, .5, 50)
+###############################################################################
+# Read bg image
+###############################################################################
+bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
+background = Image.open(path.join(PT_IMG, bgImg))
 ###############################################################################
 # Load GA data
 ###############################################################################
@@ -29,6 +35,7 @@ with open(path.join(PT_IMG, fName+'.pkl'), 'rb') as f:
 pthBase = path.join(PT_DTA, EXP_FNAME)
 migMat = np.genfromtxt(pthBase+'_MX.csv', delimiter=',')
 sites = np.genfromtxt(pthBase+'_XY.csv', delimiter=',')
+sitesNum = sites.shape[0]
 BBN = migMat[:sitesNum, :sitesNum]
 BQN = migMat[:sitesNum, sitesNum:]
 # Sites and landscape shapes --------------------------------------------------
@@ -44,7 +51,7 @@ minHistory = dta['min']
 ###############################################################################
 outPTH = path.join(PT_IMG, fName)
 monet.makeFolder(outPTH)
-
+i = 0
 for i in range(len(trapsHistory)):
     trapsLocs = trapsLocs = list(
         np.array_split(trapsHistory[i], len(trapsHistory[i])/2)
@@ -63,7 +70,7 @@ for i in range(len(trapsHistory)):
             edgecolors='w', linewidths=2
         )
     ax.text(
-        0.5, 0.5, '{:.2f}'.format(minHistory[i]),
+        0.5, 0.5, '{:.4f}'.format(minHistory[i]),
         horizontalalignment='center',
         verticalalignment='center',
         fontsize=200, color='#00000033',
@@ -80,10 +87,12 @@ for i in range(len(trapsHistory)):
     ax.set_xlim(minX-.1, maxX+.1)
     ax.set_ylim(minY-.1, maxY+.1)
     # Export ------------------------------------------------------------------
+    pthSave = path.join(outPTH, str(i).zfill(3)+'.png')
     fig.savefig(
-        path.join(
-            outPTH, str(i).zfill(3)
-        ), 
-        dpi=250, bbox_inches='tight', transparent=True
+        pthSave, dpi=250, bbox_inches='tight', transparent=True
     )
     plt.close()
+    # Merge -------------------------------------------------------------------
+    foreground = Image.open(pthSave)
+    background.paste(foreground, (0, 0), foreground)
+    background.save(pthSave)
