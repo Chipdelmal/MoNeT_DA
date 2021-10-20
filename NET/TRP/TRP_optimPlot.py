@@ -15,7 +15,7 @@ from PIL import Image
 (PT_DTA, PT_IMG, EXP_FNAME, TRAPS_NUM) = (
     '/Volumes/marshallShare/Mov/dta',
     '/Volumes/marshallShare/Mov/trp',
-    '300', '50'
+    '300', '25'
 )
 fName = '{}_{}-GA'.format(EXP_FNAME, TRAPS_NUM)
 (LW, ALPHA, SCA) = (.125, .5, 50)
@@ -23,7 +23,6 @@ fName = '{}_{}-GA'.format(EXP_FNAME, TRAPS_NUM)
 # Read bg image
 ###############################################################################
 bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
-background = Image.open(path.join(PT_IMG, bgImg))
 ###############################################################################
 # Load GA data
 ###############################################################################
@@ -53,6 +52,7 @@ outPTH = path.join(PT_IMG, fName)
 monet.makeFolder(outPTH)
 i = 0
 for i in range(len(trapsHistory)):
+    background = Image.open(path.join(PT_IMG, bgImg))
     trapsLocs = trapsLocs = list(
         np.array_split(trapsHistory[i], len(trapsHistory[i])/2)
     )
@@ -73,7 +73,14 @@ for i in range(len(trapsHistory)):
         0.5, 0.5, '{:.4f}'.format(minHistory[i]),
         horizontalalignment='center',
         verticalalignment='center',
-        fontsize=200, color='#00000033',
+        fontsize=150, color='#00000022',
+        transform=ax.transAxes, zorder=50
+    )
+    ax.text(
+        0.925, 0.025, '{}'.format(str(i).zfill(4)),
+        horizontalalignment='center',
+        verticalalignment='center',
+        fontsize=25, color='#ffffff77',
         transform=ax.transAxes, zorder=50
     )
     plt.tick_params(
@@ -94,5 +101,8 @@ for i in range(len(trapsHistory)):
     plt.close()
     # Merge -------------------------------------------------------------------
     foreground = Image.open(pthSave)
+    # (w, h) = foreground.size
+    # background = background.crop((0, 0, w, h))
     background.paste(foreground, (0, 0), foreground)
     background.save(pthSave)
+
