@@ -99,7 +99,7 @@ tauN = fun.assembleTrapMigration(psiN, tProbs)
 ###############################################################################
 # Plot landscape
 ###############################################################################
-m = interp1d([best, worst],[1.85, -12])
+m = interp1d([best, worst],[1.9, -12])
 BBN = tauN[:sitesNum, :sitesNum]
 BQN = tauN[:sitesNum, sitesNum:]
 (LW, ALPHA, SCA) = (.125, .5, 50)

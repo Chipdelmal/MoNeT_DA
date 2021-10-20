@@ -5,14 +5,23 @@ import numpy.random as rand
 import MoNeT_MGDrivE as monet
 
 
-POINTS = 10
+POINTS = 50
 (xRan, yRan) = ((-10, 10), (-10, 10))
-# Generate pointset -----------------------------------------------------------
+PTS_TMAT = np.asarray([
+    [.1, .9],
+    [.8, .2]
+])
+###############################################################################
+# Generate pointset
+###############################################################################
 coords = list(zip(
     rand.uniform(*xRan, POINTS), 
     rand.uniform(*yRan, POINTS)
 ))
-# Generate matrices -----------------------------------------------------------
+pTypes = rand.randint(0, PTS_TMAT.shape[0], POINTS)
+###############################################################################
+# Generate matrices
+###############################################################################
 dist = monet.calculateDistanceMatrix(coords)
 tau = monet.zeroInflatedExponentialMigrationKernel(
     dist, 

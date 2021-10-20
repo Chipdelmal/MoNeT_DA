@@ -54,7 +54,7 @@ toolbox.register(
     list, toolbox.individualCreator
 )
 toolbox.register("mate", tools.cxUniform, indpb=0.25)
-toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
+toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1.5, indpb=0.2)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register(
     "evaluate", ga.calcFitness, 
