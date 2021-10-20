@@ -10,8 +10,8 @@ import pickle as pkl
 import TRP_gaFun as ga
 
 
-# (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
-(EXP_FNAME, TRAPS_NUM) = ('001', 2)
+(EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
+# (EXP_FNAME, TRAPS_NUM) = ('001', 2)
 (PT_DTA, PT_IMG) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
     '/home/chipdelmal/Documents/WorkSims/Mov/trp'
@@ -23,7 +23,7 @@ kPars = {
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (25, 10)
+(POP_SIZE, GENS) = (25, 200)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 

@@ -5,7 +5,7 @@ EXP='001'
 
 for i in {1..9}
 do
-    python TRP_optim.py $EXP 1
+    python TRP_optim.py $EXP $i
 done 
 
 python TRP_optim.py $EXP 10
