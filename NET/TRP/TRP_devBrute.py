@@ -15,7 +15,7 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
-(EXP_FNAME, TRAPS_NUM) = ('002', 1)
+# (EXP_FNAME, TRAPS_NUM) = ('002', 1)
 
 (PT_DTA, PT_IMG) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',

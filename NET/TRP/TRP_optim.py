@@ -10,8 +10,8 @@ import pickle as pkl
 import TRP_gaFun as ga
 
 
-(EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
-# (EXP_FNAME, TRAPS_NUM) = ('002', 2)
+# (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
+(EXP_FNAME, TRAPS_NUM) = ('001', 2)
 (PT_DTA, PT_IMG) = (
     '/home/chipdelmal/Documents/WorkSims/Mov/dta',
     '/home/chipdelmal/Documents/WorkSims/Mov/trp'
@@ -23,7 +23,7 @@ kPars = {
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (25, 100)
+(POP_SIZE, GENS) = (25, 10)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -118,6 +118,13 @@ plt.tick_params(
     axis='both', which='both',
     bottom=False, top=False, left=False, right=False,
     labelbottom=False, labeltop=False, labelleft=False, labelright=False
+)
+ax.text(
+    0.5, 0.5, '{:.2f}'.format(minFits[-1]),
+    horizontalalignment='center',
+    verticalalignment='center',
+    fontsize=200, color='#00000033',
+    transform=ax.transAxes, zorder=50
 )
 ax.patch.set_facecolor('white')
 ax.patch.set_alpha(0)
