@@ -27,7 +27,7 @@ kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
 }
-LAY_TRAP = True
+LAY_TRAP = False
 STEPS = 120
 delta = 0.01
 ###############################################################################
@@ -132,7 +132,7 @@ for point in fitsDict[:]:
         point[0], point[1], 
         marker='s', color=aux.RVB(csca), 
         alpha=.75,
-        s=45, zorder=-5,
+        s=55, zorder=-5,
         linewidths=0, edgecolors='k'
     )
 # Axes and title --------------------------------------------------------------

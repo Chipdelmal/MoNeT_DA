@@ -8,6 +8,20 @@ import seaborn as sns
 import MoNeT_MGDrivE as monet
 
 
+def selectPaths(USR):
+    if USR=='lab':
+        (PT_DTA, PT_IMG) = (
+            '/Volumes/marshallShare/Mov/dta',
+            '/Volumes/marshallShare/Mov/trp'
+        )
+    elif USR=='dsk':
+        (PT_DTA, PT_IMG) = (
+            '/home/chipdelmal/Documents/WorkSims/Mov/dta',
+            '/home/chipdelmal/Documents/WorkSims/Mov/trp'
+        )
+    return (PT_DTA, PT_IMG)
+
+
 RVB = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
 
 def unifyTransitionsMatrix(BB, BQ, QB, QQ):

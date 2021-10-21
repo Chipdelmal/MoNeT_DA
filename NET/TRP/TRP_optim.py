@@ -12,7 +12,7 @@ import TRP_gaFun as ga
 (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
 # (EXP_FNAME, TRAPS_NUM) = ('001', 2)
 (PT_DTA, PT_IMG) = (
-    '/Volumes/marshallShare/Mov/dta', # '/home/chipdelmal/Documents/WorkSims/Mov/dta',
+    '/Volumes/marshallShare/Mov/dta', 
     '/Volumes/marshallShare/Mov/trp'
 )
 kPars = {
