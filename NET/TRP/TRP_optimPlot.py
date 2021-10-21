@@ -82,7 +82,7 @@ for i in list(range(framesNum))[:]:
         transform=ax.transAxes, zorder=50
     )
     ax.text(
-        0.5, 0.4, '(avg: {:.3f})'.format(meanHistory[i]),
+        0.5, 0.4, '(avg: {:.5f})'.format(meanHistory[i]),
         horizontalalignment='center',
         verticalalignment='center',
         fontsize=30, color='#00000022',
