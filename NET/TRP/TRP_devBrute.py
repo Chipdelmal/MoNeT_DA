@@ -18,16 +18,16 @@ from scipy.interpolate import interp1d
 # (EXP_FNAME, TRAPS_NUM) = ('002', 1)
 
 (PT_DTA, PT_IMG) = (
-    '/home/chipdelmal/Documents/WorkSims/Mov/dta',
-    '/home/chipdelmal/Documents/WorkSims/Mov/trp',
-    #'/Volumes/marshallShare/Mov/dta',
-    #'/Volumes/marshallShare/Mov/trp/Benchmark',
+    # '/home/chipdelmal/Documents/WorkSims/Mov/dta',
+    # '/home/chipdelmal/Documents/WorkSims/Mov/trp',
+    '/Volumes/marshallShare/Mov/dta',
+    '/Volumes/marshallShare/Mov/trp',
 )
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
 }
-LAY_TRAP = False
+LAY_TRAP = True
 STEPS = 120
 delta = 0.01
 ###############################################################################
@@ -109,10 +109,10 @@ BQN = tauN[:sitesNum, sitesNum:]
 (fig, ax) = aux.plotNetwork(
     fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA
 )
-if LAY_TRAP:
-    (fig, ax) = aux.plotNetwork(
-        fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9
-    )
+# if LAY_TRAP:
+#     (fig, ax) = aux.plotNetwork(
+#         fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9
+#     )
 # Plot sites and traps --------------------------------------------------------
 plt.scatter(
     sites.T[0], sites.T[1], 
@@ -122,7 +122,7 @@ plt.scatter(
 if LAY_TRAP:
     plt.scatter(
         traps.T[0], traps.T[1], 
-        marker='X', color='#f72585EE', s=500, zorder=20,
+        marker='+', color='#f72585EE', s=250, zorder=20,
         edgecolors='w', linewidths=2
     )
 # Plot response surface -------------------------------------------------------
@@ -132,30 +132,34 @@ for point in fitsDict[:]:
         point[0], point[1], 
         marker='s', color=aux.RVB(csca), 
         alpha=.75,
-        s=50, zorder=-5,
+        s=45, zorder=-5,
         linewidths=0, edgecolors='k'
     )
 # Axes and title --------------------------------------------------------------
-if LAY_TRAP:
-    ax.text(
-        0.5, 1.035, 'Avg Max Days: {:.2f}'.format(best),
-        horizontalalignment='center',
-        verticalalignment='center',
-        fontsize=50, color='#000000DD',
-        transform=ax.transAxes, zorder=15
-    )
+# if LAY_TRAP:
+#     ax.text(
+#         0.5, 1.035, 'Avg Max Days: {:.2f}'.format(best),
+#         horizontalalignment='center',
+#         verticalalignment='center',
+#         fontsize=50, color='#000000DD',
+#         transform=ax.transAxes, zorder=15
+#     )
 plt.tick_params(
     axis='both', which='both',
     bottom=False, top=False, left=False, right=False,
     labelbottom=False, labeltop=False, labelleft=False, labelright=False
 )
 ax.set_aspect('equal')
-ax.set_xlim(minX-.1, maxX+.1)
-ax.set_ylim(minY-.1, maxY+.1)
+ax.set_xlim(minX, maxX)
+ax.set_ylim(minY, maxY)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
 # Export figure ---------------------------------------------------------------
 fig.savefig(
     path.join(PT_IMG, '{}-BF-trapsNetwork.png'.format(EXP_FNAME)), 
-    dpi=250, bbox_inches='tight'
+    dpi=250, bbox_inches='tight', pad_inches=0
 )
 plt.close()
 

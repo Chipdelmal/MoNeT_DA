@@ -23,10 +23,10 @@ print('* Running: {}-{}'.format(EXP_FNAME, TRAPS_NUM))
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (30, 500)
+(POP_SIZE, GENS) = (30, 1000)
 (MATE, MUTATE, SELECT) = (
     {'mate': .25, 'cxpb': 0.5}, 
-    {'mean': 0, 'sd': 1.5, 'ipb': .2, 'mutpb': .25},
+    {'mean': 0, 'sd': 2.5, 'ipb': .2, 'mutpb': .25},
     {'tSize': 3}
 )
 (CXPB, MUTPB) = (0.5, 0.25)
@@ -118,11 +118,11 @@ BBN = migMat[:sitesNum, :sitesNum]
 BQN = migMat[:sitesNum, sitesNum:]
 (LW, ALPHA, SCA) = (.125, .5, 50)
 (fig, ax) = plt.subplots(figsize=(15, 15))
-plt.scatter(
-    sites.T[0], sites.T[1], 
-    marker='^', color='#03045eDB', 
-    s=250, zorder=20, edgecolors='w', linewidths=2
-)
+# plt.scatter(
+#     sites.T[0], sites.T[1], 
+#     marker='^', color='#03045eDB', 
+#     s=250, zorder=20, edgecolors='w', linewidths=2
+# )
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 
@@ -144,13 +144,13 @@ ax.text(
 ax.patch.set_facecolor('white')
 ax.patch.set_alpha(0)
 ax.set_aspect('equal')
-ax.set_xlim(minX-.1, maxX+.1)
-ax.set_ylim(minY-.1, maxY+.1)
+ax.set_xlim(minX, maxX)
+ax.set_ylim(minY, maxY)
 fig.savefig(
     path.join(
         PT_IMG, 
         '{}_{}-GA-trapsNetwork.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
     ), 
-    dpi=250, bbox_inches='tight', transparent=True
+    dpi=250, bbox_inches='tight', pad_inches=0, transparent=True
 )
 plt.close()
