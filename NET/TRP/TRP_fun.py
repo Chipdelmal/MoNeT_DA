@@ -86,7 +86,7 @@ def assembleTrapMigration(psiN, tProbs):
             tau[i+n, j+n] = I [i, j]
     # Normalize ---------------------------------------------------------------
     tauN = normalize(tau, axis=1, norm='l1')
-    np.apply_along_axis(sum, 1, tauN)
+    # np.apply_along_axis(sum, 1, tauN)
     return tauN
 
 

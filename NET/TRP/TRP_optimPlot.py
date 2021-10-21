@@ -1,5 +1,6 @@
 
 import time
+from sys import argv
 from glob import glob
 import numpy as np
 from os import path
@@ -14,10 +15,11 @@ from PIL import Image
 import subprocess
 
 
-(PT_DTA, PT_IMG, EXP_FNAME, TRAPS_NUM) = (
+(EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
+# (EXP_FNAME, TRAPS_NUM) = ('300', 15)
+(PT_DTA, PT_IMG) = (
     '/Volumes/marshallShare/Mov/dta',
-    '/Volumes/marshallShare/Mov/trp',
-    '300', '15'
+    '/Volumes/marshallShare/Mov/trp'
 )
 fName = '{}_{}-GA'.format(EXP_FNAME, TRAPS_NUM)
 (LW, ALPHA, SCA) = (.125, .5, 50)
@@ -110,7 +112,7 @@ for i in list(range(framesNum))[:]:
     ax.spines['bottom'].set_visible(False)
     ax.spines['left'].set_visible(False)
     # Export ------------------------------------------------------------------
-    pthSave = path.join(outPTH, str(i).zfill(3)+'.png')
+    pthSave = path.join(outPTH, str(i).zfill(4)+'.png')
     fig.savefig(
         pthSave, dpi=250, bbox_inches='tight', transparent=True
     )
@@ -130,9 +132,9 @@ for i in list(range(framesNum))[:]:
 sp = subprocess.Popen([
     'ffmpeg', '-y',
     '-start_number', '0',
-    '-r', '5',
-    '-i', path.join(outPTH, "%03d.png"), 
-    # '-c:v', 'libx264', 
+    '-r', '10',
+    '-i', path.join(outPTH, "%04d.png"), 
+    # '-vf', 'scale=1000:1000',
     path.join(outPTH, fName+'.mp4')
 ])
 sp.wait()
