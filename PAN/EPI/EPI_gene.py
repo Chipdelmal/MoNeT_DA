@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import EPI_gene_LDR as LDR
+import EPI_gene_MND as MND
 import MoNeT_MGDrivE as monet
 
 ###############################################################################
@@ -12,6 +13,8 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
     # Linked Drive ------------------------------------------------------------
     if (DRIVE == 'LDR'):
         (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
+    elif (DRIVE == 'MND'):
+        (aggD, yRange, folder) = MND.driveParameters(TYPE, popSize)
     elif (DRIVE == 'HUM'):
         (aggD, yRange, folder) = HUM.driveParameters(TYPE, popSize)
     ###########################################################################

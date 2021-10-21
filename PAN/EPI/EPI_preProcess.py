@@ -11,7 +11,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, SET, DRV, AOI, LND) = ('lab', 'Set01', 'LDR', 'HLT', 'PAN')
+    (USR, SET, DRV, AOI, LND) = ('lab', 'Set01', 'MND', 'HLT', 'PAN')
     (OVW, JOB) = (True, aux.JOB_DSK)
 else:
     (USR, SET, DRV, AOI) = (
@@ -43,7 +43,7 @@ monet.printExperimentHead(
 # Load folders
 ###########################################################################
 (expDirsMean, expDirsTrac) = monet.getExpPaths(
-    PT_DTA, mean='ANALYZED/', reps='TRACE/'
+    PT_DTA, mean='analyzed/', reps='traces/'
 )
 (expNum, nodeDigits) = (len(expDirsMean), len(str(len(land)))+1)
 outNames = aux.splitExpNames(PT_PRE)

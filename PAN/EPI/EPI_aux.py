@@ -27,7 +27,7 @@ EXPS = ('Set01', )
         [int((i+1)*365-1) for i in range(5)]
     )
 FRATE = 30
-(JOB_DSK, JOB_SRV) = (8, 8)
+(JOB_DSK, JOB_SRV) = (2, 8)
 
 # #############################################################################
 # Experiment-Specific Path Functions
