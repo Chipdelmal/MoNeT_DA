@@ -14,22 +14,17 @@ import TRP_aux as aux
 import TRP_fun as fun
 from scipy.interpolate import interp1d
 
-(EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
-# (EXP_FNAME, TRAPS_NUM) = ('002', 1)
-
-(PT_DTA, PT_IMG) = (
-    # '/home/chipdelmal/Documents/WorkSims/Mov/dta',
-    # '/home/chipdelmal/Documents/WorkSims/Mov/trp',
-    '/Volumes/marshallShare/Mov/dta',
-    '/Volumes/marshallShare/Mov/trp',
-)
+if monet.isNotebook():
+    (EXP_FNAME, TRAPS_NUM) = ('002', 1)
+    (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
+else:
+    (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
+    (PT_DTA, PT_IMG) = 
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
 }
-LAY_TRAP = False
-STEPS = 120
-delta = 0.01
+(LAY_TRAP, STEPS, delta) = (False, 120, 0.01)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 

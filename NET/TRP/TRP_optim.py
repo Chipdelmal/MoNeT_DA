@@ -8,13 +8,14 @@ import matplotlib.pyplot as plt
 from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
+import TRP_aux as aux
 
-(EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
-# (EXP_FNAME, TRAPS_NUM) = ('001', 2)
-(PT_DTA, PT_IMG) = (
-    '/Volumes/marshallShare/Mov/dta', 
-    '/Volumes/marshallShare/Mov/trp'
-)
+if monet.isNotebook():
+    (EXP_FNAME, TRAPS_NUM) = ('001', 2)
+    (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
+else:
+    (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
+    (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}

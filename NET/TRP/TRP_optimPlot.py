@@ -9,18 +9,19 @@ import matplotlib.pyplot as plt
 from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
+import TRP_aux as aux
 import MoNeT_MGDrivE as monet
 from deap import base, creator, algorithms, tools
 from PIL import Image
 import subprocess
 
 
-(EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
-# (EXP_FNAME, TRAPS_NUM) = ('300', 15)
-(PT_DTA, PT_IMG) = (
-    '/Volumes/marshallShare/Mov/dta',
-    '/Volumes/marshallShare/Mov/trp'
-)
+if monet.isNotebook():
+    (EXP_FNAME, TRAPS_NUM) = ('300', 15)
+    (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
+else:
+    (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
+    (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
 fName = '{}_{}-GA'.format(EXP_FNAME, TRAPS_NUM)
 (LW, ALPHA, SCA) = (.125, .5, 50)
 ###############################################################################
@@ -57,7 +58,7 @@ outPTH = path.join(PT_IMG, fName)
 monet.makeFolder(outPTH)
 i = 0
 framesNum = len(trapsHistory)
-for i in list(range(framesNum))[:]:
+for i in list(range(framesNum))[875:]:
     print('* Processed: {}/{}'.format(i, framesNum), end='\r')
     background = Image.open(path.join(PT_IMG, bgImg))
     trapsLocs = trapsLocs = list(
@@ -116,9 +117,8 @@ for i in list(range(framesNum))[:]:
     fig.savefig(
         pthSave, dpi=250, bbox_inches='tight', transparent=True
     )
-    plt.close()
     # Merge -------------------------------------------------------------------
-    time.sleep(1)
+    time.sleep(3)
     foreground = Image.open(pthSave)
     (w, h) = background.size
     background = background.crop((0, 0, w, h))
@@ -126,6 +126,9 @@ for i in list(range(framesNum))[:]:
     background.paste(foreground, (0, 0), foreground)
     # background = foreground.resize((int(w/1), int(h/1)),Image.ANTIALIAS)
     background.save(pthSave)
+    background.close()
+    foreground.close()
+    plt.close('all')
 ###############################################################################
 # Export video
 ###############################################################################
