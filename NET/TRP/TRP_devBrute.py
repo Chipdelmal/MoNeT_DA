@@ -15,11 +15,11 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('002', 1)
+    (EXP_FNAME, TRAPS_NUM) = ('000-050', 1)
     (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
-    (PT_DTA, PT_IMG) = 
+    (PT_DTA, PT_IMG) = aux.selectPaths(argv[2])
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
     'Escape': {'A': 0, 'b': 100}
@@ -32,6 +32,10 @@ pth = path.join(PT_DTA, EXP_FNAME)
 migMat = np.genfromtxt(pth+'_MX.csv', delimiter=',')
 sites = np.genfromtxt(pth+'_XY.csv', delimiter=',')
 sitesNum = sites.shape[0]
+pTypes = None
+if sites.shape[1]==3:
+    pTypes = sites[:,2]
+    sites = sites[:, 0:2]
 ###############################################################################
 # Transitions Matrix and Base Netowrk
 ###############################################################################
@@ -104,16 +108,25 @@ BQN = tauN[:sitesNum, sitesNum:]
 (fig, ax) = aux.plotNetwork(
     fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA
 )
+MKRS = ('X', 'o', '^')
 # if LAY_TRAP:
 #     (fig, ax) = aux.plotNetwork(
 #         fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9
 #     )
 # Plot sites and traps --------------------------------------------------------
-plt.scatter(
-    sites.T[0], sites.T[1], 
-    marker='^', color='#03045eDB', 
-    s=250, zorder=20, edgecolors='w', linewidths=2
-)
+if pTypes is None:
+    plt.scatter(
+        sites.T[0], sites.T[1], 
+        marker='^', color='#03045eDB', 
+        s=250, zorder=20, edgecolors='w', linewidths=2
+    )
+else:
+    for (i, site) in enumerate(sites):
+        plt.scatter(
+            site[0], site[1], 
+            marker=MKRS[int(pTypes[i])], color='#03045eDB', 
+            s=250, zorder=20, edgecolors='w', linewidths=2
+        )    
 if LAY_TRAP:
     plt.scatter(
         traps.T[0], traps.T[1], 

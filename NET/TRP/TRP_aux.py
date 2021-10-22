@@ -21,7 +21,7 @@ def selectPaths(USR):
         )
     return (PT_DTA, PT_IMG)
 
-
+MKRS = ('X', 'o', '^')
 RVB = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
 
 def unifyTransitionsMatrix(BB, BQ, QB, QQ):

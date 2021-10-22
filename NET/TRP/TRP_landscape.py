@@ -11,7 +11,7 @@ import TRP_aux as aux
 
 
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (30, '000')
+    (POINTS, EXP_FNAME) = (100, '000')
     (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
 else:
     POINTS = argv[1]
@@ -19,17 +19,19 @@ else:
 ###############################################################################
 # Constants
 ###############################################################################
-
 (xRan, yRan) = ((-10, 10), (-10, 10))
 PTS_TMAT = np.asarray([
-    [0, 1],
-    [1, 0]
+    [0, 1, 0],
+    [.05, 0, .95], 
+    [.95, 0, 0.05]
 ])
+PTYPE_PROB = [.1, .7, .2]
 ###############################################################################
 # Generate pointset
 ###############################################################################
 coords = list(zip(rand.uniform(*xRan, POINTS), rand.uniform(*yRan, POINTS)))
-pTypes = rand.randint(0, PTS_TMAT.shape[0], POINTS)
+# pTypes = rand.randint(0, PTS_TMAT.shape[0], POINTS)
+pTypes = np.array(PTYPE_PROB).cumsum().searchsorted(np.random.sample(POINTS))
 sites = np.asarray(coords)
 ###############################################################################
 # Generate matrices
@@ -66,7 +68,7 @@ plt.close('all')
 # Plot Landscape
 ###############################################################################
 (LW, ALPHA, SCA) = (.125, .5, 50)
-mrkrs = ('X', 'o', "^")
+mrkrs = aux.MKRS
 (fig, ax) = plt.subplots(figsize=(15, 15))
 for (i, site) in enumerate(sites):
     plt.scatter(
@@ -96,5 +98,5 @@ df = pd.DataFrame(sites, columns=['X', 'Y'])
 df['type'] = pTypes
 df.to_csv(
     path.join(PT_DTA, '{}-{}_XY.csv'.format(EXP_FNAME, str(POINTS).zfill(3))),
-    index=False
+    index=False, header=False
 )
