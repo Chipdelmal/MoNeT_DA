@@ -15,7 +15,7 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('000-050', 1)
+    (EXP_FNAME, TRAPS_NUM) = ('001-075', 1)
     (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
@@ -33,7 +33,7 @@ migMat = np.genfromtxt(pth+'_MX.csv', delimiter=',')
 sites = np.genfromtxt(pth+'_XY.csv', delimiter=',')
 sitesNum = sites.shape[0]
 pTypes = None
-if sites.shape[1]==3:
+if sites.shape[1] > 2:
     pTypes = sites[:,2]
     sites = sites[:, 0:2]
 ###############################################################################
