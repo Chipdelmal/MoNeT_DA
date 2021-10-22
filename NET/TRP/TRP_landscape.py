@@ -11,7 +11,7 @@ import TRP_aux as aux
 
 
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (100, '000')
+    (POINTS, EXP_FNAME) = (250, '001')
     (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
 else:
     POINTS = argv[1]
@@ -21,11 +21,12 @@ else:
 ###############################################################################
 (xRan, yRan) = ((-10, 10), (-10, 10))
 PTS_TMAT = np.asarray([
-    [0, 1, 0],
-    [.05, 0, .95], 
-    [.95, 0, 0.05]
+    [0.05, 0.95, 0],
+    [.05, .05, .9], 
+    [.925, 0.025, 0.05]
 ])
-PTYPE_PROB = [.1, .7, .2]
+PTYPE_PROB = [.1, .6, .3]
+KERNEL = [2, 1.0e-10, math.inf]
 ###############################################################################
 # Generate pointset
 ###############################################################################
@@ -38,9 +39,7 @@ sites = np.asarray(coords)
 ###############################################################################
 dist = monet.calculateDistanceMatrix(coords)
 tau = monet.zeroInflatedExponentialMigrationKernel(
-    dist, 
-    [0.2, 1.0e-10, math.inf],
-    zeroInflation=0.75
+    dist, KERNEL, zeroInflation=0.75
 )
 ###############################################################################
 # Generate masking matrix
@@ -86,7 +85,7 @@ fig.savefig(
     path.join(PT_IMG, '{}-{}.png'.format(EXP_FNAME, str(POINTS).zfill(3))), 
     dpi=250, bbox_inches='tight', pad_inches=0
 )
-plt.close('all')
+# plt.close('all')
 ###############################################################################
 # Export files
 ###############################################################################
@@ -100,3 +99,4 @@ df.to_csv(
     path.join(PT_DTA, '{}-{}_XY.csv'.format(EXP_FNAME, str(POINTS).zfill(3))),
     index=False, header=False
 )
+plt.close('all')

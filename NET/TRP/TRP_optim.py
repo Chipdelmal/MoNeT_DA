@@ -39,6 +39,8 @@ migMat = np.genfromtxt(pthBase+'_MX.csv', delimiter=',')
 sites = np.genfromtxt(pthBase+'_XY.csv', delimiter=',')
 # Sites and landscape shapes --------------------------------------------------
 sitesNum = sites.shape[0]
+if sites.shape[1] > 2:
+     sites = sites[:, 0:2]
 (minX, minY) = np.apply_along_axis(min, 0, sites)
 (maxX, maxY) = np.apply_along_axis(max, 0, sites)
 (xMinMax, yMinMax) = ((minX, maxX), (minY, maxY))
