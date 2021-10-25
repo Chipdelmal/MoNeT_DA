@@ -15,8 +15,8 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('001-075', 1)
-    (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
+    (EXP_FNAME, TRAPS_NUM) = ('gd1-100', 1)
+    (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[2])
@@ -108,7 +108,6 @@ BQN = tauN[:sitesNum, sitesNum:]
 (fig, ax) = aux.plotNetwork(
     fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA
 )
-MKRS = ('X', 'o', '^')
 # if LAY_TRAP:
 #     (fig, ax) = aux.plotNetwork(
 #         fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9
@@ -124,7 +123,8 @@ else:
     for (i, site) in enumerate(sites):
         plt.scatter(
             site[0], site[1], 
-            marker=MKRS[int(pTypes[i])], color='#03045eDB', 
+            marker=aux.MKRS[int(pTypes[i])], 
+            color=aux.MCOL[int(pTypes[i])], 
             s=250, zorder=20, edgecolors='w', linewidths=2
         )    
 if LAY_TRAP:

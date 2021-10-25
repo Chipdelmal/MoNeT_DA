@@ -21,7 +21,8 @@ def selectPaths(USR):
         )
     return (PT_DTA, PT_IMG)
 
-MKRS = ('X', 'o', '^')
+MKRS = ('o', '^', 's', 'p', 'd')
+MCOL = ('#e0c3fc', '#bdb2ff', '#a0c4ff', '#ffd6a5')
 RVB = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
 
 def unifyTransitionsMatrix(BB, BQ, QB, QQ):
@@ -91,3 +92,5 @@ def plotNetwork(
                     zorder=0, shape='left'
                 )
     return (fig, ax)
+
+

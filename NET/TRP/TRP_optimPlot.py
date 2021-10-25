@@ -17,7 +17,7 @@ import subprocess
 
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('300', 15)
+    (EXP_FNAME, TRAPS_NUM) = ('001', 20)
     (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
@@ -58,7 +58,7 @@ outPTH = path.join(PT_IMG, fName)
 monet.makeFolder(outPTH)
 i = 0
 framesNum = len(trapsHistory)
-for i in list(range(framesNum))[875:]:
+for i in list(reversed(list(range(framesNum)))):
     print('* Processed: {}/{}'.format(i, framesNum), end='\r')
     background = Image.open(path.join(PT_IMG, bgImg))
     trapsLocs = trapsLocs = list(

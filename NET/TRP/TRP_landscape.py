@@ -10,29 +10,38 @@ from sklearn.preprocessing import normalize
 import TRP_aux as aux
 
 
+LND = 'Uniform'
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (250, '001')
-    (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
+    (POINTS, EXP_FNAME) = (250, 'hetA')
+    (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[2])
 ###############################################################################
 # Constants
 ###############################################################################
+# (xRan, yRan) = ((-1280/2, 1280/2), (-720/2, 720/2))
 (xRan, yRan) = ((-10, 10), (-10, 10))
 PTS_TMAT = np.asarray([
-    [0.05, 0.95, 0],
+    [0.05, 0.9, .05],
     [.05, .05, .9], 
-    [.925, 0.025, 0.05]
+    [.9, 0.05, 0.05]
 ])
-PTYPE_PROB = [.1, .6, .3]
+PTYPE_PROB = [.3, .4, .3]
 KERNEL = [2, 1.0e-10, math.inf]
 ###############################################################################
 # Generate pointset
 ###############################################################################
-coords = list(zip(rand.uniform(*xRan, POINTS), rand.uniform(*yRan, POINTS)))
-# pTypes = rand.randint(0, PTS_TMAT.shape[0], POINTS)
-pTypes = np.array(PTYPE_PROB).cumsum().searchsorted(np.random.sample(POINTS))
+if LND == 'Grid':
+    x = np.linspace(xRan[0], xRan[1], int((xRan[1]-xRan[0])/2))
+    y = np.linspace(yRan[0], yRan[1], int((yRan[1]-yRan[0])/2))
+    coords = np.asarray(np.meshgrid(x, y)).T
+    coords = np.concatenate(coords)
+else:
+    coords = list(zip(rand.uniform(*xRan, POINTS), rand.uniform(*yRan, POINTS)))
+# Point-types -----------------------------------------------------------------
+pNum = len(list(coords))
+pTypes = np.array(PTYPE_PROB).cumsum().searchsorted(np.random.sample(pNum))
 sites = np.asarray(coords)
 ###############################################################################
 # Generate matrices
@@ -45,7 +54,7 @@ tau = monet.zeroInflatedExponentialMigrationKernel(
 # Generate masking matrix
 ###############################################################################
 itr = list(range(len(coords)))
-msk = np.zeros((POINTS, POINTS))
+msk = np.zeros((pNum, pNum))
 r = 0
 for r in itr:
     for c in itr:
@@ -59,7 +68,7 @@ ax[0].matshow(tau, vmax=.05, cmap=plt.cm.Purples_r)
 ax[1].matshow(msk, cmap=plt.cm.Blues)
 ax[2].matshow(tauN, vmax=.05, cmap=plt.cm.Purples_r)
 fig.savefig(
-    path.join(PT_IMG, '{}-{}_Mat.png'.format(EXP_FNAME, str(POINTS).zfill(3))), 
+    path.join(PT_IMG, '{}-{}_Mat.png'.format(EXP_FNAME, str(pNum).zfill(3))), 
     dpi=250, bbox_inches='tight', pad_inches=0
 )
 plt.close('all')
@@ -67,22 +76,23 @@ plt.close('all')
 # Plot Landscape
 ###############################################################################
 (LW, ALPHA, SCA) = (.125, .5, 50)
-mrkrs = aux.MKRS
 (fig, ax) = plt.subplots(figsize=(15, 15))
 for (i, site) in enumerate(sites):
     plt.scatter(
         site[0], site[1], 
-        marker=mrkrs[pTypes[i]], color='#03045eDB', 
+        marker=aux.MKRS[pTypes[i]], 
+        color=aux.MCOL[pTypes[i]], 
         s=250, zorder=20, edgecolors='w', linewidths=2
     )
 ax.set_xlim(*xRan)
 ax.set_ylim(*yRan)
+ax.set_aspect('equal')
 (fig, ax) = aux.plotNetwork(
     fig, ax, tauN*SCA, sites, sites, [1]*len(coords), 
     c='#03045e', lw=LW, alpha=ALPHA, arrows=False
 )
 fig.savefig(
-    path.join(PT_IMG, '{}-{}.png'.format(EXP_FNAME, str(POINTS).zfill(3))), 
+    path.join(PT_DTA, '{}-{}.png'.format(EXP_FNAME, str(pNum).zfill(3))), 
     dpi=250, bbox_inches='tight', pad_inches=0
 )
 # plt.close('all')
@@ -90,13 +100,13 @@ fig.savefig(
 # Export files
 ###############################################################################
 np.savetxt(
-    path.join(PT_DTA, '{}-{}_MX.csv'.format(EXP_FNAME, str(POINTS).zfill(3))), 
+    path.join(PT_DTA, '{}-{}_MX.csv'.format(EXP_FNAME, str(pNum).zfill(3))), 
     tauN, delimiter=','
 )
 df = pd.DataFrame(sites, columns=['X', 'Y'])
 df['type'] = pTypes
 df.to_csv(
-    path.join(PT_DTA, '{}-{}_XY.csv'.format(EXP_FNAME, str(POINTS).zfill(3))),
+    path.join(PT_DTA, '{}-{}_XY.csv'.format(EXP_FNAME, str(pNum).zfill(3))),
     index=False, header=False
 )
 plt.close('all')
