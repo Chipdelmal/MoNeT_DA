@@ -12,9 +12,9 @@ python TRP_optim.py $EXP "20" $USR
 python TRP_optim.py $EXP "15" $USR
 python TRP_optim.py $EXP "10" $USR
 
-for i in {1..9}
-do
-    python TRP_optim.py $EXP $i $USR
-done 
+# for i in {1..9}
+# do
+#     python TRP_optim.py $EXP $i $USR
+# done 
 
-python TRP_optimPlot.py $EXP "20" $USR
+python TRP_optimPlot.py $EXP "25" $USR

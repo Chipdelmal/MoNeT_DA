@@ -17,8 +17,8 @@ import subprocess
 
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('001', 20)
-    (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
+    (EXP_FNAME, TRAPS_NUM) = ('gd1-100', 10)
+    (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
@@ -44,6 +44,9 @@ BBN = migMat[:sitesNum, :sitesNum]
 BQN = migMat[:sitesNum, sitesNum:]
 # Sites and landscape shapes --------------------------------------------------
 sitesNum = sites.shape[0]
+if sites.shape[1] > 2:
+    pTypes = sites[:,2]
+    sites = sites[:, 0:2]
 (minX, minY) = np.apply_along_axis(min, 0, sites)
 (maxX, maxY) = np.apply_along_axis(max, 0, sites)
 (xMinMax, yMinMax) = ((minX, maxX), (minY, maxY))

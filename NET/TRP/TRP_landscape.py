@@ -10,9 +10,9 @@ from sklearn.preprocessing import normalize
 import TRP_aux as aux
 
 
-LND = 'Uniform'
+(LND, MOD) = ('Grid', 'HOM')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (250, 'hetA')
+    (POINTS, EXP_FNAME) = (100, 'GRD')
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
@@ -22,12 +22,19 @@ else:
 ###############################################################################
 # (xRan, yRan) = ((-1280/2, 1280/2), (-720/2, 720/2))
 (xRan, yRan) = ((-10, 10), (-10, 10))
-PTS_TMAT = np.asarray([
-    [0.05, 0.9, .05],
-    [.05, .05, .9], 
-    [.9, 0.05, 0.05]
-])
-PTYPE_PROB = [.3, .4, .3]
+if MOD == 'HOM':
+    PTS_TMAT = np.asarray([
+        [1/3, 1/3, 1/3],
+        [1/3, 1/3, 1/3], 
+        [1/3, 1/3, 1/3]
+    ])
+else:
+    PTS_TMAT = np.asarray([
+        [0.05, 0.9, .05],
+        [.05, .05, .9], 
+        [.9, 0.05, 0.05]
+    ])
+PTYPE_PROB = [.1, .6, .3]
 KERNEL = [2, 1.0e-10, math.inf]
 ###############################################################################
 # Generate pointset
@@ -68,8 +75,9 @@ ax[0].matshow(tau, vmax=.05, cmap=plt.cm.Purples_r)
 ax[1].matshow(msk, cmap=plt.cm.Blues)
 ax[2].matshow(tauN, vmax=.05, cmap=plt.cm.Purples_r)
 fig.savefig(
-    path.join(PT_IMG, '{}-{}_Mat.png'.format(EXP_FNAME, str(pNum).zfill(3))), 
-    dpi=250, bbox_inches='tight', pad_inches=0
+    path.join(PT_DTA, '{}-{}-{}_Mat.png'.format(
+        EXP_FNAME, str(pNum).zfill(3), MOD
+    )), dpi=250, bbox_inches='tight', pad_inches=0
 )
 plt.close('all')
 ###############################################################################
@@ -92,21 +100,24 @@ ax.set_aspect('equal')
     c='#03045e', lw=LW, alpha=ALPHA, arrows=False
 )
 fig.savefig(
-    path.join(PT_DTA, '{}-{}.png'.format(EXP_FNAME, str(pNum).zfill(3))), 
-    dpi=250, bbox_inches='tight', pad_inches=0
+    path.join(PT_DTA, '{}-{}-{}.png'.format(
+        EXP_FNAME, str(pNum).zfill(3), MOD
+    )), dpi=250, bbox_inches='tight', pad_inches=0
 )
 # plt.close('all')
 ###############################################################################
 # Export files
 ###############################################################################
 np.savetxt(
-    path.join(PT_DTA, '{}-{}_MX.csv'.format(EXP_FNAME, str(pNum).zfill(3))), 
-    tauN, delimiter=','
+    path.join(PT_DTA, '{}-{}-{}_MX.csv'.format(
+        EXP_FNAME, str(pNum).zfill(3), MOD
+    )), tauN, delimiter=','
 )
 df = pd.DataFrame(sites, columns=['X', 'Y'])
 df['type'] = pTypes
 df.to_csv(
-    path.join(PT_DTA, '{}-{}_XY.csv'.format(EXP_FNAME, str(pNum).zfill(3))),
-    index=False, header=False
+    path.join(PT_DTA, '{}-{}-{}_XY.csv'.format(
+        EXP_FNAME, str(pNum).zfill(3), MOD
+    )), index=False, header=False
 )
 plt.close('all')

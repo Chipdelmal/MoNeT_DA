@@ -1,4 +1,5 @@
 
+import time
 from sys import argv
 import pandas as pd
 import numpy as np
@@ -9,10 +10,11 @@ from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
 import TRP_aux as aux
+from PIL import Image
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('001', 2)
-    (PT_DTA, PT_IMG) = aux.selectPaths('dsk')
+    (EXP_FNAME, TRAPS_NUM) = ('GRD-100-HOM', 25)
+    (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
@@ -21,13 +23,14 @@ kPars = {
     'Escape': {'A': 0, 'b': 100}
 }
 print('* Running: {}-{}'.format(EXP_FNAME, TRAPS_NUM))
+bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (30, 1000)
+(POP_SIZE, GENS) = (30, 2500)
 (MATE, MUTATE, SELECT) = (
     {'mate': .25, 'cxpb': 0.5}, 
-    {'mean': 0, 'sd': 2.5, 'ipb': .2, 'mutpb': .25},
+    {'mean': 0, 'sd': 2.5, 'ipb': .25, 'mutpb': .25},
     {'tSize': 3}
 )
 (CXPB, MUTPB) = (0.5, 0.25)
@@ -149,11 +152,22 @@ ax.patch.set_alpha(0)
 ax.set_aspect('equal')
 ax.set_xlim(minX, maxX)
 ax.set_ylim(minY, maxY)
+pthSave = path.join(
+    PT_IMG, 
+    '{}_{}-GA-trapsNetwork.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+)
 fig.savefig(
-    path.join(
-        PT_IMG, 
-        '{}_{}-GA-trapsNetwork.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
-    ), 
-    dpi=250, bbox_inches='tight', pad_inches=0, transparent=True
+    pthSave, dpi=250, bbox_inches='tight', 
+    pad_inches=0, transparent=True
 )
 plt.close()
+time.sleep(3)
+background = Image.open(path.join(PT_IMG, bgImg))
+foreground = Image.open(pthSave)
+(w, h) = background.size
+background = background.crop((0, 0, w, h))
+foreground = foreground.resize((int(w/1), int(h/1)),Image.ANTIALIAS)
+background.paste(foreground, (0, 0), foreground)
+background.save(pthSave)
+background.close()
+foreground.close()
