@@ -8,6 +8,11 @@ import seaborn as sns
 import MoNeT_MGDrivE as monet
 
 
+MKRS = ('o', '^', 's', 'p', 'd')
+MCOL = ('#e0c3fc', '#bdb2ff', '#a0c4ff', '#ffd6a5')
+RVB = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
+
+
 def selectPaths(USR):
     if USR=='lab':
         (PT_DTA, PT_IMG) = (
@@ -21,9 +26,6 @@ def selectPaths(USR):
         )
     return (PT_DTA, PT_IMG)
 
-MKRS = ('o', '^', 's', 'p', 'd')
-MCOL = ('#e0c3fc', '#bdb2ff', '#a0c4ff', '#ffd6a5')
-RVB = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
 
 def unifyTransitionsMatrix(BB, BQ, QB, QQ):
     (n, m) = (BB.shape[0], QQ.shape[0])

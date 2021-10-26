@@ -14,10 +14,10 @@ import TRP_aux as aux
 from PIL import Image
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM, PLT_BF) = ('GRD-100-HET', 20, False)
+    (EXP_FNAME, TRAPS_NUM) = ('GRD-100-HET', 20)
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
-    (EXP_FNAME, TRAPS_NUM, PLT_BF) = (argv[1], int(argv[2]), int(argv[4]))
+    (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},

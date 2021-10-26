@@ -138,7 +138,7 @@ for point in fitsDict[:]:
     plt.scatter(
         point[0], point[1], 
         marker='.', color=aux.RVB(csca), 
-        alpha=.35, s=25, zorder=-5, linewidths=0, edgecolors='#12121200'
+        alpha=.25, s=25, zorder=-5, linewidths=0, edgecolors='#12121200'
     )
 # Axes and title --------------------------------------------------------------
 plt.tick_params(
