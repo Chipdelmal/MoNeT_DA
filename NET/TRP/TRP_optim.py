@@ -28,7 +28,7 @@ bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (50, 100)
+(POP_SIZE, GENS) = (50, 2500)
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': 2.5, 'ipb': .5, 'mutpb': .3},
@@ -79,7 +79,7 @@ toolbox.register(
 )
 toolbox.register(
     "evaluate", ga.calcFitness, 
-    sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.max, np.mean)
+    sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.mean, np.mean)
 )
 ###############################################################################
 # Registering functions for GA stats
@@ -97,7 +97,7 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
     pop, toolbox, cxpb=MATE['cxpb'], mutpb=MUTATE['mutpb'], ngen=GENS, 
-    stats=stats, halloffame=hof, verbose=False
+    stats=stats, halloffame=hof, verbose=True
 )
 ###############################################################################
 # Get Results
@@ -125,8 +125,8 @@ plt.plot(x, meanFits, lw=.5, color='#ffffffFF')
 # plt.plot(x, minFits, ls='dotted', lw=2.5, color='#f72585')
 ax.fill_between(x, maxFits, minFits, alpha=0.9, color='#1565c077')
 ax.set_xlim(0, max(x))
-ax.set_ylim(0, math.ceil(max(maxFits)))
-# ax.set_aspect('equal')
+ax.set_ylim(0, max(maxFits))
+ax.set_aspect(.25/ax.get_data_ratio())
 pthSave = path.join(
     PT_IMG, 
     '{}_{}-GA-Training.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
@@ -135,6 +135,7 @@ fig.savefig(
     pthSave, dpi=250, bbox_inches='tight', 
     pad_inches=0, transparent=True
 )
+plt.close('all')
 ###############################################################################
 # Plot landscape
 ###############################################################################
@@ -175,7 +176,7 @@ fig.savefig(
     pthSave, dpi=250, bbox_inches='tight', 
     pad_inches=0, transparent=True
 )
-plt.close()
+plt.close('all')
 time.sleep(3)
 background = Image.open(path.join(PT_IMG, bgImg))
 foreground = Image.open(pthSave)

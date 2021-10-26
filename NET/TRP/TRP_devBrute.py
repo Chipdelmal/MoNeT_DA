@@ -15,7 +15,7 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('gd1-100', 1)
+    (EXP_FNAME, TRAPS_NUM) = ('GRD_LG-576-HOM', 1)
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
@@ -79,8 +79,7 @@ for (r, x) in enumerate(xGrid):
         # Print message
         #######################################################################
         print(
-            '* Processed {}/{}: {:.2f}'.format(cntr, total, daysSum), 
-            end='\r'
+            '* Processed {}/{}: {:.2f}'.format(cntr, total, daysSum), end='\r'
         )
 ###############################################################################
 # Get best location
@@ -108,10 +107,10 @@ BQN = tauN[:sitesNum, sitesNum:]
 (fig, ax) = aux.plotNetwork(
     fig, ax, BBN*SCA, sites, sites, [0], c='#03045e', lw=LW, alpha=ALPHA
 )
-# if LAY_TRAP:
-#     (fig, ax) = aux.plotNetwork(
-#         fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9
-#     )
+if LAY_TRAP:
+    (fig, ax) = aux.plotNetwork(
+        fig, ax, BQN*SCA, traps, sites, [0], c='#f72585', lw=LW*3, alpha=.9
+    )
 # Plot sites and traps --------------------------------------------------------
 if pTypes is None:
     plt.scatter(
@@ -134,24 +133,17 @@ if LAY_TRAP:
         edgecolors='w', linewidths=2
     )
 # Plot response surface -------------------------------------------------------
+sz = (maxX - minX) * 2.5
 for point in fitsDict[:]:
     csca = 1/(1+math.exp(m(point[2])))
     plt.scatter(
         point[0], point[1], 
         marker='s', color=aux.RVB(csca), 
         alpha=.75,
-        s=55, zorder=-5,
+        s=sz, zorder=-5,
         linewidths=0, edgecolors='k'
     )
 # Axes and title --------------------------------------------------------------
-# if LAY_TRAP:
-#     ax.text(
-#         0.5, 1.035, 'Avg Max Days: {:.2f}'.format(best),
-#         horizontalalignment='center',
-#         verticalalignment='center',
-#         fontsize=50, color='#000000DD',
-#         transform=ax.transAxes, zorder=15
-#     )
 plt.tick_params(
     axis='both', which='both',
     bottom=False, top=False, left=False, right=False,

@@ -10,9 +10,9 @@ from sklearn.preprocessing import normalize
 import TRP_aux as aux
 
 
-(LND, MOD) = ('Grid', 'HET')
+(LND, MOD) = ('UNF', 'HOM')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (100, 'GRD_LG')
+    (POINTS, EXP_FNAME) = (200, 'UNIF_MD')
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
@@ -41,8 +41,8 @@ KERNEL = [2, 1.0e-10, math.inf]
 # Generate pointset
 ###############################################################################
 if LND == 'Grid':
-    x = np.linspace(xRan[0], xRan[1], int((xRan[1]-xRan[0])/2))
-    y = np.linspace(yRan[0], yRan[1], int((yRan[1]-yRan[0])/2))
+    x = np.linspace(xRan[0], xRan[1], int((xRan[1]-xRan[0])/3))
+    y = np.linspace(yRan[0], yRan[1], int((yRan[1]-yRan[0])/3))
     coords = np.asarray(np.meshgrid(x, y)).T
     coords = np.concatenate(coords)
 else:
@@ -85,6 +85,7 @@ plt.close('all')
 # Plot Landscape
 ###############################################################################
 (LW, ALPHA, SCA) = (.125, .5, 50)
+tauC = np.clip(tauN, 1e-10, 1)
 (fig, ax) = plt.subplots(figsize=(15, 15))
 for (i, site) in enumerate(sites):
     plt.scatter(
@@ -97,7 +98,7 @@ ax.set_xlim(*xRan)
 ax.set_ylim(*yRan)
 ax.set_aspect('equal')
 (fig, ax) = aux.plotNetwork(
-    fig, ax, tauN*SCA, sites, sites, [1]*len(coords), 
+    fig, ax, tauC*SCA, sites, sites, [1]*len(coords), 
     c='#03045e', lw=LW, alpha=ALPHA, arrows=False
 )
 fig.savefig(
@@ -105,7 +106,7 @@ fig.savefig(
         EXP_FNAME, str(pNum).zfill(3), MOD
     )), dpi=250, bbox_inches='tight', pad_inches=0
 )
-# plt.close('all')
+plt.close('all')
 ###############################################################################
 # Export files
 ###############################################################################
