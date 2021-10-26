@@ -15,7 +15,7 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('GRD_LG-576-HOM', 1)
+    (EXP_FNAME, TRAPS_NUM) = ('UNIF_MD-200-HET', 1)
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
@@ -26,7 +26,7 @@ kPars = {
 }
 (LAY_TRAP, STEPS, delta) = (False, 120, 0.01)
 ###############################################################################
-# Read migration matrix and pop sites
+# Read migration matrix and pop sites 
 ############################################################################### 
 pth = path.join(PT_DTA, EXP_FNAME)
 migMat = np.genfromtxt(pth+'_MX.csv', delimiter=',')
@@ -85,7 +85,7 @@ for (r, x) in enumerate(xGrid):
 # Get best location
 ###############################################################################
 fitsVals = [i[2] for i in fitsDict]
-(best, worst) = (min(fitsVals), max(fitsVals))
+(best, mean, worst) = (min(fitsVals), np.mean(fitsVals), max(fitsVals))
 ix = fitsVals.index(best)
 traps = np.asarray([[fitsDict[ix][0], fitsDict[ix][1]]])
 trapDists = fun.calcTrapToSitesDistance(traps, sites)
@@ -97,9 +97,9 @@ tauN = fun.assembleTrapMigration(psiN, tProbs)
 ###############################################################################
 # Plot landscape
 ###############################################################################
-m = interp1d([best, worst],[1.9, -12])
-BBN = tauN[:sitesNum, :sitesNum]
-BQN = tauN[:sitesNum, sitesNum:]
+inteRange = (best, mean)
+m = interp1d(inteRange, [5, -12])
+(BBN, BQN) = (tauN[:sitesNum, :sitesNum], tauN[:sitesNum, sitesNum:])
 (LW, ALPHA, SCA) = (.125, .5, 50)
 # Generate figure -------------------------------------------------------------
 (fig, ax) = plt.subplots(figsize=(15, 15))
@@ -122,26 +122,23 @@ else:
     for (i, site) in enumerate(sites):
         plt.scatter(
             site[0], site[1], 
-            marker=aux.MKRS[int(pTypes[i])], 
-            color=aux.MCOL[int(pTypes[i])], 
-            s=250, zorder=20, edgecolors='w', linewidths=2
+            marker=aux.MKRS[int(pTypes[i])], color=aux.MCOL[int(pTypes[i])], 
+            s=200, zorder=20, edgecolors='w', linewidths=2
         )    
 if LAY_TRAP:
     plt.scatter(
         traps.T[0], traps.T[1], 
-        marker='+', color='#f72585EE', s=250, zorder=20,
-        edgecolors='w', linewidths=2
+        marker='+', color='#f72585EE', 
+        s=250, zorder=20, edgecolors='w', linewidths=2
     )
 # Plot response surface -------------------------------------------------------
-sz = (maxX - minX) * 2.5
 for point in fitsDict[:]:
-    csca = 1/(1+math.exp(m(point[2])))
+    smp = min(point[2], inteRange[1])
+    csca = 1/(1+math.exp(m(smp)))
     plt.scatter(
         point[0], point[1], 
-        marker='s', color=aux.RVB(csca), 
-        alpha=.75,
-        s=sz, zorder=-5,
-        linewidths=0, edgecolors='k'
+        marker='.', color=aux.RVB(csca), 
+        alpha=.35, s=25, zorder=-5, linewidths=0, edgecolors='#12121200'
     )
 # Axes and title --------------------------------------------------------------
 plt.tick_params(

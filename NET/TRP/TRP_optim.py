@@ -14,10 +14,10 @@ import TRP_aux as aux
 from PIL import Image
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('GRD-100-HET', 20)
+    (EXP_FNAME, TRAPS_NUM, PLT_BF) = ('GRD-100-HET', 20, False)
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
-    (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
+    (EXP_FNAME, TRAPS_NUM, PLT_BF) = (argv[1], int(argv[2]), int(argv[4]))
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
 kPars = {
     'Trap': {'A': 0.5, 'b': 1},
@@ -28,7 +28,7 @@ bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (50, 2500)
+(POP_SIZE, GENS) = (50, 5000)
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': 2.5, 'ipb': .5, 'mutpb': .3},
@@ -79,7 +79,7 @@ toolbox.register(
 )
 toolbox.register(
     "evaluate", ga.calcFitness, 
-    sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.mean, np.mean)
+    sites=sites, psi=migMat, kPars=kPars, fitFuns=(np.max, np.mean)
 )
 ###############################################################################
 # Registering functions for GA stats
@@ -97,7 +97,7 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
     pop, toolbox, cxpb=MATE['cxpb'], mutpb=MUTATE['mutpb'], ngen=GENS, 
-    stats=stats, halloffame=hof, verbose=True
+    stats=stats, halloffame=hof, verbose=False
 )
 ###############################################################################
 # Get Results
@@ -177,6 +177,9 @@ fig.savefig(
     pad_inches=0, transparent=True
 )
 plt.close('all')
+###############################################################################
+# Overlay Brute-force
+###############################################################################
 time.sleep(3)
 background = Image.open(path.join(PT_IMG, bgImg))
 foreground = Image.open(pthSave)

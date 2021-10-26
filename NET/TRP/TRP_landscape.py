@@ -10,7 +10,7 @@ from sklearn.preprocessing import normalize
 import TRP_aux as aux
 
 
-(LND, MOD) = ('UNF', 'HOM')
+(LND, MOD) = ('UNF', 'HET')
 if monet.isNotebook():
     (POINTS, EXP_FNAME) = (200, 'UNIF_MD')
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
@@ -92,7 +92,7 @@ for (i, site) in enumerate(sites):
         site[0], site[1], 
         marker=aux.MKRS[pTypes[i]], 
         color=aux.MCOL[pTypes[i]], 
-        s=250, zorder=20, edgecolors='w', linewidths=2
+        s=200, zorder=20, edgecolors='w', linewidths=2
     )
 ax.set_xlim(*xRan)
 ax.set_ylim(*yRan)
