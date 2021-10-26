@@ -10,9 +10,9 @@ from sklearn.preprocessing import normalize
 import TRP_aux as aux
 
 
-(LND, MOD) = ('Grid', 'HOM')
+(LND, MOD) = ('Grid', 'HET')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (100, 'GRD')
+    (POINTS, EXP_FNAME) = (100, 'GRD_LG')
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
@@ -20,8 +20,9 @@ else:
 ###############################################################################
 # Constants
 ###############################################################################
-# (xRan, yRan) = ((-1280/2, 1280/2), (-720/2, 720/2))
-(xRan, yRan) = ((-10, 10), (-10, 10))
+sca = 40
+(xRan, yRan) = ((-1280/sca, 1280/sca), (-720/sca, 720/sca))
+# (xRan, yRan) = ((-10, 10), (-10, 10))
 if MOD == 'HOM':
     PTS_TMAT = np.asarray([
         [1/3, 1/3, 1/3],

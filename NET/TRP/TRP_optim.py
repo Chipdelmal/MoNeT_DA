@@ -1,5 +1,6 @@
 
 import time
+import math
 from sys import argv
 import pandas as pd
 import numpy as np
@@ -13,7 +14,7 @@ import TRP_aux as aux
 from PIL import Image
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('GRD-100-HOM', 25)
+    (EXP_FNAME, TRAPS_NUM) = ('GRD-100-HET', 20)
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
@@ -27,13 +28,12 @@ bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (30, 2500)
+(POP_SIZE, GENS) = (50, 100)
 (MATE, MUTATE, SELECT) = (
-    {'mate': .25, 'cxpb': 0.5}, 
-    {'mean': 0, 'sd': 2.5, 'ipb': .25, 'mutpb': .25},
+    {'mate': .3, 'cxpb': 0.5}, 
+    {'mean': 0, 'sd': 2.5, 'ipb': .5, 'mutpb': .3},
     {'tSize': 3}
 )
-(CXPB, MUTPB) = (0.5, 0.25)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -66,8 +66,8 @@ toolbox.register(
     list, toolbox.individualCreator
 )
 toolbox.register(
-    "mate", tools.cxUniform, 
-    indpb=MATE['mate']
+    "mate", tools.cxBlend, 
+    alpha=MATE['mate']
 )
 toolbox.register(
     "mutate", tools.mutGaussian, 
@@ -97,16 +97,16 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
     pop, toolbox, cxpb=MATE['cxpb'], mutpb=MUTATE['mutpb'], ngen=GENS, 
-    stats=stats, halloffame=hof, verbose=True
+    stats=stats, halloffame=hof, verbose=False
 )
 ###############################################################################
 # Get Results
 ############################################################################### 
-pklPath = path.join(
-    PT_IMG, '{}_{}-GA'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
-)
 (maxFits, meanFits, bestIndx, minFits, traps) = logbook.select(
     "max", "avg", "best", "min", "traps"
+)
+pklPath = path.join(
+    PT_IMG, '{}_{}-GA'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 outList = [
     i for i in zip(minFits, meanFits, maxFits, [list(j) for j in traps])
@@ -116,6 +116,26 @@ outDF.to_csv(pklPath+'.csv', index=False)
 with open(pklPath+'.pkl', "wb") as file:
     pkl.dump(outDF, file)
 ###############################################################################
+# Plot GA
+###############################################################################
+x = range(len(minFits))    
+(fig, ax) = plt.subplots(figsize=(15, 15))
+# plt.plot(x, maxFits, color='#00000000')
+plt.plot(x, meanFits, lw=.5, color='#ffffffFF')
+# plt.plot(x, minFits, ls='dotted', lw=2.5, color='#f72585')
+ax.fill_between(x, maxFits, minFits, alpha=0.9, color='#1565c077')
+ax.set_xlim(0, max(x))
+ax.set_ylim(0, math.ceil(max(maxFits)))
+# ax.set_aspect('equal')
+pthSave = path.join(
+    PT_IMG, 
+    '{}_{}-GA-Training.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+)
+fig.savefig(
+    pthSave, dpi=250, bbox_inches='tight', 
+    pad_inches=0, transparent=True
+)
+###############################################################################
 # Plot landscape
 ###############################################################################
 best = pop[bestIndx[0]]
@@ -124,11 +144,6 @@ BBN = migMat[:sitesNum, :sitesNum]
 BQN = migMat[:sitesNum, sitesNum:]
 (LW, ALPHA, SCA) = (.125, .5, 50)
 (fig, ax) = plt.subplots(figsize=(15, 15))
-# plt.scatter(
-#     sites.T[0], sites.T[1], 
-#     marker='^', color='#03045eDB', 
-#     s=250, zorder=20, edgecolors='w', linewidths=2
-# )
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 

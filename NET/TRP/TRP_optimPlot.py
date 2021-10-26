@@ -138,7 +138,7 @@ for i in list(reversed(list(range(framesNum)))):
 sp = subprocess.Popen([
     'ffmpeg', '-y',
     '-start_number', '0',
-    '-r', '10',
+    '-r', '24',
     '-i', path.join(outPTH, "%04d.png"), 
     # '-vf', 'scale=1000:1000',
     path.join(outPTH, fName+'.mp4')
