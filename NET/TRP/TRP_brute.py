@@ -66,7 +66,7 @@ for (r, x) in enumerate(xGrid):
         # Re-arrange matrix in canonical form ---------------------------------
         tauCan = fun.reshapeInCanonicalForm(tauN, sitesNum, TRAPS_NUM)
         F = fun.getMarkovAbsorbing(tauCan, TRAPS_NUM)
-        daysTillTrapped = np.apply_along_axis(np.max, 1, F)
+        daysTillTrapped = np.apply_along_axis(np.mean, 1, F)
         daysSum = np.mean(daysTillTrapped)
         # Arrange fits --------------------------------------------------------
         cntr = cntr + 1
@@ -95,7 +95,7 @@ tauN = fun.assembleTrapMigration(psiN, tProbs)
 # Plot landscape
 ###############################################################################
 inteRange = (best, mean)
-m = interp1d(inteRange, [5, -12])
+m = interp1d(inteRange, [2.5, -2.5])
 (BBN, BQN) = (tauN[:sitesNum, :sitesNum], tauN[:sitesNum, sitesNum:])
 (LW, ALPHA, SCA) = (.125, .5, 50)
 # Generate figure -------------------------------------------------------------
@@ -135,7 +135,7 @@ for point in fitsDict[:]:
     plt.scatter(
         point[0], point[1], 
         marker='.', color=aux.RVB(csca), 
-        alpha=.25, s=25, zorder=-5, linewidths=0, edgecolors='#12121200'
+        alpha=.2, s=25, zorder=-5, linewidths=0, edgecolors='#12121200'
     )
 # Axes and title --------------------------------------------------------------
 plt.tick_params(
@@ -152,7 +152,7 @@ ax.spines['bottom'].set_visible(False)
 ax.spines['left'].set_visible(False)
 # Export figure ---------------------------------------------------------------
 fig.savefig(
-    path.join(PT_IMG, '{}-BF-trapsNetwork.png'.format(EXP_FNAME)), 
+    path.join(PT_IMG, '{}-BF-NET.png'.format(EXP_FNAME)), 
     dpi=250, bbox_inches='tight', pad_inches=0
 )
 plt.close()

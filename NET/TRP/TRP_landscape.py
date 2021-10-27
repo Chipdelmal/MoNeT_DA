@@ -12,7 +12,7 @@ import TRP_aux as aux
 
 (LND, MOD) = ('UNF', 'HET')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (200, 'UNIF_MD')
+    (POINTS, EXP_FNAME) = (225, 'UNIF_MD')
     (PT_DTA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
@@ -31,12 +31,11 @@ if MOD == 'HOM':
     ])
 else:
     PTS_TMAT = np.asarray([
-        [0.05, 0.9, .05],
-        [.05, .05, .9], 
-        [.9, 0.05, 0.05]
+        [0.005, 0.975, 0.020],
+        [0.020, 0.005, 0.975], 
+        [0.975, 0.020, 0.005]
     ])
 PTYPE_PROB = [.1, .6, .3]
-KERNEL = [2, 1.0e-10, math.inf]
 ###############################################################################
 # Generate pointset
 ###############################################################################
@@ -56,7 +55,7 @@ sites = np.asarray(coords)
 ###############################################################################
 dist = monet.calculateDistanceMatrix(coords)
 tau = monet.zeroInflatedExponentialMigrationKernel(
-    dist, KERNEL, zeroInflation=0.75
+    dist, aux.MKERN, zeroInflation=0.75
 )
 ###############################################################################
 # Generate masking matrix

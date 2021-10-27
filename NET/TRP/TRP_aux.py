@@ -10,11 +10,12 @@ import MoNeT_MGDrivE as monet
 
 MKRS = ('o', '^', 's', 'p', 'd')
 MCOL = ('#e0c3fc', '#bdb2ff', '#a0c4ff', '#ffd6a5')
-RVB = monet.colorPaletteFromHexList(['#ffffff',  '#9b5de5', '#00296b'])
+RVB = monet.colorPaletteFromHexList(['#e0c3fc',  '#00296b'])
 KPARS = {
     'Trap': {'A': 0.5, 'b': .2},
     'Escape': {'A': 0, 'b': 100}
 }
+MKERN = [2, 1.0e-10, math.inf]
 
 
 def selectPaths(USR):

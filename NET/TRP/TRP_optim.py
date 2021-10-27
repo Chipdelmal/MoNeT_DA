@@ -21,14 +21,14 @@ else:
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
 kPars = aux.KPARS
 print('* Running: {}-{}'.format(EXP_FNAME, TRAPS_NUM))
-bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
+bgImg = '{}-BF-NET.png'.format(EXP_FNAME)
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (50, 5000)
+(POP_SIZE, GENS) = (30, 5000)
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
-    {'mean': 0, 'sd': 2.5, 'ipb': .5, 'mutpb': .3},
+    {'mean': 0, 'sd': 15, 'ipb': .5, 'mutpb': .3},
     {'tSize': 3}
 )
 ###############################################################################
@@ -122,11 +122,11 @@ plt.plot(x, meanFits, lw=.5, color='#ffffffFF')
 # plt.plot(x, minFits, ls='dotted', lw=2.5, color='#f72585')
 ax.fill_between(x, maxFits, minFits, alpha=0.9, color='#1565c077')
 ax.set_xlim(0, max(x))
-ax.set_ylim(0, max(maxFits))
+ax.set_ylim(0, 5*max(meanFits))
 ax.set_aspect((1/3)/ax.get_data_ratio())
 pthSave = path.join(
     PT_IMG, 
-    '{}_{}-GA-Training.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+    '{}_{}-GA-Train.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 fig.savefig(
     pthSave, dpi=250, bbox_inches='tight', 
@@ -167,7 +167,7 @@ ax.set_xlim(minX, maxX)
 ax.set_ylim(minY, maxY)
 pthSave = path.join(
     PT_IMG, 
-    '{}_{}-GA-trapsNetwork.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+    '{}_{}-GA-NET.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 fig.savefig(
     pthSave, dpi=250, bbox_inches='tight', 
