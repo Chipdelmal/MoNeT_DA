@@ -19,10 +19,7 @@ if monet.isNotebook():
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
-kPars = {
-    'Trap': {'A': 0.5, 'b': 1},
-    'Escape': {'A': 0, 'b': 100}
-}
+kPars = aux.KPARS
 print('* Running: {}-{}'.format(EXP_FNAME, TRAPS_NUM))
 bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
 ###############################################################################
@@ -126,7 +123,7 @@ plt.plot(x, meanFits, lw=.5, color='#ffffffFF')
 ax.fill_between(x, maxFits, minFits, alpha=0.9, color='#1565c077')
 ax.set_xlim(0, max(x))
 ax.set_ylim(0, max(maxFits))
-ax.set_aspect(.25/ax.get_data_ratio())
+ax.set_aspect((1/3)/ax.get_data_ratio())
 pthSave = path.join(
     PT_IMG, 
     '{}_{}-GA-Training.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
@@ -148,7 +145,7 @@ BQN = migMat[:sitesNum, sitesNum:]
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 
-        marker="X", color='#f72585EE', s=1000, zorder=20,
+        marker="X", color='#f72585EE', s=500, zorder=20,
         edgecolors='w', linewidths=2
     )
 plt.tick_params(
@@ -160,7 +157,7 @@ ax.text(
     0.5, 0.5, '{:.2f}'.format(minFits[-1]),
     horizontalalignment='center',
     verticalalignment='center',
-    fontsize=200, color='#00000033',
+    fontsize=100, color='#00000011',
     transform=ax.transAxes, zorder=50
 )
 ax.patch.set_facecolor('white')

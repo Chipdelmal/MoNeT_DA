@@ -20,10 +20,7 @@ if monet.isNotebook():
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
     (PT_DTA, PT_IMG) = aux.selectPaths(argv[2])
-kPars = {
-    'Trap': {'A': 0.5, 'b': 1},
-    'Escape': {'A': 0, 'b': 100}
-}
+kPars = aux.KPARS
 (LAY_TRAP, STEPS, delta) = (False, 120, 0.01)
 ###############################################################################
 # Read migration matrix and pop sites 
