@@ -14,23 +14,14 @@ import TRP_aux as aux
 from PIL import Image
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('GRD-100-HET', 20)
-    (PT_DTA, PT_IMG) = aux.selectPaths('lab')
+    (EXP_FNAME, TRAPS_NUM) = ('BASE-100-HOM', 1)
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('dsk')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
-    (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[3])
 kPars = aux.KPARS
-print('* Running: {}-{}'.format(EXP_FNAME, TRAPS_NUM))
-bgImg = '{}-BF-NET.png'.format(EXP_FNAME)
-###############################################################################
-# GA Settings
-############################################################################### 
-(POP_SIZE, GENS) = (30, 5000)
-(MATE, MUTATE, SELECT) = (
-    {'mate': .3, 'cxpb': 0.5}, 
-    {'mean': 0, 'sd': 15, 'ipb': .5, 'mutpb': .3},
-    {'tSize': 3}
-)
+print('* Optimizing: {} (traps={})'.format(EXP_FNAME, TRAPS_NUM))
+bgImg = '{}_BF.png'.format(EXP_FNAME)
 ###############################################################################
 # Read migration matrix and pop sites
 ############################################################################### 
@@ -44,6 +35,16 @@ if sites.shape[1] > 2:
 (minX, minY) = np.apply_along_axis(min, 0, sites)
 (maxX, maxY) = np.apply_along_axis(max, 0, sites)
 (xMinMax, yMinMax) = ((minX, maxX), (minY, maxY))
+###############################################################################
+# GA Settings
+############################################################################### 
+(POP_SIZE, GENS) = (20, 300)
+(MATE, MUTATE, SELECT) = (
+    {'mate': .3, 'cxpb': 0.5}, 
+    {'mean': 0, 'sd': (maxX-minX)/5, 'ipb': .5, 'mutpb': .3},
+    {'tSize': 3}
+)
+VERBOSE = True
 ###############################################################################
 # Registering functions for GA
 ############################################################################### 
@@ -94,7 +95,7 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 ############################################################################### 
 (pop, logbook) = algorithms.eaSimple(
     pop, toolbox, cxpb=MATE['cxpb'], mutpb=MUTATE['mutpb'], ngen=GENS, 
-    stats=stats, halloffame=hof, verbose=False
+    stats=stats, halloffame=hof, verbose=VERBOSE
 )
 ###############################################################################
 # Get Results
@@ -103,7 +104,7 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
     "max", "avg", "best", "min", "traps"
 )
 pklPath = path.join(
-    PT_IMG, '{}_{}-GA'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+    PT_GA, '{}_{}_GA'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 outList = [
     i for i in zip(minFits, meanFits, maxFits, [list(j) for j in traps])
@@ -125,11 +126,10 @@ ax.set_xlim(0, max(x))
 ax.set_ylim(0, 5*max(meanFits))
 ax.set_aspect((1/3)/ax.get_data_ratio())
 pthSave = path.join(
-    PT_IMG, 
-    '{}_{}-GA-Train.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+    PT_GA, '{}_{}-GA.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 fig.savefig(
-    pthSave, dpi=250, bbox_inches='tight', 
+    pthSave, dpi=aux.DPI, bbox_inches='tight', 
     pad_inches=0, transparent=True
 )
 plt.close('all')
@@ -155,22 +155,20 @@ plt.tick_params(
 )
 ax.text(
     0.5, 0.5, '{:.2f}'.format(minFits[-1]),
-    horizontalalignment='center',
-    verticalalignment='center',
+    horizontalalignment='center', verticalalignment='center',
     fontsize=100, color='#00000011',
     transform=ax.transAxes, zorder=50
 )
 ax.patch.set_facecolor('white')
 ax.patch.set_alpha(0)
 ax.set_aspect('equal')
-ax.set_xlim(minX, maxX)
-ax.set_ylim(minY, maxY)
+ax.set_xlim(minX-aux.PAD, maxX+aux.PAD)
+ax.set_ylim(minY-aux.PAD, maxY+aux.PAD)
 pthSave = path.join(
-    PT_IMG, 
-    '{}_{}-GA-NET.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
+    PT_IMG, '{}_{}.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 fig.savefig(
-    pthSave, dpi=250, bbox_inches='tight', 
+    pthSave, dpi=aux.DPI, bbox_inches='tight', 
     pad_inches=0, transparent=True
 )
 plt.close('all')

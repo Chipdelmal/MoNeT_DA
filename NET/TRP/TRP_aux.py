@@ -16,20 +16,22 @@ KPARS = {
     'Escape': {'A': 0, 'b': 100}
 }
 MKERN = [2, 1.0e-10, math.inf]
-
+(DPI, PAD) = (300, 1)
 
 def selectPaths(USR):
     if USR=='lab':
-        (PT_DTA, PT_IMG) = (
+        (PT_DTA, PT_GA, PT_IMG) = (
             '/Volumes/marshallShare/Mov/dta',
-            '/Volumes/marshallShare/Mov/trp'
+            '/Volumes/marshallShare/Mov/GA',
+            '/Volumes/marshallShare/Mov/trp',
         )
     elif USR=='dsk':
-        (PT_DTA, PT_IMG) = (
+        (PT_DTA, PT_GA, PT_IMG) = (
             '/home/chipdelmal/Documents/WorkSims/Mov/dta',
+            '/home/chipdelmal/Documents/WorkSims/Mov/GA',
             '/home/chipdelmal/Documents/WorkSims/Mov/trp'
         )
-    return (PT_DTA, PT_IMG)
+    return (PT_DTA, PT_GA, PT_IMG)
 
 
 def unifyTransitionsMatrix(BB, BQ, QB, QQ):

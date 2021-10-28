@@ -10,19 +10,19 @@ from sklearn.preprocessing import normalize
 import TRP_aux as aux
 
 
-(LND, MOD) = ('UNF', 'HET')
+(LND, MOD) = ('Grid', 'HOM')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (225, 'UNIF_MD')
-    (PT_DTA, PT_IMG) = aux.selectPaths('lab')
+    (POINTS, EXP_FNAME) = (100, 'BASE')
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('dsk')
 else:
     POINTS = argv[1]
-    (PT_DTA, PT_IMG) = aux.selectPaths(argv[2])
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[2])
 ###############################################################################
 # Constants
 ###############################################################################
 sca = 40
-(xRan, yRan) = ((-1280/sca, 1280/sca), (-720/sca, 720/sca))
-# (xRan, yRan) = ((-10, 10), (-10, 10))
+# (xRan, yRan) = ((-1280/sca, 1280/sca), (-720/sca, 720/sca))
+(xRan, yRan) = ((-10, 10), (-10, 10))
 if MOD == 'HOM':
     PTS_TMAT = np.asarray([
         [1/3, 1/3, 1/3],
@@ -40,8 +40,8 @@ PTYPE_PROB = [.1, .6, .3]
 # Generate pointset
 ###############################################################################
 if LND == 'Grid':
-    x = np.linspace(xRan[0], xRan[1], int((xRan[1]-xRan[0])/3))
-    y = np.linspace(yRan[0], yRan[1], int((yRan[1]-yRan[0])/3))
+    x = np.linspace(xRan[0], xRan[1], int((xRan[1]-xRan[0])/2))
+    y = np.linspace(yRan[0], yRan[1], int((yRan[1]-yRan[0])/2))
     coords = np.asarray(np.meshgrid(x, y)).T
     coords = np.concatenate(coords)
 else:
