@@ -40,7 +40,7 @@ if sites.shape[1] > 2:
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (20, 2000)
+(POP_SIZE, GENS) = (20, 1500)
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': (maxX-minX)/5, 'ipb': .5, 'mutpb': .3},
@@ -211,6 +211,6 @@ foreground = Image.open(pthSave)
 background = background.crop((0, 0, w, h))
 foreground = foreground.resize((int(w/1), int(h/1)),Image.ANTIALIAS)
 background.paste(foreground, (0, 0), foreground)
-background.save(pthSave)
+background.save(pthSave, dpi=(aux.DPI, aux.DPI))
 background.close()
 foreground.close()
