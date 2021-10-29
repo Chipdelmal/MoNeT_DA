@@ -38,7 +38,7 @@ if sites.shape[1] > 2:
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (20, 300)
+(POP_SIZE, GENS) = (20, 500)
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': (maxX-minX)/5, 'ipb': .5, 'mutpb': .3},
@@ -136,7 +136,7 @@ plt.close('all')
 ###############################################################################
 # Plot landscape
 ###############################################################################
-best = pop[bestIndx[0]]
+best = hof[0]
 trapsLocs = list(np.array_split(best, len(best)/2))
 BBN = migMat[:sitesNum, :sitesNum]
 BQN = migMat[:sitesNum, sitesNum:]
