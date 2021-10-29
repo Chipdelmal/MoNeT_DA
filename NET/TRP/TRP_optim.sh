@@ -16,4 +16,4 @@ done
 # python TRP_optim.py $EXP "20" $USR
 # python TRP_optim.py $EXP "25" $USR
 
-# python TRP_optimPlot.py $EXP "25" $USR
+# python TRP_optimPlot.py $EXP "25" $USR 

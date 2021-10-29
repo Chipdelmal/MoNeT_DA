@@ -57,5 +57,5 @@ def calcFitness(
     # Calculate fitness -------------------------------------------------------
     daysTillTrapped = np.apply_along_axis(fitFuns[0], 1, F)
     fitness = fitFuns[1](daysTillTrapped)
-    return [float(fitness)]
+    return [float(abs(fitness))]
 
