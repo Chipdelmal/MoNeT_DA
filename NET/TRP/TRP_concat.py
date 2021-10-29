@@ -9,7 +9,7 @@ import TRP_aux as aux
 
 if monet.isNotebook():
     EXP_FNAME = 'BASE-100'
-    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('dsk')
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     EXP_FNAME = argv[1]
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[2])

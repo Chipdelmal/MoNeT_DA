@@ -15,7 +15,7 @@ import TRP_fun as fun
 from PIL import Image
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('BASE-100-HOM', 1)
+    (EXP_FNAME, TRAPS_NUM) = ('SQR_01-150-HOM', 1)
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
@@ -40,7 +40,7 @@ if sites.shape[1] > 2:
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (20, 500)
+(POP_SIZE, GENS) = (20, 2000)
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': (maxX-minX)/5, 'ipb': .5, 'mutpb': .3},
@@ -155,13 +155,13 @@ radii = [math.log(tpPrs['A']/y)/(tpPrs['b']) for y in tRan]
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 
-        marker="X", color='#f72585EE', s=500, zorder=25,
+        marker="X", color='#f72585EF', s=600, zorder=25,
         edgecolors='w', linewidths=2
     )
     for r in radii:
         circle = plt.Circle(
             (trap[0], trap[1]), r, 
-            color='#e4c1f988', fill=False, ls=':', lw=1.25
+            color='#f7258509', fill=True, ls=':', lw=0, zorder=0
         )
         ax.add_patch(circle)
 for (i, site) in enumerate(sites):
@@ -174,7 +174,7 @@ for (i, site) in enumerate(sites):
 (fig, ax) = aux.plotNetwork(
     fig, ax, BQN*SCA, 
     np.asarray(trapsLocs), sites, 
-    [0], c='#ff99c8', lw=LW*10, alpha=ALPHA*.75
+    [0], c='#d81159', lw=LW*2, alpha=ALPHA*2
 )
 # Axes ------------------------------------------------------------------------
 plt.tick_params(
