@@ -15,8 +15,8 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('BASE-100-HET', 1)
-    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('dsk')
+    (EXP_FNAME, TRAPS_NUM) = ('BASE-100-HOM', 1)
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[2])

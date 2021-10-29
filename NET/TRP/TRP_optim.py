@@ -11,11 +11,12 @@ from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
 import TRP_aux as aux
+import TRP_fun as fun
 from PIL import Image
 
 if monet.isNotebook():
     (EXP_FNAME, TRAPS_NUM) = ('BASE-100-HOM', 1)
-    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('dsk')
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[3])
@@ -31,14 +32,15 @@ sites = np.genfromtxt(pthBase+'_XY.csv', delimiter=',')
 # Sites and landscape shapes --------------------------------------------------
 sitesNum = sites.shape[0]
 if sites.shape[1] > 2:
-     sites = sites[:, 0:2]
+    pTypes = sites[:,2]
+    sites = sites[:, 0:2]
 (minX, minY) = np.apply_along_axis(min, 0, sites)
 (maxX, maxY) = np.apply_along_axis(max, 0, sites)
 (xMinMax, yMinMax) = ((minX, maxX), (minY, maxY))
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (20, 1000)
+(POP_SIZE, GENS) = (20, 500)
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': (maxX-minX)/5, 'ipb': .5, 'mutpb': .3},
@@ -137,17 +139,44 @@ plt.close('all')
 # Plot landscape
 ###############################################################################
 best = hof[0]
+# Assemble migration with traps -----------------------------------------------
 trapsLocs = list(np.array_split(best, len(best)/2))
-BBN = migMat[:sitesNum, :sitesNum]
-BQN = migMat[:sitesNum, sitesNum:]
+trapDists = fun.calcTrapToSitesDistance(trapsLocs, sites)
+tProbs = fun.calcTrapsSections(trapDists, params=kPars)
+tauN = fun.assembleTrapMigration(migMat, tProbs)
+BBN = tauN[:sitesNum, :sitesNum]
+BQN = tauN[:sitesNum, sitesNum:]
+(tpPrs, tRan) = (kPars['Trap'], [.25, .1, .05, .01])
+radii = [math.log(tpPrs['A']/y)/(tpPrs['b']) for y in tRan]
+# Plot ------------------------------------------------------------------------
 (LW, ALPHA, SCA) = (.125, .5, 50)
 (fig, ax) = plt.subplots(figsize=(15, 15))
+# Traps and sites -------------------------------------------------------------
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 
-        marker="X", color='#f72585EE', s=500, zorder=20,
+        marker="X", color='#f72585EE', s=500, zorder=25,
         edgecolors='w', linewidths=2
     )
+    for r in radii:
+        circle = plt.Circle(
+            (trap[0], trap[1]), r, 
+            color='#e4c1f988', fill=False, ls=':', lw=1.25
+        )
+        ax.add_patch(circle)
+for (i, site) in enumerate(sites):
+    plt.scatter(
+        site[0], site[1], 
+        marker=aux.MKRS[int(pTypes[i])], color=aux.MCOL[int(pTypes[i])], 
+        s=200, zorder=20, edgecolors='w', linewidths=2
+    )
+# Traps network ---------------------------------------------------------------   
+(fig, ax) = aux.plotNetwork(
+    fig, ax, BQN*SCA, 
+    np.asarray(trapsLocs), sites, 
+    [0], c='#ff99c8', lw=LW*10, alpha=ALPHA*.75
+)
+# Axes ------------------------------------------------------------------------
 plt.tick_params(
     axis='both', which='both',
     bottom=False, top=False, left=False, right=False,
@@ -157,7 +186,7 @@ ax.text(
     0.5, 0.5, '{:.2f}'.format(minFits[-1]),
     horizontalalignment='center', verticalalignment='center',
     fontsize=100, color='#00000011',
-    transform=ax.transAxes, zorder=50
+    transform=ax.transAxes, zorder=5
 )
 ax.patch.set_facecolor('white')
 ax.patch.set_alpha(0)
