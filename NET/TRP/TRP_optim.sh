@@ -6,7 +6,7 @@ USR=$2
 # python TRP_brute.py $EXP $USR
 python TRP_basePlot.py $EXP $USR
 
-for i in {1..5}
+for i in {1..9}
 do
     python TRP_optim.py $EXP $i $USR
 done 
