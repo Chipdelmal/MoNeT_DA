@@ -20,7 +20,7 @@ if monet.isNotebook():
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[3])
-kPars = aux.KPARS
+(kPars, GENS) = (aux.KPARS, 1000)
 print('* Optimizing: {} (traps={})'.format(EXP_FNAME, TRAPS_NUM))
 bgImg = '{}_BF.png'.format(EXP_FNAME)
 ###############################################################################
@@ -40,7 +40,7 @@ if sites.shape[1] > 2:
 ###############################################################################
 # GA Settings
 ############################################################################### 
-(POP_SIZE, GENS) = (20, 1500)
+POP_SIZE = int(10*(TRAPS_NUM*1.20))
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': (maxX-minX)/5, 'ipb': .5, 'mutpb': .3},
@@ -125,14 +125,14 @@ plt.plot(x, meanFits, lw=.5, color='#ffffffFF')
 # plt.plot(x, minFits, ls='dotted', lw=2.5, color='#f72585')
 ax.fill_between(x, maxFits, minFits, alpha=0.9, color='#1565c077')
 ax.set_xlim(0, max(x))
-ax.set_ylim(0, 5*max(meanFits))
+ax.set_ylim(0, 5*minFits[-1])
 ax.set_aspect((1/3)/ax.get_data_ratio())
 pthSave = path.join(
     PT_GA, '{}_{}-GA.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 fig.savefig(
     pthSave, dpi=aux.DPI, bbox_inches='tight', 
-    pad_inches=0, transparent=True
+    pad_inches=0, transparent=False
 )
 plt.close('all')
 ###############################################################################
@@ -155,7 +155,7 @@ radii = [math.log(tpPrs['A']/y)/(tpPrs['b']) for y in tRan]
 for trap in trapsLocs:
     plt.scatter(
         trap[0], trap[1], 
-        marker="X", color='#f72585EF', s=600, zorder=25,
+        marker="X", color='#f72585FA', s=600, zorder=25,
         edgecolors='w', linewidths=2
     )
     for r in radii:
