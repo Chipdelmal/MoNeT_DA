@@ -40,7 +40,7 @@ if sites.shape[1] > 2:
 ###############################################################################
 # GA Settings
 ############################################################################### 
-POP_SIZE = int(10*(TRAPS_NUM*1.20))
+POP_SIZE = int(10*(TRAPS_NUM*1.25))
 (MATE, MUTATE, SELECT) = (
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': (maxX-minX)/5, 'ipb': .5, 'mutpb': .3},
@@ -131,8 +131,7 @@ pthSave = path.join(
     PT_GA, '{}_{}-GA.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
 fig.savefig(
-    pthSave, dpi=aux.DPI, bbox_inches='tight', 
-    pad_inches=0, transparent=False
+    pthSave, dpi=aux.DPI, bbox_inches='tight', pad_inches=0, transparent=False
 )
 plt.close('all')
 ###############################################################################

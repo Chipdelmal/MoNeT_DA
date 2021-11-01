@@ -107,3 +107,51 @@ def plotNetwork(
     return (fig, ax)
 
 
+def plotTraps(
+    trapsLocs, sites, pTypes, 
+    lw=.125, alpha=.5, sca=50
+):
+    (LW, ALPHA, SCA) = (.125, .5, 50)
+    (fig, ax) = plt.subplots(figsize=(15, 15))
+    # Traps and sites ---------------------------------------------------------
+    for trap in trapsLocs:
+        plt.scatter(
+            trap[0], trap[1], 
+            marker="X", color='#f72585FA', s=600, zorder=25,
+            edgecolors='w', linewidths=2
+        )
+        for r in radii:
+            circle = plt.Circle(
+                (trap[0], trap[1]), r, 
+                color='#f7258509', fill=True, ls=':', lw=0, zorder=0
+            )
+            ax.add_patch(circle)
+    for (i, site) in enumerate(sites):
+        plt.scatter(
+            site[0], site[1], 
+            marker=aux.MKRS[int(pTypes[i])], color=aux.MCOL[int(pTypes[i])], 
+            s=200, zorder=20, edgecolors='w', linewidths=2
+        )
+    # Traps network ----------------------------------------------------------- 
+    (fig, ax) = aux.plotNetwork(
+        fig, ax, BQN*SCA, 
+        np.asarray(trapsLocs), sites, 
+        [0], c='#d81159', lw=lw*2, alpha=alpha*2
+    )
+    # Axes --------------------------------------------------------------------
+    plt.tick_params(
+        axis='both', which='both',
+        bottom=False, top=False, left=False, right=False,
+        labelbottom=False, labeltop=False, labelleft=False, labelright=False
+    )
+    ax.text(
+        0.5, 0.5, '{:.2f}'.format(minFits[-1]),
+        horizontalalignment='center', verticalalignment='center',
+        fontsize=100, color='#00000011',
+        transform=ax.transAxes, zorder=5
+    )
+    ax.patch.set_facecolor('white')
+    ax.patch.set_alpha(0)
+    ax.set_aspect('equal')
+    ax.set_xlim(minX-aux.PAD, maxX+aux.PAD)
+    ax.set_ylim(minY-aux.PAD, maxY+aux.PAD)

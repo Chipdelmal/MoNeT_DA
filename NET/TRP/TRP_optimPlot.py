@@ -10,6 +10,7 @@ from deap import base, creator, algorithms, tools
 import pickle as pkl
 import TRP_gaFun as ga
 import TRP_aux as aux
+import TRP_fun as fun
 import MoNeT_MGDrivE as monet
 from deap import base, creator, algorithms, tools
 from PIL import Image
@@ -17,12 +18,12 @@ import subprocess
 
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('gd1-100', 10)
-    (PT_DTA, PT_IMG) = aux.selectPaths('lab')
+    (EXP_FNAME, TRAPS_NUM) = ('UNIF_MD-200-HOM', 10)
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
-    (PT_DTA, PT_IMG) = aux.selectPaths(argv[3])
-fName = '{}_{}-GA'.format(EXP_FNAME, TRAPS_NUM)
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[3])
+fName = '{}_{}_GA'.format(EXP_FNAME, TRAPS_NUM)
 (LW, ALPHA, SCA) = (.125, .5, 50)
 ###############################################################################
 # Read bg image
@@ -31,7 +32,7 @@ bgImg = '{}-BF-trapsNetwork.png'.format(EXP_FNAME)
 ###############################################################################
 # Load GA data
 ###############################################################################
-with open(path.join(PT_IMG, fName+'.pkl'), 'rb') as f:
+with open(path.join(PT_GA, fName+'.pkl'), 'rb') as f:
     dta = pkl.load(f)
 ###############################################################################
 # Read migration matrix and pop sites
@@ -54,6 +55,13 @@ if sites.shape[1] > 2:
 trapsHistory = dta['traps']
 meanHistory = dta['mean']
 minHistory = dta['min']
+minFit = min(dta['min'])
+# Best locations --------------------------------------------------------------
+bestFit = list(dta[dta['min']==minFit]['traps'])[0]
+trapsLocs = list(np.array_split(bestFit, len(bestFit)/2))
+trapDists = fun.calcTrapToSitesDistance(trapsLocs, sites)
+tProbs = fun.calcTrapsSections(trapDists, params=aux.KPARS)
+tauN = fun.assembleTrapMigration(migMat, tProbs)
 ###############################################################################
 # Plot landscape
 ###############################################################################
@@ -135,12 +143,12 @@ for i in list(reversed(list(range(framesNum)))):
 ###############################################################################
 # Export video
 ###############################################################################
-sp = subprocess.Popen([
-    'ffmpeg', '-y',
-    '-start_number', '0',
-    '-r', '24',
-    '-i', path.join(outPTH, "%04d.png"), 
-    # '-vf', 'scale=1000:1000',
-    path.join(outPTH, fName+'.mp4')
-])
-sp.wait()
+# sp = subprocess.Popen([
+#     'ffmpeg', '-y',
+#     '-start_number', '0',
+#     '-r', '24',
+#     '-i', path.join(outPTH, "%04d.png"), 
+#     # '-vf', 'scale=1000:1000',
+#     path.join(outPTH, fName+'.mp4')
+# ])
+# sp.wait()
