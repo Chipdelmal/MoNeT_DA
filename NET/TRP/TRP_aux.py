@@ -110,7 +110,7 @@ def plotNetwork(
 def plotTraps(
     fig, ax, 
     trapsLocs, bestVal, sites, pTypes, radii, BQN,
-    minX, minY, maxX, maxY,
+    minX, minY, maxX, maxY, gen=0,
     lw=.125, alpha=.5, sca=50
 ):
     (LW, ALPHA, SCA) = (lw, alpha, sca)
@@ -152,9 +152,20 @@ def plotTraps(
         fontsize=100, color='#00000011',
         transform=ax.transAxes, zorder=5
     )
+    if gen > 0:
+        ax.text(
+            0.9, 0.1, 'gen: {:0>3}'.format(gen),
+            horizontalalignment='center', verticalalignment='center',
+            fontsize=20, color='#00000055',
+            transform=ax.transAxes, zorder=20
+        )
     ax.patch.set_facecolor('white')
     ax.patch.set_alpha(0)
     ax.set_aspect('equal')
     ax.set_xlim(minX-PAD, maxX+PAD)
     ax.set_ylim(minY-PAD, maxY+PAD)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
     return (fig, ax)
