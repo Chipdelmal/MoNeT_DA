@@ -78,7 +78,8 @@ for exp in EXPS:
     Parallel(n_jobs=JOB)(
         delayed(dbg.pstProcessParallel)(
             exIx, header, xpidIx, 
-            qnt=qnt, sampRate=aux.SAMP_RATE, offset=0,
+            qnt=qnt, 
+            sampRate=aux.SAMP_RATE, offset=0,
             thi=aux.THI, tho=aux.THO, thw=aux.THW, 
             tap=aux.TAP, thp=(.05, .95)
         ) for exIx in expIter
