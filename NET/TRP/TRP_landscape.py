@@ -12,17 +12,17 @@ import TRP_aux as aux
 
 (LND, MOD) = ('Unif', 'HOM')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (100, 'SQR_02')
-    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('dsk')
+    (POINTS, EXP_FNAME) = (350, 'LRG_01')
+    (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths(argv[2])
 ###############################################################################
 # Constants
 ###############################################################################
-sca = 40
-# (xRan, yRan) = ((-1280/sca, 1280/sca), (-720/sca, 720/sca))
-(xRan, yRan) = ((-10, 10), (-10, 10))
+sca = 10
+(xRan, yRan) = ((-1280/sca, 1280/sca), (-720/sca, 720/sca))
+# (xRan, yRan) = ((-10, 10), (-10, 10))
 if MOD == 'HOM':
     PTS_TMAT = np.asarray([
         [1/3, 1/3, 1/3],
@@ -91,7 +91,7 @@ for (i, site) in enumerate(sites):
         site[0], site[1], 
         marker=aux.MKRS[pTypes[i]], 
         color=aux.MCOL[pTypes[i]], 
-        s=200, zorder=20, edgecolors='w', linewidths=2
+        s=150, zorder=20, edgecolors='w', linewidths=2
     )
 ax.set_xlim(*xRan)
 ax.set_ylim(*yRan)
@@ -121,4 +121,4 @@ df.to_csv(
         EXP_FNAME, str(pNum).zfill(3), MOD
     )), index=False, header=False
 )
-plt.close('all')
+
