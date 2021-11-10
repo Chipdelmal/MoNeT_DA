@@ -15,7 +15,7 @@ import TRP_fun as fun
 from PIL import Image
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('LRG_01-350-HOM', 5)
+    (EXP_FNAME, TRAPS_NUM) = ('MOV_01-400-HOM', 10)
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
@@ -79,11 +79,11 @@ BQN = tauN[:sitesNum, sitesNum:]
 (tpPrs, tRan) = (kPars['Trap'], [.25, .1, .05, .01])
 radii = [math.log(tpPrs['A']/y)/(tpPrs['b']) for y in tRan]
 # Plot ------------------------------------------------------------------------
-(LW, ALPHA, SCA) = (.125, .5, 50)
+(LW, ALPHA, SCA) = (.125, .5, 40)
 (fig, ax) = plt.subplots(figsize=(15, 15))
 (fig, ax) = aux.plotTraps(
     fig, ax, trapsLocs, bestVal, sites, pTypes, radii, BQN,
-    minX, minY, maxX, maxY
+    minX, minY, maxX, maxY, sca=SCA, lw=LW, alpha=ALPHA
 )
 pthSave = path.join(
     PT_IMG, '{}_{}.png'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))

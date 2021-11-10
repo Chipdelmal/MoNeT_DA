@@ -15,7 +15,7 @@ import TRP_fun as fun
 from scipy.interpolate import interp1d
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('BASE-100-HOM', 1)
+    (EXP_FNAME, TRAPS_NUM) = ('LRG_01-350-HOM', 1)
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], 1)
@@ -59,14 +59,14 @@ if pTypes is None:
     plt.scatter(
         sites.T[0], sites.T[1], 
         marker='^', color='#03045eDB', 
-        s=250, zorder=20, edgecolors='w', linewidths=2
+        s=150, zorder=20, edgecolors='w', linewidths=1.5
     )
 else:
     for (i, site) in enumerate(sites):
         plt.scatter(
             site[0], site[1], 
             marker=aux.MKRS[int(pTypes[i])], color=aux.MCOL[int(pTypes[i])], 
-            s=200, zorder=20, edgecolors='w', linewidths=2
+            s=150, zorder=20, edgecolors='w', linewidths=1.5
         )    
 # Axes and title --------------------------------------------------------------
 plt.tick_params(

@@ -12,7 +12,7 @@ import TRP_aux as aux
 
 (LND, MOD) = ('Unif', 'HOM')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (350, 'LRG_01')
+    (POINTS, EXP_FNAME) = (400, 'MOV_01')
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
@@ -91,14 +91,14 @@ for (i, site) in enumerate(sites):
         site[0], site[1], 
         marker=aux.MKRS[pTypes[i]], 
         color=aux.MCOL[pTypes[i]], 
-        s=150, zorder=20, edgecolors='w', linewidths=2
+        s=150, zorder=20, edgecolors='w', linewidths=1.25
     )
 ax.set_xlim(*xRan)
 ax.set_ylim(*yRan)
 ax.set_aspect('equal')
 (fig, ax) = aux.plotNetwork(
     fig, ax, tauC*SCA, sites, sites, [1]*len(coords), 
-    c='#03045e', lw=LW, alpha=ALPHA, arrows=False
+    c='#03045e', lw=LW, alpha=ALPHA, arrows=False, hl=2, hw=1.2, hsc=.05
 )
 fig.savefig(
     path.join(PT_DTA, '{}-{}-{}.png'.format(
@@ -121,4 +121,3 @@ df.to_csv(
         EXP_FNAME, str(pNum).zfill(3), MOD
     )), index=False, header=False
 )
-
