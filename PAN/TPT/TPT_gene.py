@@ -3,15 +3,19 @@
 
 import MoNeT_MGDrivE as monet
 import TPT_gene_LDR as LDR
+import TPT_gene_HUM as HUM
 
 ###############################################################################
 # Drive
 ###############################################################################
-def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
+def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
     ###########################################################################
-    # Linked Drive ------------------------------------------------------------
-    if DRIVE == 'LDR':
-        (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
+    if TYPE != 'HUM':
+        if DRIVE == 'LDR':
+            (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
+    else:
+        # Human ---------------------------------------------------------------
+        (aggD, yRange, folder) = HUM.driveParameters(TYPE, popSize=humSize)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN
@@ -32,12 +36,13 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
 
 
 def maleFemaleSelector(AOI):
-    if AOI == 'HLT':
+    if (AOI == 'HLT') or (AOI == 'HUM'):
         MF = (False, True)
     else:
         MF =    (True, True)
     return MF
 
+1
 
 def colorSelector(AOI):
     if AOI == 'ECO':

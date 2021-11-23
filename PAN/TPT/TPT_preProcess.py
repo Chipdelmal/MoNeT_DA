@@ -12,7 +12,7 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('lab', 'HLT', 'LDR')
+    (USR, AOI, DRV) = ('lab', 'HUM', 'LDR')
 else:
     (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # Setup number of threads -----------------------------------------------------
@@ -29,7 +29,7 @@ for exp in EXPS:
     # Setting up paths
     ###########################################################################
     (drive, land) = (
-        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE, humSize=aux.HUM_SIZE),
         aux.landSelector(USR=USR)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
@@ -42,6 +42,10 @@ for exp in EXPS:
         PT_DTA, PT_PRE, tS, 
         '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
     )
+    # Select sexes and ids ----------------------------------------------------
+    sexID = {"male": "M_", "female": "F_"}
+    if (AOI == 'HUM'):
+        sexID = {"male": "", "female": "H_"}
     ###########################################################################
     # Load folders
     ###########################################################################
@@ -50,7 +54,6 @@ for exp in EXPS:
     (expDirsMean, expDirsTrac) = monet.getExpPaths(
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
-    # print(land)
     (expNum, nodeDigits) = (len(expDirsMean), 2)
     expIter = list(zip(list(range(expNum)), expDirsMean, expDirsTrac))
     # Check for potential miss-matches in experiments folders -----------------
@@ -79,6 +82,6 @@ for exp in EXPS:
             cmpr='bz2', nodeDigits=2,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP,
-            sexFilenameIdentifiers={"male": "M_", "female": "F_"}
+            sexFilenameIdentifiers=sexID
         ) for exIx in expIter
     )
