@@ -11,15 +11,16 @@ import MoNeT_MGDrivE as monet
 MKRS = ('o', '^', 's', 'p', 'd')
 MCOL = ('#e0c3fc', '#bdb2ff', '#a0c4ff', '#ffd6a5')
 RVB = monet.colorPaletteFromHexList(['#e0c3fc',  '#00296b'])
-# KPARS = {
-#     'Trap': {'A': 0.5, 'b': 1},
-#     'Escape': {'A': 0, 'b': 100}
-# }
 KPARS = {
-    'Trap': {'A': 0.5, 'b': 0.75},
+    'Trap': {'A': 0.5, 'b': 1.5},
     'Escape': {'A': 0, 'b': 100}
 }
-MKERN = [2, 1.0e-10, math.inf]
+# KPARS = {
+#     'Trap': {'A': 0.5, 'b': 0.15},
+#     # 'Trap': {'A': 0.5, 'b': 0.2},
+#     'Escape': {'A': 0, 'b': 100}
+# }
+MKERN = [1, 1.0e-10, math.inf]
 (DPI, PAD) = (300, 1)
 
 def selectPaths(USR):
@@ -79,7 +80,7 @@ def plotNetworkOnMap(map, mtxTransitions, ptsB, ptsA, c='#dd5fb', lw=.4, la=5):
 def plotNetwork(
     fig, ax, mtxTransitions, ptsB, ptsA, size,
     c='#dd5fb', lw=.3, la=5, arrows=False, hw=.05, hl=0.1,
-    alpha=.75
+    alpha=.75, hsc=.5
 ):
     (aNum, bNum) = (ptsA.shape[0], ptsB.shape[0])
     for j in range(aNum):
@@ -96,29 +97,34 @@ def plotNetwork(
                 )
             else:
                 (dx, dy)= ((src[0]-snk[0]), (src[1]-snk[1]))
-                scl=size[j]/math.sqrt(dx**2+dy**2)
-                plt.arrow(
-                    snk[0], snk[1], dx-dx*hl*1.2, dy-dy*hl*1.2,
-                    lw=math.log(1+lw*mtxTransitions[j][i]),
-                    alpha=min(alpha, math.log(1+la*mtxTransitions[j][i])),
-                    head_width=hw, head_length=hl, fc=c, ec=c,
-                    zorder=0, shape='left'
-                )
+                if (dx > 0) or (dy > 0):
+                    scl=size[j]/math.sqrt(dx**2+dy**2)*10
+                    print(scl)
+                    plt.arrow(
+                        snk[0], snk[1], dx-(dx*hl*hsc), dy-(dy*hl*hsc),
+                        lw=math.log(1+lw*mtxTransitions[j][i]),
+                        alpha=min(alpha, math.log(1+la*mtxTransitions[j][i])),
+                        head_width=hw*scl, head_length=hl, fc=c, ec=c,
+                        zorder=0, shape='full', overhang=1, 
+                        length_includes_head=True
+                    )
     return (fig, ax)
 
 
 def plotTraps(
-    trapsLocs, sites, pTypes, 
-    lw=.125, alpha=.5, sca=50
+    fig, ax, 
+    trapsLocs, bestVal, sites, pTypes, radii, BQN,
+    minX, minY, maxX, maxY, gen=0,
+    lw=.125, alpha=.5, sca=5
 ):
-    (LW, ALPHA, SCA) = (.125, .5, 50)
+    (LW, ALPHA, SCA) = (lw, alpha, sca)
     (fig, ax) = plt.subplots(figsize=(15, 15))
     # Traps and sites ---------------------------------------------------------
     for trap in trapsLocs:
         plt.scatter(
             trap[0], trap[1], 
-            marker="X", color='#f72585FA', s=600, zorder=25,
-            edgecolors='w', linewidths=2
+            marker="X", color='#f72585FA', s=175, zorder=25,
+            edgecolors='w', linewidths=1
         )
         for r in radii:
             circle = plt.Circle(
@@ -129,14 +135,14 @@ def plotTraps(
     for (i, site) in enumerate(sites):
         plt.scatter(
             site[0], site[1], 
-            marker=aux.MKRS[int(pTypes[i])], color=aux.MCOL[int(pTypes[i])], 
-            s=200, zorder=20, edgecolors='w', linewidths=2
+            marker=MKRS[int(pTypes[i])], color=MCOL[int(pTypes[i])], 
+            s=150, zorder=20, edgecolors='w', linewidths=1.5
         )
     # Traps network ----------------------------------------------------------- 
-    (fig, ax) = aux.plotNetwork(
+    (fig, ax) = plotNetwork(
         fig, ax, BQN*SCA, 
         np.asarray(trapsLocs), sites, 
-        [0], c='#d81159', lw=lw*2, alpha=alpha*2
+        [0], c='#d81159', lw=LW*2, alpha=ALPHA*2
     )
     # Axes --------------------------------------------------------------------
     plt.tick_params(
@@ -145,13 +151,25 @@ def plotTraps(
         labelbottom=False, labeltop=False, labelleft=False, labelright=False
     )
     ax.text(
-        0.5, 0.5, '{:.2f}'.format(minFits[-1]),
+        0.5, 0.5, '{:.3f}'.format(bestVal),
         horizontalalignment='center', verticalalignment='center',
         fontsize=100, color='#00000011',
         transform=ax.transAxes, zorder=5
     )
+    if gen > 0:
+        ax.text(
+            0.5, 0.4, '(avg: {:.2f})'.format(gen),
+            horizontalalignment='center', verticalalignment='center',
+            fontsize=25, color='#00000022',
+            transform=ax.transAxes, zorder=20
+        )
     ax.patch.set_facecolor('white')
     ax.patch.set_alpha(0)
     ax.set_aspect('equal')
-    ax.set_xlim(minX-aux.PAD, maxX+aux.PAD)
-    ax.set_ylim(minY-aux.PAD, maxY+aux.PAD)
+    ax.set_xlim(minX-PAD, maxX+PAD)
+    ax.set_ylim(minY-PAD, maxY+PAD)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    return (fig, ax)

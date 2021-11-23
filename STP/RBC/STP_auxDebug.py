@@ -310,10 +310,11 @@ def plotDICE(
         # axTemp.yaxis.set_tick_params(width=0)
         ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
         ax.set_axis_off()
-    ax.set_aspect(monet.scaleAspect(1, STYLE))
+    # ax.set_aspect(monet.scaleAspect(1, STYLE))
     ax.set_xlim(STYLE['xRange'])
     ax.set_ylim(STYLE['yRange'])
     ax.set_xscale(scale)
+    ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
     ax.vlines(
         xLvls, 0, 1, lw=gw, ls='--', color='#000000', 
         transform=ax.get_xaxis_transform(), zorder=-1
