@@ -20,7 +20,7 @@ else:
 ###############################################################################
 # Processing loop
 ###############################################################################
-EXPS = aux.getExps(LND)
+EXPS = aux.getExps()
 exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
@@ -28,11 +28,11 @@ for exp in EXPS:
     ###########################################################################
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
-        lnd.landSelector(exp, LND, USR=USR)
+        aux.landSelector(USR=USR)
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, exp, LND, DRV
+        USR, exp, DRV
     )
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
@@ -70,12 +70,13 @@ for exp in EXPS:
     # Process data
     ###########################################################################
     Parallel(n_jobs=JOB)(
-        delayed(dbg.preProcessParallel)(
+        delayed(monet.preProcessParallel)(
             exIx, expNum, gene,
             analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
             fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
             cmpr='bz2', nodeDigits=2,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
-            REP=aux.REP, SRP=aux.SRP
+            REP=aux.REP, SRP=aux.SRP,
+            sexFilenameIdentifiers={"male": "M_", "female": "F_"}
         ) for exIx in expIter
     )
