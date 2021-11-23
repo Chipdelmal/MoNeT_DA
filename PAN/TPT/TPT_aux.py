@@ -7,6 +7,15 @@ import pandas as pd
 from glob import glob
 import MoNeT_MGDrivE as monet
 
+# https://github.com/Chipdelmal/MGDrivE/blob/master/Main/TP13/TP13_main.R
+# PARS_SORT <- c("ren", "rer",
+#                "rsg", "gsv",
+#                "fch", "fcb", "fcr",
+#                "hrm", "hrf")
+# PARS_SCAL <- c(1e0, 1e3,
+#                1e10, 1e10,
+#                1e5, 1e5, 1e5,
+#                1e5, 1e5)
 
 # #############################################################################
 # Constants
@@ -19,39 +28,36 @@ REL_START = 100
     (0, 10*int(365)), 
     True
 )
-(STABLE_T, MLR, SAMP_RATE) = (0, False, 2)
+(STABLE_T, MLR, SAMP_RATE) = (0, False, 1)
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
-    'STP', 'LDR/SDR',
-    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
+    'STP', 'LDR',
+    'E_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
 )
-REF_FILE = 'E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000'
+REF_FILE = 'E_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000'
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD) = (
     (
-        ('i_sex', 1),   ('i_ren', 2),   ('i_res', 3), 
-        ('i_rsg', 4),   ('i_gsv', 5), 
-        ('i_fch', 6),   ('i_fcb', 7),   ('i_fcr', 8),
-        ('i_hrm', 9),   ('i_hrf', 10), 
-        ('i_grp', 12)
+        ('i_ren', 1),   ('i_rer', 2),
+        ('i_rsg', 3),   ('i_gsv', 4), 
+        ('i_fch', 5),   ('i_fcb', 6),   ('i_fcr', 7),
+        ('i_hrm', 8),   ('i_hrf', 9)
     ),
     {
-        'i_sex': 1e0,   'i_ren': 1e0,   'i_res': 1e3, 
+        'i_ren': 1e0,   'i_rer': 1e3,   
         'i_rsg': 1e10,  'i_gsv': 1e10,  
         'i_fch': 1e5,   'i_fcb': 1e5,   'i_fcr': 1e5,
-        'i_hrm': 1e5,   'i_hrf': 1e5, 
-        'i_grp': 1e0,   'i_mig': 1e5
+        'i_hrm': 1e5,   'i_hrf': 1e5
     },
     {
-        'i_sex': 2,     'i_ren': 2,     'i_res': 5,   
+        'i_ren': 2,     'i_rer': 2,     
         'i_rsg': 12,    'i_gsv': 12,  
         'i_fch': 7,     'i_fcb': 7,     'i_fcr': 7,
-        'i_hrm': 7,     'i_hrf': 7,   
-        'i_grp': 2,     'i_mig': 6
+        'i_hrm': 7,     'i_hrf': 7
     }
 )
 (THI, THO, THW, TAP) = (
@@ -112,7 +118,7 @@ def getExps():
 # #############################################################################
 def patternForReleases(ren, AOI, ftype, ext='bz'):
     strPat = XP_PTRN.format(
-        '*', ren, '*', '*', '*', 
+        ren, '*', '*', '*', 
         '*', '*', '*', '*', '*', 
         AOI, '*', ftype, ext
     )
@@ -138,7 +144,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 # Paths and Style
 # #############################################################################
-def selectPath(USR, EXP, LND, DRV=None):
+def selectPath(USR, EXP, DRV=None):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/TP13/{}/'.format(EXP)
     elif USR == 'lab':
@@ -153,3 +159,8 @@ def selectPath(USR, EXP, LND, DRV=None):
     [monet.makeFolder(i) for i in fldrList]
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
 
+
+
+def landSelector(USR='lab'):
+    PAN = ([0], )
+    return PAN
