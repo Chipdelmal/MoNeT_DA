@@ -13,9 +13,11 @@ import TPT_gene as drv
 
 if monet.isNotebook():
     (USR, AOI, DRV) = ('lab', 'HLT', 'LDR')
-    JOB = aux.JOB_DSK
 else:
     (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
+# Setup number of threads -----------------------------------------------------
+JOB=aux.JOB_DSK
+if USR == 'srv':
     JOB = aux.JOB_SRV
 ###############################################################################
 # Processing loop
