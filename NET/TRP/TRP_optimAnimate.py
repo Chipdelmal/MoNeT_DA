@@ -19,7 +19,7 @@ import subprocess
 
 
 if monet.isNotebook():
-    (EXP_FNAME, TRAPS_NUM) = ('LRG_01-350-HOM', 5)
+    (EXP_FNAME, TRAPS_NUM) = ('DNT_03-100-HET', 4)
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     (EXP_FNAME, TRAPS_NUM) = (argv[1], int(argv[2]))
@@ -29,6 +29,7 @@ fName = '{}_{}_GA'.format(EXP_FNAME, TRAPS_NUM)
 pklPath = path.join(
     PT_GA, '{}_{}_GA'.format(EXP_FNAME, str(TRAPS_NUM).zfill(2))
 )
+(LW, ALPHA, SCA) = (.125, .5, 15)
 ###############################################################################
 # Read bg image
 ###############################################################################
@@ -57,7 +58,7 @@ outPTH = path.join(PT_IMG, fName)
 monet.makeFolder(outPTH)
 i = 1
 framesNum = gaRAW.shape[0]
-for i in range(1, framesNum):
+for i in range(50, 100):
     print('* Processed: {}/{}'.format(i, framesNum), end='\r')
     background = Image.open(path.join(PT_IMG, bgImg))
     # Subset GA data ----------------------------------------------------------
@@ -66,6 +67,7 @@ for i in range(1, framesNum):
     (maxFits, meanFits, minFits, traps) = [list(i) for i in cols]
     (bestVal, bestIx) = min((val, idx) for (idx, val) in enumerate(minFits))
     best = ga['traps'].iloc[bestIx]
+    meanGA = list(ga['mean'])[-1]
     # Assemble migration with traps -------------------------------------------
     trapsLocs = list(np.array_split(best, len(best)/2))
     trapDists = fun.calcTrapToSitesDistance(trapsLocs, sites)
@@ -79,7 +81,7 @@ for i in range(1, framesNum):
     (fig, ax) = plt.subplots(figsize=(15, 15))
     (fig, ax) = aux.plotTraps(
         fig, ax, trapsLocs, bestVal, sites, pTypes, radii, BQN,
-        minX, minY, maxX, maxY, gen=i
+        minX, minY, maxX, maxY, gen=meanGA, sca=SCA, lw=LW, alpha=ALPHA
     )
     # Export ------------------------------------------------------------------
     pthSave = path.join(outPTH, str(i).zfill(4)+'.png')
@@ -87,6 +89,7 @@ for i in range(1, framesNum):
         pthSave, dpi=aux.DPI, bbox_inches='tight', 
         pad_inches=0, transparent=True
     )
+    plt.close('all')
     # Merge -------------------------------------------------------------------
     time.sleep(3)
     background = Image.open(path.join(PT_IMG, bgImg))
@@ -104,7 +107,7 @@ for i in range(1, framesNum):
 sp = subprocess.Popen([
     'ffmpeg', '-y',
     '-start_number', '1',
-    '-r', '24',
+    '-r', '4',
     '-i', path.join(outPTH, "%04d.png"), 
     # '-vf', 'scale=1000:1000',
     path.join(outPTH, fName+'.mp4')

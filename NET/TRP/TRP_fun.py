@@ -40,7 +40,7 @@ def calcTrapsSections(
         tFun=expTrapProbability, 
         params={
             'Trap':   {'A': .5, 'b': .75},
-            'Escape': {'A': 0, 'b': 100},
+            'Escape': {'A': 0, 'b': 100}
         }
     ):
     trapProbs = np.asarray([

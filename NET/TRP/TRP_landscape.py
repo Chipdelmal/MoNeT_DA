@@ -1,5 +1,6 @@
 
 import math
+import random
 import numpy as np
 from os import path
 import pandas as pd
@@ -10,9 +11,9 @@ from sklearn.preprocessing import normalize
 import TRP_aux as aux
 
 
-(LND, MOD) = ('Unif', 'HOM')
+(LND, MOD) = ('Donut', 'HET')
 if monet.isNotebook():
-    (POINTS, EXP_FNAME) = (350, 'LRG_01')
+    (POINTS, EXP_FNAME) = (400, 'MOV_01')
     (PT_DTA, PT_GA, PT_IMG) = aux.selectPaths('lab')
 else:
     POINTS = argv[1]
@@ -44,6 +45,19 @@ if LND == 'Grid':
     y = np.linspace(yRan[0], yRan[1], int((yRan[1]-yRan[0])/2))
     coords = np.asarray(np.meshgrid(x, y)).T
     coords = np.concatenate(coords)
+elif LND == 'Donut':
+    coords = []
+    for i in range(POINTS):
+        radius = (8, 10)
+        center = (0, 0)
+        # random angle
+        alpha = 2 * math.pi * random.random()
+        # random radius
+        r = rand.uniform(radius[0], radius[1])
+        # calculating coordinates
+        x = r * math.cos(alpha) + center[0]
+        y = r * math.sin(alpha) + center[1]
+        coords.append([x, y])
 else:
     coords = list(zip(rand.uniform(*xRan, POINTS), rand.uniform(*yRan, POINTS)))
 # Point-types -----------------------------------------------------------------
@@ -91,14 +105,14 @@ for (i, site) in enumerate(sites):
         site[0], site[1], 
         marker=aux.MKRS[pTypes[i]], 
         color=aux.MCOL[pTypes[i]], 
-        s=150, zorder=20, edgecolors='w', linewidths=2
+        s=150, zorder=20, edgecolors='w', linewidths=1.25
     )
 ax.set_xlim(*xRan)
 ax.set_ylim(*yRan)
 ax.set_aspect('equal')
 (fig, ax) = aux.plotNetwork(
     fig, ax, tauC*SCA, sites, sites, [1]*len(coords), 
-    c='#03045e', lw=LW, alpha=ALPHA, arrows=False
+    c='#03045e', lw=LW, alpha=ALPHA, arrows=False, hl=2, hw=1.2, hsc=.05
 )
 fig.savefig(
     path.join(PT_DTA, '{}-{}-{}.png'.format(
@@ -121,4 +135,3 @@ df.to_csv(
         EXP_FNAME, str(pNum).zfill(3), MOD
     )), index=False, header=False
 )
-
