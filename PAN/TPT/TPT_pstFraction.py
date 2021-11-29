@@ -14,9 +14,10 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('lab', 'HUM', 'LDR')
+    (USR, AOI, DRV) = ('dsk', 'HUM', 'LDR')
 else:
     (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
+GRID_REF = False
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
@@ -48,7 +49,7 @@ for exp in EXPS:
     #   These are the experiments without any releases (for fractions)
     # #########################################################################
     # Get releases number set -------------------------------------------------
-    ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[2]
+    ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[1]
     # Get base experiments pattern --------------------------------------------
     if GRID_REF:
         basePat = aux.patternForReleases(aux.NO_REL_PAT, AOI, 'sum')
@@ -60,7 +61,7 @@ for exp in EXPS:
     #   srp: Garbage data aggregated into one node
     # #########################################################################
     (xpNum, digs) = monet.lenAndDigits(ren)
-    (i, rnIt) = (0, '12')
+    (i, rnIt) = (0, '20')
     for (i, rnIt) in enumerate(ren):
         monet.printProgress(i+1, xpNum, digs)
         # Repetitions data (Garbage) ------------------------------------------
@@ -73,7 +74,7 @@ for exp in EXPS:
         # Patch for static reference file -------------------------------------
         if not GRID_REF:
             baseFiles = [
-                dbg.replaceExpBase(f, aux.REF_FILE) for f in meanFiles
+                aux.replaceExpBase(f, aux.REF_FILE) for f in meanFiles
             ]
             baseFNum = len(baseFiles)
         # Create experiments iterator list ------------------------------------
@@ -98,21 +99,7 @@ for exp in EXPS:
         # Process data
         # #####################################################################
         Parallel(n_jobs=JOB)(
-            delayed(dbg.pstFractionParallel)(
+            delayed(monet.pstFractionParallel)(
                 exIx, PT_OUT
             ) for exIx in expIter
         )
-
-# (drive, land) = (
-#     drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
-#     lnd.landSelector(exp, LND, USR=USR)
-# )
-# (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
-# (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-#     USR, exp, LND, DRV
-# )
-# dta = pkl.load(
-#     PT_PRE+
-#     'E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000-HLT_00_sum.bz'
-# )['population']
-# print(dta)

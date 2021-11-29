@@ -111,7 +111,7 @@ def selectDepVars(MOI, AOI):
 # Experiments
 # #############################################################################
 def getExps():
-    return ('X2500', 'X5000', 'X7500', 'X10000')
+    return ('X2500', ) # 'X5000', 'X7500', 'X10000')
 
 # #############################################################################
 # Names and patterns
@@ -142,13 +142,15 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 
 
 # #############################################################################
-# Paths and Style
+# Paths
 # #############################################################################
 def selectPath(USR, EXP, DRV=None):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/TP13/{}/'.format(EXP)
     elif USR == 'lab':
         PATH_ROOT = '/Volumes/marshallShare/TP13/{}/'.format(EXP)
+    elif USR == 'dsk':
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/TP13/{}/'.format(EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
@@ -164,3 +166,9 @@ def selectPath(USR, EXP, DRV=None):
 def landSelector(USR='lab'):
     PAN = ([0], )
     return PAN
+
+
+def replaceExpBase(tracePath, refFile):
+    head = '/'.join(tracePath.split('/')[:-1])
+    tail = tracePath.split('-')[-1]
+    return '{}/{}-{}'.format(head, refFile, tail)
