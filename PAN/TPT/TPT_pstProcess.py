@@ -6,6 +6,7 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 from more_itertools import locate
+import pandas as pd
 import TPT_aux as aux
 import TPT_gene as drv
 
