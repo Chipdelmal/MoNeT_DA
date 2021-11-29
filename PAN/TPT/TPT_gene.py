@@ -26,7 +26,7 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
     elif TYPE == 'WLD':
         colors = monet.COLWN
     elif TYPE == 'HUM':
-        colors = monet.COLHN
+        colors = monet.COLWN
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 
