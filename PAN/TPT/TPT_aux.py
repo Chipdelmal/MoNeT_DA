@@ -30,7 +30,7 @@ REL_START = 1095
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
-    'STP', 'LDR',
+    'TPT', 'LDR',
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
 )
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
@@ -162,7 +162,6 @@ def selectPath(USR, EXP, DRV=None):
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
 
 
-
 def landSelector(USR='lab'):
     PAN = ([0], )
     return PAN
@@ -172,3 +171,10 @@ def replaceExpBase(tracePath, refFile):
     head = '/'.join(tracePath.split('/')[:-1])
     tail = tracePath.split('-')[-1]
     return '{}/{}-{}'.format(head, refFile, tail)
+
+
+def chunks(l, n):
+    (d, r) = divmod(len(l), n)
+    for i in range(n):
+        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
+        yield l[si:si+(d+1 if i < r else d)]
