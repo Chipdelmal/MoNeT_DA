@@ -202,7 +202,7 @@ def pstProcessParallel(
             repRto, sampRate=sampRate, offset=offset,
             thi=thi, tho=tho, thw=thw, tap=tap
         )
-        print(mtrsReps['TTI'])
+        # print(mtrsReps['TTI'])
         #######################################################################
         # Calculate Quantiles
         #######################################################################

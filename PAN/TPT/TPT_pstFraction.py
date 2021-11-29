@@ -22,6 +22,7 @@ GRID_REF = False
 JOB=aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
+GRID_REF = False
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -103,3 +104,4 @@ for exp in EXPS:
                 exIx, PT_OUT
             ) for exIx in expIter
         )
+
