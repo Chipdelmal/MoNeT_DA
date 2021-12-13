@@ -10,7 +10,7 @@ XID="SX"
 if [ "$USR" == "dsk" ]; then
     PTH='/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/'
 else
-    PTH=''
+    PTH='/RAID5/marshallShare/MGS_Benchmarks/SX_BENCH'
 fi
 
 ###############################################################################
