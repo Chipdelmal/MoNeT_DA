@@ -15,7 +15,7 @@ import warnings
 warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
-(GENS, VERBOSE) = (20, True)
+(GENS, VERBOSE) = (750, True)
 if srv.isNotebook():
     (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/', 

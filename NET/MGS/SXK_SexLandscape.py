@@ -23,7 +23,7 @@ else:
     (OUT_PTH, LND_TYPE, ID) = (
         argv[1], argv[2], argv[3].zfill(3)
     )
-TRPS_NUM=3
+TRPS_NUM=6
 ID="{}-{:03d}".format(ID, TRPS_NUM)
 ###############################################################################
 # Defining Landscape and Traps
@@ -45,14 +45,14 @@ points = pd.DataFrame({'x': xy[0], 'y': xy[1], 't': [0]*xy.shape[1]})
 nullTraps = [0] * TRPS_NUM
 traps = pd.DataFrame({
     'x': nullTraps, 'y': nullTraps, 'f': nullTraps,
-    't': [0, 0, 0]
+    't': [0, 0, 0, 0, 0, 0],
 })
 tKernels = {
     'Male': {
-        0: {'kernel': srv.exponentialDecay, 'params': {'A': .5, 'b': .1}}
+        0: {'kernel': srv.exponentialDecay, 'params': {'A': .5, 'b': .06}}
     },
     'Female': {
-        0: {'kernel': srv.exponentialDecay, 'params': {'A': .3, 'b': .06}}
+        0: {'kernel': srv.exponentialDecay, 'params': {'A': .75, 'b': .04}}
     }
 }
 trapsRadii = [.1, ]
