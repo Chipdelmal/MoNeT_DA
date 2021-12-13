@@ -88,5 +88,20 @@ lndF = srv.Landscape(
     kernelParams=movementKernel['Female']['kernelParams'],
     trapsKernels=tKernels['Female'], trapsRadii=trapsRadii
 )
+###############################################################################
+# Plot Landscape
+###############################################################################
+(fig, ax) = plt.subplots(1, 1, figsize=(15, 15), sharey=False)
+lndM.plotSites(fig, ax, size=100)
+lndM.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=50, lineColor='#03045e')
+lndF.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=35, lineColor='#03045e')
+srv.plotClean(fig, ax, frame=False, bbox=bbox)
+fig.savefig(
+    path.join(OUT_PTH, '{}_{}_CLN.png'.format(LND_TYPE, ID)), 
+    facecolor='w', bbox_inches='tight', pad_inches=0, dpi=300
+)
+###############################################################################
+# Export Landscape
+###############################################################################
 srv.dumpLandscape(lndM, OUT_PTH, '{}_{}_M_CLN'.format(LND_TYPE, ID))
 srv.dumpLandscape(lndF, OUT_PTH, '{}_{}_F_CLN'.format(LND_TYPE, ID))
