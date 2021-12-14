@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import math
 import numpy as np
 import pandas as pd
 from os import path
@@ -25,10 +24,10 @@ else:
     (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
         argv[1], argv[2], argv[3].zfill(3), argv[4]
     )
+TRPS_NUM=6
 ###############################################################################
 # Internals
 ###############################################################################
-TRPS_NUM=6
 ID="{}-{:03d}".format(ID, TRPS_NUM)
 if OPT_TYPE == 'M':
     (weightMale, weightFemale) = (1, 0)
@@ -133,12 +132,13 @@ if (OPT_TYPE=='F' or OPT_TYPE=='B'):
     lndF.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=35, lineColor='#03045e')
 # Plot Traps ------------------------------------------------------------------
 if OPT_TYPE=='M':
-    lndF.plotTraps(fig, ax, colors={0: '#a06cd522'}, lws=(2, 0), fill=True, ls=':', zorder=(25, 4))
+    lndM.plotTraps(fig, ax, colors={0: '#a06cd522'}, lws=(2, 0), fill=True, ls=':', zorder=(25, 4))
 if OPT_TYPE=='F':
     lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
 if OPT_TYPE=='B':
     lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
-    lndM.plotTraps(fig, ax, colors={0: '#ffffffDD'}, lws=(2, 2), fill=False, ls=':', zorder=(-5, 5))
+    lndM.plotTraps(fig, ax, colors={0: '#a06cd522'}, lws=(2, 0), fill=True, ls=':', zorder=(25, 4))
+    # lndM.plotTraps(fig, ax, colors={0: '#ffffffDD'}, lws=(2, 2), fill=True, ls=':', zorder=(26, 5))
 # Other Stuff -----------------------------------------------------------------
 srv.plotFitness(fig, ax, min(minFits), zorder=30)
 srv.plotClean(fig, ax, frame=False, bbox=bbox)
