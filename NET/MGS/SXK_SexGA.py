@@ -15,7 +15,7 @@ import warnings
 warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
-(GENS, VERBOSE) = (750, False)
+(GENS, VERBOSE) = (500, False)
 if srv.isNotebook():
     (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/', 
@@ -35,7 +35,7 @@ if OPT_TYPE == 'M':
 elif OPT_TYPE == 'F':
     (weightMale, weightFemale) = (0, 1)
 else:
-    (weightMale, weightFemale) = (.75, 1)
+    (weightMale, weightFemale) = (.5, 1)
 ###############################################################################
 # Load Landscape
 ###############################################################################
@@ -91,7 +91,7 @@ toolbox.register("select",
 toolbox.register("evaluate", 
     srv.calcSexFitness, 
     landscapeMale=lndM_GA,landscapeFemale=lndF_GA,
-    weightMale=.75, weightFemale=1,
+    weightMale=weightMale, weightFemale=weightFemale,
     optimFunction=srv.getDaysTillTrapped,
     optimFunctionArgs={'outer': np.mean, 'inner': np.max}
 )
@@ -126,8 +126,10 @@ srv.exportLog(logbook, OUT_PTH, '{}_{}_LOG'.format(LND_TYPE, ID))
 ############################################################################### 
 (fig, ax) = plt.subplots(1, 1, figsize=(15, 15), sharey=False)
 lndM.plotSites(fig, ax, size=100)
-lndM.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=50, lineColor='#03045e')
-lndF.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=35, lineColor='#03045e')
+if (OPT_TYPE=='M' or OPT_TYPE=='B'):
+    lndM.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=50, lineColor='#03045e')
+if (OPT_TYPE=='F' or OPT_TYPE=='B'):
+    lndF.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=35, lineColor='#03045e')
 lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
 lndM.plotTraps(fig, ax, colors={0: '#ffffffDD'}, lws=(2, 2), fill=False, zorder=(-5, 5))
 srv.plotClean(fig, ax, frame=False, bbox=bbox)
