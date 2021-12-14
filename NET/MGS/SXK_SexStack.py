@@ -17,12 +17,12 @@ from PIL import Image
 if srv.isNotebook():
     (OUT_PTH, LND_TYPE, ID) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/', 
-        'UNIF', 'SX1'
+        'UNIF', 'SX3'
     )
 else:
-    (OUT_PTH, LND_TYPE, ID) = (argv[1], argv[2], argv[3].zfill(3))
-TRPS_NUM=6
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM) = (argv[1], argv[2], argv[3].zfill(3), int(argv[4]))
 ID="{}-{:03d}".format(ID, TRPS_NUM)
+scaler = 2
 ###############################################################################
 # Concatenate Images
 ###############################################################################
@@ -33,8 +33,7 @@ imgPaths = (
 )
 (imgM, imgF, imgB) = [cv2.imread(i) for i in imgPaths]
 dim = imgM.shape
-imgFull = np.vstack((
-    np.hstack((imgM, imgF)), 
-    cv2.resize(imgB, (dim[1]*2, dim[0]*2))
-))
+partA = np.vstack((imgM, imgF))
+dimA = partA.shape
+imgFull = np.hstack((partA, cv2.resize(imgB, (int(dimA[1]*scaler), int(imgB.shape[0]*2)))))
 cv2.imwrite(path.join(OUT_PTH, '{}-TRP.png'.format(ID)), imgFull)

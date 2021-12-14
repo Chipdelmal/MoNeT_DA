@@ -14,15 +14,14 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
 if srv.isNotebook():
-    (OUT_PTH, LND_TYPE, ID) = (
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/Sex/', 
-        'UNIF', 'SX10'
+        'UNIF', 'SX10', 6
     )
 else:
-    (OUT_PTH, LND_TYPE, ID) = (
-        argv[1], argv[2], argv[3].zfill(3)
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM) = (
+        argv[1], argv[2], argv[3].zfill(3), int(argv[4])
     )
-TRPS_NUM=6
 ID="{}-{:03d}".format(ID, TRPS_NUM)
 ###############################################################################
 # Defining Landscape and Traps
@@ -43,8 +42,7 @@ points = pd.DataFrame({'x': xy[0], 'y': xy[1], 't': [0]*xy.shape[1]})
 # Traps info ------------------------------------------------------------------
 nullTraps = [0] * TRPS_NUM
 traps = pd.DataFrame({
-    'x': nullTraps, 'y': nullTraps, 'f': nullTraps,
-    't': [0, 0, 0, 0, 0, 0],
+    'x': nullTraps, 'y': nullTraps, 'f': nullTraps, 't': nullTraps,
 })
 tKernels = {
     'Male': {

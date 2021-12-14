@@ -18,12 +18,11 @@ if srv.isNotebook():
     )
 else:
     (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
-        argv[1], argv[2], argv[3].zfill(3), argv[4]
+        argv[1], argv[2], argv[3].zfill(3), argv[4], argv[5]
     )
 ###############################################################################
 # Internals
 ###############################################################################
-TRPS_NUM=6
 ID="{}-{:03d}".format(ID, TRPS_NUM)
 if OPT_TYPE == 'M':
     (weightMale, weightFemale) = (1, 0)
