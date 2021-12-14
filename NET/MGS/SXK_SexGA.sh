@@ -17,7 +17,7 @@ fi
 ###############################################################################
 # Generating landscapes loop
 ###############################################################################
-for XNM in {1..5}; do
+for XNM in {1..1}; do
     XPPAT="${XID}${XNM}"
     echo "* Optimizing landscape: ${XPPAT}"
     python SXK_SexGA.py $PTH $LND $XPPAT $TRP "M"

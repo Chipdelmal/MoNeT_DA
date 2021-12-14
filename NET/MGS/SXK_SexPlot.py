@@ -12,13 +12,13 @@ import MGSurvE as srv
 
 (GENS, VERBOSE) = (500, False)
 if srv.isNotebook():
-    (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM, OPT_TYPE) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/', 
-        'UNIF', 'SX1', 'M'
+        'UNIF', 'SX1', 6, 'M'
     )
 else:
-    (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
-        argv[1], argv[2], argv[3].zfill(3), argv[4], argv[5]
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM, OPT_TYPE) = (
+        argv[1], argv[2], argv[3].zfill(3), int(argv[4]), argv[5]
     )
 ###############################################################################
 # Internals

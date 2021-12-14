@@ -1,8 +1,9 @@
 #!/bin/bash
 
 USR=$1
-LND="UNIF"
 XID=$2
+LND=$3
+TRP=$4
 
 ###############################################################################
 # Setting up path 
@@ -19,5 +20,5 @@ fi
 for XNM in {1..1}; do
     XPPAT="${XID}${XNM}"
     echo "* Stacking landscape: ${XPPAT}"
-    python SXK_SexStack.py $PTH $LND $XPPAT
+    python SXK_SexStack.py $PTH $LND $XPPAT $TRP
 done
