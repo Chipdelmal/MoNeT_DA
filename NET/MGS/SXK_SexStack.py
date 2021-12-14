@@ -17,7 +17,7 @@ from PIL import Image
 if srv.isNotebook():
     (OUT_PTH, LND_TYPE, ID) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/', 
-        'UNIF', 'SX3'
+        'UNIF', 'SX4'
     )
 else:
     (OUT_PTH, LND_TYPE, ID, TRPS_NUM) = (argv[1], argv[2], argv[3].zfill(3), int(argv[4]))
@@ -36,4 +36,9 @@ dim = imgM.shape
 partA = np.vstack((imgM, imgF))
 dimA = partA.shape
 imgFull = np.hstack((partA, cv2.resize(imgB, (int(dimA[1]*scaler), int(imgB.shape[0]*2)))))
+###############################################################################
+# Write to Disk
+###############################################################################
+OUT_PTH = path.join(OUT_PTH, 'img')
+srv.makeFolder(OUT_PTH)
 cv2.imwrite(path.join(OUT_PTH, '{}-TRP.png'.format(ID)), imgFull)
