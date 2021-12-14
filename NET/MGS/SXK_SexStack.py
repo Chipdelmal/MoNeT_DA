@@ -15,9 +15,9 @@ from PIL import Image
 
 (GENS, VERBOSE) = (500, False)
 if srv.isNotebook():
-    (OUT_PTH, LND_TYPE, ID) = (
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/', 
-        'UNIF', 'SX4'
+        'UNIF', 'SX4', 6
     )
 else:
     (OUT_PTH, LND_TYPE, ID, TRPS_NUM) = (argv[1], argv[2], argv[3].zfill(3), int(argv[4]))

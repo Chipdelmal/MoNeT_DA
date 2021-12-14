@@ -17,7 +17,7 @@ fi
 ###############################################################################
 # Generating landscapes loop
 ###############################################################################
-for XNM in {1..1}; do
+for XNM in {1..6}; do
     XPPAT="${XID}${XNM}"
     echo "* Stacking landscape: ${XPPAT}"
     python SXK_SexStack.py $PTH $LND $XPPAT $TRP
