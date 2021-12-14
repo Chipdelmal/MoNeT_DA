@@ -126,14 +126,22 @@ srv.exportLog(logbook, OUT_PTH, '{}_{}_LOG'.format(LND_TYPE, ID))
 ############################################################################### 
 (fig, ax) = plt.subplots(1, 1, figsize=(15, 15), sharey=False)
 lndM.plotSites(fig, ax, size=100)
+# Plot Networks ---------------------------------------------------------------
 if (OPT_TYPE=='M' or OPT_TYPE=='B'):
     lndM.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=50, lineColor='#03045e')
 if (OPT_TYPE=='F' or OPT_TYPE=='B'):
     lndF.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=35, lineColor='#03045e')
-lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
-lndM.plotTraps(fig, ax, colors={0: '#ffffffDD'}, lws=(2, 2), fill=False, zorder=(-5, 5))
+# Plot Traps ------------------------------------------------------------------
+if OPT_TYPE=='M':
+    lndF.plotTraps(fig, ax, colors={0: '#a06cd522'}, lws=(2, 0), fill=True, ls=':', zorder=(25, 4))
+if OPT_TYPE=='F':
+    lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
+if OPT_TYPE=='B':
+    lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
+    lndM.plotTraps(fig, ax, colors={0: '#ffffffDD'}, lws=(2, 2), fill=False, ls=':', zorder=(-5, 5))
+# Other Stuff -----------------------------------------------------------------
+srv.plotFitness(fig, ax, min(minFits), zorder=30)
 srv.plotClean(fig, ax, frame=False, bbox=bbox)
-srv.plotFitness(fig, ax, min(minFits))
 fig.savefig(
     path.join(OUT_PTH, '{}_{}_TRP.png'.format(LND_TYPE, ID)), 
     facecolor='w', bbox_inches='tight', pad_inches=0, dpi=300
