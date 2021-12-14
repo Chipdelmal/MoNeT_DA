@@ -2,7 +2,7 @@
 
 USR=$1
 LND="UNIF"
-XID="SX"
+XID=$2
 
 ###############################################################################
 # Setting up path 
@@ -16,7 +16,7 @@ fi
 ###############################################################################
 # Generating landscapes loop
 ###############################################################################
-for XNM in {1..5}; do
+for XNM in {1..1}; do
     XPPAT="${XID}${XNM}"
     echo "* Stacking landscape: ${XPPAT}"
     python SXK_SexStack.py $PTH $LND $XPPAT

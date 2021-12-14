@@ -14,17 +14,16 @@ import warnings
 warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
-(GENS, VERBOSE) = (500, False)
+(GENS, VERBOSE) = (25, False)
 if srv.isNotebook():
-    (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM, OPT_TYPE) = (
         '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/SX_BENCH/', 
-        'UNIF', 'SX1', 'M'
+        'UNIF', 'SX1', 6, 'M'
     )
 else:
-    (OUT_PTH, LND_TYPE, ID, OPT_TYPE) = (
-        argv[1], argv[2], argv[3].zfill(3), argv[4]
+    (OUT_PTH, LND_TYPE, ID, TRPS_NUM, OPT_TYPE) = (
+        argv[1], argv[2], argv[3].zfill(3), int(argv[4]), argv[5]
     )
-TRPS_NUM=6
 ###############################################################################
 # Internals
 ###############################################################################
@@ -120,33 +119,6 @@ srv.dumpLandscape(lndM, OUT_PTH, '{}_{}_M_TRP'.format(LND_TYPE, ID))
 srv.dumpLandscape(lndF, OUT_PTH, '{}_{}_F_TRP'.format(LND_TYPE, ID))
 dta = pd.DataFrame(logbook)
 srv.exportLog(logbook, OUT_PTH, '{}_{}_LOG'.format(LND_TYPE, ID))
-###############################################################################
-# Plot traps
-############################################################################### 
-(fig, ax) = plt.subplots(1, 1, figsize=(15, 15), sharey=False)
-lndM.plotSites(fig, ax, size=100)
-# Plot Networks ---------------------------------------------------------------
-if (OPT_TYPE=='M' or OPT_TYPE=='B'):
-    lndM.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=50, lineColor='#03045e')
-if (OPT_TYPE=='F' or OPT_TYPE=='B'):
-    lndF.plotMigrationNetwork(fig, ax, alphaMin=.3, lineWidth=35, lineColor='#03045e')
-# Plot Traps ------------------------------------------------------------------
-if OPT_TYPE=='M':
-    lndM.plotTraps(fig, ax, colors={0: '#a06cd522'}, lws=(2, 0), fill=True, ls=':', zorder=(25, 4))
-if OPT_TYPE=='F':
-    lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
-if OPT_TYPE=='B':
-    lndF.plotTraps(fig, ax, colors={0: '#f7258522'}, lws=(2, 0), fill=True, ls='--', zorder=(25, 4))
-    lndM.plotTraps(fig, ax, colors={0: '#a06cd522'}, lws=(2, 0), fill=True, ls=':', zorder=(25, 4))
-    # lndM.plotTraps(fig, ax, colors={0: '#ffffffDD'}, lws=(2, 2), fill=True, ls=':', zorder=(26, 5))
-# Other Stuff -----------------------------------------------------------------
-srv.plotFitness(fig, ax, min(minFits), zorder=30)
-srv.plotClean(fig, ax, frame=False, bbox=bbox)
-fig.savefig(
-    path.join(OUT_PTH, '{}_{}_TRP.png'.format(LND_TYPE, ID)), 
-    facecolor='w', bbox_inches='tight', pad_inches=0, dpi=300
-)
-plt.close('all')
 ###############################################################################
 # Plot GA
 ############################################################################### 

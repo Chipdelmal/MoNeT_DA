@@ -1,8 +1,9 @@
 #!/bin/bash
 
 USR=$1
-LND="UNIF"
-XID="SX"
+XID=$2
+LND=$3
+TRP=$4
 
 ###############################################################################
 # Setting up path 
@@ -16,8 +17,8 @@ fi
 ###############################################################################
 # Generating landscapes loop
 ###############################################################################
-for XNM in {1..5}; do
+for XNM in {1..1}; do
     XPPAT="${XID}${XNM}"
     echo "* Generating landscape: ${XPPAT}"
-    python SXK_SexLandscape.py $PTH $LND $XPPAT
+    python SXK_SexLandscape.py $PTH $LND $XPPAT $TRP
 done
