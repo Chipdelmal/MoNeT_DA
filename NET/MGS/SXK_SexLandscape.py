@@ -60,13 +60,13 @@ movementKernel = {
     'Male': {
         'kernelFunction': srv.zeroInflatedExponentialKernel,
         'kernelParams': {
-            'params': [.075, 1.0e-10, math.inf], 'zeroInflation': .5
+            'params': [.050, 1.0e-10, math.inf], 'zeroInflation': .5
         }
     },
     'Female': {
         'kernelFunction': srv.zeroInflatedExponentialKernel,
         'kernelParams': {
-            'params': [.075, 1.0e-10, math.inf], 'zeroInflation': .6
+            'params': [.025, 1.0e-10, math.inf], 'zeroInflation': .7
         }
     }
 }
