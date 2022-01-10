@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from sys import argv
+import time
 import math
 from vincenty import vincenty
 import numpy as np
@@ -14,36 +15,34 @@ from deap import base, creator, algorithms, tools
 from compress_pickle import dump, load
 from sklearn.preprocessing import normalize
 import MGSurvE as srv
+import MoNeT_MGDrivE as monet
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import warnings
 warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
+MAIL_ALERTS = True
 (ID, OUT_PTH) = (
     'STP', 
-    '/RAID5/marshallShare/MGS_Benchmarks/STPVincenty/'
-    # '/home/chipdelmal/Documents/WorkSims/MGSurvE_Benchmarks/STPVincenty/'
+    # '/RAID5/marshallShare/MGS_Benchmarks/STPVincenty/'
+    '/home/chipdelmal/Documents/WorkSims/STP_Traps/'
 )
-TRPS_NUM = int(argv[1])
-GENS = 4000
+TRPS_NUM = 5# int(argv[1])
+GENS = 50
 (IX_SPLIT, DIAG_VAL) = (27, 0.02)
 ###############################################################################
 # Setup email alerts
 ###############################################################################
-MAIL_ALERTS = True
 if MAIL_ALERTS:
-    import time
-    import smtplib
     import mailAlerts as mlr
-    from datetime import datetime
-    from email.message import EmailMessage
-    import imghdr
     t0 = time.time()
 ###############################################################################
 # Load Pointset
 ###############################################################################
-sites = pd.read_csv(path.join(OUT_PTH, 'GEO', 'stp_cluster_sites_pop_v5_fixed.csv'))
+sites = pd.read_csv(
+    path.join(OUT_PTH, 'GEO', 'stp_cluster_sites_pop_v5_fixed.csv')
+)
 sites['t'] = [0]*sites.shape[0]
 SAO_TOME_LL = sites.iloc[IX_SPLIT:]
 SAO_bbox = (
@@ -58,7 +57,8 @@ SAO_LIMITS = ((6.41, 6.79), (-0.0475, .45))
 # Load Migration Matrix
 ###############################################################################
 migration = np.genfromtxt(
-    path.join(OUT_PTH, 'GEO', 'kernel_cluster_v6a.csv'), delimiter=','
+    path.join(OUT_PTH, 'GEO', 'kernel_cluster_v6a.csv'), 
+    delimiter=','
 )
 msplit = migration[IX_SPLIT:,IX_SPLIT:]
 np.fill_diagonal(msplit, DIAG_VAL)
@@ -109,19 +109,19 @@ plt.close('all')
 ###############################################################################
 # Plot Directed Network
 ###############################################################################
-# (fig, ax) = (
-#     plt.figure(figsize=(15, 15)),
-#     plt.axes(projection=lnd.projection)
-# )
-# lnd.plotSites(fig, ax, size=100)
-# lnd.plotDirectedNetwork(fig, ax)
-# lnd.plotLandBoundary(fig, ax)
-# srv.plotClean(fig, ax, bbox=lnd.landLimits)
-# fig.savefig(
-#     path.join(OUT_PTH, '{}_{:02d}_DIR.png'.format(ID, TRPS_NUM)), 
-#     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
-# )
-# plt.close('all')
+(fig, ax) = (
+    plt.figure(figsize=(15, 15)),
+    plt.axes(projection=lnd.projection)
+)
+lnd.plotSites(fig, ax, size=100)
+lnd.plotDirectedNetwork(fig, ax)
+lnd.plotLandBoundary(fig, ax)
+srv.plotClean(fig, ax, bbox=lnd.landLimits)
+fig.savefig(
+    path.join(OUT_PTH, '{}_{:02d}_DIR.png'.format(ID, TRPS_NUM)), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+plt.close('all')
 ###############################################################################
 # GA Settings
 ############################################################################### 
@@ -219,31 +219,20 @@ lnd.plotTraps(fig, ax, zorders=(25, 20))
 srv.plotFitness(fig, ax, min(dta['min']), fmt='{:.2f}')
 lnd.plotLandBoundary(fig, ax)
 srv.plotClean(fig, ax, bbox=lnd.landLimits)
+imgPath = path.join(OUT_PTH, '{}_{:02d}_TRP.png'.format(ID, TRPS_NUM))
 fig.savefig(
-    path.join(OUT_PTH, '{}_{:02d}_TRP.png'.format(ID, TRPS_NUM)), 
-    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=200
+    imgPath, facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=200
 )
 plt.close('all')
 ###############################################################################
 # Email Finished!
-############################################################################### 
+###############################################################################
 if MAIL_ALERTS:
     tF = (time.time()-t0)/3600
     fName = __file__.split('/')[-1]
-    mailStr = 'Sim finished ({}  t{:02d})\nRuntime: {}'.format(
-        fName, TRPS_NUM, tF
-    )
-    msg = EmailMessage()
-    msg['Subject'] = 'Sim finished: {} - {:02d}'.format(fName, TRPS_NUM)
-    msg['From'] = mlr.MAIL
-    msg['To'] = mlr.TARG
-    msg.set_content(mailStr)
-    imgPath = path.join(OUT_PTH, '{}_{:02d}_TRP.png'.format(ID, TRPS_NUM))
-    with open(imgPath, 'rb') as f:
-        image_data = f.read()
-        image_type = imghdr.what(f.name)
-        image_name = f.name
-    msg.add_attachment(image_data, maintype='image', subtype='image_type', filename=image_name)
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        smtp.login(mlr.MAIL, mlr.PSWD)
-        smtp.send_message(msg)
+    subject = 'Sim finished: {} - {:02d}'.format(fName, TRPS_NUM)
+    mailStr = 'Sim finished ({}  t{:02d})\nRuntime: {}'.format(fName, TRPS_NUM, tF)
+    monet.mailAlert(
+        password=mlr.PSWD, receiver=mlr.TARG, sender=mlr.MAIL,
+        subject=subject, content=mailStr, plotPath=imgPath
+    ) 
