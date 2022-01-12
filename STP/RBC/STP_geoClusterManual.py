@@ -20,15 +20,14 @@ import STP_aux as aux
 import STP_auxDebug as plo
 
 
-if monet.isNotebook():
-    (USR, REL, CLS) = ('dsk', '265', 75)
-else:
-    (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
-STP_ONLY = True
-CLUSTER_EXPORT = False
-(CLUSTERS, LABELS) = (False, False)
+(USR, REL, STH_SITE) = ('dsk', '265', True)
 (SITES_STUDY, SITES_SOUTH) = (True, False)
 SPLIT_IX = 27
+###############################################################################
+if STH_SITE:
+    relSite = aux.SOUTH
+else:
+    relSite = aux.SITES
 ###############################################################################
 # Paths
 ###############################################################################
@@ -48,14 +47,6 @@ ids = [i for i in range(df.shape[0])]
 df['id'] = ids
 SAO_TOME_LL = df.iloc[SPLIT_IX:]
 PRINCIPE_LL = df.iloc[:SPLIT_IX]
-# Blacklist -------------------------------------------------------------------
-(clstLst, clstNum) = (list(df['clst']), len(set(kmeans.labels_)))
-count = 0
-for (i, nid) in enumerate(clstLst):
-    if i in notAccessible:
-        clstLst[i] = count+clstNum
-        count = count + 1
-df['clst'] = clstLst
 ###############################################################################
 # Read Network
 ###############################################################################
@@ -66,7 +57,7 @@ psiN = normalize(psi, axis=1, norm='l2')
 ###############################################################################
 # Un-aggregated
 ###############################################################################
-notAggregate = set(aux.SOUTH)
+notAggregate = set(relSite)
 aggregate = set(df['id'])-notAggregate-set(PRINCIPE_LL['id'])-notAccessible
 ###############################################################################
 # Un-aggregated
@@ -91,6 +82,9 @@ for i in list(notAccessible):
 ###############################################################################
 # Checking Aggregation
 ###############################################################################
+clusters = list(lnd['clst'])
+aggrMat = monet.aggregateLandscape(psiN, clusters)
+
 set(lnd['clst'])
 
 len(notAggregate)
