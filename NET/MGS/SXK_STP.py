@@ -111,7 +111,7 @@ plt.close('all')
 ###############################################################################
 (fig, ax) = (
     plt.figure(figsize=(15, 15)),
-    plt.axes(projection=lnd.projection)
+    plt.axes(projection=ccrs.PlateCarree())
 )
 lnd.plotSites(fig, ax, size=100)
 lnd.plotDirectedNetwork(fig, ax)

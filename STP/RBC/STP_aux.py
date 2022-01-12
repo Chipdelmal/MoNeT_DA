@@ -222,6 +222,8 @@ def selectPathGeo(USR):
         PTH_ROT = '/RAID5/marshallShare/STP_Grid/GEO/cluster_1/'
     elif USR == 'lab':
         PTH_ROT = '/Volumes/marshallShare/STP_Grid/GEO/cluster_1/'
+    elif USR == 'dsk':
+        PTH_ROT = '/home/chipdelmal/Documents/WorkSims/STP_Grid/GEO_v2_Debug/GEO/cluster_1/'
     else:
         PTH_ROT = '/home/chipdelmal/Documents/WorkSims/STP/SPA/GEO/'
     return PTH_ROT
