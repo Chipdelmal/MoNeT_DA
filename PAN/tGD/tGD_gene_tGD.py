@@ -1,7 +1,11 @@
 
 import tGD_aux as aux
+import MoNeT_MGDrivE as monet
+from collections import OrderedDict
 
-
+###############################################################################
+# https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-tGD.R
+###############################################################################
 genotypes = (
     "WWWW", "PWWW", "MWWW", "RWWW", "BWWW", "WGWW", "PGWW", "MGWW", "RGWW",
     "BGWW", "WRWW", "PRWW", "MRWW", "RRWW", "BRWW", "WBWW", "PBWW", "MBWW",
@@ -28,98 +32,65 @@ genotypes = (
     "RBWB", "BBWB", "PBPB", "MBPB", "PBRB", "BBPB", "MBMB", "MBRB", "BBMB",
     "RBRB", "BBRB", "BBBB"
 )
-
+(locA, locB) = ((0, 2), (1, 3))
 
 ###############################################################################
 # Ecology genotype counts
 ###############################################################################
-# WA --------------------------------------------------------------------------
-wAGenes = (('W', (0, 2)), )
-wAPos = aux.aggregateGeneAppearances(genotypes, wAGenes)
-# H ---------------------------------------------------------------------------
-hGenes = (('P', (0, 2)), ('M', (0, 2)))
-hPos = aux.aggregateGeneAppearances(genotypes, hGenes)
-# RA --------------------------------------------------------------------------
-rAGenes = (('R', (0, 2)), ('B', (0, 2)))
-rAPos = aux.aggregateGeneAppearances(genotypes, rAGenes)
-# RB --------------------------------------------------------------------------
-rBGenes = (('R', (1, 3)), ('B', (1, 3)))
-rBPos = aux.aggregateGeneAppearances(genotypes, rBGenes)
-# G ---------------------------------------------------------------------------
-gGenes = (('G', (1, 3)), )
-gPos = aux.aggregateGeneAppearances(genotypes, gGenes)
-# WB --------------------------------------------------------------------------
-wBGenes = (('W', (1, 3)), )
-wBPos = aux.aggregateGeneAppearances(genotypes, wBGenes)
-# Full set --------------------------------------------------------------------
-TGD_ECO = (wAPos, hPos, rAPos, rBPos, gPos, wBPos)
-
-###############################################################################
-# Cas genotype counts
-###############################################################################
-# WA --------------------------------------------------------------------------
-wAGenes = (('W', (0, 2)), )
-wAPos = set(aux.aggregateGeneAppearances(genotypes, wAGenes))
-# H ---------------------------------------------------------------------------
-hGenes = (('P', (0, 2)), ('M', (0, 2)))
-hPos = set(aux.aggregateGeneAppearances(genotypes, hGenes))
-# RA --------------------------------------------------------------------------
-rAGenes = (('R', (0, 2)), )
-rAPos = set(aux.aggregateGeneAppearances(genotypes, rAGenes))
-# BA --------------------------------------------------------------------------
-bAGenes = (('B', (0, 2)), )
-bAPos = set(aux.aggregateGeneAppearances(genotypes, bAGenes))
-# Full set --------------------------------------------------------------------
-TGD_CAS = [list(i) for i in (wAPos, hPos, rAPos, bAPos, wAPos | hPos | rAPos | bAPos)]
-
+ECO_DICT = OrderedDict((
+    ('W', (('W', locA), )),
+    ('P', (('P', locA), )),
+    ('M', (('M', locA), )),
+    ('R', (('R', locB), )),
+    ('B', (('B', locB), )),
+    ('G', (('G', locB), )),
+))
+CRS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-# H* --------------------------------------------------------------------------
-hGenes = (('G', (1, 3)), )
-hPos = set(aux.aggregateGeneAppearances(genotypes, hGenes))
-# O- --------------------------------------------------------------------------
-wGenes = (('W', (1, 3)), ('R', (1, 3)), ('B', (1, 3)))
-wPos = set(aux.aggregateGeneAppearances(genotypes, wGenes))
-# Full set --------------------------------------------------------------------
-TGD_HLT = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
-
+HLT_DICT = OrderedDict((
+    ('G*', (('G', locB), )),
+    ('O-', (('W', locB), ('R', locB), ('B', locB)))
+))
+TGD_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
 ###############################################################################
 # Trash genotype counts
 ###############################################################################
-# C* --------------------------------------------------------------------------
-hGenes = (('P', (0, 2)), ('M', (0, 2)))
-hPos = set(aux.aggregateGeneAppearances(genotypes, hGenes))
-# O* --------------------------------------------------------------------------
-wGenes = (('W', (0, 2)), ('R', (0, 2)), ('B', (0, 2)))
-wPos = set(aux.aggregateGeneAppearances(genotypes, wGenes))
-# Full set --------------------------------------------------------------------
-TGD_TRS = [list(i) for i in (hPos, wPos - hPos, wPos | hPos)]
-
+TRS_DICT = OrderedDict((
+    ('C*', (('P', locA), ('M', locA))),
+    ('O-', (('W', locA), ('R', locA), ('B', locA)))
+))
+TGD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
-# H ---------------------------------------------------------------------------
-hGenes = (('P', (0, 2)), ('M', (0, 2)), ('R', (0, 2)), ('B', (0, 2)))
-hPos = set(aux.aggregateGeneAppearances(genotypes, hGenes))
-# W* --------------------------------------------------------------------------
-wGenes = (('W', (0, 2)), )
-wPos = set(aux.aggregateGeneAppearances(genotypes, wGenes))
-# Full set --------------------------------------------------------------------
-TGD_WLD = [list(i) for i in (hPos - wPos, wPos, hPos | wPos)]
-
+WLD_DICT = OrderedDict((
+    ('O*', (('P', locA),('M', locA), ('R', locA), ('B', locA) )),
+    ('W-', (('W', locA), ))
+))
+TGD_WLD = monet.carrierFrequencies(WLD_DICT, genotypes)
 
 ###############################################################################
 # Custom genotype counts
 ###############################################################################
-# H ---------------------------------------------------------------------------
-hGenes = (('P', (0, 2)), ('M', (0, 2)))
-hPos = set(aux.aggregateGeneAppearances(genotypes, hGenes))
-# W* --------------------------------------------------------------------------
-wGenes = (('G', (1, 3)), )
-wPos = set(aux.aggregateGeneAppearances(genotypes, wGenes))
-# Full set --------------------------------------------------------------------
-TGD_CST = [list(i) for i in (hPos - wPos, wPos, hPos | wPos)]
+CST_DICT = OrderedDict((
+    ('C*', (('P', locA), ('M', locA))),
+    ('G-', (('G', locB), ))
+))
+TGD_CST = monet.carrierFrequencies(CST_DICT, genotypes)
+
+###############################################################################
+# Custom genotype counts
+###############################################################################
+# # H ---------------------------------------------------------------------------
+# hGenes = (('P', (0, 2)), ('M', (0, 2)))
+# hPos = set(aux.aggregateGeneAppearances(genotypes, hGenes))
+# # W* --------------------------------------------------------------------------
+# wGenes = (('G', (1, 3)), )
+# wPos = set(aux.aggregateGeneAppearances(genotypes, wGenes))
+# # Full set --------------------------------------------------------------------
+# TGD_CST = [list(i) for i in (hPos - wPos, wPos, hPos | wPos)]

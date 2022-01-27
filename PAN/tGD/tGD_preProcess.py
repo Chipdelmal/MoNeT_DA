@@ -12,16 +12,17 @@ from joblib import Parallel, delayed
 ###############################################################################
 # Drives: LinkedDrive, splitDrive, tGD
 ###############################################################################
-(USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
-(FMT, OVW, JOB) = ('bz2', True, 8)
+# (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
+(USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
+(FMT, OVW, JOB) = ('bz2', True, 4)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
-if (USR == 'srv2') or (USR == 'dsk'):
+if (USR == 'srv2'):
     EXP = ('000', )
     NOI = [[0]]
 else:
     EXP = ('100', ) # ('050', '100', '400', '800')
     NOI = [[0], [1]]
+# Sex selector ----------------------------------------------------------------
 if AOI == 'HLT':
     MF = (False, True)
 else:
@@ -47,11 +48,11 @@ for exp in EXP:
     # Analyze data
     ###########################################################################
     Parallel(n_jobs=JOB)(
-            delayed(monet.preProcess)(
-                    exIx, expNum, expDirsMean, expDirsTrac, DVP,
-                    analysisOI=AOI, prePath=PT_PRE, nodesAggLst=NOI,
-                    outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
-                    MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
-                    SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP
-                ) for exIx in range(0, expNum)
-        )
+        delayed(monet.preProcess)(
+            exIx, expNum, expDirsMean, expDirsTrac, DVP,
+            analysisOI=AOI, prePath=PT_PRE, nodesAggLst=NOI,
+            outExpNames=outExpNames, fNameFmt='{}/{}-{}_', OVW=OVW,
+            MF=MF, cmpr=FMT, nodeDigits=nodeDigits,
+            SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP
+        ) for exIx in range(0, expNum)
+    )
