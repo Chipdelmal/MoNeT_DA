@@ -13,7 +13,7 @@ from joblib import Parallel, delayed
 # Drives: LinkedDrive, splitDrive, tGD
 ###############################################################################
 (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
+# (USR, DRV, AOI) = ('dsk', 'linkedDrive', 'HLT')
 (FMT, OVW, JOB) = ('bz2', True, 4)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 if (USR == 'srv2'):
@@ -30,6 +30,7 @@ else:
 ###############################################################################
 # Setting up paths and style
 ###############################################################################
+exp = '100'
 for exp in EXP:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, DRV, exp)
     drive = drv.driveSelector(DRV, AOI)

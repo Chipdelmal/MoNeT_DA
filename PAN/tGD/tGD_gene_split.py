@@ -66,3 +66,24 @@ CST_DICT = OrderedDict((
     ('H-', (('W', locB), ))
 ))
 SDR_CST = monet.carrierFrequencies(CST_DICT, genotypes)
+
+###############################################################################
+# Drive Selector
+###############################################################################
+def driveParameters(TYPE, popSize):
+    if TYPE == 'ECO':
+        aggD = monet.generateAggregationDictionary(*SDR_ECO)
+        yRange = popSize
+    elif TYPE == 'HLT':
+        aggD = monet.generateAggregationDictionary(*SDR_HLT)
+        yRange = popSize/2
+    elif TYPE == 'TRS':
+        aggD = monet.generateAggregationDictionary(*SDR_TRS)
+        yRange = popSize
+    elif TYPE == 'WLD':
+        aggD = monet.generateAggregationDictionary(*SDR_WLD)
+        yRange = popSize
+    elif TYPE == 'CST':
+        aggD = monet.generateAggregationDictionary(*SDR_CST)
+        yRange = popSize/2
+    return (aggD, yRange, 'tGD')

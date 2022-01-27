@@ -19,7 +19,7 @@ ECO_DICT = OrderedDict((
     ('B', (('B', locus), ))
 ))
 LDR_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
-
+LDR_ECO
 ###############################################################################
 # Health genotype counts
 ###############################################################################
@@ -50,9 +50,29 @@ LDR_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
 ###############################################################################
 # Cas9 genotype counts
 ###############################################################################
-CAS_DICT = OrderedDict((
+CST_DICT = OrderedDict((
     ('H*', (('H', locus), )),
     ('O-', (('W', locus), ('R', locus), ('B', locus)))
 ))
-LDR_CAS = monet.carrierFrequencies(CAS_DICT, genotypes)
+LDR_CST = monet.carrierFrequencies(CST_DICT, genotypes)
 
+###############################################################################
+# Drive Selector
+###############################################################################
+def driveParameters(TYPE, popSize):
+    if TYPE == 'ECO':
+        aggD = monet.generateAggregationDictionary(*LDR_ECO)
+        yRange = popSize*2
+    elif TYPE == 'HLT':
+        aggD = monet.generateAggregationDictionary(*LDR_HLT)
+        yRange = popSize/2
+    elif TYPE == 'TRS':
+        aggD = monet.generateAggregationDictionary(*LDR_TRS)
+        yRange = popSize
+    elif TYPE == 'WLD':
+        aggD = monet.generateAggregationDictionary(*LDR_WLD)
+        yRange = popSize
+    elif TYPE == 'CST':
+        aggD = monet.generateAggregationDictionary(*LDR_CST)
+        yRange = popSize/2
+    return (aggD, yRange, 'linkedDrive')

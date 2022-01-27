@@ -84,13 +84,22 @@ CST_DICT = OrderedDict((
 TGD_CST = monet.carrierFrequencies(CST_DICT, genotypes)
 
 ###############################################################################
-# Custom genotype counts
+# Drive Selector
 ###############################################################################
-# # H ---------------------------------------------------------------------------
-# hGenes = (('P', (0, 2)), ('M', (0, 2)))
-# hPos = set(aux.aggregateGeneAppearances(genotypes, hGenes))
-# # W* --------------------------------------------------------------------------
-# wGenes = (('G', (1, 3)), )
-# wPos = set(aux.aggregateGeneAppearances(genotypes, wGenes))
-# # Full set --------------------------------------------------------------------
-# TGD_CST = [list(i) for i in (hPos - wPos, wPos, hPos | wPos)]
+def driveParameters(TYPE, popSize):
+    if TYPE == 'ECO':
+        aggD = monet.generateAggregationDictionary(*TGD_ECO)
+        yRange = popSize*2
+    elif TYPE == 'HLT':
+        aggD = monet.generateAggregationDictionary(*TGD_HLT)
+        yRange = popSize/2
+    elif TYPE == 'TRS':
+        aggD = monet.generateAggregationDictionary(*TGD_TRS)
+        yRange = popSize
+    elif TYPE == 'WLD':
+        aggD = monet.generateAggregationDictionary(*TGD_WLD)
+        yRange = popSize
+    elif TYPE == 'CST':
+        aggD = monet.generateAggregationDictionary(*TGD_CST)
+        yRange = popSize/2
+    return (aggD, yRange, 'linkedDrive')
