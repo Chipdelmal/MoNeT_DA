@@ -12,8 +12,8 @@ from joblib import Parallel, delayed
 ###############################################################################
 # Drives: LinkedDrive, splitDrive, tGD
 ###############################################################################
-# (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-(USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
+(USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
+# (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
 (FMT, OVW, JOB) = ('bz2', True, 4)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 if (USR == 'srv2'):
@@ -23,7 +23,7 @@ else:
     EXP = ('100', ) # ('050', '100', '400', '800')
     NOI = [[0], [1]]
 # Sex selector ----------------------------------------------------------------
-if AOI == 'HLT':
+if (AOI=='HLT') or (AOI=='CST'):
     MF = (False, True)
 else:
     MF = (True, True)
