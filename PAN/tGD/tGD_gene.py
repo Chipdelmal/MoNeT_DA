@@ -16,27 +16,27 @@ COLEN = [
     ]
 COLEN = [c+'1A' for c in COLEN]
 COLEO = [i[:-2]+'FF' for i in COLEN]
-COLEM = monet.generateAlphaColorMapFromColorArray(COLEO)
+# COLEM = monet.generateAlphaColorMapFromColorArray(COLEO)
 # Health ----------------------------------------------------------------------
-COLHN = ["#FF006E", "#8338EC", "#0C4887"]
-COLHN = [c+'1A' for c in COLHN]
+COLHN = ["#FF006E1A", "#8338EC00", "#0C48871A"]
+# COLHN = [c+'1A' for c in COLHN]
 COLHO = [i[:-2]+'FF' for i in COLHN]
-COLHM = monet.generateAlphaColorMapFromColorArray(COLHO)
+# COLHM = monet.generateAlphaColorMapFromColorArray(COLHO)
 # Trash ----------------------------------------------------------------------
 COLTN = ["#BC1097", "#8337ec", "#0C4887"]
-COLTN = [c+'1A' for c in COLTN]
+# COLTN = [c+'1A' for c in COLTN]
 COLTO = [i[:-2]+'FF' for i in COLTN]
-COLTM = monet.generateAlphaColorMapFromColorArray(COLTO)
+# COLTM = monet.generateAlphaColorMapFromColorArray(COLTO)
 # Wild ----------------------------------------------------------------------
 COLWN = ["#8337ec", "#00a2fe", "#0C4887"]
 COLWN = [c+'1A' for c in COLWN]
 COLWO = [i[:-2]+'FF' for i in COLWN]
-COLWM = monet.generateAlphaColorMapFromColorArray(COLWO)
+# COLWM = monet.generateAlphaColorMapFromColorArray(COLWO)
 # CLS ----------------------------------------------------------------------
-COLCN = ["#0eeb10", "#00a2fe", "#0C4887"]
-COLCN = [c+'AA' for c in COLCN]
+COLCN = ["#0eeb101A", "#00a2fe00", "#0C488700"]
+# COLCN = [c+'AA' for c in COLCN]
 COLCO = [i[:-2]+'FF' for i in COLCN]
-COLCM = monet.generateAlphaColorMapFromColorArray(COLCO)
+# COLCM = monet.generateAlphaColorMapFromColorArray(COLCO)
 
 
 ###############################################################################
@@ -53,13 +53,13 @@ def driveSelector(DRIVE, TYPE, popSize=(11000)):
     if TYPE == 'ECO':
         colors = monet.COLEN
     elif TYPE == 'HLT':
-        colors = monet.COLHN
+        colors = COLHN
     elif TYPE == 'TRS':
         colors = monet.COLTN
     elif TYPE == 'WLD':
         colors = monet.COLWN
     elif TYPE == 'CST':
-        colors = monet.COLHN
+        colors = COLCN
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 

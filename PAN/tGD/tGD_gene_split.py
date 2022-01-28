@@ -63,7 +63,7 @@ SDR_WLD = monet.carrierFrequencies(WLD_DICT, genotypes)
 ###############################################################################
 CST_DICT = OrderedDict((
     ('C*', (('C', locA), )),
-    ('H-', (('W', locB), ))
+    ('O-', (('W', locA), ))
 ))
 SDR_CST = monet.carrierFrequencies(CST_DICT, genotypes)
 
