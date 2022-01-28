@@ -45,7 +45,7 @@ ECO_DICT = OrderedDict((
     ('B', (('B', locB), )),
     ('G', (('G', locB), )),
 ))
-CRS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
+TGD_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
 ###############################################################################
 # Health genotype counts

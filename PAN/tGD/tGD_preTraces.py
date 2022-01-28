@@ -15,11 +15,11 @@ import compress_pickle as pkl
 (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
 (FMT, SKP, MF, FZ) = ('bz2', False, (True, True), False)
-if (USR == 'srv2') or (USR == 'dsk'):
+if (USR == 'srv2'):
     EXP = ('000', )
 else:
-    EXP = ('050', '100', '400', '800') # '001', '005', '010', '100')
-###############################################################################
+    EXP = ('100', )
+##############################################################################
 # Setting up paths and style
 ###############################################################################
 for exp in EXP:
@@ -33,7 +33,6 @@ for exp in EXP:
             "aspect": .25, "colors": CLR, "xRange": [0, (365*5)/3],
             "yRange": (0, YRAN[1]*1.5)
         }
-    print(CLR)
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()
     aux.printExperimentHead(PT_ROT, PT_IMG, PT_PRE, tS, 'PreTraces '+AOI)
@@ -63,8 +62,7 @@ for exp in EXP:
         monet.exportTracesPlot(repDta, name, STYLE, PT_IMG, append='TRA', wopPrint=False)
         cl = [i[:-2]+'cc' for i in CLR]
     monet.exportGeneLegend(
-            sumDta['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
+            drive.get('gDict')['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
         )
     tE = datetime.now()
     print('* Analyzed ({}/{})                    '.format(xpNum, xpNum), end='\n')
-    print(monet.PAD)
