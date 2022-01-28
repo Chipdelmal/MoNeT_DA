@@ -79,7 +79,7 @@ TGD_WLD = monet.carrierFrequencies(WLD_DICT, genotypes)
 ###############################################################################
 CST_DICT = OrderedDict((
     ('C*', (('P', locA), ('M', locA))),
-    ('O-', (('W', locA), ))
+    ('O-', (('W', locA), ('R', locA), ('B', locA)))
 ))
 TGD_CST = monet.carrierFrequencies(CST_DICT, genotypes)
 

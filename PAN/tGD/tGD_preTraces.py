@@ -21,7 +21,8 @@ else:
     EXP = ('100', )
 ##############################################################################
 # Setting up paths and style
-###############################################################################
+##############################################################################
+exp = EXP[0]
 for exp in EXP:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, DRV, exp)
     PT_IMG = PT_IMG + 'preTraces/'
@@ -31,7 +32,7 @@ for exp in EXP:
     STYLE = {
             "width": .25, "alpha": .75, "dpi": 750, "legend": True,
             "aspect": .25, "colors": CLR, "xRange": [0, (365*5)/3],
-            "yRange": (0, YRAN[1]*1.5)
+            "yRange": (0, 7.5e3)
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()

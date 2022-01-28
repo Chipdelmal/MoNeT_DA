@@ -3,6 +3,7 @@
 
 
 import os
+import sys
 from glob import glob
 import time
 from os import path
@@ -16,8 +17,8 @@ import tGD_gene as drv
 import tGD_plots as plots
 import MoNeT_MGDrivE as monet
 
-# (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-(USR, DRV, AOI) = ('dsk', 'splitDrive', 'HLT')
+(USR, DRV) = (sys.argv[1], sys.argv[2])
+# (USR, DRV) = ('dsk', 'splitDrive')
 (FMT, SKP, MF, FZ) = ('bz2', False, (True, True), False)
 if (USR == 'srv2'):
     EXP = ('000', )
@@ -25,6 +26,7 @@ else:
     EXP = ('100', )
 typs = ('CST', 'HLT')
 DPI = 300
+AOI = 'HLT'
 ##############################################################################
 # Setting up paths and style
 ###############################################################################
