@@ -20,7 +20,7 @@ if monet.isNotebook():
 else:
     (USR, AOI, LND, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     JOB = aux.JOB_SRV
-SUBSAMPLE = 0.1
+SUBSAMPLE = 0.05
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -62,7 +62,7 @@ for exp in EXPS:
         fltrPattern = PT_PRE + aux.patternForReleases('00', AOI, '*')
     fLists = monet.getFilteredTupledFiles(fltrPattern, globPattern, tyTag)
     fLists = random.sample(fLists, int(len(fLists)*SUBSAMPLE))
-    expsNum = len(fLists)
+    expNum = len(fLists)
     # Arrange file tuples -----------------------------------------------------
     expIter = list(zip(list(range(expNum, 0, -1)), fLists))
     expIter.reverse()

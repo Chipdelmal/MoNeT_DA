@@ -63,7 +63,7 @@ def exportPreTracesParallel(
     monet.exportTracesPlot(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
         border=border, borderColor=borderColor, borderWidth=borderWidth,
-        sampRate=aux.SAMP_RATE
+        sampRate=sampRate
     )
     return None
 
