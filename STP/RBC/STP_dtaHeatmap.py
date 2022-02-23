@@ -234,6 +234,7 @@ for sw in sweep:
             MOI, HD_IND[0][2:], HD_IND[1][2:]
         )+'_'.join(fElements)
     # Save file ---------------------------------------------------------------
+    print(path.join(PT_IMG, fName+'.png'))
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
         dpi=500, bbox_inches='tight', pad=0

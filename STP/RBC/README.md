@@ -62,10 +62,18 @@ For the **pst** DA:
 To run all the data processing steps from *ANALYZED* and *TRACES* data up to the factorial CSV files, run:
 
 ```bash
-./STP_crunchDataset.sh USR
+./STP_crunchDataset.sh $USR $DRV SPA $DCE
 ```
 
 This will probably take a while, depending on how many experiments were run.
+
+### Spatial Experiments
+
+Crunch the "pre"-phase dataset the same as for the panmictic case with:
+
+```bash
+./STP_crunchDataset.sh $USR $DRV SPA $DCE
+```
 
 ## Some References
 
