@@ -1,5 +1,6 @@
 # São Tomé and Príncipe
 
+<hr>
 
 ## Simulations
 
@@ -24,34 +25,52 @@ Where the first ID is: `{S: South releases, D: Study sites}`; and the second one
 
 ## Data Analysis
 
-To run the PRE phases of the DA pipelines, use the following bash script:
+To run the PRE phases of the DA pipelines (HLT only), use the following bash script:
 
 ```bash
-./STP_crunchDataset.sh $USR LDR PAN $DCE
-./STP_crunchDataset.sh $USR SDR PAN $DCE
-./STP_crunchDataset.sh $USR LDR SPA $DCE
-./STP_crunchDataset.sh $USR SDR SPA $DCE
+./STP_crunchDataset.sh $USR "LDR" "PAN" $DCE
+./STP_crunchDataset.sh $USR "SDR" "PAN" $DCE
+./STP_crunchDataset.sh $USR "LDR" "SPA" $DCE
+./STP_crunchDataset.sh $USR "SDR" "SPA" $DCE
 ```
 
 Note that if `$DCE` is `True` it might take a while to export the plots (depending on the selected sampling fraction).
 
+If WLD, ECO, HLT, and TRS, run:
+
+```bash
+./STP_preProcess.sh $USR $LND $DRV
+```
+
 All of the heatmaps used for publication are generated through the following commands:
 
 ```bash
-./STP_heatmap.sh $USR LDR
-./STP_heatmap.sh $USR SDR
+./STP_dtaHeatmap.sh $USR "LDR"
+./STP_dtaHeatmap.sh $USR "SDR"
 ```
 
-exporting the results to the `[DATA SOURCE]/../ML/img/heat/` directories. Whereas all the accompaning releases curves are generated through:
+exporting the results to the `[DATA SOURCE]/../ML/img/heat/` directories. Whereas all the accompanying releases curves are generated through:
 
 ```bash
-python STP_dtaRelCompare.py $USR PAN HLT LDR 50
-python STP_dtaSexCompare.py $USR PAN HLT LDR 50
-python STP_dtaRelCompare.py $USR PAN HLT SDR 50
-python STP_dtaSexCompare.py $USR PAN HLT SDR 50
+python STP_dtaRelCompare.py $USR "PAN" "HLT" "LDR" 50
+python STP_dtaSexCompare.py $USR "PAN" "HLT" "LDR" 50
+python STP_dtaRelCompare.py $USR "PAN" "HLT" "SDR" 50
+python STP_dtaSexCompare.py $USR "PAN" "HLT" "SDR" 50
 ```
 
 which export the data at `[DATA SOURCE]/../ML/img/`. 
+
+## PstTraces for Spatial
+
+To generate all the `pstTraces` sets run:
+
+```bash
+./STP_pstFraction.sh $USR $LND $DRV
+./STP_pstProcess.sh $USR $LND $DRV
+./STP_pstTraces.sh $USR $LND $DRV
+```
+
+with the `SUBSAMPLE=1`.
 
 <hr>
 
@@ -86,3 +105,5 @@ which export the data at `[DATA SOURCE]/../ML/img/`.
 * `POE`: Probability of elimination/fixation
 * `MIN`: Minimum of mosquitoes
 * `RAP`: Fraction of mosquites at timepoint
+
+<hr>
