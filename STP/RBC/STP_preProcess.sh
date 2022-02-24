@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# argv1: User
-# argv2: Land
+USR=$1
+LND=$2
+DRV=$3
 
-python STP_preProcess.py $1 ECO $2
-python STP_preProcess.py $1 HLT $2
-python STP_preProcess.py $1 WLD $2
-python STP_preProcess.py $1 TRS $2
+python STP_preProcess.py $URR ECO $LND $DRV
+python STP_preProcess.py $USR HLT $LND $DRV
+python STP_preProcess.py $USR WLD $LND $DRV
+python STP_preProcess.py $USR TRS $LND $DRV
