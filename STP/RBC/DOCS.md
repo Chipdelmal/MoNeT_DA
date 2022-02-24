@@ -5,12 +5,10 @@
 
 The scripts required to generate the datasets for these experiments can be found at:
 
-* [Panmictic LDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Grid_LDR.R)
-* [Panmictic SDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Grid_SDR.R)
-* [Spatial LDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Spatial_LDR.R)
-* [Spatial SDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Spatial_SDR.R)
+* Panmictic [LDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Grid_LDR.R) and [SDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Grid_SDR.R)
+* Spatial [LDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Spatial_LDR.R) and [SDR](https://github.com/Chipdelmal/MGDrivE/blob/master/Main/STP/STP_Spatial_SDR.R)
 
-With the gene-cubes being [LDR](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-CRISPR2MF.R) and [SDR](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-SplitDriveMF.R).
+With the gene-cubes being [LDR drive](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-CRISPR2MF.R) and [SDR drive](https://github.com/Chipdelmal/MGDrivE/blob/master/MGDrivE/R/Cube-SplitDriveMF.R).
 
 These scripts export data to the following directories on the server:
 
