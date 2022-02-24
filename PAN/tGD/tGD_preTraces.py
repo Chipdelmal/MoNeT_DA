@@ -32,7 +32,7 @@ for exp in EXP:
     STYLE = {
             "width": .25, "alpha": .75, "dpi": 750, "legend": True,
             "aspect": .25, "colors": CLR, "xRange": [0, (365*5)/3],
-            "yRange": (0, 7.5e3)
+            "yRange": (0, 7.5e3*2)
         }
     STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     tS = datetime.now()
