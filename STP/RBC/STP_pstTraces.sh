@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# argv1: User
-# argv2: Land
-
-QNT='90'
+USR=$1
+LND=$2
+DRV=$3
+QNT='50'
 THS='0.1'
-python STP_pstTraces.py $1 HLT $2 $QNT $THS
-python STP_pstTraces.py $1 WLD $2 $QNT $THS
-python STP_pstTraces.py $1 TRS $2 $QNT $THS
 
-python STP_pstGrids.py $1 $2 $QNT
+python STP_pstTraces.py $USR HLT $LND $DRV $QNT $THS
+python STP_pstTraces.py $USR WLD $LND $DRV $QNT $THS
+python STP_pstTraces.py $USR TRS $LND $DRV $QNT $THS
+
+# python STP_pstGrids.py $1 $2 $QNT

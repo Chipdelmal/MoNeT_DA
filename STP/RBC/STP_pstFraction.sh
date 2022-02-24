@@ -1,5 +1,9 @@
 #!/bin/bash
 
-python STP_pstFraction.py $1 HLT $2
-python STP_pstFraction.py $1 WLD $2
-python STP_pstFraction.py $1 TRS $2
+USR=$1
+LND=$2
+DRV=$3
+
+python STP_pstFraction.py $USR HLT $LND $DRV
+python STP_pstFraction.py $USR WLD $LND $DRV
+python STP_pstFraction.py $USR TRS $LND $DRV
