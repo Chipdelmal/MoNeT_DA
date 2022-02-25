@@ -62,25 +62,24 @@ which export the data at `[DATA SOURCE]/../ML/img/`.
 
 ## PstTraces for Spatial
 
-To generate all the `pstTraces` sets run:
+To generate all the `pstTraces` sets (HLT, WLD, TRS) run:
 
 ```bash
+./STP_preProcess.sh $USR $LND $DRV
 ./STP_pstFraction.sh $USR $LND $DRV
 ./STP_pstProcess.sh $USR $LND $DRV
 ./STP_pstTraces.sh $USR $LND $DRV
 ```
 
-with the `SUBSAMPLE=1`.
+with the `SUBSAMPLE` value set to `1` in order to plot every trace.
 
 <hr>
 
-## Variables Key
-
-### Namefile
+## Namefile
 
 `E_sex_ren_res_rsg_gsv_fch_fcb_fcr_hrm_hrf`
 
-### Inputs
+## Inputs
 
 * `sex (1e00)`: released mosquitos sex
   * `sxm`: male
@@ -96,7 +95,7 @@ with the `SUBSAMPLE=1`.
 * `hrm (1e05)`: homing rate male
 * `hrt (1e05)`: homing rate female
 
-### Outputs
+## Outputs
 
 * `CPT`: Cumulative fraction of mosquitoes divided by time
 * `TTI`: Time to introgression
