@@ -73,6 +73,16 @@ To generate all the `pstTraces` sets (HLT, WLD, TRS) run:
 
 with the `SUBSAMPLE` value set to `1` in order to plot every trace.
 
+## Classificator
+
+For the full classifier routine run:
+
+```bash
+./STP_clsPipeline.sh $USR $DRV $QNT True
+```
+
+This will generate the model, plots and summaries needed for the analysis.
+
 <hr>
 
 ## Namefile
