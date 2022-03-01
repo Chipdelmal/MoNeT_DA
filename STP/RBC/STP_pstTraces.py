@@ -88,7 +88,7 @@ for exp in EXPS:
         ]
         allDF = (dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT)
         # Filtered tuples -----------------------------------------------------
-        fmtStr = '{}* Generating file tuples por processing ({})...{}'
+        fmtStr = '{}* Generating file tuples for processing ({})...{}'
         print(fmtStr.format(monet.CBBL, expsNum, monet.CEND), end='\r')
         expsIter = [None]*expsNum
         for i in range(expsNum):
