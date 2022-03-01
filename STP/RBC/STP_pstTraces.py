@@ -26,7 +26,7 @@ else:
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
     JOB = aux.JOB_SRV
-SUBSAMPLE = 1
+SUBSAMPLE = .05
 (EXPS, DRV) = (aux.getExps(LND), 'LDR')
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###############################################################################
