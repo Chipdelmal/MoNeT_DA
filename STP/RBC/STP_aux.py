@@ -153,6 +153,7 @@ def getExps(LND):
         return ('000000', )
     else:
         spaLnd = (
+            '265_DR', '265_SR',
             '265_SS', '265_SP', '265_SF', 
             '265_DS', '265_DP', '265_DF'
         )
