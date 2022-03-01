@@ -11,17 +11,18 @@ def landSelector(EXP, LND, USR='lab'):
         PAN = ([0], )
         return PAN
     else:
+        PT = aux.selectPathGeo(USR)
         if (EXP=='265_SP') or (EXP=='265_DP'):
-            PT = aux.selectPathGeo(USR)
             PAN = pkl.load(path.join(PT, 'clusters_002.bz'))
             return PAN
         elif (EXP=='265_SS') or (EXP=='265_DS'):
-            PT = aux.selectPathGeo(USR)
             SPA = pkl.load(path.join(PT, 'clusters_015.bz'))
             return SPA
         elif (EXP=='265_SF') or (EXP=='265_DF'):
-            PT = aux.selectPathGeo(USR)
             SPA = pkl.load(path.join(PT, 'clusters_075.bz'))
+            return SPA
+        elif (EXP=='265_SR') or (EXP=='265_DR'):
+            SPA = pkl.load(path.join(PT, 'clusters_0{}.bz'.format(EXP[-2:])))
             return SPA
 
 
@@ -29,7 +30,8 @@ def landSelector(EXP, LND, USR='lab'):
 def landPopSelector(REL, PT_ROT):
     if (
         (REL=='265_SP') or (REL=='265_DP') or (REL=='265_SS') or 
-        (REL=='265_DS') or (EXP=='265_SF') or (EXP=='265_DF')
+        (REL=='265_DS') or (EXP=='265_SF') or (EXP=='265_DF') or
+        (EXP=='265_SR') or (EXP=='265_DR')
     ):
         PT_UAS = path.join(
             ''.join(PT_ROT.split('/'+REL)).replace('/sim/', ''),

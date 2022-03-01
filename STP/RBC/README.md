@@ -1,5 +1,7 @@
 # São Tomé and Príncipe
 
+Information about all the routines needed for the paper.
+
 <hr>
 
 ## Simulations
@@ -72,6 +74,17 @@ To generate all the `pstTraces` sets (HLT, WLD, TRS) run:
 ```
 
 with the `SUBSAMPLE` value set to `1` in order to plot every trace.
+
+## Classifier (ML)
+
+For the full classifier routine run:
+
+```bash
+./STP_clsPipeline.sh $USR LDR 50 True
+./STP_clsPipeline.sh $USR SDR 50 True
+```
+
+after having the `STP_crunchDataset.sh` run for both SDR and LDR, PAN sets. This will generate the model, plots and summaries (feature importance) needed for the analysis.
 
 <hr>
 
