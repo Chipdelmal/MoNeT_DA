@@ -11,17 +11,18 @@ def landSelector(EXP, LND, USR='lab'):
         PAN = ([0], )
         return PAN
     else:
+        PT = aux.selectPathGeo(USR)
         if (EXP=='265_SP') or (EXP=='265_DP'):
-            PT = aux.selectPathGeo(USR)
             PAN = pkl.load(path.join(PT, 'clusters_002.bz'))
             return PAN
         elif (EXP=='265_SS') or (EXP=='265_DS'):
-            PT = aux.selectPathGeo(USR)
             SPA = pkl.load(path.join(PT, 'clusters_015.bz'))
             return SPA
         elif (EXP=='265_SF') or (EXP=='265_DF'):
-            PT = aux.selectPathGeo(USR)
             SPA = pkl.load(path.join(PT, 'clusters_075.bz'))
+            return SPA
+        elif (EXP=='265_SR') or (EXP=='265_DR'):
+            SPA = pkl.load(path.join(PT, 'clusters_0{}.bz'.format(EXP[-2:])))
             return SPA
 
 
