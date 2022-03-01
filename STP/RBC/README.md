@@ -23,7 +23,7 @@ Which are symlinked from these locations for data analysis:
 * Panmictic analysis: `/RAID5/marshallShare/STP_Grid/{LDR,SDR}/SPA/265_{S,D}{F,P,S}/`
 * Spatial analysis: `/RAID5/marshallShare/STP_Grid/{LDR,SDR}/PAN/000000`
 
-Where the first ID is: `{S: South releases, D: Study sites}`; and the second one: `{P: two clusters,  S: fifteen clusters (for plots), F: seventy-five clusters (for videos), R: Release/NoRelease Site}`.
+Where the first ID is: `{S: South releases, D: Study sites}`; and the second one: `{P: two clusters,  S: fifteen clusters (for plots), F: seventy-five clusters (for videos), R: release site versus no release sites}`.
 
 ## Data Analysis
 
