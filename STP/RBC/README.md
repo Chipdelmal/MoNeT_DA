@@ -1,5 +1,7 @@
 # São Tomé and Príncipe
 
+Information about all the routines needed for the paper.
+
 <hr>
 
 ## Simulations
@@ -73,7 +75,7 @@ To generate all the `pstTraces` sets (HLT, WLD, TRS) run:
 
 with the `SUBSAMPLE` value set to `1` in order to plot every trace.
 
-## Classificator
+## Classifier (ML)
 
 For the full classifier routine run:
 
@@ -81,7 +83,7 @@ For the full classifier routine run:
 ./STP_clsPipeline.sh $USR $DRV $QNT True
 ```
 
-This will generate the model, plots and summaries needed for the analysis.
+This will generate the model, plots and summaries (feature importance) needed for the analysis.
 
 <hr>
 
