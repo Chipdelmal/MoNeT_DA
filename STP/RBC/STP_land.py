@@ -30,7 +30,8 @@ def landSelector(EXP, LND, USR='lab'):
 def landPopSelector(REL, PT_ROT):
     if (
         (REL=='265_SP') or (REL=='265_DP') or (REL=='265_SS') or 
-        (REL=='265_DS') or (EXP=='265_SF') or (EXP=='265_DF')
+        (REL=='265_DS') or (EXP=='265_SF') or (EXP=='265_DF') or
+        (EXP=='265_SR') or (EXP=='265_DR')
     ):
         PT_UAS = path.join(
             ''.join(PT_ROT.split('/'+REL)).replace('/sim/', ''),
