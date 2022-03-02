@@ -37,7 +37,7 @@ REL_START = 1095
 )
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
-    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
 )
 REF_FILE = 'E_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000'
