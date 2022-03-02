@@ -3,25 +3,25 @@
 
 import MoNeT_MGDrivE as monet
 
-genotypes = ('S', 'I')
+genotypes = ('inc_1', 'TOTAL')
 allGeneIx = list(range(len(genotypes[0])))
 
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-sGenes = (('S', allGeneIx), )
+sGenes = (('TOTAL', allGeneIx), )
 sPos = set(monet.aggregateGeneAppearances(genotypes, sGenes))
-iGenes = (('I', allGeneIx), )
+iGenes = (('inc_i', allGeneIx), )
 iPos = set(monet.aggregateGeneAppearances(genotypes, iGenes))
-HUM_HLT= [list(i) for i in (iPos, sPos - iPos, sPos | iPos)]
+HUM_INC= [list(i) for i in (iPos, sPos-iPos, sPos|iPos)]
 
 ###############################################################################
 # Drive Selector
 ###############################################################################
-def driveParameters(TYPE, popSize=360000):
-    if TYPE == 'HUM':
+def driveParameters(TYPE, popSize=750):
+    if TYPE == 'INC':
         aggD = monet.generateAggregationDictionary(
-            ['I', 'S', 'Total'], HUM_HLT
+            ['I', 'O', 'Total'], HUM_INC
         )
     yRange = popSize
-    return (aggD, yRange, 'HUM')
+    return (aggD, yRange, 'INC')

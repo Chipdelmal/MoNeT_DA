@@ -4,18 +4,20 @@
 import MoNeT_MGDrivE as monet
 import TPT_gene_LDR as LDR
 import TPT_gene_HUM as HUM
+import TPT_gene_INC as INC
 
 ###############################################################################
 # Drive
 ###############################################################################
 def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
     ###########################################################################
-    if TYPE != 'HUM':
-        if DRIVE == 'LDR':
-            (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
-    else:
-        # Human ---------------------------------------------------------------
+    if (TYPE == 'HUM'):
         (aggD, yRange, folder) = HUM.driveParameters(TYPE, popSize=humSize)
+    elif (TYPE == 'INC'):
+        (aggD, yRange, folder) = INC.driveParameters(TYPE, popSize=750)
+    else:
+        if (DRIVE == 'LDR'):
+            (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN
@@ -27,22 +29,22 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
         colors = monet.COLWN
     elif TYPE == 'HUM':
         colors = monet.COLWN
+    elif TYPE == 'INC':
+        colors = monet.COLWN
     ###########################################################################
     geneDict = {
-        'gDict': aggD, 'yRange': yRange, 
-        'colors': colors, 'folder': folder
+        'gDict': aggD, 'yRange': yRange, 'colors': colors, 'folder': folder
     }
     return geneDict
 
 
 def maleFemaleSelector(AOI):
-    if (AOI == 'HLT') or (AOI == 'HUM'):
+    if (AOI == 'HLT') or (AOI == 'HUM') or (AOI == 'INC'):
         MF = (False, True)
     else:
         MF =    (True, True)
     return MF
 
-1
 
 def colorSelector(AOI):
     if AOI == 'ECO':
