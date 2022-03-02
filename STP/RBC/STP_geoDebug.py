@@ -24,5 +24,5 @@ sitesRel = [list(SAOTOME-set(SITES)), SITES, list(NO_ACCESS), list(PRINCIPE)]
 ###############################################################################
 # Dump data lists
 ###############################################################################
-pkl.dump(southRel, PTH_ROT+'clusters_0SR', compression='bz2')
-pkl.dump(sitesRel, PTH_ROT+'clusters_0DR', compression='bz2')
+pkl.dump(southRel, PTH_ROT+'clusters_0DR', compression='bz2')
+pkl.dump(sitesRel, PTH_ROT+'clusters_0SR', compression='bz2')
