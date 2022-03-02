@@ -18,3 +18,4 @@ python TPT_pstFraction.py $USR 'HLT' 'LDR'
 python TPT_pstProcess.py $USR 'HUM' 'LDR' $QNT
 python TPT_pstProcess.py $USR 'HLT' 'LDR' $QNT
 python TPT_pstTraces.py $USR 'HLT' 'LDR' $QNT $THS
+python TPT_pstTraces.py $USR 'HUM' 'LDR' $QNT $THS

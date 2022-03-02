@@ -8,6 +8,7 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 from more_itertools import locate
+import compress_pickle as pkl
 import pandas as pd
 import TPT_aux as aux
 import TPT_gene as drv
@@ -89,7 +90,7 @@ for exp in EXPS:
         exIx, repFiles, xpidIx,
         dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
         aux.STABLE_T, str(THS), QNT, STYLE, PT_IMG,
-        digs=digs, popScaler=1.5, #  aspect=1, border=True
+        digs=digs, popScaler=1, #  aspect=1, border=True
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------
