@@ -5,9 +5,9 @@ QNT='50'
 THS='0.1'
 
 # PreProcess ------------------------------------------------------------------
-# python TPT_preProcess.py $USR 'HUM' 'LDR'
-# python TPT_preProcess.py $USR 'HLT' 'LDR'
-# python TPT_preProcess.py $USR 'ECO' 'LDR'
+python TPT_preProcess.py $USR 'HUM' 'LDR'
+python TPT_preProcess.py $USR 'HLT' 'LDR'
+python TPT_preProcess.py $USR 'ECO' 'LDR'
 python TPT_preTraces.py $USR 'HUM' 'LDR'
 python TPT_preTraces.py $USR 'HLT' 'LDR'
 python TPT_preTraces.py $USR 'ECO' 'LDR'
