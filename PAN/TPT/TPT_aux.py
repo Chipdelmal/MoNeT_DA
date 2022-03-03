@@ -26,7 +26,7 @@ OVW = True
 REL_START = 1095
 (JOB_DSK, JOB_SRV) = (8, 20)
 (POP_SIZE, HUM_SIZE, XRAN, FZ) = (
-    75e3*3, 352e3*1, # 2e6*1.5/2, 
+    75e3*3, 352e3*1.5, # 2e6*1.5/2, 
     (0, 10*int(365)), 
     True
 )
