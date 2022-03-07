@@ -59,10 +59,10 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .75, "alpha": .75, "dpi": 300, "legend": True,
-            "aspect": .25, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
+            "width": 1, "alpha": .5, "dpi": 500, "legend": True,
+            "aspect": 1/6, "colors": CLR, 
+            "xRange": aux.XRAN, "yRange": [0, YRAN[1]]
         }
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
     ###########################################################################
     # Load postprocessed files
     ###########################################################################
@@ -87,10 +87,11 @@ for exp in EXPS:
     (fNum, digs) = monet.lenAndDigits(repFiles)
     Parallel(n_jobs=JOB)(
         delayed(monet.exportPstTracesPlotWrapper)(
-        exIx, repFiles, xpidIx,
-        dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
-        aux.STABLE_T, str(THS), QNT, STYLE, PT_IMG,
-        digs=digs, popScaler=1, #  aspect=1, border=True
+            exIx, repFiles, xpidIx,
+            dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
+            aux.STABLE_T, str(THS), QNT, STYLE, PT_IMG,
+            digs=digs, popScaler=1, autoAspect=1,
+            labelPos=(.91, .4), fontsize=5, labelspacing=.08
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------

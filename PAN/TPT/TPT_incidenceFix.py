@@ -1,22 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
-from PIL import Image
 from datetime import datetime
 import MoNeT_MGDrivE as monet
-from glob import glob
-from os import path
-import compress_pickle as pkl
+from joblib import Parallel, delayed
+from more_itertools import locate
 import TPT_aux as aux
 import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('dsk', 'HLT', 'LDR')
+    (USR, DRV, AOI) = ('dsk', 'LDR', 'INC')
 else:
-    (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
-patterns = ('*HUM_*', '*HLT_*')
+    USR = sys.argv[1]
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
@@ -38,24 +36,23 @@ for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, exp, DRV
     )
-    PT_IMG = path.join(PT_IMG, 'preTraces')
     # Time and head -----------------------------------------------------------
+    tS = datetime.now()
+    monet.printExperimentHead(
+        PT_DTA, PT_PRE, tS, 
+        '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
+    )
+    # Select sexes and ids ----------------------------------------------------
+    sexID = {"male": "M_", "female": "F_"}
+    if (AOI == 'HUM'):
+        sexID = {"male": "", "female": "H_"}
+    elif (AOI == 'INC'):
+        sexID == {"male": "", "female": "incidence_"}
+    ###########################################################################
+    # Load folders
+    ###########################################################################
+    fmtStr = '{}* Create files list...{}'
+    print(fmtStr.format(monet.CBBL, monet.CEND), end='\r')
     (expDirsMean, expDirsTrac) = monet.getExpPaths(
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
-    ###########################################################################
-    # Setting up paths
-    ###########################################################################
-    pats = list(zip(*[sorted(glob(path.join(PT_IMG, i))) for i in patterns]))
-    # Iteration cycle ---------------------------------------------------------
-    for fnames in pats:
-        background = Image.open(fnames[0])
-        whiteBkg = Image.new("RGBA", background.size, "WHITE")
-        for i in range(0, len(fnames)):
-            foreground = Image.open(fnames[i])
-            whiteBkg.paste(foreground, (0, 0), foreground)
-            foreground.close()
-        (expName, tail) = fnames[0].split('/')[-1].split('-')
-        pthSave = path.join(PT_IMG, '{}-INF_{}'.format(expName, tail[4:]))
-        whiteBkg.save(pthSave, dpi=(300, 300))
-        whiteBkg.close()

@@ -22,13 +22,13 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
     if TYPE == 'ECO':
         colors = monet.COLEN
     elif TYPE == 'HLT':
-        colors = ['#FF006E55', '#8338EC55', '#0C488755']
+        colors = ['#FF006E25', '#8338EC25', '#0C488725']
     elif TYPE == 'TRS':
         colors = monet.COLTN
     elif TYPE == 'WLD':
         colors = monet.COLWN
     elif TYPE == 'HUM':
-        colors = ['#0eeb1055', '#5D81EA55', '#0C488700']
+        colors = ['#0eeb1055', '#5D81EA55', '#dee2ff55']
     elif TYPE == 'INC':
         colors = monet.COLWN
     ###########################################################################
@@ -42,7 +42,7 @@ def maleFemaleSelector(AOI):
     if (AOI == 'HLT') or (AOI == 'HUM') or (AOI == 'INC'):
         MF = (False, True)
     else:
-        MF =    (True, True)
+        MF = (True, True)
     return MF
 
 

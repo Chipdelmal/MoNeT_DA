@@ -46,8 +46,8 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .25, "alpha": .5, "dpi": 500, "legend": True,
-            "aspect": 1/4, "colors": CLR, 
+            "width": 1, "alpha": .5, "dpi": 500, "legend": True,
+            "aspect": 1/6, "colors": CLR, 
             "xRange": aux.XRAN, "yRange": [0, YRAN[1]]
         }
     tS = datetime.now()
@@ -76,8 +76,8 @@ for exp in EXPS:
         delayed(monet.exportPreTracesParallel)(
             exIx, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, autoAspect=True,
-            border=True, borderColor='#8184a7AA', borderWidth=2
-            # sampRate=aux.SAMP_RATE
+            border=True, borderColor='#000000AA', borderWidth=1,
+            sampRate=1
         ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------

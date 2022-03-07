@@ -13,7 +13,7 @@ sGenes = (('S', allGeneIx), )
 sPos = set(monet.aggregateGeneAppearances(genotypes, sGenes))
 iGenes = (('I', allGeneIx), )
 iPos = set(monet.aggregateGeneAppearances(genotypes, iGenes))
-HUM_HLT= [list(i) for i in (sPos, iPos - sPos, sPos | iPos)]
+HUM_HLT= [list(i) for i in (iPos, sPos-iPos, sPos|iPos)]
 
 ###############################################################################
 # Drive Selector
