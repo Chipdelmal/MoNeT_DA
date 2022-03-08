@@ -97,8 +97,8 @@ for exp in EXPS:
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------
-    repDta = pkl.load(repFiles[-1])
-    monet.exportGeneLegend(
-        repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-        PT_IMG+'/legend_{}.png'.format(AOI), 500
-    )
+    # repDta = pkl.load(repFiles[-1])
+    # monet.exportGeneLegend(
+    #     repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+    #     PT_IMG+'/legend_{}.png'.format(AOI), 500
+    # )
