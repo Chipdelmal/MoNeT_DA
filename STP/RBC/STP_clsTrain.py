@@ -184,6 +184,8 @@ ax.barh(
 )
 ax.grid(1)
 ax.set_xlim(0, .5)
+ax.xaxis.set_ticks(np.arange(0, .5, .125))
+# ax.yaxis.set_ticks(np.arange(0, len(FEATS), 1))
 if TICKS_HIDE:
     ax.axes.xaxis.set_ticklabels([])
     ax.axes.yaxis.set_ticklabels([])
