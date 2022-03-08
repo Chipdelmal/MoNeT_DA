@@ -26,12 +26,13 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'SDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
     )
-TICKS_HIDE = False
+TICKS_HIDE = True
+MAX_TIME = 6
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -114,11 +115,12 @@ for (i, res) in enumerate(resVals):
     )
 ax.xaxis.set_ticks(np.arange(0, 24, 4))
 ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
-leg = [Patch(facecolor=colors[len(resVals)-(i+1)], edgecolor=list(colors[len(resVals)-(i+1)][:-1])+[.25], label=res) for (i, ren) in enumerate(resVals)]
-ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
+if not TICKS_HIDE:
+    leg = [Patch(facecolor=colors[len(resVals)-(i+1)], edgecolor=list(colors[len(resVals)-(i+1)][:-1])+[.25], label=res) for (i, ren) in enumerate(resVals)]
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
 ax.grid(1)
-ax.set_xlim(0, 24)
-ax.set_ylim(0, 6*365) # CHANGED!!!!!!!!
+ax.set_xlim(1, 24)
+ax.set_ylim(0, MAX_TIME*365) # CHANGED!!!!!!!!
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
 if TICKS_HIDE:
@@ -164,16 +166,20 @@ for (i, ren) in enumerate(renVals):
         list(dfSrf['WOP']), 
         color=colors[i]
     )
-leg = [Patch(facecolor=colors[len(renVals)-(i+1)], edgecolor=list(colors[len(renVals)-(i+1)][:-1])+[.25], label=ren) for (i, ren) in enumerate(renVals)]
-ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
+
 ax.yaxis.set_ticks(np.arange(0, 10*365, 365/2))
 ax.grid(1)
-ax.set_xlim(0, 1)
-ax.set_ylim(0, 6*365)
+ax.set_xlim(.1, 1)
+ax.set_ylim(0, MAX_TIME*365)
 ax.xaxis.set_tick_params(width=2)
 ax.yaxis.set_tick_params(width=2)
 if TICKS_HIDE:
     ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+    ax.xaxis.set_tick_params(width=0)
+    ax.yaxis.set_tick_params(width=0)
+if not TICKS_HIDE:
+    leg = [Patch(facecolor=colors[len(renVals)-(i+1)], edgecolor=list(colors[len(renVals)-(i+1)][:-1])+[.25], label=ren) for (i, ren) in enumerate(renVals)]
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', handles=leg, facecolor=(1,1,1,1), edgecolor=(1,1,1,1), frameon=False)
 plt.tight_layout()
 fig.savefig(    
     path.join(PT_IMG, 'RES-REN_traces.png'),

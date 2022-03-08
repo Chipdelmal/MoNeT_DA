@@ -34,6 +34,7 @@ TICKS_HIDE = True
 (HD_IND, kSweep) = (
     [iVars[0], iVars[1]], iVars[2]
 )
+MAX_TIME = 8
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -82,7 +83,7 @@ if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (-1, 8*365)
+    (zmin, zmax) = (-1, MAX_TIME*365)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1.05)
@@ -156,9 +157,10 @@ for sw in sweep:
     # cs.cmap.set_over('red')
     # cs.cmap.set_under('white')
     # Color bar ---------------------------------------------------------------
-    cbar = fig.colorbar(cs)
-    cbar.ax.get_yaxis().labelpad = 25
-    cbar.ax.set_ylabel('{}'.format(MOI), fontsize=15, rotation=270)
+    if not TICKS_HIDE:
+        cbar = fig.colorbar(cs)
+        cbar.ax.get_yaxis().labelpad = 25
+        cbar.ax.set_ylabel('{}'.format(MOI), fontsize=15, rotation=270)
     # Grid and ticks ----------------------------------------------------------
     if xSca == 'log':
         gZeroX = [i for i in list(sorted(x.unique())) if i>0] 
@@ -218,6 +220,7 @@ for sw in sweep:
         )
         ax.set_axis_off()
     fig.tight_layout()
+    ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
     ###########################################################################
     # Export File
     ###########################################################################
