@@ -1,27 +1,23 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
 import MoNeT_MGDrivE as monet
 
 genotypes = ('S', 'I')
-allGeneIx = list(range(len(genotypes[0])))
+locus = (0, 1)
+# allGeneIx = list(range(len(genotypes[0])))
 
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-sGenes = (('S', allGeneIx), )
-sPos = set(monet.aggregateGeneAppearances(genotypes, sGenes))
-iGenes = (('I', allGeneIx), )
-iPos = set(monet.aggregateGeneAppearances(genotypes, iGenes))
-HUM_HLT= [list(i) for i in (iPos, sPos-iPos, sPos|iPos)]
+HUM_HLT = (['S', 'I', 'Total'], [[0, ], [1, ], [0, 1]])
 
 ###############################################################################
 # Drive Selector
 ###############################################################################
 def driveParameters(TYPE, popSize=360000):
     if TYPE == 'HUM':
-        aggD = monet.generateAggregationDictionary(
-            ['I', 'S', 'Total'], HUM_HLT
-        )
+        aggD = monet.generateAggregationDictionary(*HUM_HLT)
     yRange = popSize
     return (aggD, yRange, 'HUM')
