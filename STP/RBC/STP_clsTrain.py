@@ -26,7 +26,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MTR) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('lab', 'PAN', 'HLT', 'SDR', '50', 'WOP')
     VT_SPLIT = aux.VT_TRAIN
 else:
     (USR, LND, AOI, DRV, QNT, MTR) = (
@@ -35,7 +35,7 @@ else:
     VT_SPLIT = aux.VT_TRAIN
 EXPS = aux.getExps(LND)
 (TREES, DEPTH, KFOLD) = (aux.TREES, aux.DEPTH, aux.KFOLD)
-TICKS_HIDE = False
+TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 if USR=='dsk':
     JOB = aux.JOB_DSK
@@ -184,6 +184,8 @@ ax.barh(
 )
 ax.grid(1)
 ax.set_xlim(0, .5)
+ax.xaxis.set_ticks(np.arange(0, .5, .125))
+# ax.yaxis.set_ticks(np.arange(0, len(FEATS), 1))
 if TICKS_HIDE:
     ax.axes.xaxis.set_ticklabels([])
     ax.axes.yaxis.set_ticklabels([])
