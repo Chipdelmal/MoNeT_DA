@@ -3,6 +3,11 @@
 
 import os
 import sys
+import itertools
+from os import path
+from matplotlib.pyplot import axis
+import numpy as np
+from glob import glob
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
@@ -12,9 +17,9 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('dsk', 'LDR', 'INC')
+    (USR, AOI, DRV) = ('dsk', 'INC', 'LDR')
 else:
-    USR = sys.argv[1]
+    (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
@@ -40,19 +45,37 @@ for exp in EXPS:
     tS = datetime.now()
     monet.printExperimentHead(
         PT_DTA, PT_PRE, tS, 
-        '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
+        '{} PreIncidenceFix [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
     )
     # Select sexes and ids ----------------------------------------------------
-    sexID = {"male": "M_", "female": "F_"}
-    if (AOI == 'HUM'):
-        sexID = {"male": "", "female": "H_"}
-    elif (AOI == 'INC'):
-        sexID == {"male": "", "female": "incidence_"}
+    sexID = {"male": "", "female": "incidence_"}
     ###########################################################################
     # Load folders
     ###########################################################################
-    fmtStr = '{}* Create files list...{}'
-    print(fmtStr.format(monet.CBBL, monet.CEND), end='\r')
     (expDirsMean, expDirsTrac) = monet.getExpPaths(
         PT_DTA, mean='ANALYZED/', reps='TRACE/'
     )
+    ix = 0
+    for ix in range(len(expDirsMean)):
+        #######################################################################
+        # Take averages
+        #######################################################################
+        fldr = expDirsTrac[ix]
+        fldrs = [name for name in os.listdir(fldr) if os.path.isdir(os.path.join(fldr, name))]
+        repsFldrs = [fldr+'/'+i+'/' for i in fldrs]
+        repsFiles = [glob(i+'/incidence*') for i in repsFldrs]
+        repsFiles = [i for i in list(itertools.chain(*repsFiles)) if len(i.split('/')[-1]) >= 18] # DELETE LATER
+        repsData = np.asarray([
+            np.genfromtxt(rep, delimiter=',', skip_header=1, usecols=[1, 2, 3])
+            for rep in repsFiles
+        ])
+        meanData = np.mean(repsData, axis=0)
+        #######################################################################
+        # Export csv file
+        #######################################################################
+        fldr = expDirsMean[ix]
+        np.savetxt(
+            path.join(fldr, "incidence_Mean_0001.csv"), 
+            meanData, delimiter=",", fmt='%f', header="Time, inc_1, TOTAL"
+        )
+

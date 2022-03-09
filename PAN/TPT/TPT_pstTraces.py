@@ -15,7 +15,7 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT, THS) = ('lab', 'HUM', 'LDR', 50, 0.1)
+    (USR, AOI, DRV, QNT, THS) = ('dsk', 'HUM', 'LDR', 50, 0.1)
 else:
     (USR, AOI, DRV, QNT, THS) = (
         sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]), sys.argv[5]

@@ -29,9 +29,9 @@ GRID_REF = False
 EXPS = aux.getExps()
 exp = EXPS[0]
 for exp in EXPS:
-    # #########################################################################
+    ###########################################################################
     # Setup paths and drive
-    # #########################################################################
+    ###########################################################################
     (drive, land) = (
         drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE, humSize=aux.HUM_SIZE),
         aux.landSelector(USR=USR)
@@ -45,10 +45,10 @@ for exp in EXPS:
         PT_PRE, PT_OUT, tS, 
         aux.XP_ID+' PstFraction [{}:{}:{}]'.format(fldr, exp, AOI)
     )
-    # #########################################################################
+    ###########################################################################
     # Base experiments
     #   These are the experiments without any releases (for fractions)
-    # #########################################################################
+    ###########################################################################
     # Get releases number set -------------------------------------------------
     ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[1]
     # Get base experiments pattern --------------------------------------------
@@ -56,11 +56,11 @@ for exp in EXPS:
         basePat = aux.patternForReleases(aux.NO_REL_PAT, AOI, 'sum')
         baseFiles = sorted(glob(PT_PRE+basePat))
         baseFNum = len(baseFiles)
-    # #########################################################################
+    ###########################################################################
     # Probe experiments
     #   sum: Analyzed data aggregated into one node
     #   srp: Garbage data aggregated into one node
-    # #########################################################################
+    ###########################################################################
     (xpNum, digs) = monet.lenAndDigits(ren)
     (i, rnIt) = (0, '20')
     for (i, rnIt) in enumerate(ren):

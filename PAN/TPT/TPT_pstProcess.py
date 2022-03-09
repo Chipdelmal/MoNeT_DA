@@ -14,14 +14,14 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT) = ('dsk', 'HUM', 'LDR', '50')
+    (USR, AOI, DRV, QNT) = ('dsk', 'HLT', 'LDR', '50')
 else:
     (USR, AOI, DRV, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
-CHUNKS = JOB
+CHUNKS = 1# JOB
 ###############################################################################
 # Get Experiments and Offset
 ###############################################################################
@@ -71,6 +71,7 @@ for exp in EXPS:
         [pth+'-pt_'+str(ix).zfill(2)+'.csv' 
         for pth in DFOPths] for ix in range(CHUNKS)
     ]
+    print(dfPaths)
     expIter = list(zip(dfPaths, fPathsChunks))
     Parallel(n_jobs=JOB)(
         delayed(monet.pstProcessParallel)(
