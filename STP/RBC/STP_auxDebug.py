@@ -78,7 +78,7 @@ def exportPstTracesParallel(
         labelPos=(.7, .9), xpsNum=0, digs=3, 
         autoAspect=False, popScaler=1,
         wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True, 
-        ticksHide=True, transparent=True, sampRate=1
+        ticksHide=True, transparent=True, sampRate=1, labelspacing=.1
     ):
     (ix, repFile, tti, tto, wop, mnf, _, poe, cpt) = exIx
     repDta = pkl.load(repFile)
@@ -99,7 +99,7 @@ def exportPstTracesParallel(
         poe=poe, poePrint=poePrint,
         mnf=mnf, mnfPrint=mnfPrint,
         ticksHide=ticksHide, transparent=True, 
-        sampRate=sampRate
+        sampRate=sampRate, labelspacing=labelspacing
     )
     return None
 

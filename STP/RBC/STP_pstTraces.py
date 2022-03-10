@@ -26,7 +26,7 @@ else:
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
     JOB = aux.JOB_SRV
-SUBSAMPLE = 0.025
+SUBSAMPLE = 1
 EXPS = aux.getExps(LND)
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###############################################################################
@@ -118,8 +118,8 @@ for exp in EXPS:
         delayed(dbg.exportPstTracesParallel)(
             exIx, expsNum,
             aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
-            digs=digs, border=True, autoAspect=True, labelPos=(.8, .2),
-            sampRate=aux.SAMP_RATE
+            digs=digs, border=True, autoAspect=True, labelPos=(.8, .5),
+            sampRate=aux.SAMP_RATE, labelspacing=.025
         ) for exIx in expsIter
     )
     # Export gene legend ------------------------------------------------------
