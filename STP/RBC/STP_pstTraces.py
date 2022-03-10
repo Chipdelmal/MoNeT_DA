@@ -18,7 +18,7 @@ import STP_land as lnd
 import STP_auxDebug as dbg
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV, QNT, THS) = ('dsk', 'HLT', 'PAN', 'LDR', '50', '0.1')
+    (USR, AOI, LND, DRV, QNT, THS) = ('lab', 'HLT', 'SPA', 'SDR', '50', '0.1')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV, QNT, THS) = (
@@ -26,7 +26,10 @@ else:
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
     JOB = aux.JOB_SRV
-SUBSAMPLE = 1
+if LND == 'SPA':
+    SUBSAMPLE = 1
+else:
+    SUBSAMPLE = 0.025
 EXPS = aux.getExps(LND)
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###############################################################################
@@ -110,6 +113,7 @@ for exp in EXPS:
     else:
         expsIter = pkl.load(path.join(PT_MTR, tpsName))
     expsIter.reverse()
+    # expsIter = [i for i in expsIter if i[1]=='/Volumes/marshallShare/STP_Grid/SDR/SPA/265_DR/PREPROCESS/E_01_12_00500_000790000000_000100000000_0017500_0011700_0000000_0100000_0095600-HLT_01_srp.bz']
     ###########################################################################
     # Iterate through experiments
     ###########################################################################
