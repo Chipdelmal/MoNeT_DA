@@ -4,6 +4,7 @@ USR=$1
 QNT='50'
 THS='0.1'
 
+# Data Fixes ------------------------------------------------------------------
 python TPT_incidenceFix.py $USR 'INC' 'LDR'
 # PreProcess ------------------------------------------------------------------
 python TPT_preProcess.py $USR 'HUM' 'LDR'

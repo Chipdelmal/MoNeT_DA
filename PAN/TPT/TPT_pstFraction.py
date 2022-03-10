@@ -14,7 +14,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('dsk', 'HUM', 'LDR')
+    (USR, AOI, DRV) = ('lab', 'INC', 'LDR')
 else:
     (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
 GRID_REF = False

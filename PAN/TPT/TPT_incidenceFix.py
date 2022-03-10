@@ -76,6 +76,6 @@ for exp in EXPS:
         fldr = expDirsMean[ix]
         np.savetxt(
             path.join(fldr, "incidence_Mean_0001.csv"), 
-            meanData, delimiter=",", fmt='%f', header="Time, inc_1, TOTAL"
+            meanData, delimiter=",", fmt='%f', header="Time, inc_1, NH"
         )
 

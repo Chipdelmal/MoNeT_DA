@@ -9,10 +9,10 @@ from joblib import Parallel, delayed
 from more_itertools import locate
 import TPT_aux as aux
 import TPT_gene as drv
-
+import TPT_functions as fun
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('dsk', 'HUM', 'LDR')
+    (USR, AOI, DRV) = ('lab', 'INC', 'LDR')
 else:
     (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # Setup number of threads -----------------------------------------------------
@@ -43,11 +43,13 @@ for exp in EXPS:
         '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
     )
     # Select sexes and ids ----------------------------------------------------
-    sexID = {"male": "M_", "female": "F_"}
     if (AOI == 'HUM'):
         sexID = {"male": "", "female": "H_"}
     elif (AOI == 'INC'):
-        sexID == {"male": "", "female": "incidence_"}
+        sexID = {"male": "", "female": "incidence_"}
+        exclusionPattern = lambda a: len(a.split('/')[-1]) >= 18
+    else:
+        sexID = {"male": "M_", "female": "F_"}
     ###########################################################################
     # Load folders
     ###########################################################################
