@@ -71,7 +71,7 @@ for exp in EXPS:
         [pth+'-pt_'+str(ix).zfill(2)+'.csv' 
         for pth in DFOPths] for ix in range(CHUNKS)
     ]
-    print(dfPaths)
+    # print(dfPaths)
     expIter = list(zip(dfPaths, fPathsChunks))
     Parallel(n_jobs=JOB)(
         delayed(monet.pstProcessParallel)(
@@ -85,7 +85,7 @@ for exp in EXPS:
     ###########################################################################
     # Merge dataframes chunks
     ###########################################################################
-    dfPathsPieces = list(zip(*dfPaths))[:-1]
+    dfPathsPieces = list(zip(*dfPaths))[:]
     for dfPathsSet in dfPathsPieces:
         dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
         # Write combined dataframe --------------------------------------------
