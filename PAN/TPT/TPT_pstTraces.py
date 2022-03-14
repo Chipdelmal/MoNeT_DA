@@ -59,7 +59,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": 1, "alpha": .5, "dpi": 500, "legend": True,
+            "width": .35, "alpha": .5, "dpi": 500, "legend": True,
             "aspect": 1/6, "colors": CLR, 
             "xRange": aux.XRAN, "yRange": [0, YRAN[1]]
         }
