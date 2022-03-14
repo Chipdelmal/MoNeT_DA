@@ -92,7 +92,7 @@ for exp in EXPS:
             aux.STABLE_T, str(THS), QNT, STYLE, PT_IMG,
             digs=digs, popScaler=1, autoAspect=1,
             border=True, borderColor='#000000AA', borderWidth=1,
-            labelPos=(.91, .9), fontsize=5, labelspacing=.08,
+            labelPos=(.91, .875), fontsize=5, labelspacing=.08,
             transparent=True
         ) for exIx in range(0, len(repFiles))
     )
