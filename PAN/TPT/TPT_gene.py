@@ -14,7 +14,7 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
     if (TYPE == 'HUM'):
         (aggD, yRange, folder) = HUM.driveParameters(TYPE, popSize=humSize)
     elif (TYPE == 'INC'):
-        (aggD, yRange, folder) = INC.driveParameters(TYPE, popSize=750)
+        (aggD, yRange, folder) = INC.driveParameters(TYPE, popSize=1000)
     else:
         if (DRIVE == 'LDR'):
             (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
@@ -28,9 +28,9 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
     elif TYPE == 'WLD':
         colors = monet.COLWN
     elif TYPE == 'HUM':
-        colors = ['#0eeb1055', '#5D81EA55', '#dee2ff55']
+        colors = ['#274c7755', '#5D81EA5500', '#dee2ff55']
     elif TYPE == 'INC':
-        colors = monet.COLWN
+        colors = ['#0eeb100C', '#5D81EA5500', '#dee2ff55']
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 'colors': colors, 'folder': folder

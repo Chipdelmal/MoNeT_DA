@@ -81,8 +81,8 @@ for exp in EXPS:
         ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------
-    # sumDta = pkl.load(fLists[-1][0])
-    # monet.exportGeneLegend(
-    #     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-    #     PT_IMG+'/legend_{}.png'.format(AOI), 500
-    # )
+    sumDta = pkl.load(fLists[-1][0])
+    monet.exportGeneLegend(
+        sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+        PT_IMG+'/legend_{}.png'.format(AOI), 500
+    )
