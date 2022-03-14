@@ -44,7 +44,7 @@ for exp in EXPS:
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
     monet.printExperimentHead(
-        PT_DTA, PT_PRE, tS, 
+        PT_DTA, PT_DTA, tS, 
         '{} PreIncidenceFix [{}:{}:{}]'.format(aux.XP_ID, fldr, exp, AOI)
     )
     # Select sexes and ids ----------------------------------------------------
@@ -66,7 +66,7 @@ for exp in EXPS:
         repsFiles = [glob(i+'/incidence*') for i in repsFldrs]
         repsFiles = [i for i in list(itertools.chain(*repsFiles)) if len(i.split('/')[-1]) >= 18] # DELETE LATER
         repsData = np.asarray([
-            np.genfromtxt(rep, delimiter=',', skip_header=1, usecols=[1, 2, 3])
+            np.genfromtxt(rep, delimiter=',', skip_header=1, usecols=[0, 1, 2])
             for rep in repsFiles
         ])
         meanData = np.mean(repsData, axis=0)

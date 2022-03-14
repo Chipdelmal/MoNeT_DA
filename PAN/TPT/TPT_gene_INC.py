@@ -15,8 +15,6 @@ HUM_INC = (['I', 'Total', 'Total'], [[0, ], [1, ], [1, ]])
 ###############################################################################
 def driveParameters(TYPE, popSize=750):
     if TYPE == 'INC':
-        aggD = monet.generateAggregationDictionary(
-            ['I', 'Total', 'Total'], HUM_INC
-        )
+        aggD = monet.generateAggregationDictionary(*HUM_INC)
     yRange = popSize
     return (aggD, yRange, 'INC')

@@ -152,7 +152,7 @@ def selectPath(USR, EXP, DRV=None):
     elif USR == 'lab':
         PATH_ROOT = '/Volumes/marshallShare/TP13/{}/'.format(EXP)
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/TP13/{}/'.format(EXP)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/TP13_figure/{}/'.format(EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
