@@ -27,8 +27,8 @@ Analyses scripts are saved in a geographic structure, adhering as much as possib
 * [NET](./NET): Networks landscape analysis
 * [PYF](./PYF): French Polynesia 
 * [STP](./STP): São Tomé and Príncipe
- * [SvR](./STP/SvR): Suppression versus replacement (both: panmictic and spatial)
- * [RBC](./STP/RBC): Spatial linked drive in STP for LDR and SDR
+  * [SvR](./STP/SvR): Suppression versus replacement (both: panmictic and spatial)
+  * [RBC](./STP/RBC): Spatial linked drive in STP for LDR and SDR
 
 ![electronic mosquito](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/mosquito.png)
 
