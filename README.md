@@ -23,18 +23,18 @@ Analyses scripts are saved in a geographic structure, adhering as much as possib
   * [tGD](./PAN/tGD): Second iteration of the tGD
   * [YDR](./PAN/YDR): Y-Linked Drive
   * [v2](./PAN/v2): Plots for the MGDrivE2 paper
+  * [TPT](./PAN/TPT): Analysis routines for TP-13 paper
 * [NET](./NET): Networks landscape analysis
 * [PYF](./PYF): French Polynesia 
 * [STP](./STP): São Tomé and Príncipe
  * [SvR](./STP/SvR): Suppression versus replacement (both: panmictic and spatial)
-
+ * [RBC](./STP/RBC): Spatial linked drive in STP for LDR and SDR
 
 ![electronic mosquito](https://chipdelmal.github.io/MGDrivE_Presentations/MMC2020/img/mosquito.png)
 
 ## Authors
 
 * Project Lead: [Héctor M. Sánchez C.](https://www.researchgate.net/profile/Hector_Sanchez_Castellanos)
-* Current Contributors: Kendall Dimson
 * Former Contributors: Jared Bennett, Agastya Mondal, Chris De Leon, Ameek Bindra, Víctor Ferman, Sean L. Wu, Gillian Chu, Maya Shen, Yunwen Ji, Sarafina Smith, Biyonka Liang, Sabrina Wong
 * PIs: [John M. Marshall](https://www.researchgate.net/profile/John_Marshall8), [David L. Smith](http://www.healthdata.org/about/david-smith)
 

@@ -21,3 +21,15 @@ Originally, the paths are set to be:
 * `/RAID5/marshallShare/TP13`
 
 But this can be changed in the [aux](./TPT_aux.py) file if needed.
+
+The experiments' filename key is `E_ren_rer_rsg_gsv_fch_fcb_fcr_hrm_hrf` where:
+
+* `ren`: number of releases
+* `rer`: size of the releases
+* `rsg`: resistance generation
+* `gsv`: genetic standing variation
+* `fch`: fitness cost on homing allele
+* `fcb`: fitness cost on broken allele
+* `fcr`: fitness cost on resistant allele
+* `hrm`: homing rate on males
+* `hrf`: homing rate on females
