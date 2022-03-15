@@ -23,7 +23,7 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 OVW = True
-REL_START = 0# 1095
+(REL_START, RELEASES) = (1095, [1095, 1102, 1109, 1116, 1123, 1130, 1137, 1144])
 (JOB_DSK, JOB_SRV) = (8, 20)
 (POP_SIZE, HUM_SIZE, XRAN, FZ) = (
     75e3*3, 352e3*1, # 2e6*1.5/2, 

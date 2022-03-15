@@ -93,7 +93,7 @@ for exp in EXPS:
             digs=digs, popScaler=1, autoAspect=1,
             border=True, borderColor='#000000AA', borderWidth=1,
             labelPos=(.91, .875), fontsize=5, labelspacing=.08,
-            transparent=True
+            transparent=True, vlines=aux.RELEASES, poePrint=False
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------

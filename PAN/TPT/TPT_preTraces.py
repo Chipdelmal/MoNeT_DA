@@ -77,7 +77,7 @@ for exp in EXPS:
             exIx, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, autoAspect=True,
             border=True, borderColor='#000000AA', borderWidth=1,
-            sampRate=1
+            sampRate=1, vLines=[0, 0] + aux.RELEASES
         ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------
@@ -86,3 +86,4 @@ for exp in EXPS:
         sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
         PT_IMG+'/legend_{}.png'.format(AOI), 500
     )
+
