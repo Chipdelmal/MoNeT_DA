@@ -15,7 +15,7 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT) = ('dsk', 'HUM', 'LDR', '50')
+    (USR, AOI, DRV, QNT) = ('srv', 'HUM', 'LDR', '50')
 else:
     (USR, AOI, DRV, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # Setup number of threads -----------------------------------------------------
@@ -31,7 +31,7 @@ CHUNKS = JOB
 # Processing loop
 ###############################################################################
 exp = EXPS[-1]
-fname = "E_05_00500_000790000000_000100000000_0000000_0017550_0000000_0100000_0095600-HUM_00_rto.npy"
+fname = "E_15_00500_000790000000_000100000000_0017500_0011700_0000000_0100000_0095600-HUM_00_rto.npy"
 
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###########################################################################
@@ -46,4 +46,4 @@ fname = "E_05_00500_000790000000_000100000000_0000000_0017550_0000000_0100000_00
     USR, exp, DRV
 )
 
-min(np.load(PT_OUT+fname)[0])
+[np.min(i) for i in np.load(PT_OUT+fname)]

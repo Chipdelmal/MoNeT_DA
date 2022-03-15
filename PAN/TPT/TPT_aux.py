@@ -23,12 +23,12 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 OVW = True
-REL_START = 1095
+REL_START = 0# 1095
 (JOB_DSK, JOB_SRV) = (8, 20)
 (POP_SIZE, HUM_SIZE, XRAN, FZ) = (
     75e3*3, 352e3*1, # 2e6*1.5/2, 
     (0, 10*int(365)), 
-    True
+    False
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
@@ -148,7 +148,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def selectPath(USR, EXP, DRV=None):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/TP13/{}/'.format(EXP)
+        PATH_ROOT = '/RAID5/marshallShare/TP13_figure/{}/'.format(EXP)
     elif USR == 'lab':
         PATH_ROOT = '/Volumes/marshallShare/TP13/{}/'.format(EXP)
     elif USR == 'dsk':

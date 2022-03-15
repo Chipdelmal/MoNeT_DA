@@ -12,7 +12,7 @@ import TPT_gene as drv
 import TPT_functions as fun
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('dsk', 'INC', 'LDR')
+    (USR, AOI, DRV) = ('srv', 'INC', 'LDR')
 else:
     (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # Setup number of threads -----------------------------------------------------
@@ -44,7 +44,7 @@ for exp in EXPS:
     )
     # Select sexes and ids ----------------------------------------------------
     if (AOI == 'HUM'):
-        sexID = {"male": "", "female": "H_"}
+        sexID = {"male": "H_", "female": "H_"}
     elif (AOI == 'INC'):
         sexID = {"male": "incidence_", "female": "incidence_"}
         exclusionPattern = lambda a: len(a.split('/')[-1]) >= 18

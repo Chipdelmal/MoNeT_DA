@@ -5,13 +5,11 @@ from collections import OrderedDict
 import MoNeT_MGDrivE as monet
 
 genotypes = ('S', 'I')
-locus = (0, 1)
-# allGeneIx = list(range(len(genotypes[0])))
 
 ###############################################################################
 # Health genotype counts
 ###############################################################################
-HUM_HLT = (['S', 'Prev.', 'Total'], [[0, ], [1, ], [0, 1]])
+HUM_HLT = (['S', 'Prev.', 'Total'], [[0, ], [1, ], [1, ]])
 
 ###############################################################################
 # Drive Selector

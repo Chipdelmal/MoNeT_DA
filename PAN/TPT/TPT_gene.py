@@ -28,9 +28,9 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
     elif TYPE == 'WLD':
         colors = monet.COLWN
     elif TYPE == 'HUM':
-        colors = ['#274c7700', '#c879ff55', '#dee2ff55']
+        colors = ['#274c7755', '#c879ff55', '#dee2ff55']
     elif TYPE == 'INC':
-        colors = ['#8CD9FF15', '#5D81EA00', '#dee2ff00']
+        colors = ['#8CD9FF15', '#5D81EA15', '#dee2ff00']
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 'colors': colors, 'folder': folder
@@ -39,7 +39,9 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
 
 
 def maleFemaleSelector(AOI):
-    if (AOI == 'HLT') or (AOI == 'HUM') or (AOI == 'INC'):
+    if (AOI == 'HLT') or (AOI == 'INC'):
+        MF = (False, True)
+    elif (AOI == 'HUM'):
         MF = (False, True)
     else:
         MF = (True, True)
