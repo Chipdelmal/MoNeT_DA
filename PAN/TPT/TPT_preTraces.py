@@ -46,7 +46,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": 1, "alpha": .5, "dpi": 500, "legend": True,
+            "width": .75, "alpha": .5, "dpi": 500, "legend": True,
             "aspect": 1/6, "colors": CLR, 
             "xRange": aux.XRAN, "yRange": [0, YRAN[1]]
         }
@@ -77,7 +77,7 @@ for exp in EXPS:
             exIx, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, autoAspect=True,
             border=True, borderColor='#000000AA', borderWidth=1,
-            sampRate=1, vLines=[0, 0] + aux.RELEASES
+            sampRate=1, vLines=[0, 0]# + aux.RELEASES
         ) for exIx in expIter
     )
     # Export gene legend ------------------------------------------------------
