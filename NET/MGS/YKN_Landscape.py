@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
     '/home/chipdelmal/Documents/WorkSims/MGSurvE_Yorkeys/', 
     'YK2', '001'
 )
-GENS = 50
+GENS = 10
 ###############################################################################
 # Load pointset
 ###############################################################################
@@ -39,7 +39,7 @@ YK_BBOX = (
 # Movement Kernel -------------------------------------------------------------
 mKer = {
     'kernelFunction': srv.zeroInflatedExponentialKernel,
-    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': .05}
+    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': .1}
 }
 ###############################################################################
 # Defining Traps
@@ -51,8 +51,8 @@ traps = pd.DataFrame({
     't': [0, 0, 0, 0, 0, 1, 1, 1, 1, 1], 'f': nullTraps
 })
 tKer = {
-    0: {'kernel': srv.exponentialDecay, 'params': {'A': .5, 'b': 1250}},
-    1: {'kernel': srv.exponentialDecay, 'params': {'A': .25, 'b': 1250}},
+    0: {'kernel': srv.exponentialDecay, 'params': {'A': .5, 'b': 1300}},
+    1: {'kernel': srv.exponentialDecay, 'params': {'A': .25, 'b': 1300}},
 }
 ###############################################################################
 # Setting Landscape Up
@@ -143,3 +143,32 @@ stats.register("avg", np.mean)
 stats.register("max", np.max)
 stats.register("best", lambda fitnessValues: fitnessValues.index(min(fitnessValues)))
 stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnessValues))])
+###############################################################################
+# Optimization Cycle
+############################################################################### 
+(pop, logbook) = algorithms.eaSimple(
+    pop, toolbox, cxpb=MAT['cxpb'], mutpb=MUT['mutpb'], ngen=GENS, 
+    stats=stats, halloffame=hof, verbose=VERBOSE
+)
+###############################################################################
+# Get and Export Results
+############################################################################### 
+bestChromosome = hof[0]
+bestTraps = np.reshape(bestChromosome, (-1, 2))
+lnd.updateTrapsCoords(bestTraps)
+srv.dumpLandscape(lnd, OUT_PTH, '{}_{:02d}_TRP'.format(ID, TRPS_NUM))
+dta = pd.DataFrame(logbook)
+srv.exportLog(logbook, OUT_PTH, '{}_{:02d}_LOG'.format(ID, TRPS_NUM))
+###############################################################################
+# Plot Landscape
+###############################################################################
+(fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
+lnd.plotSites(fig, ax, size=75)
+# lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
+lnd.plotTraps(fig, ax, zorders=(30, 25))
+srv.plotClean(fig, ax, bbox=YK_BBOX)
+fig.savefig(
+    path.join(OUT_PTH, '{}{}_TRP.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+plt.close('all')
