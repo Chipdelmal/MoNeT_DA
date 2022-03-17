@@ -39,7 +39,7 @@ YK_BBOX = (
 # Movement Kernel -------------------------------------------------------------
 mKer = {
     'kernelFunction': srv.zeroInflatedExponentialKernel,
-    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': .1}
+    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': .05}
 }
 ###############################################################################
 # Defining Traps
@@ -47,12 +47,12 @@ mKer = {
 TRPS_NUM = 10
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
-    'x': nullTraps, 'y': nullTraps,
+    'x': [np.mean(YK_LL['x'])]*TRPS_NUM, 'y': [np.mean(YK_LL['y'])]*TRPS_NUM,
     't': [0, 0, 0, 0, 0, 1, 1, 1, 1, 1], 'f': nullTraps
 })
 tKer = {
-    0: {'kernel': srv.exponentialDecay, 'params': {'A': .5, 'b': .1}},
-    1: {'kernel': srv.exponentialDecay, 'params': {'A': .25, 'b': .1}},
+    0: {'kernel': srv.exponentialDecay, 'params': {'A': .5, 'b': 1250}},
+    1: {'kernel': srv.exponentialDecay, 'params': {'A': .25, 'b': 1250}},
 }
 ###############################################################################
 # Setting Landscape Up
@@ -69,9 +69,9 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 # Plot Landscape
 ###############################################################################
 (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
-lnd.plotSites(fig, ax, size=100)
-lnd.plotMigrationNetwork(fig, ax, lineWidth=10, alphaMin=0.1, alphaAmplitude=2.5)
-# lnd.plotLandBoundary(fig, ax)
+lnd.plotSites(fig, ax, size=75)
+# lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
+lnd.plotTraps(fig, ax)
 srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
     path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
