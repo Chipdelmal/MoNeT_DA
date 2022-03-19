@@ -19,11 +19,11 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
 (LND_PTH, OUT_PTH, ID, EXP) = (
-    '/home/chipdelmal/Documents/WorkSims/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv',
-    '/home/chipdelmal/Documents/WorkSims/MGSurvE_Yorkeys/', 
+    '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv',
+    '/RAID5/marshallShare/MGSurvE_Yorkeys/', 
     'YK2', '001'
 )
-GENS = 10
+GENS = 1000
 ###############################################################################
 # Load pointset
 ###############################################################################
@@ -39,20 +39,20 @@ YK_BBOX = (
 # Movement Kernel -------------------------------------------------------------
 mKer = {
     'kernelFunction': srv.zeroInflatedExponentialKernel,
-    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': .1}
+    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': 0.0}
 }
 ###############################################################################
 # Defining Traps
 ###############################################################################
-TRPS_NUM = 10
+TRPS_NUM = 4
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
     'x': [np.mean(YK_LL['x'])]*TRPS_NUM, 'y': [np.mean(YK_LL['y'])]*TRPS_NUM,
-    't': [0, 0, 0, 0, 0, 1, 1, 1, 1, 1], 'f': nullTraps
+    't': [0, 0, 0, 0], 'f': nullTraps
 })
 tKer = {
-    0: {'kernel': srv.exponentialDecay, 'params': {'A': .5, 'b': 1300}},
-    1: {'kernel': srv.exponentialDecay, 'params': {'A': .25, 'b': 1300}},
+    0: {'kernel': srv.exponentialDecay, 'params': {'A': 1.0, 'b': 500}},
+    1: {'kernel': srv.sigmoidDecay,     'params': {'A': 1.0, 'rate': 75, 'x0': .05}},
 }
 ###############################################################################
 # Setting Landscape Up
@@ -60,7 +60,7 @@ tKer = {
 lnd = srv.Landscape(
     YK_LL, 
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer,
+    traps=traps, trapsKernels=tKer, trapsRadii=[.20, .25, .5],
     landLimits=YK_BBOX
 )
 bbox = lnd.getBoundingBox()
@@ -69,9 +69,9 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 # Plot Landscape
 ###############################################################################
 (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
-lnd.plotSites(fig, ax, size=75)
+lnd.plotSites(fig, ax, size=50)
 # lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
-lnd.plotTraps(fig, ax)
+lnd.plotTraps(fig, ax, zorders=(30, 25))
 srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
     path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
@@ -163,7 +163,7 @@ srv.exportLog(logbook, OUT_PTH, '{}_{:02d}_LOG'.format(ID, TRPS_NUM))
 # Plot Landscape
 ###############################################################################
 (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
-lnd.plotSites(fig, ax, size=75)
+lnd.plotSites(fig, ax, size=50)
 # lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
 lnd.plotTraps(fig, ax, zorders=(30, 25))
 srv.plotClean(fig, ax, bbox=YK_BBOX)
