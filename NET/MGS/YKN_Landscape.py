@@ -27,15 +27,15 @@ GENS = 1000
 ###############################################################################
 # Load pointset
 ###############################################################################
-YK_LL = pd.read_csv(LND_PTH, names=['x', 'y'])
+YK_LL = pd.read_csv(LND_PTH, names=['lon', 'lat'])
 YK_LL['t'] = [0]*YK_LL.shape[0]
 pad = 0.00125
 YK_BBOX = (
-    (min(YK_LL['x'])-pad, max(YK_LL['x'])+pad),
-    (min(YK_LL['y'])-pad, max(YK_LL['y'])+pad)
+    (min(YK_LL['lon'])-pad, max(YK_LL['lon'])+pad),
+    (min(YK_LL['lat'])-pad, max(YK_LL['lat'])+pad)
 )
+# YK_LL = YK_LL.reindex(columns=['lat', 'lon'])
 # YK_CNTR = [i[0]+(i[1]-i[0])/2 for i in YK_LL]
-# SAO_LIMITS = ((6.41, 6.79), (-0.0475, .45))
 # Movement Kernel -------------------------------------------------------------
 mKer = {
     'kernelFunction': srv.zeroInflatedExponentialKernel,
@@ -47,18 +47,25 @@ mKer = {
 TRPS_NUM = 4
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
-    'x': [np.mean(YK_LL['x'])]*TRPS_NUM, 'y': [np.mean(YK_LL['y'])]*TRPS_NUM,
-    't': [0, 0, 0, 0], 'f': nullTraps
+    'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 'lat': [np.mean(YK_LL['lat'])]*TRPS_NUM,
+    't': [0, 0, 1, 1], 'f': nullTraps
 })
 tKer = {
-    0: {'kernel': srv.exponentialDecay, 'params': {'A': 1.0, 'b': 500}},
-    1: {'kernel': srv.sigmoidDecay,     'params': {'A': 1.0, 'rate': 75, 'x0': .05}},
+    0: {
+        'kernel': srv.exponentialDecay, 
+        'params': {'A': .75, 'b': 0.1}
+    },
+    1: {
+        'kernel': srv.sigmoidDecay,     
+        'params': {'A': .75, 'rate': 0.25, 'x0': 10}
+    },
 }
 ###############################################################################
 # Setting Landscape Up
 ###############################################################################
 lnd = srv.Landscape(
     YK_LL, 
+    # distanceFunction=(lambda lat, lon: haversine(lat, lon, unit='m')),
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
     traps=traps, trapsKernels=tKer, trapsRadii=[.20, .25, .5],
     landLimits=YK_BBOX
@@ -68,16 +75,19 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # Plot Landscape
 ###############################################################################
-(fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
-lnd.plotSites(fig, ax, size=50)
-# lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
-lnd.plotTraps(fig, ax, zorders=(30, 25))
-srv.plotClean(fig, ax, bbox=YK_BBOX)
-fig.savefig(
-    path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
-    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
-)
-plt.close('all')
+# (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
+# lnd.plotSites(fig, ax, size=75)
+# # lnd.plotMigrationNetwork(
+# #     fig, ax, 
+# #     lineWidth=10, alphaMin=.1, alphaAmplitude=2.5,
+# # )
+# lnd.plotTraps(fig, ax, zorders=(30, 25))
+# srv.plotClean(fig, ax, bbox=YK_BBOX)
+# fig.savefig(
+#     path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+#     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+# )
+# plt.close('all')
 ###############################################################################
 # GA Settings
 ############################################################################### 
