@@ -35,39 +35,41 @@ YK_BBOX = (
     (min(YK_LL['lat'])-pad, max(YK_LL['lat'])+pad)
 )
 # YK_LL = YK_LL.reindex(columns=['lat', 'lon'])
-# YK_CNTR = [i[0]+(i[1]-i[0])/2 for i in YK_LL]
 # Movement Kernel -------------------------------------------------------------
 mKer = {
     'kernelFunction': srv.zeroInflatedExponentialKernel,
-    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': 0.0}
+    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': 0.25}
 }
 ###############################################################################
 # Defining Traps
 ###############################################################################
-TRPS_NUM = 4
+TRPS_NUM = 2
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
     'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 'lat': [np.mean(YK_LL['lat'])]*TRPS_NUM,
-    't': [0, 0, 1, 1], 'f': nullTraps
+    't': [0]*TRPS_NUM, 'f': nullTraps
 })
 tKer = {
-    0: {
+    2: {
         'kernel': srv.exponentialDecay, 
-        'params': {'A': .75, 'b': 0.1}
+        'params': {'A': .5, 'b': 0.1}
     },
     1: {
         'kernel': srv.sigmoidDecay,     
-        'params': {'A': .75, 'rate': 0.25, 'x0': 10}
+        'params': {'A': .5, 'rate': 0.25, 'x0': 10}
     },
+    0: {
+        'kernel': srv.exponentialAttractiveness,
+        'params': {'A': 1, 'k': .075, 's': .2, 'gamma': .8, 'epsilon': 0}
+    }
 }
 ###############################################################################
 # Setting Landscape Up
 ###############################################################################
 lnd = srv.Landscape(
     YK_LL, 
-    # distanceFunction=(lambda lat, lon: haversine(lat, lon, unit='m')),
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer, trapsRadii=[.20, .25, .5],
+    traps=traps, trapsKernels=tKer, trapsRadii=[.25, .5],
     landLimits=YK_BBOX
 )
 bbox = lnd.getBoundingBox()
@@ -77,11 +79,11 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
 # lnd.plotSites(fig, ax, size=75)
-# # lnd.plotMigrationNetwork(
-# #     fig, ax, 
-# #     lineWidth=10, alphaMin=.1, alphaAmplitude=2.5,
-# # )
-# lnd.plotTraps(fig, ax, zorders=(30, 25))
+# lnd.plotMigrationNetwork(
+#     fig, ax, 
+#     lineWidth=50, alphaMin=.1, alphaAmplitude=5,
+# )
+# # lnd.plotTraps(fig, ax, zorders=(30, 25))
 # srv.plotClean(fig, ax, bbox=YK_BBOX)
 # fig.savefig(
 #     path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
@@ -91,13 +93,13 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # GA Settings
 ############################################################################### 
-POP_SIZE = int(10*(lnd.trapsNumber*1.25))
+POP_SIZE = int(20*(lnd.trapsNumber*1.25))
 (MAT, MUT, SEL) = (
     {'mate': .35, 'cxpb': 0.5}, 
     {
         'mean': 0, 
-        'sd': min([abs(i[1]-i[0]) for i in bbox])/5, 
-        'mutpb': .35, 'ipb': .5
+        'sd': min([abs(i[1]-i[0]) for i in bbox])/2.5, 
+        'mutpb': .4, 'ipb': .5
     },
     {'tSize': 5}
 )
@@ -165,10 +167,9 @@ stats.register("traps", lambda fitnessValues: pop[fitnessValues.index(min(fitnes
 ############################################################################### 
 bestChromosome = hof[0]
 bestTraps = np.reshape(bestChromosome, (-1, 2))
-lnd.updateTrapsCoords(bestTraps)
-srv.dumpLandscape(lnd, OUT_PTH, '{}_{:02d}_TRP'.format(ID, TRPS_NUM))
 dta = pd.DataFrame(logbook)
 srv.exportLog(logbook, OUT_PTH, '{}_{:02d}_LOG'.format(ID, TRPS_NUM))
+lnd.updateTrapsCoords(bestTraps)
 ###############################################################################
 # Plot Landscape
 ###############################################################################
@@ -176,9 +177,14 @@ srv.exportLog(logbook, OUT_PTH, '{}_{:02d}_LOG'.format(ID, TRPS_NUM))
 lnd.plotSites(fig, ax, size=50)
 # lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
 lnd.plotTraps(fig, ax, zorders=(30, 25))
+srv.plotFitness(fig, ax, min(dta['min']), fmt='{:.2f}')
 srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
     path.join(OUT_PTH, '{}{}_TRP.png'.format(OUT_PTH, ID, TRPS_NUM)), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
 plt.close('all')
+###############################################################################
+# Dump Landscape
+###############################################################################
+srv.dumpLandscape(lnd, OUT_PTH, '{}_{:02d}_TRP'.format(ID, TRPS_NUM), fExt='pkl')
