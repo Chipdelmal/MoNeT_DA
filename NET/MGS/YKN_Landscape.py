@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
     '/RAID5/marshallShare/MGSurvE_Yorkeys/', 
     'YK2', '001'
 )
-GENS = 2500
+GENS = 2000
 ###############################################################################
 # Load pointset
 ###############################################################################
@@ -38,12 +38,12 @@ YK_BBOX = (
 # Movement Kernel -------------------------------------------------------------
 mKer = {
     'kernelFunction': srv.zeroInflatedExponentialKernel,
-    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': 0.5}
+    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': 0}
 }
 ###############################################################################
 # Defining Traps
 ###############################################################################
-TRPS_NUM = 5
+TRPS_NUM = 2
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
     'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 
@@ -61,7 +61,7 @@ tKer = {
     },
     0: {
         'kernel': srv.exponentialAttractiveness,
-        'params': {'A': 1, 'k': .075, 's': .2, 'gamma': .8, 'epsilon': 0}
+        'params': {'A': 1, 'k': .025, 's': .2, 'gamma': .8, 'epsilon': 0}
     }
 }
 ###############################################################################
@@ -70,7 +70,7 @@ tKer = {
 lnd = srv.Landscape(
     YK_LL, 
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer, trapsRadii=[.1, .25, .5],
+    traps=traps, trapsKernels=tKer, trapsRadii=[.5, .6, .75],
     landLimits=YK_BBOX
 )
 bbox = lnd.getBoundingBox()
@@ -94,7 +94,7 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # GA Settings
 ############################################################################### 
-POP_SIZE = int(20*(lnd.trapsNumber*1.25))
+POP_SIZE = int(15*(lnd.trapsNumber*1.25))
 (MAT, MUT, SEL) = (
     {'mate': .35, 'cxpb': 0.5}, 
     {
@@ -143,7 +143,7 @@ toolbox.register("evaluate",
     srv.calcFitness, 
     landscape=lndGA,
     optimFunction=srv.getDaysTillTrapped,
-    optimFunctionArgs={'outer': np.mean, 'inner': np.max}
+    optimFunctionArgs={'outer': np.mean, 'inner': np.mean}
 )
 ###############################################################################
 # Registering GA stats

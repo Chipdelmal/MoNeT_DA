@@ -18,7 +18,7 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 (LND_PTH, OUT_PTH, ID, EXP) = (
     '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv',
-    '/RAID5/marshallShare/MGSurvE_Yorkeys/', 
+    '/RAID5/marshallShare/MGSurvE_Yorkeys/Debug/', 
     'YKD', '001'
 )
 ###############################################################################
@@ -67,19 +67,23 @@ tKer = {
 lnd = srv.Landscape(
     YK_LL, 
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer, trapsRadii=[.5, ],
+    traps=traps, trapsKernels=tKer, trapsRadii=[.5, .6, .75],
     landLimits=YK_BBOX
 )
 ###############################################################################
 # Setup traps 
 ###############################################################################
-ptRans = ((.2, .1), )
+ptRans = ((0, 0), )
 bestTraps = [(range[0]*ptRan[0]+center[0], range[1]*ptRan[1]+center[1]) for ptRan in ptRans]
 pos = list(chain(*bestTraps))
 ###############################################################################
 # Calculate position
 ###############################################################################
-fitness = srv.calcFitness(pos, lnd)
+fitness = srv.calcFitness(
+    pos, lnd,
+    optimFunction=srv.getDaysTillTrapped,
+    optimFunctionArgs={'outer': np.mean, 'inner': np.mean}
+)
 lnd.updateTrapsCoords(bestTraps)
 bbox = lnd.getBoundingBox()
 ###############################################################################
@@ -92,7 +96,9 @@ lnd.plotTraps(fig, ax, zorders=(30, 25))
 srv.plotFitness(fig, ax, fitness[0], fmt='{:.2f}')
 # srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
-    path.join(OUT_PTH, '{}{}_{:02d}_TRP.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+    path.join(OUT_PTH, '{}{}_{:02d}_{}_TRP.png'.format(
+        OUT_PTH, ID, TRPS_NUM, [int(i*100) for i in ptRans[0]])
+    ), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
 # plt.close('all')
