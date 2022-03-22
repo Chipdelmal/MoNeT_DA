@@ -73,7 +73,7 @@ lnd = srv.Landscape(
 ###############################################################################
 # Setup traps 
 ###############################################################################
-ptRans = ((0, 0), )
+ptRans = ((-0.5, -0.75), )
 bestTraps = [(range[0]*ptRan[0]+center[0], range[1]*ptRan[1]+center[1]) for ptRan in ptRans]
 pos = list(chain(*bestTraps))
 ###############################################################################
@@ -91,16 +91,13 @@ bbox = lnd.getBoundingBox()
 ###############################################################################
 (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
 lnd.plotSites(fig, ax, size=50)
-# lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
 lnd.plotTraps(fig, ax, zorders=(30, 25))
-srv.plotFitness(fig, ax, fitness[0], fmt='{:.2f}')
-# srv.plotClean(fig, ax, bbox=YK_BBOX)
+srv.plotFitness(fig, ax, fitness[0], fmt='{:.5f}', fontSize=100)
+srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
     path.join(OUT_PTH, '{}{}_{:02d}_{}_TRP.png'.format(
         OUT_PTH, ID, TRPS_NUM, [int(i*100) for i in ptRans[0]])
     ), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
-# plt.close('all')
-
-
+plt.close('all')

@@ -12,7 +12,6 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 from compress_pickle import dump, load
 from deap import base, creator, algorithms, tools
-
 import MGSurvE as srv
 import warnings
 warnings.filterwarnings('ignore', 'The iteration is not making good progress')
@@ -43,7 +42,7 @@ mKer = {
 ###############################################################################
 # Defining Traps
 ###############################################################################
-TRPS_NUM = 2
+TRPS_NUM = 3
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
     'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 
@@ -178,7 +177,7 @@ lnd.updateTrapsCoords(bestTraps)
 lnd.plotSites(fig, ax, size=50)
 # lnd.plotMigrationNetwork(fig, ax, lineWidth=500, alphaMin=.1, alphaAmplitude=20)
 lnd.plotTraps(fig, ax, zorders=(30, 25))
-srv.plotFitness(fig, ax, min(dta['min']), fmt='{:.2f}')
+srv.plotFitness(fig, ax, min(dta['min']), fmt='{:.5f}', fontSize=100)
 srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
     path.join(OUT_PTH, '{}{}_{:02d}_TRP.png'.format(OUT_PTH, ID, TRPS_NUM)), 
