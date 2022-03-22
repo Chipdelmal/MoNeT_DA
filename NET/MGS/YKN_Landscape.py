@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
     '/RAID5/marshallShare/MGSurvE_Yorkeys/', 
     'YK2', '001'
 )
-GENS = 1000
+GENS = 2500
 ###############################################################################
 # Load pointset
 ###############################################################################
@@ -38,15 +38,16 @@ YK_BBOX = (
 # Movement Kernel -------------------------------------------------------------
 mKer = {
     'kernelFunction': srv.zeroInflatedExponentialKernel,
-    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': 0.25}
+    'kernelParams': {'params': srv.AEDES_EXP_PARAMS, 'zeroInflation': 0.5}
 }
 ###############################################################################
 # Defining Traps
 ###############################################################################
-TRPS_NUM = 2
+TRPS_NUM = 5
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
-    'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 'lat': [np.mean(YK_LL['lat'])]*TRPS_NUM,
+    'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 
+    'lat': [np.mean(YK_LL['lat'])]*TRPS_NUM,
     't': [0]*TRPS_NUM, 'f': nullTraps
 })
 tKer = {
@@ -69,7 +70,7 @@ tKer = {
 lnd = srv.Landscape(
     YK_LL, 
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer, trapsRadii=[.25, .5],
+    traps=traps, trapsKernels=tKer, trapsRadii=[.1, .25, .5],
     landLimits=YK_BBOX
 )
 bbox = lnd.getBoundingBox()
@@ -180,7 +181,7 @@ lnd.plotTraps(fig, ax, zorders=(30, 25))
 srv.plotFitness(fig, ax, min(dta['min']), fmt='{:.2f}')
 srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
-    path.join(OUT_PTH, '{}{}_TRP.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+    path.join(OUT_PTH, '{}{}_{:02d}_TRP.png'.format(OUT_PTH, ID, TRPS_NUM)), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
 plt.close('all')
