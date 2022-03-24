@@ -22,7 +22,7 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
     '/RAID5/marshallShare/MGSurvE_Yorkeys/', 
     'YKT', '001'
 )
-GENS = 2000
+GENS = 1000
 ###############################################################################
 # Load pointset
 ###############################################################################
