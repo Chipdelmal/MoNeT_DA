@@ -42,12 +42,13 @@ mKer = {
 ###############################################################################
 # Defining Traps
 ###############################################################################
-TRPS_NUM = 6
+TRPS_NUM = 7
 nullTraps = [0]*TRPS_NUM
 traps = pd.DataFrame({
     'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 
     'lat': [np.mean(YK_LL['lat'])]*TRPS_NUM,
-    't': [0]*TRPS_NUM, 'f': nullTraps
+    't': [0, 0, 0, 0, 1, 1, 1], 
+    'f': nullTraps
 })
 tKer = {
     2: {
@@ -56,7 +57,7 @@ tKer = {
     },
     1: {
         'kernel': srv.sigmoidDecay,     
-        'params': {'A': .5, 'rate': 0.25, 'x0': 10}
+        'params': {'A': 1.0, 'rate': 0.085, 'x0': 40}
     },
     0: {
         'kernel': srv.exponentialAttractiveness,
@@ -77,19 +78,19 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # Plot Landscape
 ###############################################################################
-(fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
-lnd.plotSites(fig, ax, size=75)
+# (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
+# lnd.plotSites(fig, ax, size=75)
 # lnd.plotMigrationNetwork(
 #     fig, ax, 
 #     lineWidth=25, alphaMin=.05, alphaAmplitude=2,
 # )
-# lnd.plotTraps(fig, ax, zorders=(30, 25))
-srv.plotClean(fig, ax, bbox=YK_BBOX)
-fig.savefig(
-    path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
-    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
-)
-plt.close('all')
+# # lnd.plotTraps(fig, ax, zorders=(30, 25))
+# srv.plotClean(fig, ax, bbox=YK_BBOX)
+# fig.savefig(
+#     path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+#     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+# )
+# plt.close('all')
 ###############################################################################
 # GA Settings
 ############################################################################### 
