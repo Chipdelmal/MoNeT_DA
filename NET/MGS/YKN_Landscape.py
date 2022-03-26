@@ -25,7 +25,7 @@ else:
 ###############################################################################
 # File ID
 ###############################################################################
-GENS = 100
+GENS = 2500
 OUT_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/'
 ###############################################################################
 # File ID
@@ -38,7 +38,7 @@ else:
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv'
     TRPS_NUM = 5
     TRAP_TYP = [0, 0, 1, 1, 2]
-print('[{} ({})]: {}'.format(ID, TRPS_NUM, LND_PTH))
+print('[{} {:02d}]: {}'.format(ID, TRPS_NUM, LND_PTH))
 ###############################################################################
 # Load pointset
 ###############################################################################
@@ -66,7 +66,7 @@ traps = pd.DataFrame({
 tKer = {
     2: {
         'kernel': srv.sigmoidDecay,     
-        'params': {'A': 1, 'rate': .175, 'x0': 30}
+        'params': {'A': 1, 'rate': .175, 'x0': 25}
     },
     1: {
         'kernel': srv.exponentialDecay, 
@@ -83,7 +83,7 @@ tKer = {
 lnd = srv.Landscape(
     YK_LL, 
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer, trapsRadii=[.9, .75, .6],
+    traps=traps, trapsKernels=tKer, trapsRadii=[.9, .8, .7],
     landLimits=YK_BBOX
 )
 bbox = lnd.getBoundingBox()
