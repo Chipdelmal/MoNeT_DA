@@ -33,11 +33,11 @@ OUT_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/'
 if ID == 'YKN':
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv'
     TRPS_NUM = 4
-    TRAP_TYP = [0, 0, 0, 1]
+    TRAP_TYP = [0, 0, 0, 0]
 else:
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv'
-    TRPS_NUM = 5
-    TRAP_TYP = [0, 0, 1, 1, 2]
+    TRPS_NUM = 6
+    TRAP_TYP = [0, 0, 0, 1, 1, 2]
 print('[{} {:02d}]: {}'.format(ID, TRPS_NUM, LND_PTH))
 ###############################################################################
 # Load pointset
