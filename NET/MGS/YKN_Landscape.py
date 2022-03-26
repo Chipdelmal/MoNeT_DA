@@ -19,25 +19,21 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
 if srv.isNotebook():
-    ID = 'YKN'
+    ID = 'YKT'
 else:
     ID = argv[1]
 ###############################################################################
 # File ID
 ###############################################################################
-GENS = 1000
-(LND_PTH, OUT_PTH, EXP) = (
-    '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv',
-    '/RAID5/marshallShare/MGSurvE_Yorkeys/', 
-    '001'
-)
+GENS = 100
+OUT_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/'
 ###############################################################################
 # File ID
 ###############################################################################
 if ID == 'YKN':
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv'
     TRPS_NUM = 4
-    TRAP_TYP = [0, 1, 1, 1]
+    TRAP_TYP = [0, 0, 0, 1]
 else:
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv'
     TRPS_NUM = 5
@@ -70,15 +66,15 @@ traps = pd.DataFrame({
 tKer = {
     2: {
         'kernel': srv.sigmoidDecay,     
-        'params': {'A': 1, 'rate': .175, 'x0': 20}
+        'params': {'A': 1, 'rate': .175, 'x0': 30}
     },
     1: {
         'kernel': srv.exponentialDecay, 
-        'params': {'A': 1, 'b': 0.06}
+        'params': {'A': 1, 'b': 0.045}
     },
     0: {
         'kernel': srv.exponentialAttractiveness,
-        'params': {'A': 1, 'k': .0125, 's': .3, 'gamma': 1.2, 'epsilon': 0}
+        'params': {'A': 1, 'k': .01, 's': .3, 'gamma': .975, 'epsilon': 0}
     }
 }
 ###############################################################################
@@ -87,7 +83,7 @@ tKer = {
 lnd = srv.Landscape(
     YK_LL, 
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer, trapsRadii=[.75, .6, .5],
+    traps=traps, trapsKernels=tKer, trapsRadii=[.9, .75, .6],
     landLimits=YK_BBOX
 )
 bbox = lnd.getBoundingBox()
@@ -97,14 +93,14 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
 # lnd.plotSites(fig, ax, size=75)
-# lnd.plotMigrationNetwork(
-#     fig, ax, 
-#     lineWidth=25, alphaMin=.05, alphaAmplitude=2,
-# )
-# # lnd.plotTraps(fig, ax, zorders=(30, 25))
+# # lnd.plotMigrationNetwork(
+# #     fig, ax, 
+# #     lineWidth=25, alphaMin=.05, alphaAmplitude=2,
+# # )
+# lnd.plotTraps(fig, ax, zorders=(30, 25))
 # srv.plotClean(fig, ax, bbox=YK_BBOX)
 # fig.savefig(
-#     path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+#     path.join(OUT_PTH, '{}{}_{:02d}_INT.png'.format(OUT_PTH, ID, TRPS_NUM)), 
 #     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 # )
 # plt.close('all')
@@ -202,8 +198,8 @@ fig.savefig(
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
 plt.close('all')
-(fig, ax) = srv.plotTrapsKernels(lnd)
-srv.plotClean(fig, ax, bbox=YK_BBOX)
+(fig, ax) = plt.subplots(1, 1, figsize=(15, 15), sharey=False)
+(fig, ax) = srv.plotTrapsKernels(fig, ax, lnd, distRange=(0, 125))
 fig.savefig(
     path.join(OUT_PTH, '{}{}_{:02d}_KER.png'.format(OUT_PTH, ID, TRPS_NUM)), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
