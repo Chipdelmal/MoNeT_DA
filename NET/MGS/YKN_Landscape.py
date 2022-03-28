@@ -19,7 +19,7 @@ warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
 if srv.isNotebook():
-    ID = 'YKT'
+    ID = 'YKN'
 else:
     ID = argv[1]
 ###############################################################################
@@ -32,12 +32,13 @@ OUT_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/'
 ###############################################################################
 if ID == 'YKN':
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv'
-    TRPS_NUM = 4
-    TRAP_TYP = [0, 0, 0, 0]
+    TRPS_NUM = 5
+    TRAP_TYP = [0, 0, 0, 0, 1]
+    FXD = [145.72063942, -16.802746264285748]
 else:
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv'
-    TRPS_NUM = 6
-    TRAP_TYP = [0, 0, 0, 1, 1, 2]
+    TRPS_NUM = 10
+    TRAP_TYP = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2]
 print('[{} {:02d}]: {}'.format(ID, TRPS_NUM, LND_PTH))
 ###############################################################################
 # Load pointset
@@ -60,9 +61,17 @@ mKer = {
 ###############################################################################
 nullTraps = [0]*TRPS_NUM
 cntr = ([np.mean(YK_LL['lon'])]*TRPS_NUM, [np.mean(YK_LL['lat'])]*TRPS_NUM)
-traps = pd.DataFrame({
-    'lon': cntr[0], 'lat': cntr[1], 't': TRAP_TYP, 'f': nullTraps
-})
+if ID == 'YKN':
+    traps = pd.DataFrame({
+        'lon': cntr[0]+[FXD[0]], 'lat': cntr[1]+[FXD[1]],
+        't': TRAP_TYP+[2], 'f': nullTraps+[1]
+    })
+else:
+    traps = pd.DataFrame({
+        'lon': cntr[0], 'lat': cntr[1], 
+        't': TRAP_TYP, 'f': nullTraps
+    })
+# Setup trap kernels ----------------------------------------------------------
 tKer = {
     2: {
         'kernel': srv.sigmoidDecay,     
@@ -112,7 +121,7 @@ POP_SIZE = int(20*(lnd.trapsNumber*1.25))
     {'mate': .35, 'cxpb': 0.5}, 
     {
         'mean': 0, 
-        'sd': min([abs(i[1]-i[0]) for i in bbox])/2.5, 
+        'sd': min([abs(i[1]-i[0]) for i in bbox])/5, 
         'mutpb': .4, 'ipb': .5
     },
     {'tSize': 5}
