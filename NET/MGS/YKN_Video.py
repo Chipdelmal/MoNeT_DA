@@ -7,24 +7,23 @@ import numpy as np
 import pandas as pd
 from os import path
 from sys import argv
-import cartopy.crs as ccrs
+import subprocess
 import matplotlib
-from matplotlib import figure
-import cartopy.feature as cfeature
-from copy import deepcopy
 import matplotlib.pyplot as plt
-from compress_pickle import dump, load
-import MGSurvE as srv
+import cartopy.crs as ccrs
 from PIL import Image
+import MGSurvE as srv
 matplotlib.use('agg')
 # https://github.com/matplotlib/matplotlib/issues/20067
 
 # ffmpeg -start_number 0 -r 4 -f image2 -s 1920x1080 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -vcodec libx264 -preset veryslow -crf 15 -i YKN_05_%05d.png -pix_fmt yuv420p OUTPUT_PATH.mp4 
 
-(OUT_PTH, LND_TYPE, ID) = (
-    '/RAID5/marshallShare/MGSurvE_Yorkeys//', 
-    'YKN', '05'
-)
+if srv.isNotebook():
+    (LND_TYPE, ID) = ('YKN', '04')
+else:
+    (LND_TYPE, ID) = (argv[1], argv[2])
+# Constants -------------------------------------------------------------------
+OUT_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys'
 fPat = '{}_{}_'.format(LND_TYPE, ID)
 IMG_PTH = path.join(OUT_PTH, fPat+'VID')
 srv.makeFolder(IMG_PTH)
@@ -54,7 +53,7 @@ plt.close('all')
 (gaMin, gaTraps, gens) = (dat['min'], dat['traps'], dat.shape[0])
 bbox = lnd.getBoundingBox()
 i=10
-for i in range(0, len(gaMin)):
+for i in range(2102, len(gaMin)):
     print("* Exporting frame {:05d}".format(i), end='\r')
     ###########################################################################
     # Reshape and update traps
@@ -114,3 +113,24 @@ for i in range(0, len(gaMin)):
     background.save(pthSave, dpi=(DPI, DPI))
     background.close()
     foreground.close()
+###############################################################################
+# Compile Video
+############################################################################### 
+subprocess.run([
+    "ffmpeg", "-y",
+    "-start_number", "0",
+    "-r", "4",
+    "-f", "image2",
+    "-i", path.join(IMG_PTH, fPat+"%05d.png"),
+    "-s", "1920x1080", 
+    "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", 
+    "-vcodec", "libx264", 
+    "-preset", "veryslow", 
+    "-crf", "15",
+    "-pix_fmt", "yuv420p",
+    path.join(IMG_PTH, fPat+"MOV.mp4")
+])
+
+
+
+ 
