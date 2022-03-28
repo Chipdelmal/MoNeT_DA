@@ -16,7 +16,6 @@ import MGSurvE as srv
 matplotlib.use('agg')
 # https://github.com/matplotlib/matplotlib/issues/20067
 
-# ffmpeg -start_number 0 -r 4 -f image2 -s 1920x1080 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -vcodec libx264 -preset veryslow -crf 15 -i YKN_05_%05d.png -pix_fmt yuv420p OUTPUT_PATH.mp4 
 
 if srv.isNotebook():
     (LND_TYPE, ID) = ('YKN', '04')
@@ -53,7 +52,7 @@ plt.close('all')
 (gaMin, gaTraps, gens) = (dat['min'], dat['traps'], dat.shape[0])
 bbox = lnd.getBoundingBox()
 i=10
-for i in range(2102, len(gaMin)):
+for i in range(0, len(gaMin)):
     print("* Exporting frame {:05d}".format(i), end='\r')
     ###########################################################################
     # Reshape and update traps
@@ -104,7 +103,7 @@ for i in range(2102, len(gaMin)):
     # Overlay Brute-force
     ###########################################################################
     time.sleep(.75)
-    background = Image.open(path.join(OUT_PTH, fPat+'CLN.png')).convert('RGBA')
+    background = Image.open(path.join(OUT_PTH, LND_TYPE+'_CLN.png')).convert('RGBA')
     foreground = Image.open(pthSave).convert('RGBA')
     (w, h) = background.size
     background = background.crop((0, 0, w, h))
@@ -128,7 +127,7 @@ subprocess.run([
     "-preset", "veryslow", 
     "-crf", "15",
     "-pix_fmt", "yuv420p",
-    path.join(IMG_PTH, fPat+"MOV.mp4")
+    path.join(OUT_PTH, fPat+"MOV.mp4")
 ])
 
 
