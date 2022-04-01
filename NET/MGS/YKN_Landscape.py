@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from os import path
 from sys import argv
+from random import uniform
 from copy import deepcopy
 import cartopy.crs as crs
 import cartopy.crs as ccrs
@@ -17,12 +18,28 @@ import warnings
 warnings.filterwarnings('ignore', 'The iteration is not making good progress')
 
 
-(LND_PTH, OUT_PTH, ID, EXP) = (
-    '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv',
-    '/RAID5/marshallShare/MGSurvE_Yorkeys/', 
-    'YKT', '001'
-)
-GENS = 2000
+if srv.isNotebook():
+    ID = 'YKN'
+else:
+    ID = argv[1]
+###############################################################################
+# File ID
+###############################################################################
+GENS = 2500
+OUT_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/'
+###############################################################################
+# File ID
+###############################################################################
+if ID == 'YKN':
+    LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv'
+    TRPS_NUM = 5
+    TRAP_TYP = [0, 0, 0, 0, 1]
+    FXD = [145.72063942, -16.802746264285748]
+else:
+    LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv'
+    TRPS_NUM = 10
+    TRAP_TYP = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2]
+print('[{} {:02d}]: {}'.format(ID, TRPS_NUM, LND_PTH))
 ###############################################################################
 # Load pointset
 ###############################################################################
@@ -42,25 +59,31 @@ mKer = {
 ###############################################################################
 # Defining Traps
 ###############################################################################
-TRPS_NUM = 6
 nullTraps = [0]*TRPS_NUM
-traps = pd.DataFrame({
-    'lon': [np.mean(YK_LL['lon'])]*TRPS_NUM, 
-    'lat': [np.mean(YK_LL['lat'])]*TRPS_NUM,
-    't': [0]*TRPS_NUM, 'f': nullTraps
-})
+cntr = ([np.mean(YK_LL['lon'])]*TRPS_NUM, [np.mean(YK_LL['lat'])]*TRPS_NUM)
+if ID == 'YKN':
+    traps = pd.DataFrame({
+        'lon': cntr[0]+[FXD[0]], 'lat': cntr[1]+[FXD[1]],
+        't': TRAP_TYP+[2], 'f': nullTraps+[1]
+    })
+else:
+    traps = pd.DataFrame({
+        'lon': cntr[0], 'lat': cntr[1], 
+        't': TRAP_TYP, 'f': nullTraps
+    })
+# Setup trap kernels ----------------------------------------------------------
 tKer = {
     2: {
-        'kernel': srv.exponentialDecay, 
-        'params': {'A': .5, 'b': 0.1}
+        'kernel': srv.sigmoidDecay,     
+        'params': {'A': 1, 'rate': .175, 'x0': 25}
     },
     1: {
-        'kernel': srv.sigmoidDecay,     
-        'params': {'A': 1.0, 'rate': 0.1, 'x0': 40}
+        'kernel': srv.exponentialDecay, 
+        'params': {'A': 1, 'b': 0.045}
     },
     0: {
         'kernel': srv.exponentialAttractiveness,
-        'params': {'A': 1, 'k': .025, 's': .2, 'gamma': .8, 'epsilon': 0}
+        'params': {'A': 1, 'k': .01, 's': .3, 'gamma': .975, 'epsilon': 0}
     }
 }
 ###############################################################################
@@ -69,7 +92,7 @@ tKer = {
 lnd = srv.Landscape(
     YK_LL, 
     kernelFunction=mKer['kernelFunction'], kernelParams=mKer['kernelParams'],
-    traps=traps, trapsKernels=tKer, trapsRadii=[.5, .6, .75],
+    traps=traps, trapsKernels=tKer, trapsRadii=[.9, .8, .7],
     landLimits=YK_BBOX
 )
 bbox = lnd.getBoundingBox()
@@ -77,28 +100,28 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # Plot Landscape
 ###############################################################################
-(fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
-lnd.plotSites(fig, ax, size=75)
-# lnd.plotMigrationNetwork(
-#     fig, ax, 
-#     lineWidth=25, alphaMin=.05, alphaAmplitude=2,
-# )
+# (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
+# lnd.plotSites(fig, ax, size=75)
+# # lnd.plotMigrationNetwork(
+# #     fig, ax, 
+# #     lineWidth=25, alphaMin=.05, alphaAmplitude=2,
+# # )
 # lnd.plotTraps(fig, ax, zorders=(30, 25))
-srv.plotClean(fig, ax, bbox=YK_BBOX)
-fig.savefig(
-    path.join(OUT_PTH, '{}{}_CLN.png'.format(OUT_PTH, ID, TRPS_NUM)), 
-    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
-)
-plt.close('all')
+# srv.plotClean(fig, ax, bbox=YK_BBOX)
+# fig.savefig(
+#     path.join(OUT_PTH, '{}{}_{:02d}_INT.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+#     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+# )
+# plt.close('all')
 ###############################################################################
 # GA Settings
 ############################################################################### 
-POP_SIZE = int(15*(lnd.trapsNumber*1.25))
+POP_SIZE = int(20*(lnd.trapsNumber*1.25))
 (MAT, MUT, SEL) = (
     {'mate': .35, 'cxpb': 0.5}, 
     {
         'mean': 0, 
-        'sd': min([abs(i[1]-i[0]) for i in bbox])/2.5, 
+        'sd': min([abs(i[1]-i[0]) for i in bbox])/5, 
         'mutpb': .4, 'ipb': .5
     },
     {'tSize': 5}
@@ -181,6 +204,13 @@ srv.plotFitness(fig, ax, min(dta['min']), fmt='{:.5f}', fontSize=100)
 srv.plotClean(fig, ax, bbox=YK_BBOX)
 fig.savefig(
     path.join(OUT_PTH, '{}{}_{:02d}_TRP.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+plt.close('all')
+(fig, ax) = plt.subplots(1, 1, figsize=(15, 15), sharey=False)
+(fig, ax) = srv.plotTrapsKernels(fig, ax, lnd, distRange=(0, 125))
+fig.savefig(
+    path.join(OUT_PTH, '{}{}_{:02d}_KER.png'.format(OUT_PTH, ID, TRPS_NUM)), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
 plt.close('all')
