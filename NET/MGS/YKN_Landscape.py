@@ -56,7 +56,7 @@ tKer = {
     },
     1: {
         'kernel': srv.sigmoidDecay,     
-        'params': {'A': .5, 'rate': 0.25, 'x0': 10}
+        'params': {'A': 1.0, 'rate': 0.1, 'x0': 40}
     },
     0: {
         'kernel': srv.exponentialAttractiveness,
