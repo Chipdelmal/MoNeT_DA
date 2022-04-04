@@ -18,7 +18,7 @@ matplotlib.use('agg')
 
 
 if srv.isNotebook():
-    (LND_TYPE, ID) = ('YKN', '04')
+    (LND_TYPE, ID) = ('YKN', '10')
 else:
     (LND_TYPE, ID) = (argv[1], argv[2])
 # Constants -------------------------------------------------------------------
@@ -40,7 +40,10 @@ TCOL = {
 # Kernel Plot
 ############################################################################### 
 (fig, ax) = plt.subplots(1, 1, figsize=(15, 15), sharey=False)
-(fig, ax) = srv.plotTrapsKernels(fig, ax, lnd, distRange=(0, 125), colors=TCOL)
+(fig, ax) = srv.plotTrapsKernels(
+    fig, ax, lnd, 
+    distRange=(0, 125), colors=TCOL, aspect=.1
+)
 fig.savefig(
     path.join(OUT_PTH, '{}{}_{}_KER.png'.format(OUT_PTH, LND_TYPE, ID)), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300

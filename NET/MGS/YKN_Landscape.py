@@ -25,15 +25,15 @@ else:
 ###############################################################################
 # File ID
 ###############################################################################
-GENS = 2500
+GENS = 10
 OUT_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/'
 ###############################################################################
 # File ID
 ###############################################################################
 if ID == 'YKN':
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys02.csv'
-    TRPS_NUM = 5
-    TRAP_TYP = [0, 0, 0, 0, 1]
+    TRPS_NUM = 2
+    TRAP_TYP = [0, 1]
     FXD = [145.72063942, -16.802746264285748]
 else:
     LND_PTH = '/RAID5/marshallShare/MGSurvE_Yorkeys/LandOriginal/Yorkeys03.csv'
@@ -63,8 +63,8 @@ nullTraps = [0]*TRPS_NUM
 cntr = ([np.mean(YK_LL['lon'])]*TRPS_NUM, [np.mean(YK_LL['lat'])]*TRPS_NUM)
 if ID == 'YKN':
     traps = pd.DataFrame({
-        'lon': cntr[0]+[FXD[0]], 'lat': cntr[1]+[FXD[1]],
-        't': TRAP_TYP+[2], 'f': nullTraps+[1]
+        'lon': [FXD[0]]+cntr[0], 'lat': [FXD[1]]+cntr[1],
+        't': [2]+TRAP_TYP, 'f': [1]+nullTraps
     })
 else:
     traps = pd.DataFrame({
@@ -121,7 +121,7 @@ POP_SIZE = int(20*(lnd.trapsNumber*1.25))
     {'mate': .35, 'cxpb': 0.5}, 
     {
         'mean': 0, 
-        'sd': min([abs(i[1]-i[0]) for i in bbox])/5, 
+        'sd': max([abs(i[1]-i[0]) for i in bbox])/2, 
         'mutpb': .4, 'ipb': .5
     },
     {'tSize': 5}
@@ -140,7 +140,8 @@ creator.create("Individual",
 )
 toolbox.register("initChromosome", srv.initChromosome, 
     trapsCoords=lndGA.trapsCoords, 
-    fixedTrapsMask=trpMsk, coordsRange=bbox
+    fixedTrapsMask=trpMsk, 
+    coordsRange=bbox
 )
 toolbox.register("individualCreator", tools.initIterate, 
     creator.Individual, toolbox.initChromosome
@@ -150,13 +151,16 @@ toolbox.register("populationCreator", tools.initRepeat,
 )
 # Mate and mutate -------------------------------------------------------------
 toolbox.register(
-    "mate", tools.cxBlend, 
+    "mate", srv.cxBlend, 
+    fixedTrapsMask=trpMsk,
     alpha=MAT['mate']
 )
 toolbox.register(
-    "mutate", tools.mutGaussian, 
-    mu=MUT['mean'], sigma=MUT['sd'], indpb=MUT['ipb']
+    "mutate", srv.mutateChromosome,
+    fixedTrapsMask=trpMsk,
+    randArgs={'loc': MUT['mean'], 'scale': MUT['sd']}, indpb=MUT['ipb']
 )
+
 # Select and evaluate ---------------------------------------------------------
 toolbox.register("select", 
     tools.selTournament, tournsize=SEL['tSize']
