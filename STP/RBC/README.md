@@ -119,3 +119,8 @@ after having the `STP_crunchDataset.sh` run for both SDR and LDR, PAN sets. This
 * `RAP`: Fraction of mosquites at timepoint
 
 <hr>
+
+## Other
+
+TestDir: `E_01_04_00200_000000000000_000000000000_0000000_0000000_0000000_0075000_0071700`
+BaseFile: `E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000-HLT_00_sum.bz`
