@@ -12,7 +12,7 @@ import compress_pickle as pkl
 import pandas as pd
 import TPT_aux as aux
 import TPT_gene as drv
-
+import TPT_functions as fun
 
 if monet.isNotebook():
     (USR, AOI, DRV, QNT, THS) = ('dsk', 'HUM', 'LDR', 50, 0.1)
@@ -59,7 +59,7 @@ for exp in EXPS:
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .75, "alpha": .5, "dpi": 500, "legend": True,
+            "width": .5, "alpha": .75, "dpi": 500, "legend": True,
             "aspect": 1/6, "colors": CLR, 
             "xRange": aux.XRAN, "yRange": [0, YRAN[1]]
         }
@@ -86,14 +86,16 @@ for exp in EXPS:
     ###########################################################################
     (fNum, digs) = monet.lenAndDigits(repFiles)
     Parallel(n_jobs=JOB)(
-        delayed(monet.exportPstTracesPlotWrapper)(
+        delayed(fun.exportPstTracesPlotWrapper)(
             exIx, repFiles, xpidIx,
             dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
             aux.STABLE_T, str(THS), QNT, STYLE, PT_IMG,
             digs=digs, popScaler=1, autoAspect=1,
             border=True, borderColor='#000000AA', borderWidth=1,
             labelPos=(.91, .875), fontsize=5, labelspacing=.08,
-            transparent=True, vlines=aux.RELEASES, poePrint=False
+            transparent=True, vlines=aux.RELEASES, 
+            poePrint=False,
+            wopPrint=False, cptPrint=False, mnfPrint=False
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------

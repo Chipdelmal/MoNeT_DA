@@ -5,16 +5,17 @@ import MoNeT_MGDrivE as monet
 import TPT_gene_LDR as LDR
 import TPT_gene_HUM as HUM
 import TPT_gene_INC as INC
+import TPT_aux as aux
 
 ###############################################################################
 # Drive
 ###############################################################################
-def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=352e3):
+def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=350e3):
     ###########################################################################
     if (TYPE == 'HUM'):
         (aggD, yRange, folder) = HUM.driveParameters(TYPE, popSize=humSize)
     elif (TYPE == 'INC'):
-        (aggD, yRange, folder) = INC.driveParameters(TYPE, popSize=1000)
+        (aggD, yRange, folder) = INC.driveParameters(TYPE, popSize=aux.INC_SIZE)
     else:
         if (DRIVE == 'LDR'):
             (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
