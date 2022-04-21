@@ -17,9 +17,9 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('srv', 'INC', 'LDR')
+    (USR, AOI, DRV, SPE) = ('lab', 'INC', 'LDR', 'gambiae')
 else:
-    (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
+    (USR, AOI, DRV, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
@@ -39,7 +39,7 @@ for exp in EXPS:
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, exp, DRV
+        USR, exp, DRV, SPE
     )
     # Time and head -----------------------------------------------------------
     tS = datetime.now()

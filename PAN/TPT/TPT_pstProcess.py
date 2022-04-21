@@ -14,9 +14,9 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT) = ('dsk', 'HLT', 'LDR', '50')
+    (USR, AOI, DRV, QNT, SPE) = ('dsk', 'HLT', 'LDR', '50', 'gambiae')
 else:
-    (USR, AOI, DRV, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    (USR, AOI, DRV, QNT, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
@@ -41,7 +41,7 @@ for exp in EXPS:
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, exp, DRV
+        USR, exp, DRV, SPE
     )
     ###########################################################################
     # Setting up paths

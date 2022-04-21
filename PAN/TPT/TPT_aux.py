@@ -71,7 +71,7 @@ REF_FILE = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_
     [.10, .25, .50, .75, .90],
     [.10, .25, .50, .75, .90],
     [.10, .25, .50, .75, .90],
-    [0, 365]# [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
+    [0, 365]
 )
 
 # #############################################################################
@@ -151,13 +151,13 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 # Paths
 # #############################################################################
-def selectPath(USR, EXP, DRV=None):
+def selectPath(USR, EXP, DRV=None, SPE='gambiae'):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/TP13_figure_{}/{}/'.format(SPECIES, EXP)
+        PATH_ROOT = '/RAID5/marshallShare/TP13_figure_{}/{}/'.format(SPE, EXP)
     elif USR == 'lab':
-        PATH_ROOT = '/Volumes/marshallShare/TP13_figure_{}/{}/'.format(SPECIES, EXP)
+        PATH_ROOT = '/Volumes/marshallShare/TP13_figure_{}/{}/'.format(SPE, EXP)
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/TP13_figure/{}/'.format(EXP)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/TP13_figure_{}/{}/'.format(SPE, EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
