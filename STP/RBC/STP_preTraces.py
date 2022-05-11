@@ -85,3 +85,6 @@ for exp in EXPS:
     #     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
     #     PT_IMG+'/legend_{}.png'.format(AOI), 500
     # )
+
+# pkl.load("/RAID5/marshallShare/STP_Grid/LDR/PAN/000000/PREPROCESS"+'/E_01_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000-HLT_00_sum.bz')
+# E_01_04_00200_000000000000_000000000000_0000000_0000000_0000000_0075000_0071700

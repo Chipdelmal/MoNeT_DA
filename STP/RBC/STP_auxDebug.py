@@ -38,13 +38,17 @@ def preProcessParallel(
     (pathMean, pathTraces) = (expDirsMean, expDirsTrac+'/')
     expName = pathMean.split('/')[-1]
     fNameFmt = '{}/{}-{}_'.format(prePath, expName, analysisOI)
-    monet.preProcessLandscape(
-        pathMean, pathTraces, expName, drive, prePath,
-        analysisOI=analysisOI, nodesAggLst=nodesAggLst,
-        fNameFmt=fNameFmt, MF=MF, cmpr=cmpr, nodeDigits=nodeDigits,
-        SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
-        sexFilenameIdentifiers=sexFilenameIdentifiers
-    )
+    # Iterate through experiment files and skip errors (unsafe but logs)
+    try:
+        monet.preProcessLandscape(
+            pathMean, pathTraces, expName, drive, prePath,
+            analysisOI=analysisOI, nodesAggLst=nodesAggLst,
+            fNameFmt=fNameFmt, MF=MF, cmpr=cmpr, nodeDigits=nodeDigits,
+            SUM=SUM, AGG=AGG, SPA=SPA, REP=REP, SRP=SRP,
+            sexFilenameIdentifiers=sexFilenameIdentifiers
+        )
+    except:
+        print('- Failed on: {}'.format(expName))
     return None
 
 

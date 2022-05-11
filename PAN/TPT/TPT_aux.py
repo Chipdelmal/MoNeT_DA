@@ -10,23 +10,28 @@ from glob import glob
 import MoNeT_MGDrivE as monet
 
 # https://github.com/Chipdelmal/MGDrivE/blob/master/Main/TP13/TP13_main.R
-# PARS_SORT <- c("ren", "rer",
-#                "rsg", "gsv",
-#                "fch", "fcb", "fcr",
-#                "hrm", "hrf")
-# PARS_SCAL <- c(1e0, 1e3,
-#                1e10, 1e10,
-#                1e5, 1e5, 1e5,
-#                1e5, 1e5)
+# PARS_SORT <- c(
+#   "ren", "rer",
+#   "rsg", "gsv",
+#   "fch", "fcb", "fcr",
+#   "hrm", "hrf"
+# )
+# PARS_SCAL <- c(
+#   1e0, 1e3,
+#   1e9, 1e10,
+#   1e5, 1e5, 1e5,
+#   1e5, 1e5
+# )
 
+SPECIES = 'gambiae'
 # #############################################################################
 # Constants
 # #############################################################################
 OVW = True
 (REL_START, RELEASES) = (1095, [1095, 1102, 1109, 1116, 1123, 1130, 1137, 1144])
 (JOB_DSK, JOB_SRV) = (8, 20)
-(POP_SIZE, HUM_SIZE, XRAN, FZ) = (
-    75e3*3, 352e3*1, # 2e6*1.5/2, 
+(POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
+    75e3*4, 352e3*1.25, 1000*1.25,
     (0, 10*int(365)), 
     False
 )
@@ -40,7 +45,7 @@ OVW = True
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
 )
-REF_FILE = 'E_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000_0000000'
+REF_FILE = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_0000000'
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD) = (
     (
@@ -51,7 +56,7 @@ REF_FILE = 'E_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000
     ),
     {
         'i_ren': 1e0,   'i_rer': 1e3,   
-        'i_rsg': 1e10,  'i_gsv': 1e10,  
+        'i_rsg': 1e9,   'i_gsv': 1e10,  
         'i_fch': 1e5,   'i_fcb': 1e5,   'i_fcr': 1e5,
         'i_hrm': 1e5,   'i_hrf': 1e5
     },
@@ -66,7 +71,7 @@ REF_FILE = 'E_00_00000_000000000000_000000000000_0000000_0000000_0000000_0000000
     [.10, .25, .50, .75, .90],
     [.10, .25, .50, .75, .90],
     [.10, .25, .50, .75, .90],
-    [0, 365]# [int(i) for i in range(0, XRAN[1], int(XRAN[1]/5))]
+    [0, 365]
 )
 
 # #############################################################################
@@ -113,7 +118,7 @@ def selectDepVars(MOI, AOI):
 # Experiments
 # #############################################################################
 def getExps():
-    return ('X2500', 'X5000', 'X7500', 'X10000')
+    return ('X0001', 'X2500', 'X5000', 'X7500', 'X10000')
 
 # #############################################################################
 # Names and patterns
@@ -146,13 +151,13 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 # Paths
 # #############################################################################
-def selectPath(USR, EXP, DRV=None):
+def selectPath(USR, EXP, DRV=None, SPE='gambiae'):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/TP13_figure/{}/'.format(EXP)
+        PATH_ROOT = '/RAID5/marshallShare/TP13_figure_{}/{}/'.format(SPE, EXP)
     elif USR == 'lab':
-        PATH_ROOT = '/Volumes/marshallShare/TP13/{}/'.format(EXP)
+        PATH_ROOT = '/Volumes/marshallShare/TP13_figure_{}/{}/'.format(SPE, EXP)
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/TP13_figure/{}/'.format(EXP)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/TP13_figure_{}/{}/'.format(SPE, EXP)
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )

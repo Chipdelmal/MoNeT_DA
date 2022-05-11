@@ -14,9 +14,9 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV) = ('lab', 'INC', 'LDR')
+    (USR, AOI, DRV, SPE) = ('dsk', 'INC', 'LDR', 'gambiae')
 else:
-    (USR, AOI, DRV) = (sys.argv[1], sys.argv[2], sys.argv[3])
+    (USR, AOI, DRV, SPE) = sys.argv[1:]
 GRID_REF = False
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
@@ -38,7 +38,7 @@ for exp in EXPS:
     )
     (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-        USR, exp, DRV
+        USR, exp, DRV, SPE
     )
     tS = datetime.now()
     monet.printExperimentHead(
