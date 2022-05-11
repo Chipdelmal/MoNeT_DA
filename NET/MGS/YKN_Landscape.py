@@ -100,19 +100,19 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ###############################################################################
 # Plot Landscape
 ###############################################################################
-# (fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
-# lnd.plotSites(fig, ax, size=75)
-# # lnd.plotMigrationNetwork(
-# #     fig, ax, 
-# #     lineWidth=25, alphaMin=.05, alphaAmplitude=2,
-# # )
-# lnd.plotTraps(fig, ax, zorders=(30, 25))
-# srv.plotClean(fig, ax, bbox=YK_BBOX)
-# fig.savefig(
-#     path.join(OUT_PTH, '{}{}_{:02d}_INT.png'.format(OUT_PTH, ID, TRPS_NUM)), 
-#     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+(fig, ax) = (plt.figure(figsize=(15, 15)), plt.axes(projection=crs.PlateCarree()))
+lnd.plotSites(fig, ax, size=75)
+# lnd.plotMigrationNetwork(
+#     fig, ax, 
+#     lineWidth=25, alphaMin=.05, alphaAmplitude=2,
 # )
-# plt.close('all')
+lnd.plotTraps(fig, ax, zorders=(30, 25))
+srv.plotClean(fig, ax, bbox=YK_BBOX)
+fig.savefig(
+    path.join(OUT_PTH, '{}{}_{:02d}_INT.png'.format(OUT_PTH, ID, TRPS_NUM)), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+plt.close('all')
 ###############################################################################
 # GA Settings
 ############################################################################### 
