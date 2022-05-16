@@ -52,12 +52,12 @@ def preProcessParallel(
             sexFilenameIdentifiers=sexFilenameIdentifiers
         )
     except:
-	errorLog = True
+        errorLog = True
         file = open("preProcess.log", "a")
         file.write('{}\n'.format(expName))
         file.close()
     if errorLog:
-    	print("* Check log for errors!")
+        print("* Check log for errors!")
     return None
 
 
