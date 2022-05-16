@@ -39,6 +39,9 @@ def preProcessParallel(
     expName = pathMean.split('/')[-1]
     fNameFmt = '{}/{}-{}_'.format(prePath, expName, analysisOI)
     # Iterate through experiment files and skip errors (unsafe but logs)
+    file = open("preProcess.log", "w")
+    file.write('# Files with errors!\n')
+    file.close()
     try:
         monet.preProcessLandscape(
             pathMean, pathTraces, expName, drive, prePath,
@@ -49,6 +52,9 @@ def preProcessParallel(
         )
     except:
         print('- Failed on: {}'.format(expName))
+        file = open("preProcess.log", "a")
+        file.write('{}\n'.format(expName))
+        file.close()
     return None
 
 
