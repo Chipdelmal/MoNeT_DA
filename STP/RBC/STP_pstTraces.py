@@ -29,7 +29,7 @@ else:
 if LND == 'SPA':
     SUBSAMPLE = 1
 else:
-    SUBSAMPLE = 0.00005
+    SUBSAMPLE = 0.005
 EXPS = aux.getExps(LND)
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
 ###############################################################################

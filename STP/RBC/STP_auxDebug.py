@@ -42,6 +42,7 @@ def preProcessParallel(
     file = open("preProcess.log", "w")
     file.write('# Files with errors!\n')
     file.close()
+    errorLog = False
     try:
         monet.preProcessLandscape(
             pathMean, pathTraces, expName, drive, prePath,
@@ -51,10 +52,12 @@ def preProcessParallel(
             sexFilenameIdentifiers=sexFilenameIdentifiers
         )
     except:
-        print('- Failed on: {}'.format(expName))
+	errorLog = True
         file = open("preProcess.log", "a")
         file.write('{}\n'.format(expName))
         file.close()
+    if errorLog:
+    	print("* Check log for errors!")
     return None
 
 
