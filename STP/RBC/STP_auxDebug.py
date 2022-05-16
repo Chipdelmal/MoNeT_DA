@@ -39,9 +39,6 @@ def preProcessParallel(
     expName = pathMean.split('/')[-1]
     fNameFmt = '{}/{}-{}_'.format(prePath, expName, analysisOI)
     # Iterate through experiment files and skip errors (unsafe but logs)
-    file = open("preProcess.log", "w")
-    file.write('# Files with errors!\n')
-    file.close()
     errorLog = False
     try:
         monet.preProcessLandscape(
@@ -52,12 +49,9 @@ def preProcessParallel(
             sexFilenameIdentifiers=sexFilenameIdentifiers
         )
     except:
-        errorLog = True
         file = open("preProcess.log", "a")
-        file.write('{}\n'.format(expName))
+        file.write(expName)
         file.close()
-    if errorLog:
-        print("* Check log for errors!")
     return None
 
 
