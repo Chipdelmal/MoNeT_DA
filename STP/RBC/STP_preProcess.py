@@ -71,6 +71,9 @@ for exp in EXPS:
     ###########################################################################
     # Process data
     ###########################################################################
+    file = open("preProcess.log", "w")
+    file.write('# Files with errors!\n')
+    file.close()
     Parallel(n_jobs=JOB)(
         delayed(dbg.preProcessParallel)(
             exIx, expNum, gene,
@@ -79,5 +82,5 @@ for exp in EXPS:
             cmpr='bz2', nodeDigits=2,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP
-        ) for exIx in expIter
+        ) for exIx in expIter[-5000:]
     )
