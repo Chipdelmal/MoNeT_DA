@@ -64,6 +64,7 @@ TRS_DICT = OrderedDict((
     ('O-', (('W', locA), ('R', locA), ('B', locA)))
 ))
 TGD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
+# TGD_TRS = monet.geneFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
