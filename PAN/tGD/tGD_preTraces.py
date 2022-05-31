@@ -29,12 +29,19 @@ for exp in EXP:
     monet.makeFolder(PT_IMG)
     drive = drv.driveSelector(DRV, AOI)
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
+    # print(YRAN)
     STYLE = {
             "width": .5, "alpha": .9, "dpi": 750, "legend": True,
             "aspect": .5, "colors": CLR, "xRange": [0, (365*5)],
-            "yRange": (0, 7.5e3*2)
+            "yRange": YRAN # (0, 7.5e3)
         }
-    STYLE['aspect'] = monet.scaleAspect(.5, STYLE)
+    # if (AOI=='TRS') or (AOI=='WLD'):
+    #     STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
+    # elif (AOI=='ECO'):
+    #     STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*4)
+    # else: 
+    #     STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1])
+    STYLE['aspect'] = monet.scaleAspect(1/3, STYLE)
     tS = datetime.now()
     aux.printExperimentHead(PT_ROT, PT_IMG, PT_PRE, tS, 'PreTraces '+AOI)
     ###########################################################################
