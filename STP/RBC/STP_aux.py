@@ -14,7 +14,7 @@ import MoNeT_MGDrivE as monet
 OVW = True
 REL_START = 100
 SPA_EXP = {'265_SR', '265_DR', '265_SS', '265_SP', '265_SF', '265_DP', '265_DS', '265_DF'}
-(JOB_DSK, JOB_SRV) = (8, 40)
+(JOB_DSK, JOB_SRV) = (8, 60)
 (POP_SIZE, XRAN, FZ) = (
     1e7*1.25, # 2e6*1.5/2, 
     (0, 10*int(365)), 

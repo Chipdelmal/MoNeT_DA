@@ -82,5 +82,5 @@ for exp in EXPS:
             cmpr='bz2', nodeDigits=2,
             SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
             REP=aux.REP, SRP=aux.SRP
-        ) for exIx in expIter[-5000:]
+        ) for exIx in expIter[:]
     )
