@@ -13,15 +13,15 @@ from joblib import Parallel, delayed
 # Drives: LinkedDrive, splitDrive, tGD
 ###############################################################################
 (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, DRV, AOI) = ('dsk', 'linkedDrive', 'HLT')
-(FMT, OVW, JOB) = ('bz2', True, 60)
+# (USR, DRV, AOI) = ('srv', 'linkedDrive', 'HLT')
+(FMT, OVW, JOB) = ('bz2', True, 40)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 if (USR == 'srv2'):
     EXP = ('000', )
     NOI = [[0]]
 else:
     EXP = ('100', ) # ('050', '100', '400', '800')
-    NOI = [[0], [1]]
+    NOI = [[0], ]
 # Sex selector ----------------------------------------------------------------
 if (AOI=='HLT') or (AOI=='CST'):
     MF = (False, True)

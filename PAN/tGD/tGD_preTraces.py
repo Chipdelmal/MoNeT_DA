@@ -30,11 +30,11 @@ for exp in EXP:
     drive = drv.driveSelector(DRV, AOI)
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .25, "alpha": .75, "dpi": 750, "legend": True,
-            "aspect": .25, "colors": CLR, "xRange": [0, (365*5)/3],
+            "width": .5, "alpha": .9, "dpi": 750, "legend": True,
+            "aspect": .5, "colors": CLR, "xRange": [0, (365*5)],
             "yRange": (0, 7.5e3*2)
         }
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.5, STYLE)
     tS = datetime.now()
     aux.printExperimentHead(PT_ROT, PT_IMG, PT_PRE, tS, 'PreTraces '+AOI)
     ###########################################################################
@@ -64,7 +64,7 @@ for exp in EXP:
             repDta, name, STYLE, PT_IMG, append='TRA', 
             wopPrint=False, transparent=True
         )
-        cl = [i[:-2]+'cc' for i in CLR]
+    cl = [i[:-2]+'cc' for i in CLR]
     monet.exportGeneLegend(
             drive.get('gDict')['genotypes'], cl, PT_IMG+'/plt_{}.png'.format(AOI), 500
         )
