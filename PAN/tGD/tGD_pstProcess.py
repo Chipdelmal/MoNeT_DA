@@ -1,127 +1,94 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
-import numpy as np
 from glob import glob
-import tGD_aux as aux
-import tGD_fun as fun
-# import tGD_dataProcess as da
 from datetime import datetime
 import MoNeT_MGDrivE as monet
-import compress_pickle as pkl
-# from joblib import Parallel, delayed
+from joblib import Parallel, delayed
+from more_itertools import locate
+import pandas as pd
+import tGD_aux as aux
+import tGD_gene as drv
 
 
-# (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
-(USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-(QNT, MLR) = ('50', True)
-
-(thiS, thoS, thwS, tapS) = (
-        [.05, .10, .25, .50, .75, .90, .95],
-        [.05, .10, .25, .50, .75, .90, .95],
-        [.05, .10, .25, .50, .75, .90, .95],
-        [int((i + 1) * 365 / 3) for i in range(5)]
-    )
-if (USR == 'srv2') or (USR == 'dsk2'):
-    EXPS = ('000', )
-    NOI = [[0]]
+if monet.isNotebook():
+    (USR, DRV, AOI, QNT) = ('srv', 'linkedDrive', 'WLD', '50')
 else:
-    EXPS = ('050', '100', '400', '800')
-    NOI = [[0], [1]]
-header = ['i_hnf', 'i_cac', 'i_frc', 'i_hrt', 'i_ren', 'i_res', 'i_grp']
-outLabels = ('TTI', 'TTO', 'WOP', 'RAP', 'MNX')
+    (USR, DRV, AOI, QNT) = sys.argv[1:]
+# Setup number of threads -----------------------------------------------------
+JOB=aux.JOB_DSK
+if USR == 'srv':
+    JOB = aux.JOB_SRV
+CHUNKS = 1# JOB
 ###############################################################################
-# Iterate through experiments
+# Get Experiments and Offset
 ###############################################################################
-xpDict = {}
-smryDicts = ({}, {}, {}, {}, {})
-expNum = len(EXPS)
-for (j, EXP) in enumerate(EXPS):
+EXPS = ('100', )
+###############################################################################
+# Processing loop
+###############################################################################
+exp = EXPS[0]
+for exp in EXPS:
+    (header, xpidIx) = list(zip(*aux.DATA_HEAD))
+    ###########################################################################
+    # Load landscape and drive
+    ###########################################################################
+    (drive, land) = (
+        drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
+        [[0], ]
+    )
+    (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+    (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, DRV, exp)
+    ###########################################################################
+    # Setting up paths
+    ###########################################################################
     tS = datetime.now()
-    (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, DRV, EXP)
-    aux.printExperimentHead(PT_ROT, PT_IMG, PT_OUT, tS, 'PostProcess ' + AOI)
-    print('{}* [{}/{}] {}{}'.format(
-            monet.CWHT, str(j+1).zfill(3), str(expNum).zfill(3),
-            EXP, monet.CEND
-        ))
-    # Output dataframes paths -------------------------------------------------
-    pth = PT_MTR + AOI + '_{}_' + QNT + '_qnt.csv'
-    DFOPths = [pth.format(z) for z in outLabels]
-    # Get experiment IDs ------------------------------------------------------
-    # print(PT_OUT)
-    uids = fun.getExperimentsIDSets(PT_OUT, skip=-1)
-    (hnf, cac, frc, hrt, ren, res, typ, grp) = uids[1:]
-    # Parse filepaths ---------------------------------------------------------
-    ptrn = aux.XP_NPAT.format('*', '*', '*', '*', '*', '*', AOI, '*', 'rto', 'npy')
+    monet.printExperimentHead(
+        PT_OUT, PT_MTR, tS, 
+        'tGD PstProcess [{}:{}:{}]'.format(DRV, exp, AOI)
+    )
+    ###########################################################################
+    # Setup schemes
+    ###########################################################################
+    # pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
+    pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt'
+    DFOPths = [pth.format(z) for z in aux.DATA_NAMES]
+    # Setup experiments IDs ---------------------------------------------------
+    uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
+    # Get experiment files ----------------------------------------------------
+    ptrn = aux.patternForReleases('*', AOI, 'rto', 'npy')
     fPaths = sorted(glob(PT_OUT+ptrn))
-    # Create empty dataframes to store the data -------------------------------
-    outDFs = monet.initDFsForDA(fPaths, header, thiS, thoS, thwS, tapS)
-    (ttiDF, ttoDF, wopDF, tapDF, rapDF) = outDFs
-    # Iterate through experiments ---------------------------------------------
-    fNum = len(fPaths)
-    digs = len(str(fNum))
-    for (i, fPath) in enumerate(fPaths):
-        fmtStr = '{}+ File: {}/{}'
-        print(
-            fmtStr.format(monet.CBBL, str(i+1).zfill(digs), fNum, monet.CEND),
-            end='\r'
-        )
-        repRto = np.load(fPath)
-        (reps, days) = repRto.shape
-        #######################################################################
-        # Calculate Metrics
-        #######################################################################
-        # Thresholds ----------------------------------------------------------
-        (ttiS, ttoS, wopS) = (
-                monet.calcTTI(repRto, thiS),
-                monet.calcTTO(repRto, thoS),
-                monet.calcWOP(repRto, thwS)
-            )
-        (_, _, minS, maxS) = monet.calcMinMax(repRto)
-        rapS = monet.getRatioAtTime(repRto, tapS)
-        #######################################################################
-        # Calculate Quantiles
-        #######################################################################
-        qnt = int(QNT) / 100
-        ttiSQ = [np.nanquantile(tti, qnt) for tti in ttiS]
-        ttoSQ = [np.nanquantile(tto, 1-qnt) for tto in ttoS]
-        wopSQ = [np.nanquantile(wop, 1-qnt) for wop in wopS]
-        rapSQ = [np.nanquantile(rap, qnt) for rap in rapS]
-        mniSQ = (np.nanquantile(minS[0], 1-qnt), np.nanquantile(minS[1], qnt))
-        mnxSQ = (np.nanquantile(maxS[0], 1-qnt), np.nanquantile(maxS[1], 1-qnt))
-        #######################################################################
-        # Update in Dataframes
-        #######################################################################
-        xpid = fun.getXpId(fPath, [1, 2, 3, 4, 5, 6, 8])
-        mnxAppend = list(mniSQ)+list(mnxSQ)
-        updates = [xpid + i for i in (ttiSQ, ttoSQ, wopSQ, rapSQ, mnxAppend)]
-        for df in zip(outDFs, updates):
-            df[0].iloc[i] = df[1]
-        #######################################################################
-        # Update in Dictionaries
-        #######################################################################
-        if MLR:
-            outDict = [
-                    {int(i[0]*100): i[1] for i in zip(thiS, ttiS)},
-                    {int(i[0]*100): i[1] for i in zip(thoS, ttoS)},
-                    {int(i[0]*100): i[1] for i in zip(thwS, wopS)},
-                    {int(i[0]*100): i[1] for i in zip(tapS, rapS)},
-                    {
-                        'mnl': minS[0], 'mnd': minS[1],
-                        'mxl': maxS[0], 'mxd': maxS[1]
-                    }
-                ]
-            for dct in zip(smryDicts, outDict):
-                dct[0][tuple(xpid)] = dct[1]
+    qnt = float(int(QNT)/100)
     ###########################################################################
-    # Export Data
+    # Divide fPaths in chunks
     ###########################################################################
-    for df in zip(outDFs, DFOPths):
-        df[0].to_csv(df[1], index=False)
-    if MLR:
-        for (i, dict) in enumerate(smryDicts):
-            lbl = outLabels[i]
-            pth = PT_MTR + AOI + '_' + lbl + '_' + QNT + '_mlr.bz'
-            pkl.dump(dict, pth, compression='bz2')
-print(monet.CWHT+'* Finished!                                '+monet.CEND)
+    fPathsChunks = list(aux.chunks(fPaths, CHUNKS))
+    dfPaths = [
+        [pth+'-pt_'+str(ix).zfill(2)+'.csv' 
+        for pth in DFOPths] for ix in range(CHUNKS)
+    ]
+    # print(dfPaths)
+    expIter = list(zip(dfPaths, fPathsChunks))
+    Parallel(n_jobs=JOB)(
+        delayed(monet.pstProcessParallel)(
+            exIx, header, xpidIx, 
+            qnt=qnt, 
+            sampRate=aux.SAMP_RATE, # offset=0,
+            thi=aux.THI, tho=aux.THO, thw=aux.THW, 
+            tap=aux.TAP, thp=(.05, .95)
+        ) for exIx in expIter
+    )
+    ###########################################################################
+    # Merge dataframes chunks
+    ###########################################################################
+    dfPathsPieces = list(zip(*dfPaths))[:]
+    for dfPathsSet in dfPathsPieces:
+        dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
+        # Write combined dataframe --------------------------------------------
+        fName = dfPathsSet[0].split('-')[0]+'.csv'
+        dfFull.to_csv(fName, index=False)
+
+
+

@@ -12,7 +12,7 @@ import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT) = ('srv', 'linkedDrive', 'HLT', '50')
+    (USR, DRV, AOI, QNT) = ('srv', 'linkedDrive', 'WLD', '50')
 else:
     (USR, DRV, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 (SKP, OVW) = (False, True)

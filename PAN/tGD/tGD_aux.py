@@ -12,11 +12,19 @@ from glob import glob
 import MoNeT_MGDrivE as monet
 
 
+(JOB_DSK, JOB_SRV) = (2, 20)
 XP_NPAT = 'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
+POP_SIZE = 6e3
+(SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
+(DATA_NAMES, DATA_PRE, DATA_PST) = (
+    ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
+    ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
+)
+SAMP_RATE = 1
 
-def patternForReleases(ren, AOI, ftype):
+def patternForReleases(ren, AOI, ftype, ext='bz'):
     strPat = XP_NPAT.format(
-        '*', '*', '*', '*', '*', '*', ren, '*', AOI, '*', ftype, 'bz'
+        '*', '*', '*', '*', '*', '*', ren, '*', AOI, '*', ftype, ext
     )
     return strPat
 
@@ -54,27 +62,34 @@ def aggregateGeneAppearances(genotypes, genes):
 
 def flatten(l): return [item for sublist in l for item in sublist]
 
+
+def chunks(l, n):
+    (d, r) = divmod(len(l), n)
+    for i in range(n):
+        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
+        yield l[si:si+(d+1 if i < r else d)]
+
 ###############################################################################
 # Data Analysis 
 ###############################################################################
 (DATA_HEAD, DATA_SCA, DATA_PAD) = (
     (
-        ('i_fca', 1), ('i_fcb', 2),
+        ('i_fcs', 1), ('i_fcb', 2),
         ('i_fga', 3), ('i_fgb', 4),
-        ('i_crt', 5), ('i_hdr', 6),
-        ('i_ren', 7), ('i_rer', 8)
+        ('i_cut', 5), ('i_hdr', 6),
+        ('i_ren', 7), ('i_res', 8)
     ),
     {
-        'i_fca': 1e4, 'i_fcb': 1e4,
+        'i_fcs': 1e4, 'i_fcb': 1e4,
         'i_fga': 1e4, 'i_fgb': 1e4,
-        'i_crt': 1e2, 'i_hdr': 1e2,
-        'i_ren': 1e0, 'i_rer': 1e2
+        'i_cut': 1e2, 'i_hdr': 1e2,
+        'i_ren': 1e0, 'i_res': 1e2
     },
     {
-        'i_fca': 6, 'i_fcb': 6,
+        'i_fcs': 6, 'i_fcb': 6,
         'i_fga': 6, 'i_fgb': 6,
-        'i_crt': 3, 'i_hdr': 3,
-        'i_ren': 3, 'i_rer': 3
+        'i_cut': 3, 'i_hdr': 3,
+        'i_ren': 3, 'i_res': 3
     }
 )
 (THI, THO, THW, TAP) = (
