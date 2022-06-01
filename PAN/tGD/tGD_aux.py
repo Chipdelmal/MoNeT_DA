@@ -8,11 +8,28 @@ import re
 import matplotlib
 import pandas as pd
 # import numpy as np
+from glob import glob
 import MoNeT_MGDrivE as monet
 
 
-XP_NPAT = 'E_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
+XP_NPAT = 'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 
+def patternForReleases(ren, AOI, ftype):
+    strPat = XP_NPAT.format(
+        '*', '*', '*', '*', '*', '*', ren, '*', AOI, '*', ftype, 'bz'
+    )
+    return strPat
+
+
+def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.lzma'):
+    filesList = glob(PATH_EXP+'E*')
+    fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
+    splitFilenames = [re.split('_|-', i)[:skip] for i in fileNames]
+    ids = []
+    for c in range(len(splitFilenames[0])):
+        colSet = set([i[c] for i in splitFilenames])
+        ids.append(sorted(list(colSet)))
+    return ids
 
 ###############################################################################
 # Count genotypes
@@ -44,20 +61,20 @@ def flatten(l): return [item for sublist in l for item in sublist]
     (
         ('i_fca', 1), ('i_fcb', 2),
         ('i_fga', 3), ('i_fgb', 4),
-        ('i_crt', 5), ('i_hdr', 6)
-        ('i_ren', 7), ('i_rer', 8),
+        ('i_crt', 5), ('i_hdr', 6),
+        ('i_ren', 7), ('i_rer', 8)
     ),
     {
-        'i_ren': 1e0,   'i_rer': 1e3,   
-        'i_rsg': 1e9,   'i_gsv': 1e10,  
-        'i_fch': 1e5,   'i_fcb': 1e5,   'i_fcr': 1e5,
-        'i_hrm': 1e5,   'i_hrf': 1e5
+        'i_fca': 1e4, 'i_fcb': 1e4,
+        'i_fga': 1e4, 'i_fgb': 1e4,
+        'i_crt': 1e2, 'i_hdr': 1e2,
+        'i_ren': 1e0, 'i_rer': 1e2
     },
     {
-        'i_ren': 2,     'i_rer': 2,     
-        'i_rsg': 12,    'i_gsv': 12,  
-        'i_fch': 7,     'i_fcb': 7,     'i_fcr': 7,
-        'i_hrm': 7,     'i_hrf': 7
+        'i_fca': 6, 'i_fcb': 6,
+        'i_fga': 6, 'i_fgb': 6,
+        'i_crt': 3, 'i_hdr': 3,
+        'i_ren': 3, 'i_rer': 3
     }
 )
 (THI, THO, THW, TAP) = (
