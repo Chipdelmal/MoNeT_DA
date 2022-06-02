@@ -31,9 +31,7 @@ exp = EXPS[0]
 ###########################################################################
 # Load landscape and drive
 ###########################################################################
-(drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), [[0], ]
-)
+(drive, land) = (drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), [[0], ])
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, DRV, exp)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
