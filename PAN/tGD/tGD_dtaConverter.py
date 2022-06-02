@@ -14,11 +14,11 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT, THS, NME, TRC) = (
-        'srv', 'HLT', 'linkedDrive', '50', '0.1', 'NM', 'HLT'
+    (USR, DRV, AOI, QNT, THS, NME, TRC) = (
+        'srv', 'linkedDrive', 'HLT', '50', '0.1', 'NM', 'HLT'
     )
 else:
-    (USR, AOI, DRV, QNT, THS, NME, TRC) = sys.argv[1:]
+    (USR, DRV, AOI, QNT, THS, NME, TRC) = sys.argv[1:]
 exp = aux.EXPS[0]
 # Filename --------------------------------------------------------------------
 if NME == 'BD':

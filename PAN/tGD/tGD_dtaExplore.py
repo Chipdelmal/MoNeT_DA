@@ -16,9 +16,9 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, MTR, THS) = ('srv', 'linkedDrive', 'WLD', '50', 'WOP', '0.1')
+    (USR, DRV, AOI, QNT, THS) = ('srv', 'linkedDrive', 'HLT', '50', '0.1')
 else:
-    (USR, DRV, AOI, QNT, MTR, THS) = sys.argv[1:]
+    (USR, DRV, AOI, QNT, THS) = sys.argv[1:]
 EXPS = aux.EXPS
 exp = EXPS[0]
 # Setup number of cores -------------------------------------------------------

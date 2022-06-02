@@ -13,11 +13,11 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT, THS, TRC) = (
-        'srv', 'HLT', 'linkedDrive', '50', '0.1', 'HLT'
+    (USR, DRV, AOI, QNT, THS, TRC) = (
+        'srv', 'linkedDrive', 'HLT', '50', '0.1', 'HLT'
     )
 else:
-    (USR, AOI, DRV, QNT, THS, TRC) = sys.argv[1:]
+    (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
 TICKS_HIDE = True
 # Setup number of cores -------------------------------------------------------
 JOB = aux.JOB_DSK
