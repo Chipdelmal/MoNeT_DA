@@ -37,7 +37,7 @@ for exp in EXP:
     DVP = drive.get('gDict')
     # Time and head -----------------------------------------------------------
     tS = datetime.now()
-    aux.printExperimentHead(PT_DTA, PT_IMG, PT_PRE, tS, 'Preprocess ' + AOI)
+    aux.printExperimentHead(PT_DTA, PT_IMG, PT_PRE, tS, 'PreProcess ' + AOI)
     ###########################################################################
     # Load folders
     ###########################################################################
