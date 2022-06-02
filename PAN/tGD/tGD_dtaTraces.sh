@@ -1,11 +1,11 @@
 #!/bin/bash
 
 USR=$1
-AOI='HLT'
-QNT='50'
-THS='0.5'
-TRC='HLT'
+QNT=$2
+THS=$3
+AOI=$4
+PLT=$5
 
 python tGD_dtaExplore.py $USR 'linkedDrive' $AOI $QNT $THS
-python tGD_dtaConverter.py $USR 'linkedDrive' $AOI $QNT $THS 'NM' $TRC
-python tGD_dtaTraces.py $USR 'linkedDrive' $AOI $QNT $THS $TRC
+python tGD_dtaConverter.py $USR 'linkedDrive' $AOI $QNT $THS 'NM' $PLT
+python tGD_dtaTraces.py $USR 'linkedDrive' $AOI $QNT $THS $PLT

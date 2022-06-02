@@ -78,8 +78,8 @@ Parallel(n_jobs=JOB)(
     ) for exIx in subset
 )
 # Export gene legend ------------------------------------------------------
-# repDta = pkl.load(expsIter[0][1])
-# monet.exportGeneLegend(
-#     repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-#     PT_IMG+'/legend_{}.png'.format(TRC), 500
-# )
+repDta = pkl.load(expsIter[0][1])
+monet.exportGeneLegend(
+    repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
+    PT_IMG+'/legend_{}.png'.format(TRC), 500
+)

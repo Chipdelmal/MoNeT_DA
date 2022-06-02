@@ -1,7 +1,7 @@
 #!/bin/bash
 USR=$1
-QNT='50'
-THS='0.5'
+QNT=$2
+THS=$3
 
 source tGD_pstProcess.sh $USR 'linkedDrive' $QNT $THS
 source tGD_pstProcess.sh $USR 'splitDrive' $QNT $THS

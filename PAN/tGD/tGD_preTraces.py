@@ -50,13 +50,13 @@ for exp in EXP:
     tyTag = ('sum', 'srp')
     if FZ:
         fLists = list(zip(*[fun.getFilteredFiles(
-                PT_PRE+'*_00_*'+AOI+'*'+tp+'*',
-                PT_PRE+'*'+AOI+'*'+tp+'*') for tp in tyTag]
-            ))
+            PT_PRE+'*_00_*'+AOI+'*'+tp+'*',
+            PT_PRE+'*'+AOI+'*'+tp+'*') for tp in tyTag]
+        ))
     else:
         fLists = list(zip(
-                *[sorted(glob(PT_PRE+'*'+AOI+'*'+tp+'*')) for tp in tyTag]
-            ))
+            *[sorted(glob(PT_PRE+'*'+AOI+'*'+tp+'*')) for tp in tyTag]
+        ))
     ###########################################################################
     # Process files
     ###########################################################################
