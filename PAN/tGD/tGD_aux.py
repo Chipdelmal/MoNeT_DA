@@ -3,11 +3,9 @@
 
 
 import re
-# import os as os
-# import csv as csv
 import matplotlib
 import pandas as pd
-# import numpy as np
+import numpy as np
 from glob import glob
 import MoNeT_MGDrivE as monet
 
@@ -21,6 +19,8 @@ POP_SIZE = 6e3
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
 )
 SAMP_RATE = 1
+EXPS = ('100', )
+
 
 def patternForReleases(ren, AOI, ftype, ext='bz'):
     strPat = XP_NPAT.format(
@@ -98,7 +98,12 @@ def chunks(l, n):
     [.10, .25, .50, .75, .90],
     [0, 365]
 )
-
+DATA_TYPE = {
+    'i_fcs': np.double, 'i_fcb': np.double,
+    'i_fga': np.double, 'i_fgb': np.double,
+    'i_cut': np.double, 'i_hdr': np.double,
+    'i_ren': np.int8,   'i_res': np.double
+}
 
 # #############################################################################
 # Paths and Style
