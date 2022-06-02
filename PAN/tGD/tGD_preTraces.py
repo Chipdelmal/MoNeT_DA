@@ -31,10 +31,10 @@ for exp in EXP:
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     # print(YRAN)
     STYLE = {
-            "width": .5, "alpha": .9, "dpi": 750, "legend": True,
-            "aspect": .5, "colors": CLR, "xRange": [0, (365*5)],
-            "yRange": YRAN # (0, 7.5e3)
-        }
+        "width": .5, "alpha": .9, "dpi": 750, "legend": True,
+        "aspect": .5, "colors": CLR, "xRange": [0, (365*5)],
+        "yRange": YRAN # (0, 7.5e3)
+    }
     # if (AOI=='TRS') or (AOI=='WLD'):
     #     STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*2)
     # elif (AOI=='ECO'):

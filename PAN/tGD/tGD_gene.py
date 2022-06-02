@@ -18,7 +18,7 @@ COLEN = [c+'1A' for c in COLEN]
 COLEO = [i[:-2]+'FF' for i in COLEN]
 # COLEM = monet.generateAlphaColorMapFromColorArray(COLEO)
 # Health ----------------------------------------------------------------------
-COLHN = ["#FF006E1A", "#8338EC00", "#0C48871A"]
+COLHN = ["#FF006E1A", "#8338EC1A", "#0C48871A"]
 # COLHN = [c+'1A' for c in COLHN]
 COLHO = [i[:-2]+'FF' for i in COLHN]
 # COLHM = monet.generateAlphaColorMapFromColorArray(COLHO)
@@ -33,7 +33,7 @@ COLWN = [c+'1A' for c in COLWN]
 COLWO = [i[:-2]+'FF' for i in COLWN]
 # COLWM = monet.generateAlphaColorMapFromColorArray(COLWO)
 # CLS ----------------------------------------------------------------------
-COLCN = ["#0eeb101A", "#00a2fe00", "#0C48871A"]
+COLCN = ["#0eeb101A", "#00a2fe1A", "#0C48871A"]
 # COLCN = [c+'AA' for c in COLCN]
 COLCO = [i[:-2]+'FF' for i in COLCN]
 # COLCM = monet.generateAlphaColorMapFromColorArray(COLCO)
