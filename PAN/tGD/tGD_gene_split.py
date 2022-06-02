@@ -73,7 +73,7 @@ SDR_CST = monet.carrierFrequencies(CST_DICT, genotypes)
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*SDR_ECO)
-        yRange = popSize
+        yRange = popSize*2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*SDR_HLT)
         yRange = popSize/2
