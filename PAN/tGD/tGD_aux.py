@@ -86,10 +86,10 @@ def chunks(l, n):
         'i_ren': 1e0, 'i_res': 1e2
     },
     {
-        'i_fcs': 6, 'i_fcb': 6,
-        'i_fga': 6, 'i_fgb': 6,
+        'i_fcs': 4, 'i_fcb': 4,
+        'i_fga': 4, 'i_fgb': 4,
         'i_cut': 3, 'i_hdr': 3,
-        'i_ren': 3, 'i_res': 3
+        'i_ren': 2, 'i_res': 4
     }
 )
 (THI, THO, THW, TAP) = (

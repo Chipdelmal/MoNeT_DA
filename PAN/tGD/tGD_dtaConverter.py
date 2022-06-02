@@ -14,21 +14,14 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, NME, TRC) = (
-        'lab', 'PAN', 'HLT',
-        'LDR', '50', 'BD', 
-        'HLT'
+    (USR, AOI, DRV, QNT, THS, NME, TRC) = (
+        'srv', 'HLT', 'linkedDrive', '50', '0.1', 'NM', 'HLT'
     )
 else:
-    (USR, LND, AOI, DRV, QNT, NME, TRC) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], 
-	    sys.argv[4], sys.argv[5], sys.argv[6], 
-        sys.argv[7]
-    )
+    (USR, AOI, DRV, QNT, THS, NME, TRC) = sys.argv[1:]
+exp = aux.EXPS[0]
 # Filename --------------------------------------------------------------------
-if NME == 'SX':
-    FNAME = 'DTA_FLTR_SX.csv'
-elif NME == 'BD':
+if NME == 'BD':
     FNAME = 'DTA_FLTR_BD.csv'
 else:
     FNAME = 'DTA_FLTR.csv'
@@ -41,27 +34,23 @@ else:
 ###############################################################################
 # Paths
 ###############################################################################
-EXPS = aux.getExps(LND)
-(drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
-    lnd.landSelector(EXPS[0], LND, USR=USR)
-)
-(PT_ROT, _, _, PT_PRE, _, _) = aux.selectPath(USR, EXPS[0], LND, DRV)
+(drive, land) = (drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE), [[0], ])
+(gene, fldr) = (drive.get('gDict'), drive.get('folder'))
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, DRV, exp)
 PT_ROT = path.split(path.split(PT_ROT)[0])[0]
 PT_OUT = path.join(PT_ROT, 'ML')
-PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
-PT_SUMS = [path.join(PT_ROT, exp, 'SUMMARY') for exp in EXPS]
+PT_SUMS = path.join(PT_ROT, '100', 'SUMMARY')
 # Time and head --------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
     PT_OUT, PT_OUT, tS,
-    '{} DtaConvert [{}:{}:{}:{}]'.format(aux.XP_ID, aux.DRV, QNT, AOI, aux.THS)
+    '{} DtaConvert [{}:{}:{}:{}]'.format('tGD', DRV, QNT, AOI, THS)
 )
 ###############################################################################
 # Read CSV
 ###############################################################################
-thsStr = str(int(float(aux.THS)*100))
+thsStr = str(int(float(THS)*100))
 (fName_I, fName_R, fName_C) = (
     'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr),
     'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr),
@@ -81,21 +70,13 @@ zipper = {i: (SCA[i], PAD[i]) for i in catSorting}
 (expsIter, skipped, counter) = ([], 0, 0)
 ix = 2
 # Check for padding!!!!!!!!!!! (inconsistent) ---------------------------------
-if LND=='PAN':
-    zipper['i_grp'] = (zipper['i_grp'][0], 2)
 for ix in range(expsNum):
     print('{}* Processing: {}/{}{}'.format(CBBL, ix+1, expsNum, CEND), end='\r')
     row = DATA.iloc[ix]
     i=0
-    ins = [
-        row[i] if row[i] in aux.SPA_EXP
-        else str(int(row[i]*zipper[i][0])).zfill(zipper[i][1])
-        for i in zipper
-    ]
-    (mig, grp) = (ins[-1], ins[-2])
-    fname = aux.XP_PTRN.format(*ins[:-2], TRC, ins[-2], 'srp', 'bz')
+    ins = [str(int(row[i]*zipper[i][0])).zfill(zipper[i][1]) for i in zipper]
+    fname = aux.XP_NPAT.format(*ins[:], TRC, '00', 'srp', 'bz')
     prePath = PT_PRE.split('/')
-    prePath[-3] = mig
     fpath = path.join('/'.join(prePath), fname)
     if path.isfile(fpath):
         (tti, tto, wop, poe, _, cpt, mnf) = [row[i] for i in outSorting]
@@ -112,5 +93,4 @@ print('{}* Skipped (no PRE): {}/{}{}'.format(CBBL, skipped, expsNum, CEND))
 # Export iter
 ###############################################################################
 dump(expsIter, path.join(PT_OUT, 'DTA_PST.job'))
-
 
