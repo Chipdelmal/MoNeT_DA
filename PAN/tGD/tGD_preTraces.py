@@ -15,10 +15,7 @@ import compress_pickle as pkl
 (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
 (FMT, SKP, MF, FZ) = ('bz2', False, (True, True), False)
-if (USR == 'srv2'):
-    EXP = ('000', )
-else:
-    EXP = ('100', )
+EXP = aux.EXPS
 ##############################################################################
 # Setting up paths and style
 ##############################################################################

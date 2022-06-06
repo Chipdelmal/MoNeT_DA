@@ -19,3 +19,6 @@ python tGD_overlays.py $USR splitDrive
 source tGD_preProcess.sh $USR tGD
 source tGD_preTraces.sh $USR tGD
 python tGD_overlays.py $USR tGD
+
+
+# /RAID5/marshallShare/tGD/20220602/linkedDrive/000/ANALYZED/

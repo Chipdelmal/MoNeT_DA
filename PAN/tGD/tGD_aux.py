@@ -10,7 +10,7 @@ from glob import glob
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
-(JOB_DSK, JOB_SRV) = (2, 20)
+(JOB_DSK, JOB_SRV) = (2, 40)
 XP_NPAT = 'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 (POP_SIZE, XRAN) = (6e3, (0, 5*365))
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
@@ -111,6 +111,8 @@ DATA_TYPE = {
 def selectPath(USR, DRV, EXP):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220527/{}/{}/'.format(DRV, EXP)
+    if USR == 'srv2':
+        PATH_ROOT = '/RAID5/marshallShare/tGD/20220602/{}/{}/'.format(DRV, EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/tGD/{}/{}/'.format(DRV, EXP)
     (PATH_IMG, PATH_DATA) = (
