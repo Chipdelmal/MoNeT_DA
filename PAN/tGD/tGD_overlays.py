@@ -36,7 +36,7 @@ for exp in EXP:
     drive = drv.driveSelector(DRV, AOI)
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-            "width": .25, "alpha": .75, "dpi": 750, "legend": True,
+            "width": .25, "alpha": .75, "dpi": 200, "legend": True,
             "aspect": .25, "colors": CLR, "xRange": [0, (365*5)/3],
             "yRange": (0, YRAN[1]*1.5)
         }
