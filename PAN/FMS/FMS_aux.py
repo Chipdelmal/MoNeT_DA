@@ -14,10 +14,10 @@ XP_ID = 'FMS'
 ###############################################################################
 # Releases and Populations
 ###############################################################################
-(REL_START, RELEASES) = (10, [365+(7*i) for i in range(10)])
+(REL_START, RELEASES) = (50, [365+(7*i) for i in range(10)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
-    (0, 10*int(365)), 
+    (0, 5*int(365)), 
     False
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)

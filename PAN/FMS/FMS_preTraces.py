@@ -42,7 +42,7 @@ monet.makeFolder(PT_IMG)
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .5,        "alpha": .5,    "dpi": 500,     "legend": True,
+    "width": .25,        "alpha": .25,    "dpi": 750,     "legend": True,
     "aspect": 1/6,      "colors": CLR, 
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }

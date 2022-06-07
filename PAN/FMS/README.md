@@ -11,14 +11,3 @@ Original path for the experiments is: `/RAID0/pgSIT`. Where the experiments' fil
 * `ren`: number of releases
 * `rer`: size of the releases
 
-
-## Symlinks on Server
-
-```bash
-declare -a StringArray=("pgSIT" )
-
-for fName in ${StringArray[@]}; do
-    ln -s "/RAID0/fem_pgSIT/{$fName}/ANALYZED" "/RAID5/marshallShare/fem_pgSIT/{$fName}/ANALYZED";
-    ln -s "/RAID0/fem_pgSIT/{$fName}/TRACE" "/RAID5/marshallShare/fem_pgSIT/{$fName}/TRACE";
-done
-```
