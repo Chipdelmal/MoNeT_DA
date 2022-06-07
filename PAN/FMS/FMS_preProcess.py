@@ -4,11 +4,11 @@
 import os
 import sys
 from datetime import datetime
-import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 from more_itertools import locate
-import PGS_aux as aux
-import PGS_gene as drv
+import MoNeT_MGDrivE as monet
+import FMS_aux as aux
+import FMS_gene as drv
 
 if monet.isNotebook():
     (USR, AOI, DRV, SPE) = ('srv', 'INC', 'LDR', 'gambiae')
