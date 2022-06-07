@@ -136,7 +136,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 ###############################################################################
 def selectPath(USR, DRV=None):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/fem_pgSIT/{}/'.format(DRV)
+        PATH_ROOT = '/RAID5/marshallShare/fem_pgSIT/{}/'.format(DRV)
     elif USR == 'lab':
         PATH_ROOT = '/Volumes/marshallShare/fem_pgSIT/{}/'.format(DRV)
     elif USR == 'dsk':
