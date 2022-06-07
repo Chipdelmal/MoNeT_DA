@@ -11,3 +11,10 @@ Original path for the experiments is: `/RAID0/pgSIT`. Where the experiments' fil
 * `ren`: number of releases
 * `rer`: size of the releases
 
+
+## Symlinks on Server
+
+```bash
+ln -s /RAID0/fem_pgSIT/pgSIT/ANALYZED /RAID5/marshallShare/fem_pgSIT/pgSIT/ANALYZED;\
+ln -s /RAID0/fem_pgSIT/pgSIT/TRACE /RAID5/marshallShare/fem_pgSIT/pgSIT/TRACE;
+```
