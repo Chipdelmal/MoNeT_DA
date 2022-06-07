@@ -32,7 +32,7 @@ if USR == 'srv':
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_PRE, tS, '{} PreProcess [{}:{}]'.format(aux.XP_ID, fldr, AOI)
+    PT_DTA, PT_PRE, tS, 'PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
 # Time and head ---------------------------------------------------------------
 PT_IMG = path.join(PT_IMG, 'preTraces')

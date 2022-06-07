@@ -30,7 +30,7 @@ if USR == 'srv':
 # Time and head -----------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_PRE, tS, '{} PreProcess [{}:{}]'.format(aux.XP_ID, fldr, AOI)
+    PT_DTA, PT_PRE, tS, 'PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
 # Select sexes and ids ----------------------------------------------------
 sexID = {"male": "M_", "female": "F_"}
