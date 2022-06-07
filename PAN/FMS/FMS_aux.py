@@ -5,6 +5,7 @@ import re
 from glob import glob
 import MoNeT_MGDrivE as monet
 
+XP_ID = 'FMS'
 ###############################################################################
 # System Constants
 ###############################################################################
@@ -13,9 +14,9 @@ import MoNeT_MGDrivE as monet
 ###############################################################################
 # Releases and Populations
 ###############################################################################
-(REL_START, RELEASES) = (365, [365+(7*i) for i in range(10)])
+(REL_START, RELEASES) = (10, [365+(7*i) for i in range(10)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
-    1e3*5, 352e3*1.25, 1000*1.25,
+    5e3, 1e3, 1000*1.25,
     (0, 10*int(365)), 
     False
 )
@@ -23,7 +24,6 @@ import MoNeT_MGDrivE as monet
 ###############################################################################
 # Files and DA constants
 ###############################################################################
-(XP_ID, DRV,) = ('PGS', 'PGS')
 (XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00')
 REF_FILE = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_0000000'
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
@@ -134,13 +134,13 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 ###############################################################################
 # Paths
 ###############################################################################
-def selectPath(USR, EXP, DRV=None):
+def selectPath(USR, DRV=None):
     if USR == 'srv':
-        PATH_ROOT = '/RAID0/pgSIT/{}/{}'.format(DRV, EXP)
+        PATH_ROOT = '/RAID5/fem_pgSIT/{}/'.format(DRV)
     elif USR == 'lab':
-        PATH_ROOT = '/Volumes/marshallShare/pgSIT/{}/{}'.format(DRV, EXP)
+        PATH_ROOT = '/Volumes/marshallShare/fem_pgSIT/{}/'.format(DRV)
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/pgSIT/{}/{}/'.format(DRV, EXP)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/fem_pgSIT/{}/'.format(DRV)
     (PATH_IMG, PATH_DATA) = (
         '{}img/'.format(PATH_ROOT), 
         '{}'.format(PATH_ROOT)
@@ -154,7 +154,7 @@ def selectPath(USR, EXP, DRV=None):
 
 
 def landSelector(USR='lab'):
-    PAN = ([0], )
+    PAN = ((0), )
     return PAN
 
 

@@ -3,7 +3,7 @@
 
 import MoNeT_MGDrivE as monet
 import FMS_gene_FMS as FMS
-import TPT_gene_PGS as PGS
+import FMS_gene_PGS as PGS
 import FMS_aux as aux
 
 ###############################################################################
@@ -12,9 +12,9 @@ import FMS_aux as aux
 def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=350e3):
     ###########################################################################
     if (DRIVE == 'FMS'):
-        (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
+        (aggD, yRange, folder) = FMS.driveParameters(TYPE, popSize)
     elif (DRIVE == 'PGS'):
-        (aggD, yRange, folder) = LDR.driveParameters(TYPE, popSize)
+        (aggD, yRange, folder) = PGS.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN
@@ -34,7 +34,6 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=350e3):
     }
     return geneDict
 
-
 def maleFemaleSelector(AOI):
     if (AOI == 'HLT') or (AOI == 'INC'):
         MF = (False, True)
@@ -43,7 +42,6 @@ def maleFemaleSelector(AOI):
     else:
         MF = (True, True)
     return MF
-
 
 def colorSelector(AOI):
     if AOI == 'ECO':
