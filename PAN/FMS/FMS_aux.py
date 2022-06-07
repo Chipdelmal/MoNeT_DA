@@ -154,7 +154,7 @@ def selectPath(USR, DRV=None):
 
 
 def landSelector(USR='lab'):
-    PAN = ((0), )
+    PAN = ([0], )
     return PAN
 
 
