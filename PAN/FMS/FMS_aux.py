@@ -33,22 +33,13 @@ REF_FILE = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD) = (
     (
-        ('i_ren', 1),   ('i_rer', 2),
-        ('i_rsg', 3),   ('i_gsv', 4), 
-        ('i_fch', 5),   ('i_fcb', 6),   ('i_fcr', 7),
-        ('i_hrm', 8),   ('i_hrf', 9)
+        ('i_ren', 1),   ('i_res', 2)
     ),
     {
-        'i_ren': 1e0,   'i_rer': 1e3,   
-        'i_rsg': 1e9,   'i_gsv': 1e10,  
-        'i_fch': 1e5,   'i_fcb': 1e5,   'i_fcr': 1e5,
-        'i_hrm': 1e5,   'i_hrf': 1e5
+        'i_ren': 1e0,   'i_res': 1e1
     },
     {
-        'i_ren': 2,     'i_rer': 2,     
-        'i_rsg': 12,    'i_gsv': 12,  
-        'i_fch': 7,     'i_fcb': 7,     'i_fcr': 7,
-        'i_hrm': 7,     'i_hrf': 7
+        'i_ren': 4,     'i_res': 6,
     }
 )
 (THI, THO, THW, TAP) = (
@@ -153,7 +144,7 @@ def selectPath(USR, DRV=None):
     return (PATH_ROOT, PATH_IMG, PATH_DATA, PATH_PRE, PATH_OUT, PATH_MTR)
 
 
-def landSelector(USR='lab'):
+def landSelector():
     PAN = ([0], )
     return PAN
 

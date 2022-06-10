@@ -25,7 +25,7 @@ if USR == 'srv':
 ###############################################################################
 (drive, land) = (
     drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE, humSize=aux.HUM_SIZE),
-    aux.landSelector(USR=USR)
+    aux.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, fldr)
@@ -42,9 +42,9 @@ monet.makeFolder(PT_IMG)
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .25,        "alpha": .25,    "dpi": 750,     "legend": True,
-    "aspect": 1/6,      "colors": CLR, 
-    "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
+    "width": .1, "alpha": .1, "dpi": 750, "aspect": 1/6, 
+    "colors": CLR, "legend": True,
+    "xRange": aux.XRAN, "yRange": (0, YRAN[1]*2)
 }
 ###############################################################################
 # Load preprocessed files lists
