@@ -63,8 +63,8 @@ TRS_DICT = OrderedDict((
     ('C*', (('P', locA), ('M', locA))),
     ('O-', (('W', locA), ('R', locA), ('B', locA)))
 ))
-TGD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
-# TGD_TRS = monet.geneFrequencies(TRS_DICT, genotypes)
+# TGD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
+TGD_TRS = monet.geneFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
@@ -96,7 +96,7 @@ def driveParameters(TYPE, popSize):
         yRange = popSize/2
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(*TGD_TRS)
-        yRange = popSize
+        yRange = popSize*2
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*TGD_WLD)
         yRange = popSize

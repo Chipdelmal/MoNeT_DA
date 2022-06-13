@@ -109,7 +109,7 @@ DATA_TYPE = {
 # Paths and Style
 # #############################################################################
 def selectPath(USR, DRV, EXP):
-    if USR == 'srv':
+    if USR == 'srv1':
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220527/{}/{}/'.format(DRV, EXP)
     if USR == 'srv2':
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220602/{}/{}/'.format(DRV, EXP)
