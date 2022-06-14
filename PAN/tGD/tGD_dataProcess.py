@@ -62,7 +62,7 @@ def initEmptyDFs(
 
 
 def filterDFWithID(df, xpid):
-    xpidz = list(zip(list(df.columns)[:7], xpid))
+    xpidz = list(zip(list(df.columns)[:8], xpid))
     filters = [df[i[0]] == i[1] for i in xpidz]
     filter = list(map(all, zip(*filters)))
     return df[filter]

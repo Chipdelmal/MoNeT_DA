@@ -13,7 +13,7 @@ import tGD_gene as drv
 
 # print(sys.argv[1:])
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('srv', 'linkedDrive', 'WLD', '50', '0.1')
+    (USR, DRV, AOI, QNT, THS) = ('srv1', 'linkedDrive', 'WLD', '50', '0.1')
 else:
     (USR, DRV, AOI, QNT, THS) = sys.argv[1:]
 EXPS = aux.EXPS
@@ -39,6 +39,9 @@ monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
     '{} ClsUnify [{}:{}:{}:{}]'.format(DRV, DRV, QNT, AOI, THS)
 )
+# Revert THS for AOI ---------------------------------------------------------
+if AOI == 'TRS':
+    THS = str(1-float(THS))
 ###############################################################################
 # Merge Dataframes
 ###############################################################################

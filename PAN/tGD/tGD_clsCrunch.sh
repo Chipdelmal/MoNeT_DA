@@ -36,3 +36,4 @@ python tGD_clsUnify.py $USR tGD HLT $QNT $THS
 python tGD_clsUnify.py $USR tGD WLD $QNT $THS
 python tGD_clsUnify.py $USR tGD CST $QNT $THS
 python tGD_clsUnify.py $USR tGD TRS $QNT $THS
+ 
