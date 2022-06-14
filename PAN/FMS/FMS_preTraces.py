@@ -13,7 +13,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('lab', 'PGS', 'ECO')
+    (USR, DRV, AOI) = ('srv', 'RDL', 'ECO')
 else:
     (USR, DRV, AOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -24,7 +24,7 @@ if USR == 'srv':
 # Processing loop
 ###############################################################################
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE, humSize=aux.HUM_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     aux.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))

@@ -5,12 +5,14 @@ import MoNeT_MGDrivE as monet
 import FMS_gene_FMS as FMS
 import FMS_gene_PGS as PGS
 import FMS_gene_IIT as IIT
+import FMS_gene_RDL as RDL
+import FMS_gene_RDF as RDF
 import FMS_aux as aux
 
 ###############################################################################
 # Drive
 ###############################################################################
-def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=350e3):
+def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
     ###########################################################################
     if (DRIVE == 'FMS'):
         (aggD, yRange, folder) = FMS.driveParameters(TYPE, popSize)
@@ -18,6 +20,10 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=350e3):
         (aggD, yRange, folder) = PGS.driveParameters(TYPE, popSize)
     elif (DRIVE == 'IIT'):
         (aggD, yRange, folder) = IIT.driveParameters(TYPE, popSize)
+    elif (DRIVE == 'RDL'):
+        (aggD, yRange, folder) = RDL.driveParameters(TYPE, popSize)
+    elif (DRIVE == 'RDF'):
+        (aggD, yRange, folder) = RDF.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN
