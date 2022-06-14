@@ -42,7 +42,7 @@ monet.makeFolder(PT_IMG)
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .1, "alpha": .1, "dpi": 750, "aspect": 1/6, 
+    "width": .05, "alpha": .05, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*2)
 }
@@ -77,3 +77,4 @@ monet.exportGeneLegend(
     PT_IMG+'/legend_{}.png'.format(AOI), 500
 )
 
+# dbg = pkl.load('/RAID5/marshallShare/fem_pgSIT/IIT/PREPROCESS/'+'E_0015_001500-ECO_00_sum.bz')

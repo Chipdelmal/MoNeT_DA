@@ -11,7 +11,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('lab', 'FMS', 'ECO')
+    (USR, DRV, AOI) = ('srv', 'IIT', 'ECO')
 else:
     (USR, DRV, AOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------

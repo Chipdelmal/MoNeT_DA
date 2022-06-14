@@ -5,7 +5,7 @@ from collections import OrderedDict
 import MoNeT_MGDrivE as monet
 
 ###############################################################################
-# Souce: 
+# Souce: https://github.com/Chipdelmal/MGDrivE/blob/master/Main/pgSIT_Femaless/cubePgSIT.R
 #   A/a: Cas locus, 
 #   B/b: gRNA locus, 
 #   C/c: female viability target site 1
