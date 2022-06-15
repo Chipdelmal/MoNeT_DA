@@ -64,7 +64,7 @@ wopRge = (0, 10*365)
 fltrA = (
     renRge[0] <= DATA_H['i_ren'], DATA_H['i_ren'] <= renRge[1],
     resRge[0] <= DATA_H['i_res'], DATA_H['i_res'] <= resRge[1],
-    wopRge[0] <= DATA_T['WOP'],     DATA_T['WOP'] <= wopRge[1],
+    wopRge[0] <= DATA_T['WOP'],   DATA_T['WOP'] <= wopRge[1],
 )
 fullFltrA = list(map(all, zip(*fltrA)))
 # TRS (Cas9) ------------------------------------------------------------------
@@ -82,8 +82,5 @@ DATA_FILTERED = [dta[fullFltr] for dta in (DATA_H, DATA_T)]
 ###############################################################################
 # Export data
 ###############################################################################
-# print('{}* Found {}/{} matches (FLTR){}'.format(
-# 	monet.CBBL, sum(fullFltr), DATA_H.shape[0], monet.CEND
-# ))
-# constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
-# constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR_BD.csv'), index=False)
+DATA_FILTERED[0].to_csv(path.join(PT_OUT, 'DTA_FLTR_{}.csv'.format(AOI[0])), index=False)
+DATA_FILTERED[1].to_csv(path.join(PT_OUT, 'DTA_FLTR_{}.csv'.format(AOI[1])), index=False)
