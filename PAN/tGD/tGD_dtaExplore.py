@@ -16,7 +16,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('srv', 'linkedDrive', 'HLT', '50', '0.1')
+    (USR, DRV, AOI, QNT, THS) = ('srv2', 'linkedDrive', 'HLT', '50', '0.1')
 else:
     (USR, DRV, AOI, QNT, THS) = sys.argv[1:]
 EXPS = aux.EXPS
