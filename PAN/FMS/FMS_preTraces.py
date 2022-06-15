@@ -11,6 +11,8 @@ from more_itertools import locate
 import MoNeT_MGDrivE as monet
 import FMS_aux as aux
 import FMS_gene as drv
+import warnings
+warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
     (USR, DRV, AOI) = ('srv', 'RDL', 'ECO')
