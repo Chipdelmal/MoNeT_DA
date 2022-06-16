@@ -21,7 +21,7 @@ XP_ID = 'FMS'
 (REL_START, RELEASES) = (50, [365+(7*i) for i in range(10)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
-    (0, 3*int(365)), 
+    (0, 2*int(365)), 
     False
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)
@@ -240,9 +240,9 @@ def exportTracesPlot(
         axTemp.axvline(vLines[1], alpha=0.75, ls='-', lw=.1, color='#FF1A4B', zorder=0)
 
     for hline in hLines:
-        axTemp.axhline(hline, alpha=.2, zorder=10, ls='-', lw=.08, color='#000000')
+        axTemp.axhline(hline, alpha=.2, zorder=10, ls='-', lw=.15, color='#000000')
     for vline in vLines[2:]:
-        axTemp.axvline(vline, alpha=.2, zorder=10, ls='-', lw=.08, color='#000000')
+        axTemp.axvline(vline, alpha=.2, zorder=10, ls='-', lw=.15, color='#000000')
     # Print metrics -----------------------------------------------------------
     if  wopPrint:
         axTemp.text(
