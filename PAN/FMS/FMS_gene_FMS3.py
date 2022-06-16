@@ -15,22 +15,12 @@ import MoNeT_MGDrivE as monet
 #   X/x: male fertility target site
 ###############################################################################
 genotypes = (
-    "AABBCCDD", "aABBCCDD", "AAbBCCDD", "aAbBCCDD", "AABBcCDD", "aABBcCDD", 
-    "AAbBcCDD", "aAbBcCDD", "AABBCCdD", "aABBCCdD", "AAbBCCdD", "aAbBCCdD", 
-    "AABBcCdD", "aABBcCdD", "AAbBcCdD", "aAbBcCdD", "aaBBCCDD", "aabBCCDD", 
-    "aaBBcCDD", "aabBcCDD", "aaBBCCdD", "aabBCCdD", "aaBBcCdD", "aabBcCdD", 
-    "AAbbCCDD", "aAbbCCDD", "AAbbcCDD", "aAbbcCDD", "AAbbCCdD", "aAbbCCdD", 
-    "AAbbcCdD", "aAbbcCdD", "aabbCCDD", "aabbcCDD", "aabbCCdD", "aabbcCdD",
-    "AABBccDD", "aABBccDD", "AAbBccDD", "aAbBccDD", "AABBccdD", "aABBccdD", 
-    "AAbBccdD", "aAbBccdD", "aaBBccDD", "aabBccDD", "aaBBccdD", "aabBccdD", 
-    "AAbbccDD", "aAbbccDD", "AAbbccdD", "aAbbccdD", "aabbccDD", "aabbccdD", 
-    "AABBCCdd", "aABBCCdd", "AAbBCCdd", "aAbBCCdd", "AABBcCdd", "aABBcCdd", 
-    "AAbBcCdd", "aAbBcCdd", "aaBBCCdd", "aabBCCdd", "aaBBcCdd", "aabBcCdd", 
-    "AAbbCCdd", "aAbbCCdd", "AAbbcCdd", "aAbbcCdd", "aabbCCdd", "aabbcCdd", 
-    "AABBccdd", "aABBccdd", "AAbBccdd", "aAbBccdd", "aaBBccdd", "aabBccdd", 
-    "AAbbccdd", "aAbbccdd", "aabbccdd"
+    "AABBCC", "aABBCC", "AAbBCC", "aAbBCC", "AABBcC", "aABBcC", "AAbBcC", "aAbBcC", 
+    "aaBBCC", "aabBCC", "aaBBcC", "aabBcC", "AAbbCC", "aAbbCC", "AAbbcC", "aAbbcC", 
+    "aabbCC", "aabbcC", "AABBcc", "aABBcc", "AAbBcc", "aAbBcc", "aaBBcc", "aabBcc", 
+    "AAbbcc", "aAbbcc", "aabbcc"
 )
-(locA, locB, locC, locD) = ((0, 1), (2, 3), (4, 5), (6, 7))
+(locA, locB, locC) = ((0, 1), (2, 3), (4, 5))
 
 ###############################################################################
 # Ecology genotype counts
@@ -38,19 +28,18 @@ genotypes = (
 ECO_DICT = OrderedDict((
     ('A', (('A', locA), )), ('a', (('a', locA), )),
     ('B', (('B', locB), )), ('b', (('b', locB), )),
-    ('C', (('C', locC), )), ('c', (('c', locC), )),
-    ('D', (('D', locD), )), ('d', (('d', locD), ))
+    ('C', (('C', locC), )), ('c', (('c', locC), ))
 ))
-PGS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
+FMS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
 ###############################################################################
 # Health genotype counts (gRNA)
 ###############################################################################
 HLT_DICT = OrderedDict((
-    ('T*',   (('A', locA), ('B', locB), ('C', locC), ('D', locD))),
-    ('O-',   (('a', locA), ('b', locB), ('c', locC), ('d', locD)))
+    ('T*',   (('A', locA), ('B', locB), ('C', locC))),
+    ('O-',   (('a', locA), ('b', locB), ('c', locC)))
 ))
-PGS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
+FMS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
 ###############################################################################
 # Trash genotype counts (Cas9)
@@ -59,31 +48,31 @@ TRS_DICT = OrderedDict((
     ('Cas9*',   (('A', locA), )),
     ('O-',      (('a', locA), ))
 ))
-PGS_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
+FMS_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
 ###############################################################################
 # Wild genotype counts
 ###############################################################################
 WLD_DICT = OrderedDict((
-    ('O*', (('A', locA), ('B', locB), ('C', locC), ('D', locD))),
-    ('W-', (('a', locA), ('b', locB), ('c', locC), ('d', locD)))
+    ('O*', (('A', locA), ('B', locB), ('C', locC))),
+    ('W-', (('a', locA), ('b', locB), ('c', locC)))
 ))
-PGS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
+FMS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
 
 ###############################################################################
 # Drive Selector
 ###############################################################################
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
-        aggD = monet.generateAggregationDictionary(*PGS_ECO)
+        aggD = monet.generateAggregationDictionary(*FMS_ECO)
         yRange = popSize*4
     elif TYPE == 'HLT':
-        aggD = monet.generateAggregationDictionary(*PGS_HLT)
-        yRange = popSize/2
+        aggD = monet.generateAggregationDictionary(*FMS_HLT)
+        yRange = popSize
     elif TYPE == 'TRS':
-        aggD = monet.generateAggregationDictionary(*PGS_TRS)
+        aggD = monet.generateAggregationDictionary(*FMS_TRS)
         yRange = popSize/2
     elif TYPE == 'WLD':
-        aggD = monet.generateAggregationDictionary(*PGS_WLD)
+        aggD = monet.generateAggregationDictionary(*FMS_WLD)
         yRange = popSize/2
-    return (aggD, yRange, 'pgSIT')
+    return (aggD, yRange, 'ifegenia_3')

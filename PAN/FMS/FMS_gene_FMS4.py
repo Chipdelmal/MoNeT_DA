@@ -47,8 +47,8 @@ FMS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 # Health genotype counts (gRNA)
 ###############################################################################
 HLT_DICT = OrderedDict((
-    ('gRNA*',   (('B', locB), )),
-    ('O-',      (('b', locB), ))
+    ('T*',   (('A', locA), ('B', locB), ('C', locC), ('D', locD))),
+    ('O-',   (('a', locA), ('b', locB), ('c', locC), ('d', locD)))
 ))
 FMS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
@@ -79,7 +79,7 @@ def driveParameters(TYPE, popSize):
         yRange = popSize*4
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*FMS_HLT)
-        yRange = popSize/2
+        yRange = popSize
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(*FMS_TRS)
         yRange = popSize/2
