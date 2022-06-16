@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.25', '0.75'))
+    (USR, DRV, AOI, QNT, THS) = ('srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.25', '0.25'))
 else:
     (USR, DRV, AOI, QNT, THS) = sys.argv[1:]
 EXPS = aux.EXPS
@@ -64,7 +64,7 @@ wopRge = (0, 10*365)
 fltrA = (
     renRge[0] <= DATA_H['i_ren'], DATA_H['i_ren'] <= renRge[1],
     resRge[0] <= DATA_H['i_res'], DATA_H['i_res'] <= resRge[1],
-    wopRge[0] <= DATA_T['WOP'],   DATA_T['WOP'] <= wopRge[1],
+    wopRge[0] <= DATA_H['WOP'],   DATA_H['WOP']   <= wopRge[1],
 )
 fullFltrA = list(map(all, zip(*fltrA)))
 # TRS (Cas9) ------------------------------------------------------------------
@@ -72,7 +72,7 @@ wopRge = (20, 300)
 fltrB = (
     renRge[0] <= DATA_T['i_ren'],   DATA_T['i_ren'] <= renRge[1],
     resRge[0] <= DATA_T['i_res'],   DATA_T['i_res'] <= resRge[1],
-    wopRge[0] <= DATA_T['WOP'],     DATA_T['WOP'] <= wopRge[1],
+    wopRge[0] <= DATA_T['WOP'],     DATA_T['WOP']   <= wopRge[1],
 )
 fullFltrB = list(map(all, zip(*fltrB)))
 # Put them together -----------------------------------------------------------

@@ -12,7 +12,7 @@ import compress_pickle as pkl
 
 (JOB_DSK, JOB_SRV) = (2, 60)
 XP_NPAT = 'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
-(POP_SIZE, XRAN) = (6e3, (0, 5*365))
+(POP_SIZE, XRAN) = (6e3, (0, 10*365))
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),

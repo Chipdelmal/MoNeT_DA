@@ -87,4 +87,4 @@ def driveParameters(TYPE, popSize):
     elif TYPE == 'CST':
         aggD = monet.generateAggregationDictionary(*SDR_CST)
         yRange = popSize/2
-    return (aggD, yRange, 'tGD')
+    return (aggD, yRange, 'splitDrive')

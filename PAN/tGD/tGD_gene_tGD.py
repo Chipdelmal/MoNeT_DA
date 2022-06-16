@@ -103,4 +103,4 @@ def driveParameters(TYPE, popSize):
     elif TYPE == 'CST':
         aggD = monet.generateAggregationDictionary(*TGD_CST)
         yRange = popSize/2
-    return (aggD, yRange, 'linkedDrive')
+    return (aggD, yRange, 'tGD')

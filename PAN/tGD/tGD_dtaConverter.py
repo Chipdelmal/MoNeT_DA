@@ -58,7 +58,7 @@ zipper = {i: (int(SCA[i]), PAD[i]) for i in catSorting}
 # print(outSorting)
 # Transform to fnames ---------------------------------------------------------
 expsNum = DATA[0].shape[0]
-(expsIter, skipped, counter) = ([], 0, 0)
+(expsIter, skipped, counter) = ([[], []], 0, 0)
 ix = 2
 # Check for padding!!!!!!!!!!! (inconsistent) ---------------------------------
 for ix in range(expsNum):
@@ -72,7 +72,11 @@ for ix in range(expsNum):
     if path.isfile(fpaths[0]) and path.isfile(fpaths[1]):
         for (fpath, row) in zip(fpaths, rows):
             (tti, tto, wop, poe, _, cpt, mnf) = [row[i] for i in outSorting]
-            expsIter.append([
+            if AOI[0] in fpath:
+                expIx = 0
+            elif AOI[1] in fpath:
+                expIx = 1 
+            expsIter[expIx].append([
                 counter, fpath,
                 tti, tto, wop, mnf, 0, poe, cpt
             ])
@@ -84,5 +88,6 @@ print('{}* Skipped (no PRE): {}/{}{}'.format(CBBL, skipped, expsNum, CEND))
 ###############################################################################
 # Export iter
 ###############################################################################
-dump(expsIter, path.join(PT_OUT, 'DTA_PST.job'))
+dump(expsIter[0], path.join(PT_OUT, 'DTA_PST_{}.job'.format(AOI[0])))
+dump(expsIter[1], path.join(PT_OUT, 'DTA_PST_{}.job'.format(AOI[1])))
 
