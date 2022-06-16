@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import MoNeT_MGDrivE as monet
-import FMS_gene_FMS as FMS
+import FMS_gene_FMS4 as FMS4
+import FMS_gene_FMS4 as FMS5
 import FMS_gene_PGS as PGS
 import FMS_gene_IIT as IIT
 import FMS_gene_RDL as RDL
@@ -14,8 +15,10 @@ import FMS_aux as aux
 ###############################################################################
 def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
     ###########################################################################
-    if (DRIVE == 'FMS'):
-        (aggD, yRange, folder) = FMS.driveParameters(TYPE, popSize)
+    if (DRIVE == 'FMS4'):
+        (aggD, yRange, folder) = FMS4.driveParameters(TYPE, popSize)
+    elif (DRIVE == 'FMS5'):
+        (aggD, yRange, folder) = FMS5.driveParameters(TYPE, popSize)
     elif (DRIVE == 'PGS'):
         (aggD, yRange, folder) = PGS.driveParameters(TYPE, popSize)
     elif (DRIVE == 'IIT'):

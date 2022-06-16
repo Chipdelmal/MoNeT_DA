@@ -86,4 +86,4 @@ def driveParameters(TYPE, popSize):
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*FMS_WLD)
         yRange = popSize/2
-    return (aggD, yRange, 'ifegenia')
+    return (aggD, yRange, 'ifegenia_4')
