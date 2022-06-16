@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import re
+import numpy as np
 from glob import glob
+from os import path
+import compress_pickle as pkl
+import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
 
 XP_ID = 'FMS'
@@ -160,3 +164,133 @@ def chunks(l, n):
     for i in range(n):
         si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
         yield l[si:si+(d+1 if i < r else d)]
+
+
+
+###############################################################################
+# Dependent Variables for Heatmaps
+###############################################################################
+def exportPreTracesParallel(
+            exIx, STYLE, PT_IMG,
+            border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
+            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1,
+            transparent=True, sampRate=1
+        ):
+    monet.printProgress(exIx[0], xpNum, digs)
+    repFilePath = exIx[1][1]
+    repDta = pkl.load(repFilePath)
+    name = path.splitext(repFilePath.split('/')[-1])[0][:-4]
+    exportTracesPlot(
+        repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
+        border=border, borderColor=borderColor, borderWidth=borderWidth,
+        vLines=vLines, transparent=transparent, sampRate=sampRate
+    )
+    return None
+
+
+def exportTracesPlot(
+    tS, nS, STYLE, PATH_IMG, append='', 
+    vLines=[0, 0], hLines=[0], labelPos=(.7, .95), autoAspect=False,
+    border=True, borderColor='#8184a7AA', borderWidth=2, popScaler=1,
+    wop=0, wopPrint=True, 
+    cpt=0, cptPrint=False, 
+    poe=0, poePrint=False,
+    mnf=0, mnfPrint=False,
+    transparent=False, ticksHide=True, sampRate=1,
+    fontsize=5, labelspacing=.1
+):
+    if transparent:
+        plt.rcParams.update({
+            "figure.facecolor":  (1.0, 0.0, 0.0, 0.0),
+            "axes.facecolor":    (0.0, 1.0, 0.0, 0.0),
+            "savefig.facecolor": (0.0, 0.0, 1.0, 0.0),
+        })
+    figArr = monet.plotNodeTraces(tS, STYLE, sampRate=sampRate)
+    axTemp = figArr[0].get_axes()[0]
+    STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*popScaler)
+    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+    axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
+    if autoAspect:
+        axTemp.set_aspect(aspect=monet.scaleAspect(STYLE["aspect"], STYLE))
+    else:
+        axTemp.set_aspect(aspect=STYLE["aspect"])
+    if ticksHide:
+        axTemp.axes.xaxis.set_ticklabels([])
+        axTemp.axes.yaxis.set_ticklabels([])
+        axTemp.axes.xaxis.set_visible(False)
+        axTemp.axes.yaxis.set_visible(False)
+        # axTemp.xaxis.set_tick_params(width=0)
+        # axTemp.yaxis.set_tick_params(width=0)
+        axTemp.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+        axTemp.set_axis_off()
+    axTemp.xaxis.set_ticks(np.arange(0, STYLE['xRange'][1], 365))
+    axTemp.yaxis.set_ticks(np.arange(0, STYLE['yRange'][1], STYLE['yRange'][1]/4))
+    axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
+    axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
+
+    days = tS['landscapes'][0].shape[0]*sampRate
+    if (vLines[0] > 0) and (vLines[1] <= days) and (wop > 0) and (vLines[0] < vLines[1]):
+        axTemp.axvspan(vLines[0], vLines[1], alpha=0.15, facecolor='#3687ff', zorder=0)
+        axTemp.axvline(vLines[0], alpha=0.75, ls='-', lw=.1, color='#3687ff', zorder=0)
+        axTemp.axvline(vLines[1], alpha=0.75, ls='-', lw=.1, color='#3687ff', zorder=0)
+
+    if (vLines[0] > 0) and (vLines[1] <= days) and (wop > 0) and (vLines[0] > vLines[1]):
+        axTemp.axvspan(vLines[0], vLines[1], alpha=0.15, facecolor='#FF5277', zorder=0)
+        axTemp.axvline(vLines[0], alpha=0.75, ls='-', lw=.1, color='#FF1A4B', zorder=0)
+        axTemp.axvline(vLines[1], alpha=0.75, ls='-', lw=.1, color='#FF1A4B', zorder=0)
+
+    for hline in hLines:
+        axTemp.axhline(hline, alpha=.2, zorder=10, ls='-', lw=.08, color='#000000')
+    for vline in vLines[2:]:
+        axTemp.axvline(vline, alpha=.2, zorder=10, ls='-', lw=.08, color='#000000')
+    # Print metrics -----------------------------------------------------------
+    if  wopPrint:
+        axTemp.text(
+            labelPos[0], labelPos[1]-labelspacing*0, 'WOP: '+str(int(wop)),
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=axTemp.transAxes,
+            color='#00000055', fontsize=fontsize
+        )
+    if cptPrint:
+        axTemp.text(
+            labelPos[0], labelPos[1]-labelspacing*1, 'CPT: {:.3f}'.format(cpt),
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=axTemp.transAxes,
+            color='#00000055', fontsize=fontsize
+        )         
+    if mnfPrint:
+        axTemp.text(
+            labelPos[0], labelPos[1]-labelspacing*2, 'MIN: {:.3f}'.format(mnf),
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=axTemp.transAxes,
+            color='#00000055', fontsize=fontsize
+        )     
+    if poePrint:
+        axTemp.text(
+            labelPos[0], labelPos[1]-labelspacing*3, 'POE: {:.3f}'.format(poe),
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=axTemp.transAxes,
+            color='#00000055', fontsize=fontsize
+        ) 
+    # --------------------------------------------------------------------------
+    #axTemp.tick_params(color=(0, 0, 0, 0.5))
+    # extent = axTemp.get_tightbbox(figArr[0]).transformed(figArr[0].dpi_scale_trans.inverted())
+    if border:
+        axTemp.set_axis_on()
+        plt.setp(axTemp.spines.values(), color=borderColor)
+        pad = 0.025
+        for axis in ['top','bottom','left','right']:
+            axTemp.spines[axis].set_linewidth(borderWidth)
+    else:
+        pad = 0
+    figArr[0].savefig(
+            "{}/{}.png".format(PATH_IMG, nS),
+            dpi=STYLE['dpi'], facecolor=None,
+            orientation='portrait', format='png', 
+            transparent=transparent, bbox_inches='tight', pad_inches=pad
+        )
+    plt.clf()
+    plt.cla() 
+    plt.close('all')
+    plt.gcf()
+    return None

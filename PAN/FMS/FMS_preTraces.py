@@ -44,7 +44,7 @@ monet.makeFolder(PT_IMG)
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .05, "alpha": .05, "dpi": 750, "aspect": 1/6, 
+    "width": .125, "alpha": .1, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }
@@ -60,17 +60,24 @@ expNum = len(fLists)
 # Arrange file tuples ---------------------------------------------------------
 expIter = list(zip(list(range(expNum, 0, -1)), fLists))
 expIter.reverse()
+# Semi hard-coded ren (NEEDS FIX!) --------------------------------------------
+i = 20
+rens = []
+for i in range(len(fLists)):
+    fPat = fLists[i][0].split('/')[-1].split('-')[0].split('_')
+    ren = [50+i*7 for i in range(int(fPat[1]))]
+    rens.append(ren)
 ###############################################################################
 # Process files
 ###############################################################################
 (xpNum, digs) = monet.lenAndDigits(fLists)
 Parallel(n_jobs=JOB)(
-    delayed(monet.exportPreTracesParallel)(
+    delayed(aux.exportPreTracesParallel)(
         exIx, STYLE, PT_IMG, 
         xpNum=xpNum, digs=digs, autoAspect=True,
         border=True, borderColor='#000000AA', borderWidth=1,
-        sampRate=1, vLines=[0, 0]# + aux.RELEASES
-    ) for exIx in expIter
+        sampRate=1, vLines=[0, 0] + ren # aux.RELEASES
+    ) for (exIx, ren) in zip(expIter, rens)
 )
 # Export gene legend ----------------------------------------------------------
 sumDta = pkl.load(fLists[-1][0])
