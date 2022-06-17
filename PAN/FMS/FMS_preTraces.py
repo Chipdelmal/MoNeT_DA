@@ -44,7 +44,7 @@ monet.makeFolder(PT_IMG)
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .125, "alpha": .1, "dpi": 750, "aspect": 1/6, 
+    "width": .15, "alpha": .15, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }
@@ -76,7 +76,8 @@ Parallel(n_jobs=JOB)(
         exIx, STYLE, PT_IMG, 
         xpNum=xpNum, digs=digs, autoAspect=True,
         border=True, borderColor='#000000AA', borderWidth=1,
-        sampRate=1, vLines=[0, 0] + ren # aux.RELEASES
+        sampRate=1, vLines=[0, 0] + ren, # aux.RELEASES
+        hLines=[aux.POP_SIZE, aux.POP_SIZE/2]
     ) for (exIx, ren) in zip(expIter, rens)
 )
 # Export gene legend ----------------------------------------------------------

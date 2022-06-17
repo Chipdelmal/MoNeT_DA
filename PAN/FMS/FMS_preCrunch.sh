@@ -10,7 +10,7 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-python FMS_preProcess.py $USR $DRV ECO
-python FMS_preTraces.py $USR $DRV ECO
-python FMS_preProcess.py $USR $DRV HLT
+# python FMS_preProcess.py $USR $DRV ECO
+# python FMS_preTraces.py $USR $DRV ECO
+# python FMS_preProcess.py $USR $DRV HLT
 python FMS_preTraces.py $USR $DRV HLT

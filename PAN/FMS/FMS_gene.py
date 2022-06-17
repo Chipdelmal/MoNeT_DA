@@ -4,7 +4,7 @@
 import MoNeT_MGDrivE as monet
 import FMS_gene_FMS3 as FMS3
 import FMS_gene_FMS4 as FMS4
-import FMS_gene_FMS4 as FMS5
+import FMS_gene_FMS5 as FMS5
 import FMS_gene_PGS as PGS
 import FMS_gene_IIT as IIT
 import FMS_gene_RDL as RDL
@@ -32,16 +32,19 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         (aggD, yRange, folder) = RDF.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
-        colors = monet.COLEN
+        colors = [
+            '#2614ed', '#FF006E', '#45d40c', '#8338EC', '#1888e3', 
+            '#BC1097', '#FFE93E', '#3b479d', '#540d6e', '#7bdff2'
+        ]
     elif TYPE == 'HLT':
         if DRIVE == 'FMS3':
-            colors = ['#f2008900', '#c879ff00', '#f2008933']
+            colors = ['#f2008900', '#c879ff00', '#f2008955']
         elif DRIVE == 'FMS4':
-            colors = ['#f2008900', '#c879ff00', '#9381ff33']
+            colors = ['#f2008900', '#c879ff00', '#00bbf955']
         elif DRIVE == 'FMS5':
-            colors = ['#f2008900', '#c879ff00', '#0d47a133']
+            colors = ['#f2008900', '#c879ff00', '#45d40c55']
         elif DRIVE == 'PGS':
-            colors = ['#f2008900', '#c879ff00', '#7bf1a833']
+            colors = ['#f2008900', '#c879ff00', '#00000055']
         else:
             colors = ['#f2008955', '#c879ff55', '#0d47a155']
     elif TYPE == 'TRS':

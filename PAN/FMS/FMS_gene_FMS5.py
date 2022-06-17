@@ -75,8 +75,8 @@ FMS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 # Health genotype counts (gRNA)
 ###############################################################################
 HLT_DICT = OrderedDict((
-    ('gRNA*',   (('B', locB), )),
-    ('O-',      (('b', locB), ))
+    ('T*',   (('A', locA), ('B', locB), ('C', locC), ('D', locD), ('E', locE))),
+    ('O-',   (('a', locA), ('b', locB), ('c', locC), ('d', locD), ('e', locE)))
 ))
 FMS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 
