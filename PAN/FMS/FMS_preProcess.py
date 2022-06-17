@@ -11,7 +11,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('srv', 'FMS4', 'HLT')
+    (USR, DRV, AOI) = ('srv', 'FMS5', 'HLT')
 else:
     (USR, DRV, AOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -73,3 +73,7 @@ Parallel(n_jobs=JOB)(
         sexFilenameIdentifiers=sexID
     ) for exIx in expIter
 )
+
+
+# import pandas as pd
+# pd.read_csv('/RAID5/marshallShare/fem_pgSIT/ifegenia_4/ANALYZED/E_0004_000030.csv')

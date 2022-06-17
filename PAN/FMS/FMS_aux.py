@@ -183,7 +183,8 @@ def exportPreTracesParallel(
     exportTracesPlot(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
         border=border, borderColor=borderColor, borderWidth=borderWidth,
-        vLines=vLines, transparent=transparent, sampRate=sampRate
+        vLines=vLines, transparent=transparent, sampRate=sampRate,
+        hLines=hLines
     )
     return None
 

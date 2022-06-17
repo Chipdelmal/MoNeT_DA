@@ -15,7 +15,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('srv', 'RDL', 'ECO')
+    (USR, DRV, AOI) = ('srv', 'FMS5', 'HLT')
 else:
     (USR, DRV, AOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -87,4 +87,4 @@ monet.exportGeneLegend(
     PT_IMG+'/legend_{}.png'.format(AOI), 500
 )
 
-# dbg = pkl.load('/RAID5/marshallShare/fem_pgSIT/IIT/PREPROCESS/'+'E_0015_001500-ECO_00_sum.bz')
+# dbg = pkl.load('/RAID5/marshallShare/fem_pgSIT/ifegenia_5/PREPROCESS/'+'E_0004_000160-ECO_00_sum.bz')

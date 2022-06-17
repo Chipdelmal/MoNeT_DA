@@ -24,7 +24,7 @@ genotypes = (
     "aaBBCCdDEE", "aabBCCdDEE", "aaBBcCdDEE", "aabBcCdDEE", "aaBBCCDDeE", "aabBCCDDeE", 
     "aaBBcCDDeE", "aabBcCDDeE", "aaBBCCdDeE", "aabBCCdDeE", "aaBBcCdDeE", "aabBcCdDeE", 
     "AAbbCCDDEE", "aAbbCCDDEE", "AAbbcCDDEE", "aAbbcCDDEE", "AAbbCCdDEE", "aAbbCCdDEE", 
-    "AAbbcCdDEE", "aAbbcCdDEE", "AAbbCCDDeE", "aAbbCCDDeE", "AAbbcCDDeE", "aAbbcCDDeE"
+    "AAbbcCdDEE", "aAbbcCdDEE", "AAbbCCDDeE", "aAbbCCDDeE", "AAbbcCDDeE", "aAbbcCDDeE", 
     "AAbbCCdDeE", "aAbbCCdDeE", "AAbbcCdDeE", "aAbbcCdDeE", "aabbCCDDEE", "aabbcCDDEE", 
     "aabbCCdDEE", "aabbcCdDEE", "aabbCCDDeE", "aabbcCDDeE", "aabbCCdDeE", "aabbcCdDeE", 
     "AABBccDDEE", "aABBccDDEE", "AAbBccDDEE", "aAbBccDDEE", "AABBccdDEE", "aABBccdDEE", 
@@ -34,7 +34,7 @@ genotypes = (
     "AAbbccDDEE", "aAbbccDDEE", "AAbbccdDEE", "aAbbccdDEE", "AAbbccDDeE", "aAbbccDDeE", 
     "AAbbccdDeE", "aAbbccdDeE", "aabbccDDEE", "aabbccdDEE", "aabbccDDeE", "aabbccdDeE", 
     "AABBCCddEE", "aABBCCddEE", "AAbBCCddEE", "aAbBCCddEE", "AABBcCddEE", "aABBcCddEE", 
-    "AAbBcCddEE", "aAbBcCddEE", "AABBCCddeE", "aABBCCddeE", "AAbBCCddeE", "aAbBCCddeE"
+    "AAbBcCddEE", "aAbBcCddEE", "AABBCCddeE", "aABBCCddeE", "AAbBCCddeE", "aAbBCCddeE", 
     "AABBcCddeE", "aABBcCddeE", "AAbBcCddeE", "aAbBcCddeE", "aaBBCCddEE", "aabBCCddEE", 
     "aaBBcCddEE", "aabBcCddEE", "aaBBCCddeE", "aabBCCddeE", "aaBBcCddeE", "aabBcCddeE", 
     "AAbbCCddEE", "aAbbCCddEE", "AAbbcCddEE", "aAbbcCddEE", "AAbbCCddeE", "aAbbCCddeE", 
@@ -44,7 +44,7 @@ genotypes = (
     "AAbbccddEE", "aAbbccddEE", "AAbbccddeE", "aAbbccddeE", "aabbccddEE", "aabbccddeE", 
     "AABBCCDDee", "aABBCCDDee", "AAbBCCDDee", "aAbBCCDDee", "AABBcCDDee", "aABBcCDDee", 
     "AAbBcCDDee", "aAbBcCDDee", "AABBCCdDee", "aABBCCdDee", "AAbBCCdDee", "aAbBCCdDee", 
-    "AABBcCdDee", "aABBcCdDee", "AAbBcCdDee", "aAbBcCdDee", "aaBBCCDDee", "aabBCCDDee"
+    "AABBcCdDee", "aABBcCdDee", "AAbBcCdDee", "aAbBcCdDee", "aaBBCCDDee", "aabBCCDDee", 
     "aaBBcCDDee", "aabBcCDDee", "aaBBCCdDee", "aabBCCdDee", "aaBBcCdDee", "aabBcCdDee", 
     "AAbbCCDDee", "aAbbCCDDee", "AAbbcCDDee", "aAbbcCDDee", "AAbbCCdDee", "aAbbCCdDee", 
     "AAbbcCdDee", "aAbbcCdDee", "aabbCCDDee", "aabbcCDDee", "aabbCCdDee", "aabbcCdDee", 
@@ -54,9 +54,10 @@ genotypes = (
     "AABBCCddee", "aABBCCddee", "AAbBCCddee", "aAbBCCddee", "AABBcCddee", "aABBcCddee", 
     "AAbBcCddee", "aAbBcCddee", "aaBBCCddee", "aabBCCddee", "aaBBcCddee", "aabBcCddee", 
     "AAbbCCddee", "aAbbCCddee", "AAbbcCddee", "aAbbcCddee", "aabbCCddee", "aabbcCddee", 
-    "AABBccddee", "aABBccddee", "AAbBccddee", "aAbBccddee", "aaBBccddee", "aabBccddee"
+    "AABBccddee", "aABBccddee", "AAbBccddee", "aAbBccddee", "aaBBccddee", "aabBccddee", 
     "AAbbccddee", "aAbbccddee", "aabbccddee"
 )
+
 (locA, locB, locC, locD, locE) = ((0, 1), (2, 3), (4, 5), (6, 7), (8, 9))
 
 ###############################################################################
@@ -107,7 +108,7 @@ def driveParameters(TYPE, popSize):
         yRange = popSize*4
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*FMS_HLT)
-        yRange = popSize/2
+        yRange = popSize
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(*FMS_TRS)
         yRange = popSize/2
