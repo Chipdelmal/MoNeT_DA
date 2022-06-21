@@ -10,7 +10,7 @@ from glob import glob
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
-(JOB_DSK, JOB_SRV) = (2, 60)
+(JOB_DSK, JOB_SRV) = (2, 20)
 XP_NPAT = 'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 (POP_SIZE, XRAN) = (6e3, (0, 10*365))
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)

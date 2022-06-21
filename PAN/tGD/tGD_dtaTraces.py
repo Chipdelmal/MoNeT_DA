@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
     (USR, DRV, AOI, QNT, THS, TRC) = (
-        'srv2', 'tGD', ('HLT', 'TRS'), '50', '0.1', 'HLT'
+        'srv2', 'tGD', ('HLT', 'TRS'), '50', '0.25', 'HLT'
     )
 else:
     (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -61,11 +61,11 @@ for (i, expsIter) in enumerate([expsIterA, expsIterB]):
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-        "width": .5, "alpha": .9, "dpi": 200, "legend": True,
+        "width": .5, "alpha": .9, "dpi": 150, "legend": True,
         "aspect": .5, "colors": CLR, "xRange": aux.XRAN,
-        "yRange": (0, YRAN[1]*3)
+        "yRange": (0, YRAN[1]*2.5)
     }
-    STYLE['aspect'] = monet.scaleAspect(1/3, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(1/4, STYLE)
     # print('YRAN: {}'.format(STYLE))
     ###########################################################################
     # Plot
@@ -78,7 +78,7 @@ for (i, expsIter) in enumerate([expsIterA, expsIterB]):
             digs=digs, border=True, autoAspect=False, labelPos=(.8, .15),
             poePrint=False, ticksHide=TICKS_HIDE, labelspacing=.05,
             mnfPrint=False,
-            transparent=True, sampRate=aux.SAMP_RATE
+            transparent=False, sampRate=aux.SAMP_RATE
         ) for exIx in subset
     )
     # Export gene legend ------------------------------------------------------

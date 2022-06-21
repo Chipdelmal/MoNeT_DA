@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.25', '0.25'))
+    (USR, DRV, AOI, QNT, THS) = ('srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.25', '0.75'))
 else:
     (USR, DRV, AOI, QNT, THS) = sys.argv[1:]
 EXPS = aux.EXPS
@@ -60,7 +60,7 @@ monet.printExperimentHead(
 # Both ------------------------------------------------------------------------
 (renRge, resRge) = ((-1, 20), (-1, 1))
 # HLT (gRNA) ------------------------------------------------------------------
-wopRge = (0, 10*365)
+wopRge = (2*365, 10*365)
 fltrA = (
     renRge[0] <= DATA_H['i_ren'], DATA_H['i_ren'] <= renRge[1],
     resRge[0] <= DATA_H['i_res'], DATA_H['i_res'] <= resRge[1],
@@ -68,7 +68,7 @@ fltrA = (
 )
 fullFltrA = list(map(all, zip(*fltrA)))
 # TRS (Cas9) ------------------------------------------------------------------
-wopRge = (20, 300)
+wopRge = (300, 5*365)
 fltrB = (
     renRge[0] <= DATA_T['i_ren'],   DATA_T['i_ren'] <= renRge[1],
     resRge[0] <= DATA_T['i_res'],   DATA_T['i_res'] <= resRge[1],
