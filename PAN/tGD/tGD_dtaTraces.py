@@ -61,7 +61,7 @@ for (i, expsIter) in enumerate([expsIterA, expsIterB]):
     ###########################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-        "width": .5, "alpha": .9, "dpi": 150, "legend": True,
+        "width": .5, "alpha": .9, "dpi": 200, "legend": True,
         "aspect": .5, "colors": CLR, "xRange": aux.XRAN,
         "yRange": (0, YRAN[1]*2.5)
     }

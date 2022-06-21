@@ -60,7 +60,7 @@ monet.printExperimentHead(
 # Both ------------------------------------------------------------------------
 (renRge, resRge) = ((-1, 20), (-1, 1))
 # HLT (gRNA) ------------------------------------------------------------------
-wopRge = (2*365, 10*365)
+wopRge = (3*365, 10*365)
 fltrA = (
     renRge[0] <= DATA_H['i_ren'], DATA_H['i_ren'] <= renRge[1],
     resRge[0] <= DATA_H['i_res'], DATA_H['i_res'] <= resRge[1],
@@ -68,7 +68,7 @@ fltrA = (
 )
 fullFltrA = list(map(all, zip(*fltrA)))
 # TRS (Cas9) ------------------------------------------------------------------
-wopRge = (300, 5*365)
+wopRge = (2*365, 5*365)
 fltrB = (
     renRge[0] <= DATA_T['i_ren'],   DATA_T['i_ren'] <= renRge[1],
     resRge[0] <= DATA_T['i_res'],   DATA_T['i_res'] <= resRge[1],
