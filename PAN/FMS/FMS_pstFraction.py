@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import numpy as np
-from os import path
 from glob import glob
 import FMS_aux as aux
 import FMS_gene as drv
