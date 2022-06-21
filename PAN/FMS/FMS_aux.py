@@ -28,8 +28,8 @@ XP_ID = 'FMS'
 ###############################################################################
 # Files and DA constants
 ###############################################################################
-(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00')
-REF_FILE = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_0000000'
+(XP_PTRN, NO_REL_PAT) = ('E_{}_{}-{}_{}_{}.{}', '00')
+REF_FILE = 'E_0000_000000'
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
@@ -101,10 +101,10 @@ def getExps():
 ###############################################################################
 # Names and patterns
 ###############################################################################
-def patternForReleases(ren, AOI, ftype, ext='bz'):
+def patternForReleases(ren, AOI, ftype, ext='bz', pad=0):
+    renP = str(ren).rjust(pad, '0')
     strPat = XP_PTRN.format(
-        ren, '*', '*', '*', 
-        '*', '*', '*', '*', '*', 
+        renP, '*', 
         AOI, '*', ftype, ext
     )
     return strPat

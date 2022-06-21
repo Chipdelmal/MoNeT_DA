@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
 import sys
 from os import path
 from datetime import datetime
@@ -31,14 +30,13 @@ if USR == 'srv':
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, fldr)
+PT_IMG = path.join(PT_IMG, 'preTraces')
+monet.makeFolder(PT_IMG)
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
     PT_DTA, PT_PRE, tS, 'PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
-# Time and head ---------------------------------------------------------------
-PT_IMG = path.join(PT_IMG, 'preTraces')
-monet.makeFolder(PT_IMG)
 ###############################################################################
 # Style 
 ###############################################################################
