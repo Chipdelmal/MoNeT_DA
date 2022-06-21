@@ -16,7 +16,7 @@ from joblib import Parallel, delayed
 # warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('srv', 'FMS5', 'HLT')
+    (USR, DRV, AOI) = ('srv', 'PGS', 'HLT')
 else:
     (USR, DRV, AOI) = sys.argv[1:]
 GRID_REF = False
