@@ -1,5 +1,8 @@
 # Mail Alerts
 mailAlerts.py
+out/
+in/
+*.zip
 
 # VSCode settings
 **/.vscode/
