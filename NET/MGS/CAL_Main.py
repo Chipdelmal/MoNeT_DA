@@ -88,7 +88,7 @@ trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
 ############################################################################### 
 POP_SIZE = int(10*(lnd.trapsNumber*1.25))
 (GENS, MAT, MUT, SEL) = (
-    100,
+    500,
     {'mate': .3, 'cxpb': 0.5}, 
     {'mean': 0, 'sd': min([i[1]-i[0] for i in bbox])/5, 'mutpb': .5, 'ipb': .5},
     {'tSize': 4}
