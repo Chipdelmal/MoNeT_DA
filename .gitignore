@@ -3,6 +3,7 @@ mailAlerts.py
 out/
 in/
 *.zip
+*.csv
 
 # VSCode settings
 **/.vscode/
