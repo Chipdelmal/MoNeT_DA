@@ -23,7 +23,7 @@ warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
     (USR, DRV, AOI, QNT, THS, MOI) = (
-        'srv2', 'linkedDrive', 'WLD', '50', '0.1', 'WOP'
+        'srv2', 'tGD', 'TRS', '50', '0.2', 'CPT'
     )
     iVars = ['i_ren', 'i_res', 'i_hdr']
 else:
@@ -32,7 +32,7 @@ else:
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
     iVars = [sys.argv[7], sys.argv[8], sys.argv[9]]
-TICKS_HIDE = True
+TICKS_HIDE = False
 (HD_IND, kSweep) = (
     [iVars[0], iVars[1]], iVars[2]
 )
@@ -110,15 +110,15 @@ fltr = {
     'i_fcb': 0.05,
     'i_fga': 0.0,
     'i_fgb': 0.0427,
-    'i_cut': 0.5,
-    'i_hdr': 0.6,
-    'i_ren': 0,
-    'i_res': 0
+    'i_cut': 1.0,
+    'i_hdr': 0.9,
+    'i_ren': 12,
+    'i_res': 1
 }
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
 sweep = uqVal[kSweep]
-sw = sweep[0]
+sw = sweep[-1]
 for sw in sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]
