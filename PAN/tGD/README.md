@@ -52,3 +52,10 @@ The following lines should run the whole set of analysis for the current workflo
 ./tGD_clsCrunch.sh srv 50 0.1; \
 ./tGD_dtaTraces.sh srv 50 0.1 HLT HLT
 ```
+
+```bash
+./tGD_clsCrunch.sh srv2 50 0.1; ./tGD_clsCrunch.sh srv2 50 0.9; \
+./tGD_clsCrunch.sh srv2 50 0.2; ./tGD_clsCrunch.sh srv2 50 0.8; \
+./tGD_clsCrunch.sh srv2 50 0.25; ./tGD_clsCrunch.sh srv2 50 0.75; \
+./tGD_clsCrunch.sh srv2 50 0.5; 
+```

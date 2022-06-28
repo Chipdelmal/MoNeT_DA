@@ -115,6 +115,8 @@ def selectPath(USR, DRV, EXP):
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220602/{}/{}/'.format(DRV, EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/tGD/{}/{}/'.format(DRV, EXP)
+    else:
+        print("Username Error!!!!!")
     (PATH_IMG, PATH_DATA) = (
             '{}img/'.format(PATH_ROOT), '{}'.format(PATH_ROOT)
         )
@@ -129,7 +131,7 @@ def selectPath(USR, DRV, EXP):
 def selectDepVars(MOI, THS, AOI):
     # Select ranges and dependent variable-------------------------------------
     if (MOI == 'WOP'):
-        scalers = (1, 1000, round(1*365))
+        scalers = (1, 1000, round(10*365))
         (HD_DEP, IND_RAN) = (str(THS), 7)
     elif (MOI == 'TTI'):
         scalers = (1, 1000, round(365))
@@ -141,7 +143,10 @@ def selectDepVars(MOI, THS, AOI):
         scalers = (1, 1000, 1)
         (HD_DEP, IND_RAN) = ('486', 7)
     elif (MOI == 'MNX'):
-        scalers = (1, 1000, 1)
+        scalers = (1, 1, 1)
+        (HD_DEP, IND_RAN) = ('min', 7)
+    else:
+        scalers = (1, 1, 1)
         (HD_DEP, IND_RAN) = ('min', 7)
     # Color Mapping -----------------------------------------------------------
     if AOI == 'HLT':
