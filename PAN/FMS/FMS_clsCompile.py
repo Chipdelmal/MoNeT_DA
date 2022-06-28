@@ -37,7 +37,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_SUMS, tS, 
-    '{} ClsCompile [{}:{}:{}:{}]'.format(DRV, DRV, QNT, AOI, MTR)
+    '{} ClsCompile [{}:{}:{}]'.format(DRV, QNT, AOI, MTR)
 )
 ###########################################################################
 # Flatten CSVs

@@ -34,6 +34,13 @@ With the symlinked paths being:
 
 ## Pipelines
 
+For the full data pipeline on all the drives, run:
+
+```bash
+./FMS_fullPipe.sh srv 50 0.1
+```
+
+
 ### PreProcess
 
 ```bash
@@ -52,7 +59,7 @@ With the symlinked paths being:
 ./FMS_pstCrunch.sh srv FMS5 50
 ```
 
-### DataProcess
+### ClsProcess
 
 ```bash
 ./FMS_clsCrunch.sh srv PGS 50 HLT 0.1
