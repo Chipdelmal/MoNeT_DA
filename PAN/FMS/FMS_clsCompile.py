@@ -9,9 +9,9 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, MTR) = ('srv', 'PGS', 'HLT', '50', 'CPT')
+    (USR, DRV, QNT, AOI, MTR) = ('srv', 'PGS', '50', 'HLT', 'WOP')
 else:
-    (USR, DRV, AOI, QNT, MTR) = (
+    (USR, DRV, QNT, AOI, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5]
     )
