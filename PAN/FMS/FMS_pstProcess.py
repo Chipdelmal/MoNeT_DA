@@ -41,9 +41,9 @@ monet.printExperimentHead(
 # Processing loop
 ###############################################################################
 (header, xpidIx) = list(zip(*aux.DATA_HEAD))
-###########################################################################
+###############################################################################
 # Setup schemes
-###########################################################################
+###############################################################################
 # pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt.csv'
 pth = PT_MTR+AOI+'_{}_'+QNT+'_qnt'
 DFOPths = [pth.format(z) for z in aux.DATA_NAMES]
@@ -53,9 +53,9 @@ uids = aux.getExperimentsIDSets(PT_OUT, skip=-1)
 ptrn = aux.patternForReleases('*', AOI, 'rto', 'npy')
 fPaths = sorted(glob(PT_OUT+ptrn))
 qnt = float(int(QNT)/100)
-###########################################################################
+###############################################################################
 # Divide fPaths in chunks
-###########################################################################
+###############################################################################
 fPathsChunks = list(aux.chunks(fPaths, CHUNKS))
 dfPaths = [
     [pth+'-pt_'+str(ix).zfill(2)+'.csv' 
@@ -72,15 +72,12 @@ Parallel(n_jobs=JOB)(
         tap=aux.TAP, thp=(.05, .95)
     ) for exIx in expIter
 )
-###########################################################################
+###############################################################################
 # Merge dataframes chunks
-###########################################################################
+###############################################################################
 dfPathsPieces = list(zip(*dfPaths))[:]
 for dfPathsSet in dfPathsPieces:
     dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
     # Write combined dataframe --------------------------------------------
     fName = dfPathsSet[0].split('-')[0]+'.csv'
     dfFull.to_csv(fName, index=False)
-
-
-

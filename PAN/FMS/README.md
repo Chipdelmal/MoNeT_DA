@@ -8,6 +8,9 @@ One-node analysis of pgSIT efficacy as compared to other sterile insect techniqu
 
 * `PGS`: pgSIT
 * `FML`: Femaless
+* `IIT`: Incompatible Insect Technique
+* `RDF`: Female-Specific RIDL Technique
+* `RDL`: RIDL
 
 ## Experimental Setup
 
@@ -27,3 +30,33 @@ With the symlinked paths being:
 
 * `/RAID5/marshallShare/fem_pgSIT/{drive}/ANALYZED` to `/RAID0/fem_pgSIT/{drive}/ANALYZED`
 * `/RAID5/marshallShare/fem_pgSIT/{drive}/TRACE` to `/RAID0/fem_pgSIT/{drive}/TRACE`
+
+
+## Pipelines
+
+### PreProcess
+
+```bash
+./FMS_preCrunch.sh srv PGS
+./FMS_preCrunch.sh srv FMS3
+./FMS_preCrunch.sh srv FMS4
+./FMS_preCrunch.sh srv FMS5
+```
+
+### PstProcess
+
+```bash
+./FMS_pstCrunch.sh srv PGS 50
+./FMS_pstCrunch.sh srv FMS3 50
+./FMS_pstCrunch.sh srv FMS4 50
+./FMS_pstCrunch.sh srv FMS5 50
+```
+
+### DataProcess
+
+```bash
+./FMS_clsCrunch.sh srv PGS 50 HLT 0.1
+./FMS_clsCrunch.sh srv FMS3 50 HLT 0.1
+./FMS_clsCrunch.sh srv FMS4 50 HLT 0.1
+./FMS_clsCrunch.sh srv FMS5 50 HLT 0.1
+```
