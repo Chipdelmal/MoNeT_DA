@@ -35,7 +35,7 @@ CHUNKS = JOB
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_PRE, tS, 'PstProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
+    PT_DTA, PT_OUT, tS, 'PstProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
 ###############################################################################
 # Processing loop

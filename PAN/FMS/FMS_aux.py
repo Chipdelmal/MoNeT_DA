@@ -35,15 +35,22 @@ REF_FILE = 'E_0000_000000'
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
 )
 # Data Analysis ---------------------------------------------------------------
-(DATA_HEAD, DATA_SCA, DATA_PAD) = (
+(DATA_HEAD, DATA_SCA, DATA_PAD, DATA_TYPE) = (
     (
-        ('i_ren', 1),   ('i_res', 2)
+        ('i_ren', 1),   ('i_res', 2),
+        ('i_grp', 4)
     ),
     {
-        'i_ren': 1e0,   'i_res': 1e1
+        'i_ren': 1e0,   'i_res': 1e1,
+        'i_grp': 1e0
     },
     {
         'i_ren': 4,     'i_res': 6,
+        'i_grp': 2
+    },
+    {
+        'i_ren': np.int8, 'i_res': np.double,
+        'i_grp': np.int8
     }
 )
 (THI, THO, THW, TAP) = (

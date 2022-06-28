@@ -30,6 +30,8 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         (aggD, yRange, folder) = RDL.driveParameters(TYPE, popSize)
     elif (DRIVE == 'RDF'):
         (aggD, yRange, folder) = RDF.driveParameters(TYPE, popSize)
+    else:
+        print("Error in gene drive ID")
     ###########################################################################
     if TYPE == 'ECO':
         colors = [

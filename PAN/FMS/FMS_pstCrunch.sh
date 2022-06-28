@@ -12,4 +12,4 @@ cd "$parent_path"
 # Launch Scripts
 ###############################################################################
 python FMS_pstFraction.py $USR $DRV 'HLT'
-python FMS_pstFraction.py $USR $DRV 'HLT' $QNT
+python FMS_pstProcess.py $USR $DRV 'HLT' $QNT
