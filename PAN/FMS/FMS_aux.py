@@ -302,3 +302,35 @@ def exportTracesPlot(
     plt.close('all')
     plt.gcf()
     return None
+
+def exportPstTracesParallel(
+        exIx, expsNum,
+        STABLE_T, THS, QNT, STYLE, PT_IMG, 
+        border=True, borderColor='#322E2D', borderWidth=1, 
+        labelPos=(.7, .9), xpsNum=0, digs=3, 
+        autoAspect=False, popScaler=1,
+        wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True, 
+        ticksHide=True, transparent=True, sampRate=1, labelspacing=.1
+    ):
+    (ix, repFile, tti, tto, wop, mnf, _, poe, cpt) = exIx
+    repDta = pkl.load(repFile)
+    # Print to terminal -------------------------------------------------------
+    padi = str(ix+1).zfill(digs)
+    fmtStr = '{}+ File: {}/{}'
+    print(fmtStr.format(monet.CBBL, padi, expsNum, monet.CEND), end='\r')
+    # Traces ------------------------------------------------------------------
+    pop = repDta['landscapes'][0][STABLE_T][-1]
+    # STYLE['yRange'] = (0,  pop*popScaler)
+    monet.exportTracesPlot(
+        repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
+        vLines=[tti, tto, 0], hLines=[mnf*pop], labelPos=labelPos, 
+        border=border, borderColor=borderColor, borderWidth=borderWidth,
+        autoAspect=autoAspect, popScaler=popScaler,
+        wop=wop, wopPrint=wopPrint, 
+        cpt=cpt, cptPrint=cptPrint,
+        poe=poe, poePrint=poePrint,
+        mnf=mnf, mnfPrint=mnfPrint,
+        ticksHide=ticksHide, transparent=True, 
+        sampRate=sampRate, labelspacing=labelspacing
+    )
+    return None
