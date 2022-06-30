@@ -12,10 +12,7 @@ import FMS_gene as drv
 if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS, TRC) = ('srv', 'PGS', '50', 'HLT', '0.1', 'HLT')
 else:
-    (USR, DRV, QNT, AOI, THS, TRC) = (
-        sys.argv[1], sys.argv[2], sys.argv[3], 
-        sys.argv[4], sys.argv[5], sys.argv[5]
-    )
+    (USR, DRV, QNT, AOI, THS, TRC) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -59,7 +56,7 @@ COLS = list(DATA.columns)
 # Filter Output with Constraints
 ###############################################################################
 (renRge, resRge) = ((-1, 20), (-1, 50))
-wopRge = (3*365, 10*365)
+wopRge = (.1*365, 4*365)
 fltr = (
     renRge[0] <= DATA['i_ren'], DATA['i_ren'] <= renRge[1],
     resRge[0] <= DATA['i_res'], DATA['i_res'] <= resRge[1],
@@ -69,7 +66,7 @@ constrained = DATA[list(map(all, zip(*fltr)))]
 ###############################################################################
 # Export
 ###############################################################################
-print('{}* Found {}/{} matches (FLTR){}'.format(
+print('{}* Found {}/{} matches (Check filter if needed!){}'.format(
 	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
 ))
 constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
@@ -82,7 +79,7 @@ outSorting = [i for i in list(DATA.columns) if i[0]!='i']
 zipper = {i: (int(SCA[i]), PAD[i]) for i in catSorting}
 # print(outSorting)
 # Transform to fnames ---------------------------------------------------------
-expsNum = DATA.shape[0]
+expsNum = constrained.shape[0]
 (expsIter, skipped, counter) = ([[], []], 0, 0)
 ix = 2
 skipped = 0
@@ -91,7 +88,7 @@ for ix in range(expsNum):
         '{}* Processing: {}/{}{}'.format(monet.CBBL, ix+1, expsNum, monet.CEND), 
         end='\r'
     )
-    row = DATA.iloc[ix]
+    row = constrained.iloc[ix]
     i=0
     ins = [str(int(row[i]*zipper[i][0])).zfill(zipper[i][1]) for i in zipper]
     fname = aux.XP_PTRN.format(*ins[:-1], TRC, '00', 'srp', 'bz') 

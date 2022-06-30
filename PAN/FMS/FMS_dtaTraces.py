@@ -46,14 +46,14 @@ subset = [exp for exp in expsIter if exp[1].find(PT_ROT)==0]
 tS = datetime.now()
 monet.printExperimentHead(
     PT_SUMS, pt_img, tS, 
-    '{} DtaExplore [{}:{}:{}]'.format('FMS', DRV, QNT, AOI)
+    '{} DtaTraces [{}:{}:{}]'.format('FMS', DRV, QNT, AOI)
 )
 ###############################################################################
 # Style
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .15, "alpha": .15, "dpi": 750, "aspect": 1/6, 
+    "width": .125, "alpha": .125, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }
@@ -68,6 +68,6 @@ Parallel(n_jobs=JOB)(
         aux.STABLE_T, 0, QNT, STYLE, pt_img,
         digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
         poePrint=False, mnfPrint=False, ticksHide=False,
-        transparent=False, sampRate=aux.SAMP_RATE
+        transparent=True, sampRate=aux.SAMP_RATE
     ) for exIx in subset
 )
