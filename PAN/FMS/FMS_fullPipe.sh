@@ -18,5 +18,5 @@ do
     bash FMS_pstCrunch.sh $USR $drv $QNT
     bash FMS_clsCrunch.sh $USR $drv $QNT HLT $THS
     bash FMS_dtaTraces.sh $USR $drv $QNT HLT $THS HLT
-    bash FMS_dtaHeatmap.sh $USR $drv $QNT HLT $THS 
+    bash FMS_dtaHeatmaps.sh $USR $drv $QNT HLT $THS 
 done

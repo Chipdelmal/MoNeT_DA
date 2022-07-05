@@ -42,7 +42,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_SUMS, tS, 
-    '{} DtaHeatmap [{}:{}:{}:{}:{}]'.format('FMS', DRV, QNT, AOI, THS, MOI)
+    '{} DtaHeatmap [{}:{}:{}:{}]'.format(DRV, QNT, AOI, THS, MOI)
 )
 ###############################################################################
 # Select surface variables
@@ -68,7 +68,7 @@ if MOI == 'TT0':
     (zmin, zmax) = (0, 365*6)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (356/2, 5*365)
+    (zmin, zmax) = (0, 365*6)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 elif MOI == 'CPT':
     (zmin, zmax) = (-.05, 1.05)
@@ -132,7 +132,7 @@ for sw in sweep:
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface ----------------------
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#000000', linewidths=.5, alpha=1)
+    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#000000', linewidths=.5, alpha=0)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
     # cs.cmap.set_over('red')
     # cs.cmap.set_under('white')
@@ -216,6 +216,7 @@ for sw in sweep:
     fName = '{}_{}_{}-E_'.format(
             MOI, HD_IND[0][2:], HD_IND[1][2:]
         )+'_'.join(fElements)
+    fName = fName+'-{}Q_{}T'.format(QNT, thsStr)
     # Save file ---------------------------------------------------------------
     # print(path.join(PT_IMG, fName+'.png'))
     fig.savefig(
