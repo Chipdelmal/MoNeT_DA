@@ -3,19 +3,17 @@ import sys
 import numpy as np
 from os import path
 import pandas as pd
-from glob import glob
-from joblib import dump
 from datetime import datetime
+import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
 import FMS_aux as aux
 import FMS_gene as drv
-from STP.RBC.STP_dtaHeatmap import TICKS_HIDE
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
-    iVars = ['i_ren', 'i_res']
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'RDF', '50', 'HLT', '0.1', 'POE')
 else:
-    (USR, DRV, QNT, AOI, THS, MOI, iVars) = sys.argv[1:]
+    (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
+iVars = ['i_ren', 'i_res', 'i_grp']
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -25,7 +23,7 @@ CHUNKS = JOB
 (xSca, ySca) = ('linear', 'linear')
 TICKS_HIDE = False
 MAX_TIME = 365*2
-(HD_IND, kSweep) = ([iVars[0], iVars[1]], None)
+(HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2])
 ###############################################################################
 # Paths
 ###############################################################################
@@ -43,7 +41,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_SUMS, tS, 
-    '{} DtaHeatmap [{}:{}:{}:{}]'.format('FMS', DRV, QNT, AOI, THS)
+    '{} DtaHeatmap [{}:{}:{}:{}:{}]'.format('FMS', DRV, QNT, AOI, THS, MOI)
 )
 ###############################################################################
 # Select surface variables
@@ -63,17 +61,20 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Contour levels --------------------------------------------------------------
 # Z levels
 if MOI == 'TTI':
-    (zmin, zmax) = (45, 90)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
+    (zmin, zmax) = (0, 365*4)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
+if MOI == 'TT0':
+    (zmin, zmax) = (0, 365*6)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (-1, MAX_TIME)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (zmin, zmax) = (356/2, 5*365)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 elif MOI == 'CPT':
-    (zmin, zmax) = (0, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/25), 'linear')
+    (zmin, zmax) = (-.05, 1.05)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 
 if zmax > 10:
     rval = 0
@@ -88,17 +89,9 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 # Filter dataframe
 ###############################################################################
 fltr = {
-    'i_sex': 1,
     'i_ren': 12,
     'i_res': .5,
-    'i_rsg': 0.079,
-    'i_gsv': 0.01,
-    'i_fch': 0.175,
-    'i_fcb': 0.117,
-    'i_fcr': 0,
-    'i_hrm': 1.0,
-    'i_hrf': 0.956,
-    'i_grp': 0, 'i_mig': 0
+    'i_grp': 0
 }
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
@@ -187,8 +180,8 @@ for sw in sweep:
     renB = (HD_IND[0]=='i_ren') or (HD_IND[1]=='i_ren')
     resB = (HD_IND[0]=='i_res') or (HD_IND[1]=='i_res')
     if renB and resB:
-        ax.xaxis.set_ticks(np.arange(0, 24, 4))
-        ax.yaxis.set_ticks(np.arange(0, 1, 0.2))
+        ax.xaxis.set_ticks(np.arange(0, max(DATA['i_ren']), 4))
+        ax.yaxis.set_ticks(np.arange(0, max(DATA['i_res']), 4))
     plt.xlim(ran[0][0], ran[0][1])
     plt.ylim(ran[1][0], ran[1][1])
     if TICKS_HIDE:
@@ -220,10 +213,10 @@ for sw in sweep:
             MOI, HD_IND[0][2:], HD_IND[1][2:]
         )+'_'.join(fElements)
     # Save file ---------------------------------------------------------------
-    print(path.join(PT_IMG, fName+'.png'))
+    # print(path.join(PT_IMG, fName+'.png'))
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
-        dpi=500, bbox_inches='tight', pad=0
+        dpi=500, bbox_inches='tight'
     )
     # Clearing and closing (fig, ax) ------------------------------------------
     plt.clf()
