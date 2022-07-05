@@ -23,6 +23,7 @@ CHUNKS = JOB
 (xSca, ySca) = ('linear', 'linear')
 TICKS_HIDE = False
 MAX_TIME = 365*2
+CLABEL_FONTSIZE = 0
 (HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2])
 ###############################################################################
 # Paths
@@ -61,7 +62,7 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Contour levels --------------------------------------------------------------
 # Z levels
 if MOI == 'TTI':
-    (zmin, zmax) = (0, 365*4)
+    (zmin, zmax) = (0, 365*6)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 if MOI == 'TT0':
     (zmin, zmax) = (0, 365*6)
@@ -70,6 +71,9 @@ elif MOI == 'WOP':
     (zmin, zmax) = (356/2, 5*365)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 elif MOI == 'CPT':
+    (zmin, zmax) = (-.05, 1.05)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
+elif MOI == 'POE':
     (zmin, zmax) = (-.05, 1.05)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
 else:
@@ -166,13 +170,13 @@ for sw in sweep:
         for (l, s) in zip(cc.levels, strs):
             fmt[l] = s
         ax.clabel(
-            cc, cc.levels[1::2], inline=True, fontsize=20, fmt=fmt,
-            rightside_up=False, inline_spacing=5
+            cc, cc.levels[1::2], inline=True, fontsize=CLABEL_FONTSIZE, 
+            fmt=fmt, rightside_up=False, inline_spacing=5
         )
     else:
         ax.clabel(
-            cc, inline=True, fontsize=20, fmt='%1.{}f'.format(rval),
-            rightside_up=True
+            cc, inline=True, fontsize=CLABEL_FONTSIZE, 
+            fmt='%1.{}f'.format(rval), rightside_up=True
         )
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
