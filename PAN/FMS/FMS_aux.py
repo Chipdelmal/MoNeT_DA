@@ -62,7 +62,7 @@ REF_FILE = 'E_0000_000000'
 ###############################################################################
 # Dependent Variables for Heatmaps
 ###############################################################################
-def selectDepVars(MOI, AOI):
+def selectDepVars(MOI):
     # Select ranges and dependent variable-------------------------------------
     if (MOI == 'WOP') or (MOI == 'TTO'):
         scalers = [1, 1, XRAN]
