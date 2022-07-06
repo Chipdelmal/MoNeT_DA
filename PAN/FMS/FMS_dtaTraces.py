@@ -1,13 +1,13 @@
 import sys
 from os import path
-import pandas as pd
-from glob import glob
 from joblib import load
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 import FMS_aux as aux
 import FMS_gene as drv
+import warnings
+warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
     (USR, DRV, QNT, AOI) = ('srv', 'PGS', '50', 'HLT')
