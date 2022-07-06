@@ -63,23 +63,22 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Z levels
 if MOI == 'TTI':
     (zmin, zmax) = (0, 365*6)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 if MOI == 'TT0':
     (zmin, zmax) = (0, 365*6)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 elif MOI == 'WOP':
     (zmin, zmax) = (0, 365*6)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 elif MOI == 'CPT':
     (zmin, zmax) = (-.05, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 elif MOI == 'POE':
     (zmin, zmax) = (-.05, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/10), 'linear')
-
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 if zmax > 10:
     rval = 0
 else:
