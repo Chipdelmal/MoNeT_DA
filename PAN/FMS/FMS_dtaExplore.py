@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, TRC) = ('srv', 'PGS', '50', 'HLT', '0.1', 'HLT')
+    (USR, DRV, QNT, AOI, THS, TRC) = ('srv', 'FMS5', '50', 'HLT', '0.5', 'HLT')
 else:
     (USR, DRV, QNT, AOI, THS, TRC) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -55,8 +55,8 @@ COLS = list(DATA.columns)
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
-(renRge, resRge) = ((-1, 20), (-1, 50))
-wopRge = (.1*365, 4*365)
+(renRge, resRge) = ((-1, 50), (-1, 50))
+wopRge = (-10*365, 15*365)
 fltr = (
     renRge[0] <= DATA['i_ren'], DATA['i_ren'] <= renRge[1],
     resRge[0] <= DATA['i_res'], DATA['i_res'] <= resRge[1],

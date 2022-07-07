@@ -51,6 +51,9 @@ HLT_DICT = OrderedDict((
     ('O-',   (('a', locA), ('b', locB), ('c', locC), ('d', locD)))
 ))
 FMS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
+FMS_HLT[1][0] = FMS_HLT[1][-1]
+FMS_HLT[1][1] = FMS_HLT[1][-1]
+
 
 ###############################################################################
 # Trash genotype counts (Cas9)

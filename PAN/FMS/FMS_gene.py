@@ -9,7 +9,6 @@ import FMS_gene_PGS as PGS
 import FMS_gene_IIT as IIT
 import FMS_gene_RDL as RDL
 import FMS_gene_RDF as RDF
-import FMS_aux as aux
 
 ###############################################################################
 # Drive
@@ -35,18 +34,18 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
     ###########################################################################
     if TYPE == 'ECO':
         colors = [
-            '#2614ed', '#FF006E', '#45d40c', '#8338EC', '#1888e3', 
-            '#BC1097', '#FFE93E', '#3b479d', '#540d6e', '#7bdff2'
+            '#2614ed55', '#FF006E55', '#45d40c55', '#8338EC55', '#1888e355', 
+            '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
         ]
     elif TYPE == 'HLT':
         if DRIVE == 'FMS3':
-            colors = ['#f2008900', '#c879ff00', '#f2008955']
+            colors = ['#1888e300', '#2614ed00', '#f2008955']
         elif DRIVE == 'FMS4':
-            colors = ['#f2008900', '#c879ff00', '#00bbf955']
+            colors = ['#1888e300', '#2614ed00', '#3b479d55']
         elif DRIVE == 'FMS5':
-            colors = ['#f2008900', '#c879ff00', '#45d40c55']
+            colors = ['#1888e300', '#2614ed00', '#45d40c55']
         elif DRIVE == 'PGS':
-            colors = ['#f2008900', '#c879ff00', '#BC109755']
+            colors = ['#1888e300', '#2614ed00', '#8338EC55']
         elif DRIVE == 'IIT':
             colors = ['#f2008900', '#c879ff00', '#540d6e55']
         elif DRIVE == 'RDL':

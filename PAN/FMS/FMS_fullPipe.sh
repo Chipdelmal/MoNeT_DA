@@ -12,11 +12,11 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-for drv in "IIT" "RDL" "RDF" "PGS" "FMS3" "FMS4" "FMS5"
+for drv in "FMS3" "FMS4" "FMS5" #"IIT" "RDL" "RDF" "PGS" "FMS3" "FMS4" "FMS5"
 do
     bash FMS_preCrunch.sh $USR $drv
     bash FMS_pstCrunch.sh $USR $drv $QNT
     bash FMS_clsCrunch.sh $USR $drv $QNT HLT $THS
     bash FMS_dtaTraces.sh $USR $drv $QNT HLT $THS HLT
     bash FMS_dtaHeatmaps.sh $USR $drv $QNT HLT $THS 
-done
+done 

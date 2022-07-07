@@ -68,6 +68,10 @@ Parallel(n_jobs=JOB)(
         aux.STABLE_T, 0, QNT, STYLE, pt_img,
         digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
         poePrint=False, mnfPrint=False, ticksHide=False,
-        transparent=True, sampRate=aux.SAMP_RATE
+        transparent=True, sampRate=aux.SAMP_RATE,
+        releases=[
+            aux.REL_START+i*7 for i in 
+            range(int(exIx[1].split('/')[-1].split('_')[1]))
+        ]
     ) for exIx in subset
 )

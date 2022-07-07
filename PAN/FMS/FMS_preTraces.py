@@ -35,7 +35,7 @@ monet.makeFolder(PT_IMG)
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_PRE, tS, 'PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
+    PT_DTA, PT_IMG, tS, 'PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
 ###############################################################################
 # Style 
@@ -63,7 +63,7 @@ i = 20
 rens = []
 for i in range(len(fLists)):
     fPat = fLists[i][0].split('/')[-1].split('-')[0].split('_')
-    ren = [50+i*7 for i in range(int(fPat[1]))]
+    ren = [aux.REL_START+i*7 for i in range(int(fPat[1]))]
     rens.append(ren)
 ###############################################################################
 # Process files
@@ -84,5 +84,4 @@ monet.exportGeneLegend(
     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
     PT_IMG+'/legend_{}.png'.format(AOI), 500
 )
-
 # dbg = pkl.load('/RAID5/marshallShare/fem_pgSIT/ifegenia_5/PREPROCESS/'+'E_0004_000160-ECO_00_sum.bz')

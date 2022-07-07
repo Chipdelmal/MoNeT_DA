@@ -310,7 +310,8 @@ def exportPstTracesParallel(
         labelPos=(.7, .9), xpsNum=0, digs=3, 
         autoAspect=False, popScaler=1,
         wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True, 
-        ticksHide=True, transparent=True, sampRate=1, labelspacing=.1
+        ticksHide=True, transparent=True, sampRate=1, labelspacing=.1,
+        releases=[]
     ):
     (ix, repFile, tti, tto, wop, mnf, _, poe, cpt) = exIx
     repDta = pkl.load(repFile)
@@ -321,9 +322,9 @@ def exportPstTracesParallel(
     # Traces ------------------------------------------------------------------
     pop = repDta['landscapes'][0][STABLE_T][-1]
     # STYLE['yRange'] = (0,  pop*popScaler)
-    monet.exportTracesPlot(
+    exportTracesPlot(
         repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-        vLines=[tti, tto, 0], hLines=[mnf*pop], labelPos=labelPos, 
+        vLines=[tti, tto]+releases, hLines=[mnf*pop], labelPos=labelPos, 
         border=border, borderColor=borderColor, borderWidth=borderWidth,
         autoAspect=autoAspect, popScaler=popScaler,
         wop=wop, wopPrint=wopPrint, 

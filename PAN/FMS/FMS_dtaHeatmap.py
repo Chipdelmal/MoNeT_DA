@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'RDF', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_grp']
@@ -62,13 +62,13 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Contour levels --------------------------------------------------------------
 # Z levels
 if MOI == 'TTI':
-    (zmin, zmax) = (0, 365*6)
+    (zmin, zmax) = (0, 365*5)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 if MOI == 'TT0':
-    (zmin, zmax) = (0, 365*6)
+    (zmin, zmax) = (0, 365*5)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (0, 365*6)
+    (zmin, zmax) = (0, 365*5)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
 elif MOI == 'CPT':
     (zmin, zmax) = (-.05, 1.05)
