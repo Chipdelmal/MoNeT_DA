@@ -67,11 +67,13 @@ Parallel(n_jobs=JOB)(
         exIx, fNum,
         aux.STABLE_T, 0, QNT, STYLE, pt_img,
         digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
-        poePrint=False, mnfPrint=False, ticksHide=False,
+        wopPrint=False, poePrint=False, mnfPrint=False, cptPrint=False,
+        ticksHide=True,
         transparent=True, sampRate=aux.SAMP_RATE,
         releases=[
             aux.REL_START+i*7 for i in 
             range(int(exIx[1].split('/')[-1].split('_')[1]))
-        ]
+        ],
+        hLines=[aux.POP_SIZE, aux.POP_SIZE/2]
     ) for exIx in subset
 )
