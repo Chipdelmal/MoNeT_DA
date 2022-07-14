@@ -21,7 +21,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = False
+TICKS_HIDE = True
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
 (HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2])
@@ -63,22 +63,28 @@ DATA = pd.read_csv(path.join(PT_OUT, fName_I))
 # Z levels
 if MOI == 'TTI':
     (zmin, zmax) = (0, 365*5)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    cntr = [2*365]
 if MOI == 'TT0':
     (zmin, zmax) = (0, 365*5)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    cntr = [2*365]
 elif MOI == 'WOP':
     (zmin, zmax) = (0, 365*5)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    cntr = [2*365]
 elif MOI == 'CPT':
     (zmin, zmax) = (-.05, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    cntr = [.5]
 elif MOI == 'POE':
     (zmin, zmax) = (-.05, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    cntr = [.5]
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+
 if zmax > 10:
     rval = 0
 else:
@@ -131,8 +137,15 @@ for sw in sweep:
     (fig, ax) = plt.subplots(figsize=(10, 8))
     # Experiment points, contour lines, response surface ----------------------
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
-    cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#000000', linewidths=.5, alpha=0)
-    cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
+    cc = ax.contour(
+        rsS[0], rsS[1], rsS[2], 
+        levels=cntr, colors=drive['colors'][-1][:-2], 
+        linewidths=3, alpha=.825, linestyles='solid'
+    )
+    cs = ax.contourf(
+        rsS[0], rsS[1], rsS[2], 
+        levels=lvls, cmap=cmap, extend='max'
+    )
     # cs.cmap.set_over('red')
     # cs.cmap.set_under('white')
     # Color bar ---------------------------------------------------------------
@@ -158,25 +171,25 @@ for sw in sweep:
     ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
     ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
     # Labels ------------------------------------------------------------------
-    if not TICKS_HIDE:
-        ax.set_xlabel(HD_IND[0])
-        ax.set_ylabel(HD_IND[1])
-        pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
-        plt.title(pTitle, fontsize=7.5)
-    if MOI=='WOP':
-        fmt = {}
-        strs = ["{:.2f}".format(i/365) for i in cc.levels]
-        for (l, s) in zip(cc.levels, strs):
-            fmt[l] = s
-        ax.clabel(
-            cc, cc.levels[1::2], inline=True, fontsize=CLABEL_FONTSIZE, 
-            fmt=fmt, rightside_up=False, inline_spacing=5
-        )
-    else:
-        ax.clabel(
-            cc, inline=True, fontsize=CLABEL_FONTSIZE, 
-            fmt='%1.{}f'.format(rval), rightside_up=True
-        )
+    # if not TICKS_HIDE:
+    #     ax.set_xlabel(HD_IND[0])
+    #     ax.set_ylabel(HD_IND[1])
+    #     pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
+    #     plt.title(pTitle, fontsize=7.5)
+    # if MOI=='WOP':
+    #     fmt = {}
+    #     strs = ["{:.2f}".format(i/365) for i in cc.levels]
+    #     for (l, s) in zip(cc.levels, strs):
+    #         fmt[l] = s
+    #     ax.clabel(
+    #         cc, cc.levels[1::2], inline=True, fontsize=CLABEL_FONTSIZE, 
+    #         fmt=fmt, rightside_up=False, inline_spacing=5
+    #     )
+    # else:
+    #     ax.clabel(
+    #         cc, inline=True, fontsize=CLABEL_FONTSIZE, 
+    #         fmt='%1.{}f'.format(rval), rightside_up=True
+    #     )
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
     ax.set_yscale(ySca)
@@ -200,6 +213,7 @@ for sw in sweep:
         ax.set_axis_off()
     fig.tight_layout()
     ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
+    ax.set_facecolor("#00000000")
     ###########################################################################
     # Export File
     ###########################################################################
@@ -220,7 +234,7 @@ for sw in sweep:
     # print(path.join(PT_IMG, fName+'.png'))
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
-        dpi=500, bbox_inches='tight'
+        dpi=500, bbox_inches='tight', transparent=True
     )
     # Clearing and closing (fig, ax) ------------------------------------------
     plt.clf()

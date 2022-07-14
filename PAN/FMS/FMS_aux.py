@@ -8,6 +8,7 @@ from os import path
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
+from matplotlib.colors import LinearSegmentedColormap, ColorConverter
 
 XP_ID = 'FMS'
 ###############################################################################
@@ -62,6 +63,12 @@ REF_FILE = 'E_0000_000000'
 ###############################################################################
 # Dependent Variables for Heatmaps
 ###############################################################################
+def colorPaletteFromHexList(clist):
+    c = ColorConverter().to_rgba
+    clrs = [c(i) for i in clist]
+    rvb = LinearSegmentedColormap.from_list("", clrs)
+    return rvb
+
 def selectDepVars(MOI):
     # Select ranges and dependent variable-------------------------------------
     if (MOI == 'WOP') or (MOI == 'TTO'):
@@ -90,13 +97,13 @@ def selectDepVars(MOI):
         (HD_DEP, IND_RAN) = ('MNF', 1) 
     # Color Mapping -----------------------------------------------------------
     if MOI == 'WOP':
-        cmap = monet.cmapP
+        cmap = colorPaletteFromHexList(['#ffffff00', '#3687ff33'])
     elif MOI == 'CPT':
-        cmap = monet.cmapM
+        cmap = colorPaletteFromHexList(['#ffffff00', '#2614ed55'])
     elif MOI == 'POE':
-        cmap = monet.cmapC
+        cmap = colorPaletteFromHexList(['#ffffff00', '#8338EC55'])
     else:
-        cmap = monet.cmapW
+        cmap = colorPaletteFromHexList(['#ffffff00', '#3b479d55'])
     return (scalers, HD_DEP, IND_RAN, cmap)
 
 ###############################################################################
@@ -311,7 +318,7 @@ def exportPstTracesParallel(
         autoAspect=False, popScaler=1,
         wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True, 
         ticksHide=True, transparent=True, sampRate=1, labelspacing=.1,
-        releases=[]
+        releases=[], hLines=[0]
     ):
     (ix, repFile, tti, tto, wop, mnf, _, poe, cpt) = exIx
     repDta = pkl.load(repFile)
@@ -324,7 +331,7 @@ def exportPstTracesParallel(
     # STYLE['yRange'] = (0,  pop*popScaler)
     exportTracesPlot(
         repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-        vLines=[tti, tto]+releases, hLines=[mnf*pop], labelPos=labelPos, 
+        vLines=[tti, tto]+releases, hLines=hLines, labelPos=labelPos, 
         border=border, borderColor=borderColor, borderWidth=borderWidth,
         autoAspect=autoAspect, popScaler=popScaler,
         wop=wop, wopPrint=wopPrint, 
