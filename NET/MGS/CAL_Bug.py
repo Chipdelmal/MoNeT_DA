@@ -11,7 +11,6 @@ import cartopy.crs as ccrs
 
 
 GENS = 2000
-CF_NAME = 'COORDS.csv'
 (PTH_O, PTH_I) = ('./out', './in')
 ###############################################################################
 # Load Pointset
