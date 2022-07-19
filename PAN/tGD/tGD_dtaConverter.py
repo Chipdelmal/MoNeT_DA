@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
     (USR, DRV, AOI, QNT, THS, NME, TRC) = (
-        'srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.25', '0.75'), 'NM', ('HLT', 'TRS')
+        'srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.1', '0.9'), 'NM', ('HLT', 'TRS')
     )
 else:
     (USR, DRV, AOI, QNT, THS, NME, TRC) = sys.argv[1:]
