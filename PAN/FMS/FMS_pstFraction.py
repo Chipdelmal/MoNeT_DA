@@ -6,7 +6,6 @@ from glob import glob
 import FMS_aux as aux
 import FMS_gene as drv
 from datetime import datetime
-import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 from more_itertools import locate
 from joblib import Parallel, delayed
@@ -14,7 +13,7 @@ from joblib import Parallel, delayed
 # warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('srv', 'PGS', 'HLT')
+    (USR, DRV, AOI) = ('srv', 'IIT', 'HLT')
 else:
     (USR, DRV, AOI) = sys.argv[1:]
 GRID_REF = False

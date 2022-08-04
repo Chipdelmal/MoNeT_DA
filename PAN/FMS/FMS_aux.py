@@ -14,7 +14,7 @@ XP_ID = 'FMS'
 ###############################################################################
 # System Constants
 ###############################################################################
-(OVW, JOB_DSK, JOB_SRV) = (True, 4, 60)
+(OVW, JOB_DSK, JOB_SRV) = (True, 4, 40)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Releases and Populations
@@ -29,8 +29,8 @@ XP_ID = 'FMS'
 ###############################################################################
 # Files and DA constants
 ###############################################################################
-(XP_PTRN, NO_REL_PAT) = ('E_{}_{}-{}_{}_{}.{}', '00')
-REF_FILE = 'E_0000_000000'
+(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00')
+REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
@@ -38,15 +38,21 @@ REF_FILE = 'E_0000_000000'
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD, DATA_TYPE) = (
     (
-        ('i_ren', 1),   ('i_res', 2),
-        ('i_grp', 4)
+        ('i_ren', 1), ('i_res', 2), 
+        ('i_pct', 3), ('i_pmd', 4), 
+        ('i_mfr', 5), ('i_mtf', 6), ('i_fvb', 7),
+        ('i_grp', 9)
     ),
     {
-        'i_ren': 1e0,   'i_res': 1e1,
+        'i_ren': 1e0, 'i_res': 1e1,
+        'i_pct': 1e6, 'i_pmd': 1e6, 
+        'i_mfr': 1e6, 'i_mtf': 1e6, 'i_fvb': 1e6,
         'i_grp': 1e0
     },
     {
-        'i_ren': 4,     'i_res': 6,
+        'i_ren': 4, 'i_res': 6,
+        'i_pct': 8, 'i_pmd': 8, 
+        'i_mfr': 8, 'i_mtf': 8, 'i_fvb': 8,
         'i_grp': 2
     },
     {
@@ -118,16 +124,14 @@ def getExps():
 def patternForReleases(ren, AOI, ftype, ext='bz', pad=0):
     renP = str(ren).rjust(pad, '0')
     strPat = XP_PTRN.format(
-        renP, '*', 
+        renP, '*', '*', '*', '*', '*', '*', 
         AOI, '*', ftype, ext
     )
     return strPat
 
-
 def splitExpNames(PATH_OUT, ext='bz'):
     out = [i.split('/')[-1].split('-')[0] for i in glob(PATH_OUT+'*.'+ext)]
     return sorted(list(set(out)))
-
 
 def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
     filesList = glob(PATH_EXP+'E*')
@@ -138,7 +142,6 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
         colSet = set([i[c] for i in splitFilenames])
         ids.append(sorted(list(colSet)))
     return ids
-
 
 ###############################################################################
 # Paths

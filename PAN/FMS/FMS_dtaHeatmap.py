@@ -13,7 +13,7 @@ if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
-iVars = ['i_ren', 'i_res', 'i_grp']
+iVars = ['i_ren', 'i_res', 'i_pct']
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -99,7 +99,12 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 ###############################################################################
 fltr = {
     'i_ren': 12,
-    'i_res': .5,
+    'i_res': 0.5,
+    'i_pct': 0.9, 
+    'i_pmd': 0.0, 
+    'i_mfr': 0.0, 
+    'i_mtf': 0.1, 
+    'i_fvb': 0.0,
     'i_grp': 0
 }
 [fltr.pop(i) for i in HD_IND]
