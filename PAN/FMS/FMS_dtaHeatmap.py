@@ -21,7 +21,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = True
+TICKS_HIDE = False
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
 (HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2])
@@ -41,7 +41,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 # Time and head -----------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_ROT, PT_SUMS, tS, 
+    PT_SUMS, PT_IMG, tS, 
     '{} DtaHeatmap [{}:{}:{}:{}]'.format(DRV, QNT, AOI, THS, MOI)
 )
 ###############################################################################

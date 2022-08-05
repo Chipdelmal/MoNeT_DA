@@ -35,7 +35,7 @@ monet.makeFolder(PT_IMG)
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_IMG, tS, 'PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
+    PT_PRE, PT_IMG, tS, 'PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
 ###############################################################################
 # Style 
