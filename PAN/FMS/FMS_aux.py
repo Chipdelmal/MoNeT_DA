@@ -56,7 +56,9 @@ REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
         'i_grp': 2
     },
     {
-        'i_ren': np.int8, 'i_res': np.double,
+        'i_ren': np.int8,   'i_res': np.double,
+        'i_pct': np.double, 'i_pmd': np.double, 
+        'i_mfr': np.double, 'i_mtf': np.double, 'i_fvb': np.double,
         'i_grp': np.int8
     }
 )
