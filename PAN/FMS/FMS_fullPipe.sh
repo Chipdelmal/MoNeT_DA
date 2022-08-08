@@ -12,7 +12,7 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-for drv in "FMS3" "FMS4"
+for drv in "FMS3" "FMS4" # "FMS5" "PGS" # "IIT" "RDL" "RDF" 
 do
     bash FMS_preCrunch.sh $USR $drv
     bash FMS_pstCrunch.sh $USR $drv $QNT

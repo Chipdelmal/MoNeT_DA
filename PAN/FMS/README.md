@@ -77,3 +77,12 @@ bash FMS_dtaTraces.sh $USR $drv $QNT HLT $THS HLT
 ./FMS_clsCrunch.sh srv FMS4 50 HLT 0.1
 ./FMS_clsCrunch.sh srv FMS5 50 HLT 0.1
 ```
+
+
+
+## Download Results
+
+```bash
+scp -r lab:/RAID5/marshallShare/fem_pgSIT/ifegenia_3/img '/home/chipdelmal/Documents/WorkSims/fem_pgSIT/2022_08/ifegenia_3'
+scp -r lab:/RAID5/marshallShare/fem_pgSIT/ifegenia_3/ML/img/heat '/home/chipdelmal/Documents/WorkSims/fem_pgSIT/2022_08/ifegenia_3/img'
+```

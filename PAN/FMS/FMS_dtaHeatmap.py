@@ -100,10 +100,10 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 fltr = {
     'i_ren': 12,
     'i_res': 0.5,
-    'i_pct': 0.9, 
-    'i_pmd': 0.0, 
+    'i_pct': 1.0, 
+    'i_pmd': 1.0, 
     'i_mfr': 0.0, 
-    'i_mtf': 0.1, 
+    'i_mtf': 1.0,
     'i_fvb': 0.0,
     'i_grp': 0
 }
