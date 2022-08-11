@@ -1,16 +1,10 @@
 import sys
 from math import exp
 from os import minor, path
-from re import match
 from glob import glob
-from itertools import product
-from joblib import dump, load
-from datetime import datetime
 import numpy as np
-from numpy.lib.arraypad import pad
 import pandas as pd
 import matplotlib.pyplot as plt
-from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import tGD_aux as aux
 import tGD_gene as drv
@@ -23,11 +17,11 @@ warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
     (USR, DRV, AOI, QNT, THS, MOI) = (
-        'srv2', 'tGD', 'TRS', '50', '0.2', 'CPT'
+        'srv2', 'tGD', 'HLT', '50', '0.25', 'CPT'
     )
-    iVars = ['i_ren', 'i_res', 'i_hdr']
+    iVars = ['i_fcs', 'i_fcb', 'i_hdr']
 else:
-    (USR, LND, AOI, DRV, QNT, MOI) = (
+    (USR, DRV, AOI, QNT, THS, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
         sys.argv[4], sys.argv[5], sys.argv[6]
     )
@@ -84,11 +78,14 @@ if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (-1, MAX_TIME*365)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    if AOI == 'TRS':
+        (zmin, zmax) = (-1, MAX_TIME*365/20)
+    else:
+        (zmin, zmax) = (-1, MAX_TIME*365/10)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
 elif MOI == 'CPT':
-    (zmin, zmax) = (0, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/25), 'linear')
+    (zmin, zmax) = (-0.5, 1.1)
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/25), 'nearest')
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
@@ -106,8 +103,8 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 # Filter dataframe
 ###############################################################################
 fltr = {
-    'i_fcs': 0.05,
-    'i_fcb': 0.05,
+    'i_fcs': 0.35,
+    'i_fcb': 0.35,
     'i_fga': 0.0,
     'i_fgb': 0.0427,
     'i_cut': 1.0,
@@ -231,8 +228,8 @@ for sw in sweep:
         else:
             xEl = 'X'*aux.DATA_PAD[k]
         fElements.append(xEl)
-    fName = '{}_{}_{}-E_'.format(
-            MOI, HD_IND[0][2:], HD_IND[1][2:]
+    fName = '{}_{}-{}_{}-E_'.format(
+            MOI, AOI, HD_IND[0][2:], HD_IND[1][2:]
         )+'_'.join(fElements)
     # Save file ---------------------------------------------------------------
     print(path.join(PT_IMG, fName+'.png'))
