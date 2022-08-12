@@ -2,6 +2,9 @@
 
 USR=$1
 DRV=$2
+QNT=$3
+THS=$4
+
 ###############################################################################
 # Setup Path
 ###############################################################################
@@ -10,7 +13,9 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-python FMS_preProcess.py $USR $DRV ECO
-# python FMS_preTraces.py $USR $DRV ECO
-python FMS_preProcess.py $USR $DRV HLT
-python FMS_preTraces.py $USR $DRV HLT
+bash FMS_preCrunch.sh $USR $drv
+bash FMS_pstCrunch.sh $USR $drv $QNT
+bash FMS_clsCrunch.sh $USR $drv $QNT HLT $THS
+# bash FMS_dtaTraces.sh $USR $drv $QNT HLT $THS HLT
+bash FMS_dtaHeatmaps.sh $USR $drv $QNT HLT $THS 
+

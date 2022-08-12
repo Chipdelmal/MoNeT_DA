@@ -14,7 +14,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('srv', 'FMS5', 'HLT')
+    (USR, DRV, AOI) = ('srv', 'FMS3', 'HLT')
 else:
     (USR, DRV, AOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -42,7 +42,7 @@ monet.printExperimentHead(
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .1, "alpha": .1, "dpi": 750, "aspect": 1/6, 
+    "width": .05, "alpha": .05, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }
@@ -59,11 +59,15 @@ expNum = len(fLists)
 expIter = list(zip(list(range(expNum, 0, -1)), fLists))
 expIter.reverse()
 # Semi hard-coded ren (NEEDS FIX!) --------------------------------------------
-i = 20
+i = 1000
 rens = []
 for i in range(len(fLists)):
     fPat = fLists[i][0].split('/')[-1].split('-')[0].split('_')
-    ren = [aux.REL_START+i*7 for i in range(int(fPat[1]))]
+    renS = int(fPat[1])
+    if renS > 0:
+        ren = [aux.REL_START+i*7 for i in range(renS)]
+    else:
+        ren = [0]
     rens.append(ren)
 ###############################################################################
 # Process files
@@ -74,9 +78,13 @@ Parallel(n_jobs=JOB)(
         exIx, STYLE, PT_IMG, 
         xpNum=xpNum, digs=digs, autoAspect=True,
         border=True, borderColor='#000000AA', borderWidth=1,
-        sampRate=1, vLines=[0, 0] + ren, # aux.RELEASES
+        sampRate=1, 
+        vLines=[0, 0] + [
+            aux.REL_START+i*7 for i in 
+            range(int(exIx[1][0].split('/')[-1].split('_')[1]))
+        ],
         hLines=[aux.POP_SIZE, aux.POP_SIZE/2]
-    ) for (exIx, ren) in zip(expIter, rens)
+    ) for exIx in expIter
 )
 # Export gene legend ----------------------------------------------------------
 sumDta = pkl.load(fLists[-1][0])

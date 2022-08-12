@@ -16,7 +16,7 @@ cd "$parent_path"
 ###############################################################################
 for drv in "FMS3" "FMS4" "FMS5" "PGS"
 do
-    for mtr in "WOP" "CPT" "POE" "TTI" # "TTO" "MNX"
+    for mtr in "WOP" "CPT" "POE" "TTI"
     do
         python FMS_dtaHeatmap.py $USR $drv $QNT $AOI $THS $mtr
     done

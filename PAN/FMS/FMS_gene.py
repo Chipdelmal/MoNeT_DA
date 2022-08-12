@@ -39,21 +39,21 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         ]
     elif TYPE == 'HLT':
         if DRIVE == 'FMS3':
-            colors = ['#1888e300', '#2614ed00', '#f2008955']
+            colors = ['#1888e300', '#2614ed00', '#f2008935']
         elif DRIVE == 'FMS4':
-            colors = ['#1888e300', '#2614ed00', '#3b479d55']
+            colors = ['#1888e300', '#2614ed00', '#3b479d35']
         elif DRIVE == 'FMS5':
-            colors = ['#1888e300', '#2614ed00', '#45d40c55']
+            colors = ['#1888e300', '#2614ed00', '#45d40c35']
         elif DRIVE == 'PGS':
-            colors = ['#1888e300', '#2614ed00', '#8338EC55']
+            colors = ['#1888e300', '#2614ed00', '#8338EC35']
         elif DRIVE == 'IIT':
-            colors = ['#f2008900', '#c879ff00', '#540d6e55']
+            colors = ['#f2008900', '#c879ff00', '#540d6e35']
         elif DRIVE == 'RDL':
-            colors = ['#f2008900', '#c879ff00', '#bbdefb55']
+            colors = ['#f2008900', '#c879ff00', '#bbdefb35']
         elif DRIVE == 'RDF':
-            colors = ['#f2008900', '#c879ff00', '#03045e55']
+            colors = ['#f2008900', '#c879ff00', '#03045e35']
         else:
-            colors = ['#f2008955', '#c879ff55', '#c879ff55']
+            colors = ['#f2008955', '#c879ff55', '#c879ff35']
     elif TYPE == 'TRS':
         colors = monet.COLTN
     elif TYPE == 'WLD':

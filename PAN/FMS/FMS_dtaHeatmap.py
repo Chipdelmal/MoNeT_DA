@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_pct']
@@ -100,7 +100,7 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 fltr = {
     'i_ren': 12,
     'i_res': 0.5,
-    'i_pct': 1.0, 
+    'i_pct': 0.95, 
     'i_pmd': 1.0, 
     'i_mfr': 0.0, 
     'i_mtf': 1.0,
@@ -176,25 +176,25 @@ for sw in sweep:
     ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
     ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
     # Labels ------------------------------------------------------------------
-    # if not TICKS_HIDE:
-    #     ax.set_xlabel(HD_IND[0])
-    #     ax.set_ylabel(HD_IND[1])
-    #     pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
-    #     plt.title(pTitle, fontsize=7.5)
-    # if MOI=='WOP':
-    #     fmt = {}
-    #     strs = ["{:.2f}".format(i/365) for i in cc.levels]
-    #     for (l, s) in zip(cc.levels, strs):
-    #         fmt[l] = s
-    #     ax.clabel(
-    #         cc, cc.levels[1::2], inline=True, fontsize=CLABEL_FONTSIZE, 
-    #         fmt=fmt, rightside_up=False, inline_spacing=5
-    #     )
-    # else:
-    #     ax.clabel(
-    #         cc, inline=True, fontsize=CLABEL_FONTSIZE, 
-    #         fmt='%1.{}f'.format(rval), rightside_up=True
-    #     )
+    if not TICKS_HIDE:
+        ax.set_xlabel(HD_IND[0])
+        ax.set_ylabel(HD_IND[1])
+        pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
+        plt.title(pTitle, fontsize=7.5)
+    if MOI=='WOP':
+        fmt = {}
+        strs = ["{:.2f}".format(i/365) for i in cc.levels]
+        for (l, s) in zip(cc.levels, strs):
+            fmt[l] = s
+        ax.clabel(
+            cc, cc.levels[1::2], inline=True, fontsize=CLABEL_FONTSIZE, 
+            fmt=fmt, rightside_up=False, inline_spacing=5
+        )
+    else:
+        ax.clabel(
+            cc, inline=True, fontsize=CLABEL_FONTSIZE, 
+            fmt='%1.{}f'.format(rval), rightside_up=True
+        )
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
     ax.set_yscale(ySca)
