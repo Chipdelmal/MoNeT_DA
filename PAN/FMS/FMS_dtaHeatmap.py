@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_pct']
@@ -21,7 +21,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = False
+TICKS_HIDE = True
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
 (HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2])
@@ -100,7 +100,7 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 fltr = {
     'i_ren': 12,
     'i_res': 0.5,
-    'i_pct': 0.95, 
+    'i_pct': 1.0, 
     'i_pmd': 1.0, 
     'i_mfr': 0.0, 
     'i_mtf': 1.0,

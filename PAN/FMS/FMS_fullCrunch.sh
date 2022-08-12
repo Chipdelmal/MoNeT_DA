@@ -16,6 +16,6 @@ cd "$parent_path"
 bash FMS_preCrunch.sh $USR $drv
 bash FMS_pstCrunch.sh $USR $drv $QNT
 bash FMS_clsCrunch.sh $USR $drv $QNT HLT $THS
-# bash FMS_dtaTraces.sh $USR $drv $QNT HLT $THS HLT
+bash FMS_dtaTraces.sh $USR $drv $QNT HLT $THS HLT
 bash FMS_dtaHeatmaps.sh $USR $drv $QNT HLT $THS 
 
