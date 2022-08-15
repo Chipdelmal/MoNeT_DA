@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_pct']
@@ -24,7 +24,7 @@ CHUNKS = JOB
 TICKS_HIDE = True
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
-(HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2])
+(HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2]) 
 ###############################################################################
 # Paths
 ###############################################################################
@@ -80,7 +80,7 @@ elif MOI == 'CPT':
 elif MOI == 'POE':
     (zmin, zmax) = (-.05, 1.05)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
-    cntr = [.5]
+    cntr = [.9]
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
