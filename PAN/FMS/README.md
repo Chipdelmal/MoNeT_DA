@@ -83,6 +83,6 @@ bash FMS_dtaTraces.sh $USR $drv $QNT HLT $THS HLT
 ## Download Results
 
 ```bash
-scp -r lab:/RAID5/marshallShare/fem_pgSIT/ifegenia_3/img '/home/chipdelmal/Documents/WorkSims/fem_pgSIT/2022_08/ifegenia_3'
+scp -r lab:/RAID5/marshallShare/fem_pgSIT/ifegenia_5/img '/home/chipdelmal/Documents/WorkSims/fem_pgSIT/2022_08/ifegenia_5'
 scp -r lab:/RAID5/marshallShare/fem_pgSIT/ifegenia_3/ML/img/heat '/home/chipdelmal/Documents/WorkSims/fem_pgSIT/2022_08/ifegenia_3/img'
 ```

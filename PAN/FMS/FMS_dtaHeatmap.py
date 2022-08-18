@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_pct']
@@ -71,7 +71,7 @@ if MOI == 'TT0':
     cntr = [2*365]
 elif MOI == 'WOP':
     (zmin, zmax) = (0, 365*5)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
     cntr = [2*365]
 elif MOI == 'CPT':
     (zmin, zmax) = (-.05, 1.05)
@@ -79,11 +79,11 @@ elif MOI == 'CPT':
     cntr = [.5]
 elif MOI == 'POE':
     (zmin, zmax) = (-.05, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
     cntr = [.9]
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
+    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/2), 'nearest')
 
 if zmax > 10:
     rval = 0
@@ -181,20 +181,20 @@ for sw in sweep:
         ax.set_ylabel(HD_IND[1])
         pTitle = ' '.join(['[{}: {}]'.format(i, fltr[i]) for i in fltr])
         plt.title(pTitle, fontsize=7.5)
-    if MOI=='WOP':
-        fmt = {}
-        strs = ["{:.2f}".format(i/365) for i in cc.levels]
-        for (l, s) in zip(cc.levels, strs):
-            fmt[l] = s
-        ax.clabel(
-            cc, cc.levels[1::2], inline=True, fontsize=CLABEL_FONTSIZE, 
-            fmt=fmt, rightside_up=False, inline_spacing=5
-        )
-    else:
-        ax.clabel(
-            cc, inline=True, fontsize=CLABEL_FONTSIZE, 
-            fmt='%1.{}f'.format(rval), rightside_up=True
-        )
+    # if MOI=='WOP':
+    #     fmt = {}
+    #     strs = ["{:.2f}".format(i/365) for i in cc.levels]
+    #     for (l, s) in zip(cc.levels, strs):
+    #         fmt[l] = s
+    #     ax.clabel(
+    #         cc, cc.levels[1::2], inline=True, fontsize=CLABEL_FONTSIZE, 
+    #         fmt=fmt, rightside_up=False, inline_spacing=5
+    #     )
+    # else:
+    #     ax.clabel(
+    #         cc, inline=True, fontsize=CLABEL_FONTSIZE, 
+    #         fmt='%1.{}f'.format(rval), rightside_up=True
+    #     )
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
     ax.set_yscale(ySca)
