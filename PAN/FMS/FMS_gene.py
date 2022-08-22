@@ -51,7 +51,7 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         elif DRIVE == 'RDL':
             colors = ['#f2008900', '#c879ff00', '#bbdefb35']
         elif DRIVE == 'RDF':
-            colors = ['#f2008900', '#c879ff00', '#03045e35']
+            colors = ['#f2008900', '#c879ff00', '#1888e335']
         else:
             colors = ['#f2008955', '#c879ff55', '#c879ff35']
     elif TYPE == 'TRS':
