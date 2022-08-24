@@ -43,7 +43,7 @@ df = pd.DataFrame(param_values, columns=saNames)
 # Ammending Experiments DF
 ###############################################################################
 rows = df.shape[0]
-cstVars = saVars = ([i for i in VARS_RANGES if (len(i[1])<=1)])
+cstVars = ([i for i in VARS_RANGES if (len(i[1])<=1)])
 for (var, cstVal) in cstVars:
     df[var]=cstVal*rows
 df = df[[i[0] for i in VARS_RANGES]]
