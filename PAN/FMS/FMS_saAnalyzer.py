@@ -64,9 +64,8 @@ rowVals.pop('rer')
 rowVals['grp'] = 0
 # Assemble the filter
 fltr = {f'i_{k}': v for k, v in rowVals.items()}
-###############################################################################
-# Filter Results for entry
-###############################################################################
+# Filter Results for entry ----------------------------------------------------
 ks = list(fltr.keys())
-vix = [all(i) for i in zip(*[np.isclose(RES[k], fltr[k]) for k in ks])]
+rowFilterMtx = [np.isclose(RES[k], fltr[k]) for k in ks]
+boolFilter = [all(i) for i in zip(*rowFilterMtx)]
 
