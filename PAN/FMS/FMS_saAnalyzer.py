@@ -4,7 +4,7 @@ from os import path
 import numpy as np
 import pandas as pd
 import compress_pickle as pkl
-from SALib.analyze import sobol
+from SALib.analyze import sobol, delta, pawn
 import MoNeT_MGDrivE as monet
 import FMS_aux as aux
 import FMS_gene as drv
@@ -61,7 +61,7 @@ saVars = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])>1)])])
 saCnst = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])<=1)])])
 rsnst = set([i.split('_')[-1] for i in headRes]) - set(PROBLEM['names'])
 # Generate filter -------------------------------------------------------------
-ix = 70
+# ix = 70
 expNum = EXP.shape[0]
 (matchesSizes, outVector) = ([0]*expNum, np.zeros(expNum))
 for ix in range(expNum):
@@ -83,7 +83,13 @@ for ix in range(expNum):
     boolFull = [a and b for (a, b) in zip(boolFilterRes, boolFilter)]
     dataRow = RES[boolFull]
     (matchesSizes[ix], outVector[ix]) = (dataRow.shape[0], float(dataRow[MOI]))
+if len(set(matchesSizes))>1:
+    print("Error in the output vector!")
+    # matchesSizes.index(0)
 ###############################################################################
 # Do SA
 ###############################################################################
-Si = sobol.analyze(PROBLEM, outVector)
+Si = sobol.analyze(PROBLEM, outVector, print_to_console=True)
+Si = delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+Si = pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+
