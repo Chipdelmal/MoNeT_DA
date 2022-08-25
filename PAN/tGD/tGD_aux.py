@@ -20,24 +20,29 @@ XP_NPAT = 'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 )
 SAMP_RATE = 1
 EXPS = ('100', )
+###############################################################################
+# Sensitivity Analysis
+###############################################################################
+SA_SAMPLES = 2**9
+SA_RANGES = (
+    ('fcs', (0.000, 1.000)), 
+    ('fcb', (0,  )), 
+    ('fga', (0.010, 0.100)), 
+    ('fgb', (0.425, 0.500)), 
+    ('cut', (0.800, 0.950)), 
+    ('hdr', (0.600, 0.950)), 
+    ('res', (0.000, 1.000)),
+    ('ren', (12, ))
+)
 
-
-def patternForReleases(ren, AOI, ftype, ext='bz'):
-    strPat = XP_NPAT.format(
-        '*', '*', '*', '*', '*', '*', ren, '*', AOI, '*', ftype, ext
-    )
-    return strPat
-
-
-def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.lzma'):
-    filesList = glob(PATH_EXP+'E*')
-    fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
-    splitFilenames = [re.split('_|-', i)[:skip] for i in fileNames]
-    ids = []
-    for c in range(len(splitFilenames[0])):
-        colSet = set([i[c] for i in splitFilenames])
-        ids.append(sorted(list(colSet)))
-    return ids
+#   * `fcs`: from=0.05, to=0.95, by=0.05 (1e4)
+#   * `fcb`: from=0.05, to=0.95, by=0.05 (1e4)
+#   * `fga`: from=0.01, to=0.10, by=0.01 (1e4)
+#   * `fgb`: from=0.425, to=0.50, by=0.005 (1e4)
+#   * `cut`: from=0.0.80, to=0.95, by=0.05 (1e2)
+#   * `hdr`: from=0.60, to=0.95, by=0.05 (1e2)
+#   * `ren`: from=0, to=24, by=1 (1e0)
+#   * `res`: from=10, to=250, by=0.05 (1e2)
 
 ###############################################################################
 # Count genotypes
@@ -283,3 +288,21 @@ def exportPstTracesParallel(
         sampRate=sampRate, labelspacing=labelspacing
     )
     return None
+
+
+def patternForReleases(ren, AOI, ftype, ext='bz'):
+    strPat = XP_NPAT.format(
+        '*', '*', '*', '*', '*', '*', ren, '*', AOI, '*', ftype, ext
+    )
+    return strPat
+
+
+def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.lzma'):
+    filesList = glob(PATH_EXP+'E*')
+    fileNames = [i.split('/')[-1].split('.')[-2] for i in filesList]
+    splitFilenames = [re.split('_|-', i)[:skip] for i in fileNames]
+    ids = []
+    for c in range(len(splitFilenames[0])):
+        colSet = set([i[c] for i in splitFilenames])
+        ids.append(sorted(list(colSet)))
+    return ids
