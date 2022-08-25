@@ -6,6 +6,8 @@ import pandas as pd
 import compress_pickle as pkl
 from SALib.analyze import sobol, delta, pawn
 import MoNeT_MGDrivE as monet
+import matplotlib.pyplot as plt
+import squarify
 import FMS_aux as aux
 import FMS_gene as drv
 
@@ -87,9 +89,47 @@ if len(set(matchesSizes))>1:
     print("Error in the output vector!")
     # matchesSizes.index(0)
 ###############################################################################
-# Do SA
+# Run SA
 ###############################################################################
-Si = sobol.analyze(PROBLEM, outVector, print_to_console=True)
-Si = delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
-Si = pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+(SA_sobol, SA_delta, SA_pawn) = (
+    sobol.analyze(PROBLEM, outVector, print_to_console=True),
+    delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True),
+    pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+)
+# Compile dataframes ----------------------------------------------------------
+deltaDF = pd.DataFrame(SA_delta)
+pawnDF = pd.DataFrame(SA_pawn)
+sobolOut = list(zip(
+    SA_sobol['S1'], SA_sobol['S1_conf'], 
+    SA_sobol['ST'], SA_sobol['ST_conf'],
+    pawnDF['names']
+))
+sobolDF = pd.DataFrame(sobolOut, columns=['S1', 'S1_conf', 'ST', 'ST_conf', 'names'])
+###############################################################################
+# Plots
+###############################################################################
+# plt.show(SA_pawn.plot())
+colors = [
+    '#2614ed55', '#FF006E55', '#45d40c55', '#8338EC55', '#1888e355', 
+    '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
+]
+saRes = pawnDF
+(sizes, label) = (saRes['median'], saRes['names'])
+(fig, ax) = plt.subplots(figsize=(5,5))
+squarify.plot(sizes=sizes, label=label, alpha=0.5, color=colors)
+ax.set_aspect(1)
+plt.axis('off')
+plt.show()
+###############################################################################
+# Export to Disk
+###############################################################################
+outPairs = list(zip(
+    ['Sobol', 'Delta', 'PAWN'],
+    [sobolDF, deltaDF, pawnDF], 
+    [SA_sobol, SA_delta, SA_pawn]
+))
+for (name, df, dct) in outPairs:
+    fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')
+    df.to_csv(fName+'.csv', index=False)
+    pkl.dump(dct, fName+'.pkl')
 
