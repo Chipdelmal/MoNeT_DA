@@ -4,16 +4,16 @@ from os import path
 import numpy as np
 import pandas as pd
 import compress_pickle as pkl
-from SALib.sample import saltelli
+from SALib.analyze import sobol
 import MoNeT_MGDrivE as monet
 import FMS_aux as aux
 import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS) = ('srv', 'PGS', '50', 'HLT', '0.1')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
-    (USR, DRV, QNT, AOI, THS) = sys.argv[1:]
+    (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
 # Setting Paths Up and Reading SA Constants
 ###############################################################################
@@ -61,20 +61,29 @@ saVars = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])>1)])])
 saCnst = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])<=1)])])
 rsnst = set([i.split('_')[-1] for i in headRes]) - set(PROBLEM['names'])
 # Generate filter -------------------------------------------------------------
-ix = 10
-rowVals = EXP.iloc[ix].to_dict()
-# Fix discrepancy in release size
-rowVals['res'] = rowVals['rer']
-rowVals.pop('rer')
-# Add group id to filter
-rowVals['grp'] = 0
-# Assemble the filter
-fltr = {f'i_{k}': v for k, v in rowVals.items()}
-# Filter Results for entry ----------------------------------------------------
-# ks = list(fltr.keys())
-ks = ['i_ren', 'i_pct', 'i_pmd', 'i_mfr', 'i_mtf', 'i_fvb', 'i_grp']
-rowFilterMtx = [np.isclose(RES[k], fltr[k]) for k in ks]
-boolFilter = [all(i) for i in zip(*rowFilterMtx)]
-boolFilterRes = np.isclose(RES['i_res'], fltr['i_res'], atol=1e-1)
-boolFull = [a and b for (a, b) in zip(boolFilterRes, boolFilter)]
-dataRow = RES[boolFull]
+ix = 70
+expNum = EXP.shape[0]
+(matchesSizes, outVector) = ([0]*expNum, np.zeros(expNum))
+for ix in range(expNum):
+    print('Processing {:06d}/{:06d}'.format(ix+1, expNum), end='\r')
+    rowVals = EXP.iloc[ix].to_dict()
+    # Fix discrepancy in release size
+    rowVals['res'] = round(rowVals['rer'], 2)
+    rowVals.pop('rer')
+    # Add group id to filter
+    rowVals['grp'] = 0
+    # Assemble the filter
+    fltr = {f'i_{k}': v for k, v in rowVals.items()}
+    # Filter Results for entry ------------------------------------------------
+    ks = list(fltr.keys())
+    ks.remove('i_res')
+    rowFilterMtx = [np.isclose(RES[k], fltr[k], atol=1e-4) for k in ks]
+    boolFilter = [all(i) for i in zip(*rowFilterMtx)]
+    boolFilterRes = np.isclose(RES['i_res'], fltr['i_res'], atol=1e-1)
+    boolFull = [a and b for (a, b) in zip(boolFilterRes, boolFilter)]
+    dataRow = RES[boolFull]
+    (matchesSizes[ix], outVector[ix]) = (dataRow.shape[0], float(dataRow[MOI]))
+###############################################################################
+# Do SA
+###############################################################################
+Si = sobol.analyze(PROBLEM, outVector)
