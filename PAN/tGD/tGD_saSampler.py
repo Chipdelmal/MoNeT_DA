@@ -10,7 +10,7 @@ import tGD_aux as aux
 
 
 if monet.isNotebook():
-    (USR, DRV) = ('srv2', 'linkedDrive')
+    (USR, DRV) = ('srv2', 'tGD')
 else:
     (USR, DRV) = sys.argv[1:]
 exp = '100'

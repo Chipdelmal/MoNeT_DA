@@ -47,6 +47,12 @@ thsStr = str(int(float(THS)*100))
 )
 RES = pd.read_csv(path.join(PT_OUT, fName_I))
 ###############################################################################
+# Explore
+###############################################################################
+headerInd = list(RES.columns)
+uqVal = {i: len(list(RES[i].unique())) for i in headerInd}
+RES.shape
+###############################################################################
 # Assemble Output Vector
 ###############################################################################
 headExp = list(EXP.columns)
@@ -55,7 +61,7 @@ saVars = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])>1)])])
 saCnst = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])<=1)])])
 rsnst = set([i.split('_')[-1] for i in headRes]) - set(PROBLEM['names'])
 # Generate filter -------------------------------------------------------------
-ix = 0
+ix = 10
 rowVals = EXP.iloc[ix].to_dict()
 # Fix discrepancy in release size
 rowVals['res'] = rowVals['rer']
@@ -65,7 +71,10 @@ rowVals['grp'] = 0
 # Assemble the filter
 fltr = {f'i_{k}': v for k, v in rowVals.items()}
 # Filter Results for entry ----------------------------------------------------
-ks = list(fltr.keys())
+# ks = list(fltr.keys())
+ks = ['i_ren', 'i_pct', 'i_pmd', 'i_mfr', 'i_mtf', 'i_fvb', 'i_grp']
 rowFilterMtx = [np.isclose(RES[k], fltr[k]) for k in ks]
 boolFilter = [all(i) for i in zip(*rowFilterMtx)]
-
+boolFilterRes = np.isclose(RES['i_res'], fltr['i_res'], atol=1e-1)
+boolFull = [a and b for (a, b) in zip(boolFilterRes, boolFilter)]
+dataRow = RES[boolFull]
