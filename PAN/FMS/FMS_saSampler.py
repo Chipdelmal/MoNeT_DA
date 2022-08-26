@@ -11,7 +11,7 @@ import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV) = ('srv', 'PGS')
+    (USR, DRV) = ('srv', 'FMS3')
 else:
     (USR, DRV) = sys.argv[1:]
 ###############################################################################
