@@ -15,7 +15,7 @@ import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -101,3 +101,15 @@ squarify.plot(sizes=sizes, label=label, alpha=0.5, color=colors)
 ax.set_aspect(1)
 plt.axis('off')
 plt.show()
+###############################################################################
+# Export to Disk
+###############################################################################
+outPairs = list(zip(
+    ['Delta', 'PAWN', 'HDMR', 'FAST'],
+    [deltaDF, pawnDF, hdmrDF, fastDF], 
+    [SA_delta, SA_pawn, SA_hdmr, SA_fast]
+))
+for (name, df, dct) in outPairs:
+    fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')
+    df.to_csv(fName+'.csv', index=False)
+    pkl.dump(dct, fName+'.pkl')

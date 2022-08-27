@@ -113,8 +113,8 @@ colors = [
     '#2614ed55', '#FF006E55', '#45d40c55', '#8338EC55', '#1888e355', 
     '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
 ]
-saRes = pawnDF
-(sizes, label) = (saRes['median'], saRes['names'])
+saRes = sobolDF
+(sizes, label) = (saRes['S1'], saRes['names'])
 (fig, ax) = plt.subplots(figsize=(5,5))
 squarify.plot(sizes=sizes, label=label, alpha=0.5, color=colors)
 ax.set_aspect(1)
