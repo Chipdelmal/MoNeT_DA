@@ -1,5 +1,4 @@
 
-
 import math
 from os import sys
 from os import path
@@ -15,7 +14,7 @@ import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -83,23 +82,51 @@ SA_fast = rbd_fast.analyze(problem, X, Y, print_to_console=True)
 # Compile dataframes ----------------------------------------------------------
 deltaDF = pd.DataFrame(SA_delta)
 pawnDF = pd.DataFrame(SA_pawn)
-hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'names': SA_hdmr['names']})
+hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Plots
 ###############################################################################
-# plt.show(SA_pawn.plot())
-colors = [
-    '#2614ed55', '#FF006E55', '#45d40c55', '#8338EC55', '#1888e355', 
-    '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
-]
-saRes = hdmrDF
-fltr = [not (math.isnan(i)) for i in saRes['S1']]
-(sizes, label) = (abs(saRes['S1'][fltr]), saRes['names'][fltr])
+mIx = 0
+methods = list(zip(
+    ("FAST", "Delta", "PAWN", "HDMR"), 
+    (fastDF, deltaDF, pawnDF, hdmrDF)
+))
+(method, saRes) = methods[mIx]
+tag = ('S1' if  method is not 'PAWN' else 'median')
+fltr = [not (math.isnan(i)) for i in saRes[tag]]
+(sizes, label) = (
+    abs(saRes[tag][fltr]), 
+    [i.split('_')[-1] for i in saRes['names'][fltr]]
+)
 (fig, ax) = plt.subplots(figsize=(5,5))
-squarify.plot(sizes=sizes, label=label, alpha=0.5, color=colors)
+squarify.plot(sizes=sizes, label=label, alpha=0.5, color=aux.TREE_COLS)
 ax.set_aspect(1)
 plt.axis('off')
+plt.show()
+# Stacked bars ----------------------------------------------------------------
+width=.35
+cats = [i.split('_')[-1] for i in saRes['names'][fltr]]
+methods = ("FAST", "Delta", "PAWN", "HDMR")
+dfs = (deltaDF, pawnDF, hdmrDF, fastDF)
+(fig, ax) = plt.subplots()
+ax.bar(cats, deltaDF['S1'], width, label='Delta')
+ax.bar(cats, fastDF['S1'], width, label='FAST')
+ax.bar(cats, pawnDF['median'], width,label='PAWN')
+ax.bar(cats, hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]], width,label='HDMR')
+ax.legend()
+plt.show()
+# Stacked bars ----------------------------------------------------------------
+sArray = np.asarray([
+    fastDF['S1'], deltaDF['S1'], pawnDF['median'],
+    hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]]
+])
+row_sums = sArray.sum(axis=1)
+sNorm = sArray/row_sums[:, np.newaxis]
+(fig, ax) = plt.subplots()
+for i in range(len(cats)):
+    ax.bar(methods, sArray[:,i], width, label=cats[i])
+ax.legend()
 plt.show()
 ###############################################################################
 # Export to Disk

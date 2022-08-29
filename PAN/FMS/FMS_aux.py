@@ -360,3 +360,9 @@ def exportPstTracesParallel(
         sampRate=sampRate, labelspacing=labelspacing
     )
     return None
+
+
+TREE_COLS = [
+    '#2614ed55', '#FF006E55', '#45d40c55', '#8338EC55', '#1888e355', 
+    '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
+]
