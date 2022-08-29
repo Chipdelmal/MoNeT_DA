@@ -82,7 +82,7 @@ SA_fast = rbd_fast.analyze(problem, X, Y, print_to_console=True)
 # Compile dataframes ----------------------------------------------------------
 deltaDF = pd.DataFrame(SA_delta)
 pawnDF = pd.DataFrame(SA_pawn)
-hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
+hdmrDF = pd.DataFrame({'S1': SA_hdmr['Sa'], 'S1_conf': SA_hdmr['Sa_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Plots
@@ -95,7 +95,7 @@ mIx = 1
 for mIx in range(len(methods)):
     (method, saRes) = methods[mIx]
     tag = ('S1' if  method is not 'PAWN' else 'median')
-    fltr = [not (math.isnan(i)) for i in saRes[tag]]
+    fltr = [i in set(FEATS) for i in saRes['names']]
     (sizes, label) = (
         abs(saRes[tag][fltr]), 
         [i.split('_')[-1] for i in saRes['names'][fltr]]
@@ -109,30 +109,6 @@ for mIx in range(len(methods)):
         path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
         dpi=500, bbox_inches='tight', transparent=True
     )
-# # Stacked bars ----------------------------------------------------------------
-# width=.35
-# cats = [i.split('_')[-1] for i in saRes['names'][fltr]]
-# methods = ("FAST", "Delta", "PAWN", "HDMR")
-# dfs = (deltaDF, pawnDF, hdmrDF, fastDF)
-# (fig, ax) = plt.subplots()
-# ax.bar(cats, deltaDF['S1'], width, label='Delta')
-# ax.bar(cats, fastDF['S1'], width, label='FAST')
-# ax.bar(cats, pawnDF['median'], width,label='PAWN')
-# ax.bar(cats, hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]], width,label='HDMR')
-# ax.legend()
-# plt.show()
-# # Stacked bars ----------------------------------------------------------------
-# sArray = np.asarray([
-#     fastDF['S1'], deltaDF['S1'], pawnDF['median'],
-#     hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]]
-# ])
-# row_sums = sArray.sum(axis=1)
-# sNorm = sArray/row_sums[:, np.newaxis]
-# (fig, ax) = plt.subplots()
-# for i in range(len(cats)):
-#     ax.bar(methods, sArray[:,i], width, label=cats[i])
-# ax.legend()
-# plt.show()
 ###############################################################################
 # Export to Disk
 ###############################################################################
