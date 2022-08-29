@@ -87,47 +87,52 @@ fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Plots
 ###############################################################################
-mIx = 0
 methods = list(zip(
     ("FAST", "Delta", "PAWN", "HDMR"), 
     (fastDF, deltaDF, pawnDF, hdmrDF)
 ))
-(method, saRes) = methods[mIx]
-tag = ('S1' if  method is not 'PAWN' else 'median')
-fltr = [not (math.isnan(i)) for i in saRes[tag]]
-(sizes, label) = (
-    abs(saRes[tag][fltr]), 
-    [i.split('_')[-1] for i in saRes['names'][fltr]]
-)
-(fig, ax) = plt.subplots(figsize=(5,5))
-squarify.plot(sizes=sizes, label=label, alpha=0.5, color=aux.TREE_COLS)
-ax.set_aspect(1)
-plt.axis('off')
-plt.show()
-# Stacked bars ----------------------------------------------------------------
-width=.35
-cats = [i.split('_')[-1] for i in saRes['names'][fltr]]
-methods = ("FAST", "Delta", "PAWN", "HDMR")
-dfs = (deltaDF, pawnDF, hdmrDF, fastDF)
-(fig, ax) = plt.subplots()
-ax.bar(cats, deltaDF['S1'], width, label='Delta')
-ax.bar(cats, fastDF['S1'], width, label='FAST')
-ax.bar(cats, pawnDF['median'], width,label='PAWN')
-ax.bar(cats, hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]], width,label='HDMR')
-ax.legend()
-plt.show()
-# Stacked bars ----------------------------------------------------------------
-sArray = np.asarray([
-    fastDF['S1'], deltaDF['S1'], pawnDF['median'],
-    hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]]
-])
-row_sums = sArray.sum(axis=1)
-sNorm = sArray/row_sums[:, np.newaxis]
-(fig, ax) = plt.subplots()
-for i in range(len(cats)):
-    ax.bar(methods, sArray[:,i], width, label=cats[i])
-ax.legend()
-plt.show()
+mIx = 1
+for mIx in range(len(methods)):
+    (method, saRes) = methods[mIx]
+    tag = ('S1' if  method is not 'PAWN' else 'median')
+    fltr = [not (math.isnan(i)) for i in saRes[tag]]
+    (sizes, label) = (
+        abs(saRes[tag][fltr]), 
+        [i.split('_')[-1] for i in saRes['names'][fltr]]
+    )
+    lbl = ['{}\n{:.2f}'.format(a, b) for (a, b) in zip(label, sizes)]
+    (fig, ax) = plt.subplots(figsize=(5,5))
+    squarify.plot(sizes=sizes, label=lbl, alpha=0.5, color=aux.TREE_COLS)
+    ax.set_aspect(1)
+    plt.axis('off')
+    fig.savefig(
+        path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
+        dpi=500, bbox_inches='tight', transparent=True
+    )
+# # Stacked bars ----------------------------------------------------------------
+# width=.35
+# cats = [i.split('_')[-1] for i in saRes['names'][fltr]]
+# methods = ("FAST", "Delta", "PAWN", "HDMR")
+# dfs = (deltaDF, pawnDF, hdmrDF, fastDF)
+# (fig, ax) = plt.subplots()
+# ax.bar(cats, deltaDF['S1'], width, label='Delta')
+# ax.bar(cats, fastDF['S1'], width, label='FAST')
+# ax.bar(cats, pawnDF['median'], width,label='PAWN')
+# ax.bar(cats, hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]], width,label='HDMR')
+# ax.legend()
+# plt.show()
+# # Stacked bars ----------------------------------------------------------------
+# sArray = np.asarray([
+#     fastDF['S1'], deltaDF['S1'], pawnDF['median'],
+#     hdmrDF['S1'][[i in set(deltaDF['names']) for i in list(hdmrDF['names'])]]
+# ])
+# row_sums = sArray.sum(axis=1)
+# sNorm = sArray/row_sums[:, np.newaxis]
+# (fig, ax) = plt.subplots()
+# for i in range(len(cats)):
+#     ax.bar(methods, sArray[:,i], width, label=cats[i])
+# ax.legend()
+# plt.show()
 ###############################################################################
 # Export to Disk
 ###############################################################################

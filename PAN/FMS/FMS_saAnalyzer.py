@@ -4,7 +4,7 @@ from os import path
 import numpy as np
 import pandas as pd
 import compress_pickle as pkl
-from SALib.analyze import sobol, delta, pawn
+from SALib.analyze import sobol, delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
 import squarify
@@ -91,13 +91,12 @@ if len(set(matchesSizes))>1:
 ###############################################################################
 # Run SA
 ###############################################################################
-(SA_sobol, SA_delta, SA_pawn) = (
-    sobol.analyze(PROBLEM, outVector, print_to_console=True),
-    delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True),
-    pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
-)
+SA_sobol = sobol.analyze(PROBLEM, outVector, print_to_console=True)
+SA_delta = delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+SA_pawn = pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+SA_hdmr = hdmr.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+SA_fast = rbd_fast.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 # Compile dataframes ----------------------------------------------------------
-deltaDF = pd.DataFrame(SA_delta)
 pawnDF = pd.DataFrame(SA_pawn)
 sobolOut = list(zip(
     SA_sobol['S1'], SA_sobol['S1_conf'], 
@@ -105,6 +104,9 @@ sobolOut = list(zip(
     pawnDF['names']
 ))
 sobolDF = pd.DataFrame(sobolOut, columns=['S1', 'S1_conf', 'ST', 'ST_conf', 'names'])
+deltaDF = pd.DataFrame(SA_delta)
+hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
+fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Plots
 ###############################################################################
