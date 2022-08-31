@@ -4,14 +4,14 @@ from os import path
 import numpy as np
 import pandas as pd
 import compress_pickle as pkl
-from SALib.sample import saltelli
+from SALib.sample import saltelli, latin
 import MoNeT_MGDrivE as monet
 import FMS_aux as aux
 import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV) = ('srv', 'FMS3')
+    (USR, DRV) = ('srv', 'PGS')
 else:
     (USR, DRV) = sys.argv[1:]
 ###############################################################################
@@ -37,8 +37,9 @@ problem = {
 ###############################################################################
 # Sampling
 ###############################################################################
-param_values = saltelli.sample(problem, SAMPLES_NUM)
+param_values = latin.sample(problem, SAMPLES_NUM)
 df = pd.DataFrame(param_values, columns=saNames)
+df['ren'] = [int(i) for i in round(df['ren'])]
 ###############################################################################
 # Ammending Experiments DF
 ###############################################################################
