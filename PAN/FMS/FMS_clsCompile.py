@@ -9,7 +9,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, MTR) = ('srv', 'FMS3', '50', 'HLT', 'WOP')
+    (USR, DRV, QNT, AOI, MTR) = ('srv', 'PGS', '50', 'HLT', 'TTO')
 else:
     (USR, DRV, QNT, AOI, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -42,7 +42,7 @@ monet.printExperimentHead(
 ###########################################################################
 # Flatten CSVs
 ###########################################################################
-fName = sorted(glob('{}/*{}*{}*qnt.csv'.format(PT_SUMS, AOI, MTR)))
+fName = sorted(glob('{}/{}_{}_{}_qnt.csv'.format(PT_SUMS, AOI, MTR, QNT)))
 dfList = [pd.read_csv(i, sep=',') for i in fName]
 dfMerged = pd.concat(dfList)
 # Sorting columns ---------------------------------------------------------

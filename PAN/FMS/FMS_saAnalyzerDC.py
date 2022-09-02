@@ -106,7 +106,7 @@ for mIx in range(len(methods)):
     ax.set_aspect(1)
     plt.axis('off')
     fig.savefig(
-        path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
+        path.join(PT_MTR, f'SAC-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
         dpi=500, bbox_inches='tight', transparent=True
     )
 ###############################################################################
@@ -118,6 +118,6 @@ outPairs = list(zip(
     [SA_delta, SA_pawn, SA_hdmr, SA_fast]
 ))
 for (name, df, dct) in outPairs:
-    fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')
+    fName = path.join(PT_MTR, f'SAC-{AOI}_{MOI}-{name}-{QNT}_qnt')
     df.to_csv(fName+'.csv', index=False)
     pkl.dump(dct, fName+'.pkl')

@@ -92,19 +92,19 @@ if len(set(matchesSizes))>1:
 ###############################################################################
 # Run SA
 ###############################################################################
-SA_sobol = sobol.analyze(PROBLEM, outVector, print_to_console=True)
+# SA_sobol = sobol.analyze(PROBLEM, outVector, print_to_console=True)
 SA_delta = delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 SA_pawn = pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 SA_hdmr = hdmr.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 SA_fast = rbd_fast.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 # Compile dataframes ----------------------------------------------------------
 pawnDF = pd.DataFrame(SA_pawn)
-sobolOut = list(zip(
-    SA_sobol['S1'], SA_sobol['S1_conf'], 
-    SA_sobol['ST'], SA_sobol['ST_conf'],
-    pawnDF['names']
-))
-sobolDF = pd.DataFrame(sobolOut, columns=['S1', 'S1_conf', 'ST', 'ST_conf', 'names'])
+# sobolOut = list(zip(
+#     SA_sobol['S1'], SA_sobol['S1_conf'], 
+#     SA_sobol['ST'], SA_sobol['ST_conf'],
+#     pawnDF['names']
+# ))
+# sobolDF = pd.DataFrame(sobolOut, columns=['S1', 'S1_conf', 'ST', 'ST_conf', 'names'])
 deltaDF = pd.DataFrame(SA_delta)
 hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
@@ -113,8 +113,8 @@ fastDF = pd.DataFrame(SA_fast)
 # Plots
 ###############################################################################
 methods = list(zip(
-    ("FAST", "Delta", "PAWN", "HDMR", "Sobol"), 
-    (fastDF, deltaDF, pawnDF, hdmrDF, sobolDF)
+    ("FAST", "Delta", "PAWN", "HDMR"), #, "Sobol"), 
+    (fastDF, deltaDF, pawnDF, hdmrDF) #, sobolDF)
 ))
 mIx = 1
 for mIx in range(len(methods)):
@@ -138,9 +138,9 @@ for mIx in range(len(methods)):
 # Export to Disk
 ###############################################################################
 outPairs = list(zip(
-    ['Sobol', 'Delta', 'PAWN', 'HDMR', 'FAST'],
-    [sobolDF, deltaDF, pawnDF, hdmrDF, fastDF], 
-    [SA_sobol, SA_delta, SA_pawn, SA_hdmr, SA_fast]
+    ['Delta', 'PAWN', 'HDMR', 'FAST'], #, 'Sobol']
+    [deltaDF, pawnDF, hdmrDF, fastDF], #, sobolDF] 
+    [SA_delta, SA_pawn, SA_hdmr, SA_fast] #, SA_sobol]
 ))
 for (name, df, dct) in outPairs:
     fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')
