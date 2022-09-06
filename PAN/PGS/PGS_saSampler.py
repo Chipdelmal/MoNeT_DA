@@ -40,6 +40,7 @@ problem = {
 param_values = latin.sample(problem, SAMPLES_NUM)
 df = pd.DataFrame(param_values, columns=saNames)
 df['ren'] = [int(i) for i in round(df['ren'])]
+df['rei'] = [int(i) for i in round(df['rei'])]
 ###############################################################################
 # Ammending Experiments DF
 ###############################################################################

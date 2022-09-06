@@ -182,9 +182,9 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 ###############################################################################
 def selectPath(USR, DRV=None):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/pgSIT/{}/'.format(DRV)
+        PATH_ROOT = '/RAID5/marshallShare/pgSIT2/{}/'.format(DRV)
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/pgSIT/{}/'.format(DRV)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/pgSIT2/{}/'.format(DRV)
     (PATH_IMG, PATH_DATA) = (
         '{}img/'.format(PATH_ROOT), 
         '{}'.format(PATH_ROOT)
