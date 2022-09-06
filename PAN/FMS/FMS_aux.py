@@ -3,7 +3,9 @@
 
 import re
 import numpy as np
+from numpy import random
 from glob import glob
+from more_itertools import locate
 from os import path
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
@@ -29,11 +31,11 @@ XP_ID = 'FMS'
 ###############################################################################
 # Sensitivity Analysis
 ###############################################################################
-SA_SAMPLES = 10000
+SA_SAMPLES = 8192
 SA_RANGES = (
     ('ren', (1, 48)), 
     ('rer', (1, 50)), 
-    ('pct', (0.5, 1)), 
+    ('pct', (0, .5)), 
     ('pmd', (0, 1)), 
     ('mfr', (0, )), 
     ('mtf', (0, 1)), 
@@ -80,6 +82,22 @@ REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
     [.10, .20, .25, .50, .75, .80, .90],
     [.10, .20, .25, .50, .75, .80, .90],
     [0, 365]
+)
+###############################################################################
+# DICE Plots
+###############################################################################
+pFeats = (
+    ('i_ren', 'linear'), ('i_res', 'linear'),
+    ('i_pct', 'linear'), ('i_pmd', 'linear'),
+    ('i_mfr', 'linear'), ('i_mtf', 'linear'), ('i_fvb', 'linear'),
+)
+DICE_PARS = (
+    ('CPT', 0.005, '#4361ee43', (0, 1)),
+    ('WOP', 0.050, '#be0aff33', (0, 5*365+50)),
+    ('TTO', 0.050, '#9ef01a33', (0, 5*365+50)),
+    ('TTI', 0.075, '#23194233', (0, 150)),
+    ('MNF', 0.000, '#00B3E643', (0, 1)),
+    ('POE', 0.001, '#ff006e22', (0, 1))
 )
 ###############################################################################
 # Dependent Variables for Heatmaps
@@ -361,6 +379,125 @@ def exportPstTracesParallel(
     )
     return None
 
+###############################################################################
+# DICE Plots
+###############################################################################
+def plotDICE(
+        dataEffect, xVar, yVar, features, hRows={},
+        sampleRate=1, wiggle=False, sd=0, scale='linear', 
+        lw=.175, color='#be0aff13', hcolor='#000000', hlw=.175,
+        rangePad=(.975, 1.025), gw=.25, yRange=None, ticksHide=False
+    ):
+    (inFact, outFact) = (dataEffect[features], dataEffect[yVar])
+    # Get levels and factorial combinations without feature -------------------
+    xLvls = sorted(list(inFact[xVar].unique()))
+    dropFeats = inFact.drop(xVar, axis=1).drop_duplicates()
+    dropSample = dropFeats.sample(frac=sampleRate)
+    # dropIndices = dropSample.index
+    # Generate figure ---------------------------------------------------------
+    doneRows = set()
+    (fig, ax) = plt.subplots(figsize=(10, 10))
+    # Log and linear scales ---------------------------------------------------
+    if scale == 'log':
+        xRan = [xLvls[1], xLvls[-1]]
+        xdelta = .125
+    else:
+        xRan = [xLvls[0], xLvls[-1]]
+        xdelta = (xRan[1] - xRan[0])/100
+    if yRange is None:
+        yRan = [min(dataEffect[yVar]), max(dataEffect[yVar])]
+    else:
+        yRan = yRange
+    # Iterate through traces --------------------------------------------------
+    for i in range(0, dropSample.shape[0]):
+        # If the row index has already been processed, go to the next ---------
+        if (dropSample.iloc[i].name) in doneRows:
+            continue
+        # If not, process and plot --------------------------------------------
+        entry = dropSample.iloc[i]
+        zipIter = zip(list(entry.keys()), list(entry.values))
+        fltrRaw = [list(dataEffect[col]==val) for (col, val) in zipIter]
+        fltr = [all(i) for i in zip(*fltrRaw)]
+        rowsIx = list(locate(fltr, lambda x: x == True))
+        [doneRows.add(i) for i in rowsIx]
+        # With filter in place, add the trace ---------------------------------
+        data = dataEffect[fltr][[xVar, yVar]]
+        if wiggle:
+            yData = [i+random.uniform(low=-sd, high=sd) for i in data[yVar]]
+        else:
+            yData = data[yVar]
+        # Plot markers --------------------------------------------------------
+        if len(hRows) != 0:
+            for (ix, r) in enumerate(list(data.index)):
+                # Draw highlights ---------------------------------------------
+                (x, y) = (data[xVar].iloc[ix], yData[ix])
+                if scale == 'log':
+                    xPoint = [x*(1-xdelta), x, x*(1+xdelta)]
+                else:
+                    xPoint = [x-xdelta, x, x+xdelta]
+                yD = (yRan[1]-yRan[0])/100
+                if r in hRows:
+                    (c, yD) = (hcolor, yD)
+                    ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
+                # else:
+                #     (c, yD) = (color, -yD)
+                # ax.plot(xPoint, [y+yD, y, y+yD], color=c, lw=hlw, zorder=10)
+        # Plot trace ----------------------------------------------------------
+        ax.plot(data[xVar], yData, lw=lw, color=color)
+    # Styling -----------------------------------------------------------------
+    if yRange is None:
+        STYLE = {
+            'xRange': xRan,
+            'yRange': [min(outFact)*rangePad[0], max(outFact)*rangePad[1]]
+        }
+    else:
+        STYLE = {
+            'xRange': xRan,
+            'yRange': yRan
+        }
+    # Apply styling to axes ---------------------------------------------------
+    if ticksHide:
+        ax.axes.xaxis.set_ticklabels([])
+        ax.axes.yaxis.set_ticklabels([])
+        ax.axes.xaxis.set_visible(False)
+        ax.axes.yaxis.set_visible(False)
+        # axTemp.xaxis.set_tick_params(width=0)
+        # axTemp.yaxis.set_tick_params(width=0)
+        ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
+        ax.set_axis_off()
+    # ax.set_aspect(monet.scaleAspect(1, STYLE))
+    ax.set_xlim(STYLE['xRange'])
+    ax.set_ylim(STYLE['yRange'])
+    ax.set_xscale(scale)
+    ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
+    # ax.vlines(
+    #     xLvls, 0, 1, lw=gw, ls='--', color='#000000', 
+    #     transform=ax.get_xaxis_transform(), zorder=-1
+    # )
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20, rotation=90)
+    fig.tight_layout()
+    return (fig, ax)
+
+
+def exportDICEParallel(
+        AOI, xVar, yVar, dataSample, FEATS, PT_IMG, hRows={}, 
+        dpi=500, lw=0.175, scale='linear', wiggle=False, sd=0.1, 
+        color='blue', sampleRate=0.5, hcolor='#00000020', hlw=5,
+        yRange=None, ticksHide=False
+    ):
+    prgStr = '{}* Processing [{}:{}:{}]{}'
+    print(prgStr.format(monet.CBBL, AOI, yVar, xVar, monet.CEND), end='\r')
+    fName = path.join(PT_IMG, 'DICE_{}_{}.png'.format(xVar[2:], yVar))
+    (fig, ax) = plotDICE(
+        dataSample, xVar, yVar, FEATS, hRows=hRows, lw=lw,
+        scale=scale, wiggle=wiggle, sd=sd, color=color,
+        sampleRate=sampleRate, hcolor=hcolor, hlw=hlw, yRange=yRange,
+        ticksHide=ticksHide
+    )
+    fig.savefig(fName, dpi=dpi, bbox_inches='tight', pad=0)
+    plt.clf(); plt.cla(); plt.close('all'); plt.gcf()
+    return None
 
 TREE_COLS = [
     '#2614ed', '#FF006E', '#45d40c', '#8338EC', '#1888e3', 
