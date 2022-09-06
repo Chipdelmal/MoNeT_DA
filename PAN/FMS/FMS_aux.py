@@ -495,7 +495,7 @@ def exportDICEParallel(
         sampleRate=sampleRate, hcolor=hcolor, hlw=hlw, yRange=yRange,
         ticksHide=ticksHide
     )
-    fig.savefig(fName, dpi=dpi, bbox_inches='tight', pad=0)
+    fig.savefig(fName, dpi=dpi, bbox_inches='tight')
     plt.clf(); plt.cla(); plt.close('all'); plt.gcf()
     return None
 

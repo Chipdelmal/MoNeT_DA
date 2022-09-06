@@ -14,7 +14,7 @@ if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS) = ('srv', 'PGS', '50', 'HLT', '0.1')
 else:
     (USR, DRV, QNT, AOI, THS) = sys.argv[1:]
-TRACE_NUM = 15e3
+TRACE_NUM = 20e3
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
