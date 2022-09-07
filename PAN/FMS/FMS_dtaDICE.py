@@ -14,7 +14,7 @@ if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS) = ('srv', 'PGS', '50', 'HLT', '0.1')
 else:
     (USR, DRV, QNT, AOI, THS) = sys.argv[1:]
-TRACE_NUM = 35e3
+TRACE_NUM = 42e3
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -78,7 +78,7 @@ for (yVar, sigma, col, yRange) in ans[:]:
         delayed(aux.exportDICEParallel)(
             AOI, xVar, yVar, dataEffect, FEATS, PT_IMG, hRows=highRows,
             dpi=400, scale=scale, wiggle=True, sd=sigma, sampleRate=sampleRate,
-            color=col, hcolor='#000000'+'50', lw=0.125, hlw=0.1, yRange=yRange,
+            color=col, hcolor='#000000'+'50', lw=0.2, hlw=0.1, yRange=yRange,
             ticksHide=False
         ) for (xVar, scale) in pFeats
     )
