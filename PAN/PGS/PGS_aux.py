@@ -44,6 +44,9 @@ SA_RANGES = (
 )
 ###############################################################################
 # Files and DA constants
+#   "ren", "rer", "rei", "pct", "pmd", "mfr", "mtf", "fvb"
+#   1e0, 1e8, 1e0, 1e10, 1e10, 1e10, 1e10, 1e10
+#   4, 14, 4, 12, 12, 12, 12, 12
 ###############################################################################
 (XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00')
 REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
@@ -54,25 +57,25 @@ REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD, DATA_TYPE) = (
     (
-        ('i_ren', 1), ('i_res', 2), 
-        ('i_pct', 3), ('i_pmd', 4), 
-        ('i_mfr', 5), ('i_mtf', 6), ('i_fvb', 7),
-        ('i_grp', 9)
+        ('i_ren', 1), ('i_res', 2), ('i_rei', 3),
+        ('i_pct', 4), ('i_pmd', 5), 
+        ('i_mfr', 6), ('i_mtf', 7), ('i_fvb', 8),
+        ('i_grp', 10)
     ),
     {
-        'i_ren': 1e0, 'i_res': 1e1,
-        'i_pct': 1e6, 'i_pmd': 1e6, 
-        'i_mfr': 1e6, 'i_mtf': 1e6, 'i_fvb': 1e6,
+        'i_ren': 1e0,  'i_res': 1e1, 'i_rei': 1e0
+        'i_pct': 1e10, 'i_pmd': 1e10, 
+        'i_mfr': 1e10, 'i_mtf': 1e10, 'i_fvb': 1e10,
         'i_grp': 1e0
     },
     {
-        'i_ren': 4, 'i_res': 6,
-        'i_pct': 8, 'i_pmd': 8, 
-        'i_mfr': 8, 'i_mtf': 8, 'i_fvb': 8,
+        'i_ren': 4,  'i_res': 14, 'i_rei': 4
+        'i_pct': 12, 'i_pmd': 12, 
+        'i_mfr': 12, 'i_mtf': 12, 'i_fvb': 12,
         'i_grp': 2
     },
     {
-        'i_ren': np.int8,   'i_res': np.double,
+        'i_ren': np.int8,   'i_res': np.double, 'i_rei': np.int8,
         'i_pct': np.double, 'i_pmd': np.double, 
         'i_mfr': np.double, 'i_mtf': np.double, 'i_fvb': np.double,
         'i_grp': np.int8
@@ -88,7 +91,7 @@ REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
 # DICE Plots
 ###############################################################################
 pFeats = (
-    ('i_ren', 'linear'), ('i_res', 'linear'),
+    ('i_ren', 'linear'), ('i_res', 'linear'), ('i_rei', 'linear'),
     ('i_pct', 'linear'), ('i_pmd', 'linear'),
     ('i_mfr', 'linear'), ('i_mtf', 'linear'), ('i_fvb', 'linear'),
 )
