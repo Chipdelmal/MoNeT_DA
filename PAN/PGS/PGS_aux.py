@@ -21,10 +21,10 @@ XP_ID = 'PGS'
 ###############################################################################
 # Releases and Populations
 ###############################################################################
-(REL_START, RELEASES) = (30, [365+(7*i) for i in range(10)])
+(REL_START, RELEASES) = (50, [365+(7*i) for i in range(10)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
-    (REL_START, 2*int(365)), 
+    (REL_START, 5*int(365)), 
     False
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)
@@ -63,13 +63,13 @@ REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
         ('i_grp', 10)
     ),
     {
-        'i_ren': 1e0,  'i_res': 1e1, 'i_rei': 1e0
+        'i_ren': 1e0,  'i_res': 1e1, 'i_rei': 1e0,
         'i_pct': 1e10, 'i_pmd': 1e10, 
         'i_mfr': 1e10, 'i_mtf': 1e10, 'i_fvb': 1e10,
         'i_grp': 1e0
     },
     {
-        'i_ren': 4,  'i_res': 14, 'i_rei': 4
+        'i_ren': 4,  'i_res': 14, 'i_rei': 4,
         'i_pct': 12, 'i_pmd': 12, 
         'i_mfr': 12, 'i_mtf': 12, 'i_fvb': 12,
         'i_grp': 2
