@@ -17,7 +17,7 @@ import compress_pickle as pkl
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, EXP) = ('dsk', 'HLT', '02', 's2')
+    (USR, AOI, LND, EXP) = ('srv', 'HLT', '01', 's1')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, EXP) = (
@@ -28,7 +28,7 @@ else:
 ###############################################################################
 # Processing loop
 ###############################################################################
-EXPS = aux.getExps(LND)
+# EXPS = aux.getExps(LND)
 rel = aux.REL[0]
 exp = EXP
 for relN in aux.REL:
