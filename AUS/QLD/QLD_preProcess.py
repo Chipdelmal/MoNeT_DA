@@ -43,8 +43,8 @@ for rel in aux.REL:
         # Time and head -----------------------------------------------------------
         tS = datetime.now()
         monet.printExperimentHead(
-            PT_DTA, PT_PRE, tS, 
-            '{} PreProcess [{}:{}:{}]'.format(aux.XP_ID, aux.DRV, exp, AOI)
+            PT_PRE, PT_IMG, tS, 
+            '{} PreProcess [{}:{}:{}:{}]'.format(aux.XP_ID, LND, aux.DRV, exp, AOI)
         )
         ###########################################################################
         # Load folders

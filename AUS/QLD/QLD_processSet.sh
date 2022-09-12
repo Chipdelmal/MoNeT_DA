@@ -19,10 +19,10 @@ AOI="HLT"
 ###############################################################################
 # New
 ###############################################################################
-for land in "01" "02" "10"; do
+for land in "01" "02"; do
     for scenario in "s1" "s2" "s3" "s4"; do
         python QLD_preProcess.py $USR $AOI $land $scenario
-        # python QLD_preTraces.py $USR $AOI $land $scenario
+        python QLD_preTraces.py $USR $AOI $land $scenario
         # python QLD_pstFraction.py $USR $AOI $land $scenario
     done
 done
