@@ -40,7 +40,7 @@ monet.printExperimentHead(
     '{} ClsCompile [{}:{}:{}]'.format(DRV, QNT, AOI, MTR)
 )
 ###########################################################################
-# Flatten CSVs
+# Flatten CSVs (Scaled Naming)
 ###########################################################################
 fName = sorted(glob('{}/{}_{}_{}_qnt.csv'.format(PT_SUMS, AOI, MTR, QNT)))
 dfList = [pd.read_csv(i, sep=',') for i in fName]
@@ -56,6 +56,24 @@ typesDict = {k: aux.DATA_TYPE[k] for k in dfMerged.columns if k[0]=='i'}
 dfMerged = dfMerged.astype(typesDict)
 dfMerged.to_csv(
     path.join(PT_OUT, 'SCA_'+path.split(fName[0])[-1]), 
+    index=False
+)
+###########################################################################
+# Flatten CSVs (Regular Naming)
+###########################################################################
+# Regular Naming -----------------------------------------------------------------
+fName = sorted(glob('{}/{}_{}_{}_qnt.csv'.format(PT_SUMS, AOI, MTR, QNT)))
+dfList = [pd.read_csv(i, sep=',') for i in fName]
+dfMerged = pd.concat(dfList)
+# Sorting columns ---------------------------------------------------------
+outLabels = [x for x in list(dfMerged.columns) if len(x.split('_')) <= 1]
+inLabels = [i[0] for i in aux.DATA_HEAD]
+dfMerged = dfMerged.reindex(inLabels+outLabels, axis=1)
+# Scaling -----------------------------------------------------------------
+typesDict = {i:int for i in list(aux.DATA_TYPE.keys())}
+dfMerged = dfMerged.astype(typesDict)
+dfMerged.to_csv(
+    path.join(PT_OUT, 'REG_'+path.split(fName[0])[-1]), 
     index=False
 )
 ###########################################################################
