@@ -16,6 +16,7 @@ from joblib import Parallel, delayed
 if monet.isNotebook():
     (USR, DRV, AOI, QNT) = ('srv', 'PGS', 'HLT', '50')
 else:
+    print(sys.argv[1:])
     (USR, DRV, AOI, QNT) = sys.argv[1:]
 GRID_REF = False
 # Setup number of threads -----------------------------------------------------
