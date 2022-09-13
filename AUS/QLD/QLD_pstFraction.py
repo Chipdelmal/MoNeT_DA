@@ -16,7 +16,7 @@ from joblib import Parallel, delayed
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, EXP) = ('dsk', 'HLT', '01', 's1')
+    (USR, AOI, LND, EXP) = ('srv', 'HLT', '01', 's1')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, EXP) = (

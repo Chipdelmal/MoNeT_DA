@@ -31,8 +31,10 @@ REL = ('1e-06', )# '1e-07', '1e-08', '1e-09', '1e-10')
 # Paths and Style
 # #############################################################################
 def selectPath(USR, EXP, LND, REL):
-    if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/QLD/20220822/1e-06/{}/'.format(EXP)
+    if USR == 'srvA':
+        PATH_ROOT = '/RAID5/marshallShare/QLD/20220822_A/1e-06/{}/'.format(EXP)
+    elif USR == 'srvB':
+        PATH_ROOT = '/RAID5/marshallShare/QLD/20220822_B/1e-06/{}/'.format(EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/QLD/Experiments/{}/'.format(EXP)
     elif USR == 'dsk2':
