@@ -162,7 +162,7 @@ def getExps():
 def patternForReleases(ren, AOI, ftype, ext='bz', pad=0):
     renP = str(ren).rjust(pad, '0')
     strPat = XP_PTRN.format(
-        renP, '*', '*', '*', '*', '*', '*', 
+        renP, '*', '*', '*', '*', '*', '*', '*', 
         AOI, '*', ftype, ext
     )
     return strPat
