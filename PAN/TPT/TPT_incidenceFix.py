@@ -17,7 +17,7 @@ import TPT_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV, SPE) = ('lab', 'INC', 'LDR', 'gambiae')
+    (USR, AOI, DRV, SPE) = ('srv', 'INC', 'LDR', 'coluzii_low')
 else:
     (USR, AOI, DRV, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
