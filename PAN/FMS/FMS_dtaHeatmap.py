@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_pct']
@@ -73,14 +73,16 @@ elif MOI == 'WOP':
     (zmin, zmax) = (0, 365*5)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
     cntr = [2*365]
+    lvls = [cntr[0]-1, cntr[0]]
 elif MOI == 'CPT':
     (zmin, zmax) = (-.05, 1.05)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'nearest')
     cntr = [.5]
 elif MOI == 'POE':
-    (zmin, zmax) = (-.05, 1.05)
+    (zmin, zmax) = (0.1, 1.05)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
     cntr = [.9]
+    lvls = [cntr[0]-.01, cntr[0]]
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/2), 'nearest')
@@ -152,7 +154,7 @@ for sw in sweep:
         levels=lvls, cmap=cmap, extend='max'
     )
     # cs.cmap.set_over('red')
-    # cs.cmap.set_under('white')
+    cs.cmap.set_under('white')
     # Color bar ---------------------------------------------------------------
     if not TICKS_HIDE:
         cbar = fig.colorbar(cs)
