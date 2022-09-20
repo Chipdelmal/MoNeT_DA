@@ -19,3 +19,5 @@ do
     python PGS_clsCompile.py $USR $DRV $QNT $AOI $mtr
 done
 python PGS_clsUnify.py $USR $DRV $QNT $AOI $THS 
+python PGS_dtaExplore.py $USR $DRV $QNT $AOI $THS $AOI
+python PGS_dtaTraces.py $USR $DRV $QNT $AOI

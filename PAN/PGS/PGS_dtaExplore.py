@@ -10,9 +10,9 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS, TRC) = ('srv', 'PGS', 'HLT', '50', '0.1', 'HLT')
+    (USR, DRV, QNT, AOI, THS, TRC) = ('srv', 'PGS', 'HLT', '50', '0.1', 'HLT')
 else:
-    (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
+    (USR, DRV, QNT, AOI, THS, TRC) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':

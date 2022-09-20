@@ -2,13 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from os import path
 from glob import glob
 import PGS_aux as aux
 import PGS_gene as drv
+import numpy as np
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 from more_itertools import locate
 from joblib import Parallel, delayed
+import matplotlib.pyplot as plt
 # import warnings
 # warnings.filterwarnings("ignore")
 
@@ -33,7 +36,7 @@ if USR == 'srv':
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_PRE, tS, 'PstFraction [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
+    PT_PRE, PT_OUT, tS, 'PstFraction [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
 ###########################################################################
 # Base experiments
@@ -86,12 +89,23 @@ for (i, rnIt) in enumerate(ren):
             lambda x: x!=True
         ))
         expIter = [expIter[i] for i in expsIxList]
-    # #####################################################################
+    ###########################################################################
     # Process data
-    # #####################################################################
+    ###########################################################################
     Parallel(n_jobs=JOB)(
         delayed(monet.pstFractionParallel)(
             exIx, PT_OUT
         ) for exIx in expIter
     )
-
+###############################################################################
+# Check exported files
+###############################################################################
+# fFiles = glob(path.join(PT_OUT, '*.npy'))
+# fName = fFiles[1]
+# rto = np.load(fName)
+# # Plot to inspect -------------------------------------------------------------
+# (fig, ax) = plt.subplots(figsize=(30, 15))
+# ax.plot(rto[0])
+# ax.set_aspect(.25/ax.get_data_ratio())
+# fig.show()
+# fName
