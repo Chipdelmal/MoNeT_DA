@@ -14,29 +14,13 @@ import MoNeT_MGDrivE as monet
 #   ...
 #   X/x: male fertility target site
 ###############################################################################
-# genotypes = (
-#     "AABBCCDD", "aABBCCDD", "AAbBCCDD", "aAbBCCDD", "AABBcCDD", "aABBcCDD", 
-#     "AAbBcCDD", "aAbBcCDD", "AABBCCdD", "aABBCCdD", "AAbBCCdD", "aAbBCCdD", 
-#     "AABBcCdD", "aABBcCdD", "AAbBcCdD", "aAbBcCdD", "aaBBCCDD", "aabBCCDD", 
-#     "aaBBcCDD", "aabBcCDD", "aaBBCCdD", "aabBCCdD", "aaBBcCdD", "aabBcCdD", 
-#     "AAbbCCDD", "aAbbCCDD", "AAbbcCDD", "aAbbcCDD", "AAbbCCdD", "aAbbCCdD", 
-#     "AAbbcCdD", "aAbbcCdD", "aabbCCDD", "aabbcCDD", "aabbCCdD", "aabbcCdD",
-#     "AABBccDD", "aABBccDD", "AAbBccDD", "aAbBccDD", "AABBccdD", "aABBccdD", 
-#     "AAbBccdD", "aAbBccdD", "aaBBccDD", "aabBccDD", "aaBBccdD", "aabBccdD", 
-#     "AAbbccDD", "aAbbccDD", "AAbbccdD", "aAbbccdD", "aabbccDD", "aabbccdD", 
-#     "AABBCCdd", "aABBCCdd", "AAbBCCdd", "aAbBCCdd", "AABBcCdd", "aABBcCdd", 
-#     "AAbBcCdd", "aAbBcCdd", "aaBBCCdd", "aabBCCdd", "aaBBcCdd", "aabBcCdd", 
-#     "AAbbCCdd", "aAbbCCdd", "AAbbcCdd", "aAbbcCdd", "aabbCCdd", "aabbcCdd", 
-#     "AABBccdd", "aABBccdd", "AAbBccdd", "aAbBccdd", "aaBBccdd", "aabBccdd", 
-#     "AAbbccdd", "aAbbccdd", "aabbccdd"
-# )
 genotypes = (
-    "AABBCCDD", "aABBCCDD", "AAbBCCDD", "aAbBCCDD", "AABBcCDD", "aABBcCDD",
-    "AAbBcCDD", "aAbBcCDD", "AABBCCdD", "aABBCCdD", "AAbBCCdD", "aAbBCCdD",
+    "AABBCCDD", "aABBCCDD", "AAbBCCDD", "aAbBCCDD", "AABBcCDD", "aABBcCDD", 
+    "AAbBcCDD", "aAbBcCDD", "AABBCCdD", "aABBCCdD", "AAbBCCdD", "aAbBCCdD", 
     "AABBcCdD", "aABBcCdD", "AAbBcCdD", "aAbBcCdD", "aaBBCCDD", "aabBCCDD", 
     "aaBBcCDD", "aabBcCDD", "aaBBCCdD", "aabBCCdD", "aaBBcCdD", "aabBcCdD", 
     "AAbbCCDD", "aAbbCCDD", "AAbbcCDD", "aAbbcCDD", "AAbbCCdD", "aAbbCCdD", 
-    "AAbbcCdD", "aAbbcCdD", "aabbCCDD", "aabbcCDD", "aabbCCdD", "aabbcCdD", 
+    "AAbbcCdD", "aAbbcCdD", "aabbCCDD", "aabbcCDD", "aabbCCdD", "aabbcCdD",
     "AABBccDD", "aABBccDD", "AAbBccDD", "aAbBccDD", "AABBccdD", "aABBccdD", 
     "AAbBccdD", "aAbBccdD", "aaBBccDD", "aabBccDD", "aaBBccdD", "aabBccdD", 
     "AAbbccDD", "aAbbccDD", "AAbbccdD", "aAbbccdD", "aabbccDD", "aabbccdD", 
@@ -66,6 +50,7 @@ HLT_DICT = OrderedDict((
     ('O-',   (('a', locA), ('b', locB), ('c', locC), ('d', locD)))
 ))
 PGS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
+PGS_HLT = [PGS_HLT[0], [PGS_HLT[1][0], PGS_HLT[1][-1], PGS_HLT[1][-1]]]
 
 ###############################################################################
 # Trash genotype counts (Cas9)
