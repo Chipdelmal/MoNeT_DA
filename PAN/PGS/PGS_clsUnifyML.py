@@ -35,7 +35,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} ClsUnify [{}:{}]'.format(DRV, AOI, THS)
+    '{} ClsUnifyML [{}:{}]'.format(DRV, AOI, THS)
 )
 ###############################################################################
 # Merge Dataframes

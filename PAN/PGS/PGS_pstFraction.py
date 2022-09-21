@@ -109,3 +109,5 @@ for (i, rnIt) in enumerate(ren):
 # ax.set_aspect(.25/ax.get_data_ratio())
 # fig.show()
 # fName
+
+# monet.calcMetrics(rto)
