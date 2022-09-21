@@ -42,104 +42,51 @@ monet.printExperimentHead(
 ###############################################################################
 # Merge Dataframes
 ###############################################################################
-dataFrames = []
-mtr = 'MNX'
-for mtr in ['TTI', 'TTO', 'WOP']:
-    # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
-    pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
-    dta = pd.read_csv(pth)
-    dataCols = [k for k in dta.columns if k[0]=='i']+[THS]
-    dta = dta[dataCols]
-    dta = dta.rename(columns={THS: mtr})
-    dataFrames.append(dta)
-for mtr in ['POE', 'CPT']:
-    # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
-    pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
-    dta = pd.read_csv(pth)
-    dataFrames.append(dta)
-for mtr in ['MNX', ]:
-    # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
-    pth = path.join(PT_OUT, 'SCA_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
-    dta = pd.read_csv(pth)
-    dataCols = [k for k in dta.columns if k[0]=='i']+['min']
-    dta = dta[dataCols]
-    dta = dta.rename(columns={'min': 'MNF'})
-    dataFrames.append(dta)
-fullDataframe = reduce(lambda x, y: pd.merge(x, y, ), dataFrames)
-###############################################################################
-# Add zero-release control values
-###############################################################################
-fltr = [fullDataframe['i_ren']==0, fullDataframe['i_res']==0]
-zeroEntry = fullDataframe[list(map(all, zip(*fltr)))].iloc[0].copy()
-(ren, res) = [list(fullDataframe[i].unique()) for i in ('i_ren', 'i_res')]
-for renT in ren:
-    tmp = zeroEntry.copy()
-    tmp['i_ren']=renT
-    tmp['i_res']=0
-    fullDataframe.loc[-1]=tmp
-    fullDataframe = fullDataframe.reset_index(drop=True)
-for resT in res:
-    tmp = zeroEntry.copy()
-    tmp['i_ren']=0
-    tmp['i_res']=resT
-    fullDataframe.loc[-1]=tmp
-    fullDataframe = fullDataframe.reset_index(drop=True)
-fullDataframe.iloc[-100:-20]
-###############################################################################
-# Export
-###############################################################################
-fNameOut = 'SCA_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(THS)*100))
-fullDataframe.to_csv(path.join(PT_OUT, fNameOut), index=False)
-
-###############################################################################
-# Merge Dataframes (regular)
-###############################################################################
-dataFrames = []
-mtr = 'MNX'
-for mtr in ['TTI', 'TTO', 'WOP']:
-    # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
-    pth = path.join(PT_OUT, 'REG_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
-    dta = pd.read_csv(pth)
-    dataCols = [k for k in dta.columns if k[0]=='i']+[THS]
-    dta = dta[dataCols]
-    dta = dta.rename(columns={THS: mtr})
-    dataFrames.append(dta)
-for mtr in ['POE', 'CPT']:
-    # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
-    pth = path.join(PT_OUT, 'REG_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
-    dta = pd.read_csv(pth)
-    dataFrames.append(dta)
-for mtr in ['MNX', ]:
-    # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
-    pth = path.join(PT_OUT, 'REG_{}_{}_{}_qnt.csv'.format(AOI, mtr, QNT))
-    dta = pd.read_csv(pth)
-    dataCols = [k for k in dta.columns if k[0]=='i']+['min']
-    dta = dta[dataCols]
-    dta = dta.rename(columns={'min': 'MNF'})
-    dataFrames.append(dta)
-fullDataframe = reduce(lambda x, y: pd.merge(x, y, ), dataFrames)
-###############################################################################
-# Add zero-release control values
-###############################################################################
-fltr = [fullDataframe['i_ren']==0, fullDataframe['i_res']==0]
-zeroEntry = fullDataframe[list(map(all, zip(*fltr)))].iloc[0].copy()
-(ren, res) = [list(fullDataframe[i].unique()) for i in ('i_ren', 'i_res')]
-for renT in ren:
-    tmp = zeroEntry.copy()
-    tmp['i_ren']=renT
-    tmp['i_res']=0
-    fullDataframe.loc[-1]=tmp
-    fullDataframe = fullDataframe.reset_index(drop=True)
-for resT in res:
-    tmp = zeroEntry.copy()
-    tmp['i_ren']=0
-    tmp['i_res']=resT
-    fullDataframe.loc[-1]=tmp
-    fullDataframe = fullDataframe.reset_index(drop=True)
-###############################################################################
-# Export
-###############################################################################
-typesDict = {i:int for i in list(aux.DATA_TYPE.keys())}
-fullDataframe = fullDataframe.astype(typesDict)
-fNameOut = 'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, int(float(THS)*100))
-fullDataframe.to_csv(path.join(PT_OUT, fNameOut), index=False)
+for fid in ('SCA', 'REG'):
+    dataFrames = []
+    mtr = 'MNX'
+    for mtr in ['TTI', 'TTO', 'WOP']:
+        # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
+        pth = path.join(PT_OUT, '{}_{}_{}_{}_qnt.csv'.format(fid, AOI, mtr, QNT))
+        dta = pd.read_csv(pth)
+        dataCols = [k for k in dta.columns if k[0]=='i']+[THS]
+        dta = dta[dataCols]
+        dta = dta.rename(columns={THS: mtr})
+        dataFrames.append(dta)
+    for mtr in ['POE', 'CPT']:
+        # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
+        pth = path.join(PT_OUT, '{}_{}_{}_{}_qnt.csv'.format(fid, AOI, mtr, QNT))
+        dta = pd.read_csv(pth)
+        dataFrames.append(dta)
+    for mtr in ['MNX', ]:
+        # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
+        pth = path.join(PT_OUT, '{}_{}_{}_{}_qnt.csv'.format(fid, AOI, mtr, QNT))
+        dta = pd.read_csv(pth)
+        dataCols = [k for k in dta.columns if k[0]=='i']+['min']
+        dta = dta[dataCols]
+        dta = dta.rename(columns={'min': 'MNF'})
+        dataFrames.append(dta)
+    fullDataframe = reduce(lambda x, y: pd.merge(x, y, ), dataFrames)
+    ###########################################################################
+    # Add zero-release control values
+    ###########################################################################
+    fltr = [fullDataframe['i_ren']==0, fullDataframe['i_res']==0]
+    zeroEntry = fullDataframe[list(map(all, zip(*fltr)))].iloc[0].copy()
+    (ren, res) = [list(fullDataframe[i].unique()) for i in ('i_ren', 'i_res')]
+    for renT in ren:
+        tmp = zeroEntry.copy()
+        tmp['i_ren']=renT
+        tmp['i_res']=0
+        fullDataframe.loc[-1]=tmp
+        fullDataframe = fullDataframe.reset_index(drop=True)
+    for resT in res:
+        tmp = zeroEntry.copy()
+        tmp['i_ren']=0
+        tmp['i_res']=resT
+        fullDataframe.loc[-1]=tmp
+        fullDataframe = fullDataframe.reset_index(drop=True)
+    ###########################################################################
+    # Export
+    ###########################################################################
+    fNameOut = '{}_{}_{}Q_{}T.csv'.format(fid, AOI, QNT, int(float(THS)*100))
+    fullDataframe.to_csv(path.join(PT_OUT, fNameOut), index=False)
