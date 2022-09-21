@@ -11,6 +11,9 @@ import compress_pickle as pkl
 import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
 from matplotlib.colors import LinearSegmentedColormap, ColorConverter
+import warnings
+warnings.filterwarnings("ignore")
+
 
 XP_ID = 'PGS'
 ###############################################################################
