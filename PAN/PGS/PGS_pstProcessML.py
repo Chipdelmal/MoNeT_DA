@@ -65,7 +65,7 @@ dfPaths = [
 ]
 expIter = list(zip(dfPaths, fPathsChunks))
 Parallel(n_jobs=JOB)(
-    delayed(aux.pstProcessParallelML)(
+    delayed(monet.pstProcessParallelML)(
         exIx, header, xpidIx, aux.MAX_REPS,
         qnt=qnt, 
         sampRate=aux.SAMP_RATE, # offset=0,
@@ -76,28 +76,11 @@ Parallel(n_jobs=JOB)(
 ###############################################################################
 # Merge dataframes chunks
 ###############################################################################
-# dfPathsPieces = list(zip(*dfPaths))[:]
-# for dfPathsSet in dfPathsPieces:
-#     dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
-#     # Write combined dataframe --------------------------------------------
-#     fName = dfPathsSet[0].split('-')[0]+'.csv'
-#     dfFull.to_csv(fName, index=False)
+dfPathsPieces = list(zip(*dfPaths))[:]
+dfPathsPieces = [dfPathsPieces[i] for i in (0, 1, 2, 4, 6)]
+for dfPathsSet in dfPathsPieces:
+    dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
+    # Write combined dataframe --------------------------------------------
+    fName = dfPathsSet[0].split('-')[0]+'.csv'
+    dfFull.to_csv(fName, index=False)
 
-
-
-
-MAX_REPS = 100
-exIx = expIter[0]
-oRepData = aux.pstProcessParallelML(        
-    exIx, header, xpidIx, maxReps=MAX_REPS,
-    qnt=qnt, 
-    sampRate=aux.SAMP_RATE, # offset=0,
-    thi=aux.THI, tho=aux.THO, thw=aux.THW, 
-    tap=aux.TAP, thp=(.05, .95)
-)
-(dfs, mtrs, rto, dct, mtrs, updates) = oRepData
-
-(fig, ax) = plt.subplots(figsize=(30, 15))
-ax.plot(rto.T)
-ax.set_aspect(.25/ax.get_data_ratio())
-fig.show()
