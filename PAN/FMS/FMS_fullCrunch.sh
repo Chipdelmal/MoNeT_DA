@@ -17,4 +17,4 @@ bash FMS_preCrunch.sh $USR $DRV
 bash FMS_pstCrunch.sh $USR $DRV $QNT
 bash FMS_clsCrunch.sh $USR $DRV $QNT HLT $THS
 # bash FMS_dtaTraces.sh $USR $DRV $QNT HLT $THS HLT
-bash FMS_dtaHeatmaps.sh $USR $DRV $QNT HLT $THS 
+# bash FMS_dtaHeatmaps.sh $USR $DRV $QNT HLT $THS 

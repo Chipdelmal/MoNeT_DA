@@ -4,7 +4,7 @@ from os import path
 import numpy as np
 import pandas as pd
 import compress_pickle as pkl
-from SALib.sample import saltelli, latin
+from SALib.sample import latin
 import MoNeT_MGDrivE as monet
 import FMS_aux as aux
 import FMS_gene as drv

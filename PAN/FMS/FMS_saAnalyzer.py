@@ -14,7 +14,7 @@ import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -34,10 +34,12 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 ###############################################################################
 # Read SA Files
 ###############################################################################
+PT_PKL = PT_MTR.split('/')
+PT_PKL = '/'.join(prts)
 (PROBLEM, SAMPLER, EXP) = (
-    pkl.load(path.join(PT_MTR, 'SA_experiment.pkl')),
-    np.load(path.join(PT_MTR, 'SA_experiment.npy')),
-    pd.read_csv (path.join(PT_MTR, 'SA_experiment.csv'))
+    pkl.load(path.join(PT_PKL, 'SA_experiment.pkl')),
+    np.load(path.join(PT_PKL, 'SA_experiment.npy')),
+    pd.read_csv (path.join(PT_PKL, 'SA_experiment.csv'))
 )
 ###############################################################################
 # Read Results CSV
@@ -67,6 +69,7 @@ rsnst = set([i.split('_')[-1] for i in headRes]) - set(PROBLEM['names'])
 # ix = 70
 expNum = EXP.shape[0]
 (matchesSizes, outVector) = ([0]*expNum, np.zeros(expNum))
+ix = 1
 for ix in range(expNum):
     print('Processing {:06d}/{:06d}'.format(ix+1, expNum), end='\r')
     rowVals = EXP.iloc[ix].to_dict()
@@ -105,7 +108,7 @@ pawnDF = pd.DataFrame(SA_pawn)
 #     pawnDF['names']
 # ))
 # sobolDF = pd.DataFrame(sobolOut, columns=['S1', 'S1_conf', 'ST', 'ST_conf', 'names'])
-deltaDF = pd.DataFrame(SA_delta)
+deltaDF = pd.DataFrame({'S1': SA_delta['delta'], 'S1_conf': SA_delta['delta_conf'], 'names': SA_delta['names']})
 hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
 fastDF = pd.DataFrame(SA_fast)
