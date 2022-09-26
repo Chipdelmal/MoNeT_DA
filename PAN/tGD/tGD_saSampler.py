@@ -10,7 +10,7 @@ import tGD_aux as aux
 
 
 if monet.isNotebook():
-    (USR, DRV) = ('srv2', 'tGD')
+    (USR, DRV) = ('srv', 'splitDrive')
 else:
     (USR, DRV) = sys.argv[1:]
 exp = '100'
@@ -48,7 +48,7 @@ df = df[[i[0] for i in VARS_RANGES]]
 ###############################################################################
 headerInd = list(df.columns)
 uqVal = {i: list(df[i].unique()) for i in headerInd}
-df.shape
+df.loc[len(df)] = [0]*df.shape[1]
 ###############################################################################
 # Export
 ###############################################################################
