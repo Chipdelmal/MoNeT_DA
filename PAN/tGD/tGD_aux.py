@@ -85,9 +85,9 @@ def chunks(l, n):
         ('i_ren', 7), ('i_res', 8)
     ),
     {
-        'i_fcs': 1e4, 'i_fcb': 1e4,
-        'i_fga': 1e4, 'i_fgb': 1e4,
-        'i_cut': 1e2, 'i_hdr': 1e2,
+        'i_fcs': 1e6, 'i_fcb': 1e6,
+        'i_fga': 1e6, 'i_fgb': 1e6,
+        'i_cut': 1e6, 'i_hdr': 1e6,
         'i_ren': 1e0, 'i_res': 1e2
     },
     {
@@ -116,7 +116,7 @@ DATA_TYPE = {
 def selectPath(USR, DRV, EXP):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220905_SA/{}/{}/'.format(DRV, EXP)
-    if USR == 'srv2':
+    elif USR == 'srv2':
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220602/{}/{}/'.format(DRV, EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/tGD/{}/{}/'.format(DRV, EXP)
@@ -211,7 +211,6 @@ def axisRange(x):
 ###############################################################################
 # Terminal
 ###############################################################################
-
 def printExperimentHead(PATH_ROOT, PATH_IMG, PATH_DATA, time, title):
     print(monet.PAD)
     (cred, cwht, cend) = (monet.CRED, monet.CWHT, monet.CEND)

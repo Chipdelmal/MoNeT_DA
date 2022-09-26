@@ -12,7 +12,7 @@ import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT) = ('srv', 'linkedDrive', 'WLD', '50')
+    (USR, DRV, AOI, QNT) = ('srv', 'linkedDrive', 'HLT', '50')
 else:
     (USR, DRV, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 (SKP, OVW) = (False, True)
@@ -37,6 +37,7 @@ baseFiles = sorted(glob(PT_PRE+basePat))
 #   srp: Garbage data aggregated into one node
 # #########################################################################
 (xpNum, digs) = monet.lenAndDigits(ren)
+(i, rnIt) = (0, ren[0])
 for (i, rnIt) in enumerate(ren):
     monet.printProgress(i+1, xpNum, digs)
     # Mean data (Analyzed) ------------------------------------------------
@@ -51,6 +52,7 @@ for (i, rnIt) in enumerate(ren):
     # Load data
     # #####################################################################
     expNum = len(meanFiles)
+    pIx = 0
     for pIx in range(expNum):
         (bFile, mFile, tFile) = (baseFiles[pIx], meanFiles[pIx], traceFiles[pIx])
         (base, mean, trace) = [pkl.load(file) for file in (bFile, mFile, tFile)]

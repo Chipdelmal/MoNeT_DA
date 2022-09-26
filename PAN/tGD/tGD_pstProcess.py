@@ -14,7 +14,7 @@ import tGD_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT) = ('srv', 'linkedDrive', 'WLD', '50')
+    (USR, DRV, AOI, QNT) = ('srv', 'linkedDrive', 'HLT', '50')
 else:
     (USR, DRV, AOI, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
