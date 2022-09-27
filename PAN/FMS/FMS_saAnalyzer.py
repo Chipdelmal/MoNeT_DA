@@ -14,7 +14,7 @@ import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS4', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -35,7 +35,8 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 # Read SA Files
 ###############################################################################
 PT_PKL = PT_MTR.split('/')
-PT_PKL = '/'.join(prts)
+PT_PKL[-3] = 'pgSIT'
+PT_PKL = '/'.join(PT_PKL)
 (PROBLEM, SAMPLER, EXP) = (
     pkl.load(path.join(PT_PKL, 'SA_experiment.pkl')),
     np.load(path.join(PT_PKL, 'SA_experiment.npy')),
@@ -98,7 +99,7 @@ if len(set(matchesSizes))>1:
 # SA_sobol = sobol.analyze(PROBLEM, outVector, print_to_console=True)
 SA_delta = delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 SA_pawn = pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
-SA_hdmr = hdmr.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
+# SA_hdmr = hdmr.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 SA_fast = rbd_fast.analyze(PROBLEM, SAMPLER, outVector, print_to_console=True)
 # Compile dataframes ----------------------------------------------------------
 pawnDF = pd.DataFrame(SA_pawn)
@@ -108,42 +109,41 @@ pawnDF = pd.DataFrame(SA_pawn)
 #     pawnDF['names']
 # ))
 # sobolDF = pd.DataFrame(sobolOut, columns=['S1', 'S1_conf', 'ST', 'ST_conf', 'names'])
-deltaDF = pd.DataFrame({'S1': SA_delta['delta'], 'S1_conf': SA_delta['delta_conf'], 'names': SA_delta['names']})
-hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
-fastDF = pd.DataFrame(SA_fast)
+deltaDF = pd.DataFrame(SA_delta)
+# hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Plots
 ###############################################################################
-methods = list(zip(
-    ("FAST", "Delta", "PAWN", "HDMR"), #, "Sobol"), 
-    (fastDF, deltaDF, pawnDF, hdmrDF) #, sobolDF)
-))
-mIx = 1
-for mIx in range(len(methods)):
-    (method, saRes) = methods[mIx]
-    tag = ('S1' if  method is not 'PAWN' else 'median')
-    fltr = [not (math.isnan(i)) for i in saRes[tag]]
-    (sizes, label) = (
-        abs(saRes[tag][fltr]), 
-        [i.split('_')[-1] for i in saRes['names'][fltr]]
-    )
-    lbl = ['{}\n{:.2f}'.format(a, b) for (a, b) in zip(label, sizes)]
-    (fig, ax) = plt.subplots(figsize=(5,5))
-    squarify.plot(sizes=sizes, label=lbl, alpha=0.5, color=aux.TREE_COLS)
-    ax.set_aspect(1)
-    plt.axis('off')
-    fig.savefig(
-        path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
-        dpi=500, bbox_inches='tight', transparent=True
-    )
+# methods = list(zip(
+#     ("FAST", "Delta", "PAWN", "HDMR"), #, "Sobol"), 
+#     (fastDF, deltaDF, pawnDF, hdmrDF) #, sobolDF)
+# ))
+# mIx = 1
+# for mIx in range(len(methods)):
+#     (method, saRes) = methods[mIx]
+#     tag = ('S1' if  method is not 'PAWN' else 'median')
+#     fltr = [not (math.isnan(i)) for i in saRes[tag]]
+#     (sizes, label) = (
+#         abs(saRes[tag][fltr]), 
+#         [i.split('_')[-1] for i in saRes['names'][fltr]]
+#     )
+#     lbl = ['{}\n{:.2f}'.format(a, b) for (a, b) in zip(label, sizes)]
+#     (fig, ax) = plt.subplots(figsize=(5,5))
+#     squarify.plot(sizes=sizes, label=lbl, alpha=0.5, color=aux.TREE_COLS)
+#     ax.set_aspect(1)
+#     plt.axis('off')
+#     fig.savefig(
+#         path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
+#         dpi=500, bbox_inches='tight', transparent=True
+#     )
 ###############################################################################
 # Export to Disk
 ###############################################################################
 outPairs = list(zip(
-    ['Delta', 'PAWN', 'HDMR', 'FAST'], #, 'Sobol']
-    [deltaDF, pawnDF, hdmrDF, fastDF], #, sobolDF] 
-    [SA_delta, SA_pawn, SA_hdmr, SA_fast] #, SA_sobol]
+    ['Delta', 'PAWN','FAST'],    #,  'HDMR', 'Sobol']
+    [deltaDF, pawnDF, fastDF],   #,  hdmrDF, sobolDF] 
+    [SA_delta, SA_pawn, SA_fast] #, SA_hdmr, SA_sobol]
 ))
 for (name, df, dct) in outPairs:
     fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')
