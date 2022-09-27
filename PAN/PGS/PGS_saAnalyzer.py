@@ -102,7 +102,6 @@ pawnDF = pd.DataFrame(SA_pawn)
 deltaDF = pd.DataFrame(SA_delta)
 hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
-fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Plots
 ###############################################################################
