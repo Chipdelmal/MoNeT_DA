@@ -9,6 +9,8 @@ import tGD_aux as aux
 # import STP_dataProcess as da
 from datetime import datetime
 import compress_pickle as pkl
+from more_itertools import locate
+from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 
 if monet.isNotebook():
@@ -17,6 +19,8 @@ else:
     (USR, DRV, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 (SKP, OVW) = (False, True)
 exp = '100'
+GRID_REF = False
+JOB = 20
 # #########################################################################
 # Setup ids and paths
 # #########################################################################
@@ -37,28 +41,45 @@ baseFiles = sorted(glob(PT_PRE+basePat))
 #   srp: Garbage data aggregated into one node
 # #########################################################################
 (xpNum, digs) = monet.lenAndDigits(ren)
-(i, rnIt) = (0, ren[0])
-for (i, rnIt) in enumerate(ren):
+(i, rnIt) = (0, ren[1])
+for (i, rnIt) in enumerate(ren[1:]):
     monet.printProgress(i+1, xpNum, digs)
-    # Mean data (Analyzed) ------------------------------------------------
-    # meanPat = aux.XP_NPAT.format('*', rnIt, '*', '*', '*', AOI, '*', 'sum', 'bz')
-    meanPat = aux.patternForReleases(rnIt, AOI, 'sum')
-    meanFiles = sorted(glob(PT_PRE+meanPat))
     # Repetitions data (Garbage) ------------------------------------------
-    # tracePat = aux.XP_NPAT.format('*', rnIt, '*', '*', '*', AOI, '*', 'srp', 'bz')
-    tracePat = aux.patternForReleases(rnIt, AOI, 'srp')
+    tracePat = aux.patternForReleases(rnIt, AOI, 'srp', pad=aux.DATA_PAD['i_ren'])
     traceFiles = sorted(glob(PT_PRE+tracePat))
-    # #####################################################################
-    # Load data
-    # #####################################################################
+    # Mean data (Analyzed) ------------------------------------------------
+    meanPat = aux.patternForReleases(rnIt, AOI, 'sum', pad=aux.DATA_PAD['i_ren'])
+    meanFiles = sorted(glob(PT_PRE+meanPat))
     expNum = len(meanFiles)
-    pIx = 0
-    for pIx in range(expNum):
-        (bFile, mFile, tFile) = (baseFiles[pIx], meanFiles[pIx], traceFiles[pIx])
-        (base, mean, trace) = [pkl.load(file) for file in (bFile, mFile, tFile)]
-        # #################################################################
-        # Process data
-        # #################################################################
-        fName = '{}{}rto'.format(PT_OUT, mFile.split('/')[-1][:-6])
-        repsRatios = monet.getPopRepsRatios(base, trace, 1)
-        np.save(fName, repsRatios)
+    # Patch for static reference file -------------------------------------
+    if not GRID_REF:
+        baseFiles = [
+            PT_PRE+f"/E_000000_000000_000000_000000_000000_000000_00_0000-{AOI}_00_sum.bz"
+        ]*expNum
+        baseFNum = len(baseFiles)
+    # Create experiments iterator list ------------------------------------
+    expIter = list(zip(
+        list(range(expNum)), baseFiles, meanFiles, traceFiles
+    ))
+    # Check for potential miss-matches in experiments folders -------------
+    (meanFNum, tracFNum) = (len(meanFiles), len(traceFiles))
+    if (meanFNum!=tracFNum) or (baseFNum!=meanFNum) or (baseFNum!=tracFNum):
+        errorString = 'Unequal experiments folders lengths ({}/{}/{})'
+        sys.exit(errorString.format(baseFNum, meanFNum, tracFNum)) 
+    # Filter existing if needed -------------------------------------------
+    if aux.OVW == False:
+        expIDPreDone = set(monet.splitExpNames(PT_OUT, ext='npy'))
+        expIDForProcessing = [i.split('/')[-1][:-14] for i in meanFiles]
+        expsIxList = list(locate(
+            [(i in expIDPreDone) for i in expIDForProcessing], 
+            lambda x: x!=True
+        ))
+        expIter = [expIter[i] for i in expsIxList]
+    ###########################################################################
+    # Process data
+    ###########################################################################
+    Parallel(n_jobs=JOB)(
+        delayed(monet.pstFractionParallel)(
+            exIx, PT_OUT
+        ) for exIx in expIter
+    )

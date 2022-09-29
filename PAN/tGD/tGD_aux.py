@@ -10,6 +10,7 @@ from glob import glob
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 
+OVW = True
 (JOB_DSK, JOB_SRV) = (2, 20)
 XP_NPAT = 'E_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}'
 (POP_SIZE, XRAN) = (6e3, (0, 10*365))
@@ -86,14 +87,14 @@ def chunks(l, n):
     ),
     {
         'i_fcs': 1e6, 'i_fcb': 1e6,
-        'i_fga': 1e6, 'i_fgb': 1e6,
+        'i_fga': 1e5, 'i_fgb': 1e5,
         'i_cut': 1e6, 'i_hdr': 1e6,
-        'i_ren': 1e0, 'i_res': 1e2
+        'i_ren': 1e0, 'i_res': 1e4
     },
     {
-        'i_fcs': 4, 'i_fcb': 4,
-        'i_fga': 4, 'i_fgb': 4,
-        'i_cut': 3, 'i_hdr': 3,
+        'i_fcs': 6, 'i_fcb': 6,
+        'i_fga': 6, 'i_fgb': 6,
+        'i_cut': 6, 'i_hdr': 6,
         'i_ren': 2, 'i_res': 4
     }
 )
@@ -109,7 +110,7 @@ DATA_TYPE = {
     'i_cut': np.double, 'i_hdr': np.double,
     'i_ren': np.int8,   'i_res': np.double
 }
-
+REF_FILE = 'E_'+'_'.join(['0'*i for i in list(DATA_PAD.values())[:-1]])
 # #############################################################################
 # Paths and Style
 # #############################################################################
@@ -289,9 +290,10 @@ def exportPstTracesParallel(
     return None
 
 
-def patternForReleases(ren, AOI, ftype, ext='bz'):
+def patternForReleases(ren, AOI, ftype, ext='bz', pad=0):
+    renP = str(ren).rjust(pad, '0')
     strPat = XP_NPAT.format(
-        '*', '*', '*', '*', '*', '*', ren, '*', AOI, '*', ftype, ext
+        '*', '*', '*', '*', '*', '*', renP, '*', AOI, '*', ftype, ext
     )
     return strPat
 
@@ -305,3 +307,8 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.lzma'):
         colSet = set([i[c] for i in splitFilenames])
         ids.append(sorted(list(colSet)))
     return ids
+
+def replaceExpBase(tracePath, refFile):
+    head = '/'.join(tracePath.split('/')[:-1])
+    tail = tracePath.split('-')[-1]
+    return '{}/{}-{}'.format(head, refFile, tail)
