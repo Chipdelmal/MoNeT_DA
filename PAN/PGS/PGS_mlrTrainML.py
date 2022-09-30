@@ -18,6 +18,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import ShuffleSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.inspection import plot_partial_dependence
+from sklearn.inspection import PartialDependenceDisplay
 
 if monet.isNotebook():
     (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
@@ -58,18 +59,21 @@ df = pd.read_csv(path.join(PT_OUT, fName))
 indVars = [i[0] for i in aux.DATA_HEAD]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = (dfIn, df[MOI])
-(X_train, X_test, y_train, y_test) = train_test_split(X, y, test_size=0.3)
+(X_train, X_test, y_train, y_test) = train_test_split(X, y, test_size=0.2)
 # scaler = StandardScaler().fit(X_train)
 # X_trainSC = scaler.transform(X_train)
 ###############################################################################
 # Train Model
 ###############################################################################
-scoring = ['neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2']
+scoring = [
+    'explained_variance', 'max_error',
+    'neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2'
+]
 mlRegression = RandomForestRegressor(
-    oob_score=True,
+    oob_score=True, criterion='squared_error', # 'absolute_error'
     n_jobs=aux.JOB_DSK*2, verbose=False
 )
-cv = ShuffleSplit(n_splits=5, test_size=0.25, random_state=0)
+cv = ShuffleSplit(n_splits=5, test_size=0.3, random_state=0)
 scores = cross_validate(
     mlRegression, X_train, y_train, cv=cv, scoring=scoring
 )
@@ -79,12 +83,17 @@ print(scores)
 ###############################################################################
 mlRegression.fit(X_train, y_train)
 # (fig, ax) = plt.subplots(figsize=(20, 10))
-display = plot_partial_dependence(
+display = PartialDependenceDisplay.from_estimator(
     mlRegression, X, indVars[:-1],
-    kind="individual",
+    kind='both',
     subsample=500, n_jobs=aux.JOB_DSK*2,
     n_cols=round((len(indVars)-1)/2), 
     ice_lines_kw={'linewidth': 0.200, 'alpha': 0.175},
+    pd_line_kw={'color': '#f72585'},
     grid_resolution=20, random_state=0,
 )
-display.figure_.subplots_adjust(hspace=.5)
+display.figure_.subplots_adjust(hspace=.3)
+for r in range(len(display.axes_)):
+    for c in range(len(display.axes_[0])):
+        display.axes_[r][c].set_ylabel("")
+        display.axes_[r][c].get_legend().remove()
