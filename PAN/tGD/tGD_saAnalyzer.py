@@ -60,9 +60,17 @@ headerInd = list(RES.columns)
 uqVal = {i: len(list(RES[i].unique())) for i in headerInd}
 resNum = RES.shape
 ###############################################################################
+# Read SA Files
+###############################################################################
+(PROBLEM, SAMPLER, EXP) = (
+    pkl.load(path.join(PT_MTR, 'SA_experiment.pkl')),
+    np.load(path.join(PT_MTR, 'SA_experiment.npy')),
+    pd.read_csv (path.join(PT_MTR, 'SA_experiment.csv'))
+)
+###############################################################################
 # Assemble Output Vector
 ###############################################################################
-headExp = list(EXP.columns)
+headExp = list(RES.columns)
 headRes = [i for i in RES.columns if i[0]=='i']
 saVars = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])>1)])])
 saCnst = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])<=1)])])
@@ -88,9 +96,9 @@ print(problem)
 # Run SA
 ###############################################################################
 # SA_sobol = sobol.analyze(PROBLEM, outVector, print_to_console=True)
-SA_delta = delta.analyze(PROBLEM, X, Y, print_to_console=True)
-SA_pawn  = pawn.analyze(PROBLEM, X, Y, print_to_console=True)
-SA_fast  = rbd_fast.analyze(PROBLEM, X, Y, print_to_console=True)
+SA_delta = delta.analyze(problem, X, Y, print_to_console=True)
+SA_pawn  = pawn.analyze(problem, X, Y, print_to_console=True)
+SA_fast  = rbd_fast.analyze(problem, X, Y, print_to_console=True)
 # Compile dataframes ----------------------------------------------------------
 pawnDF = pd.DataFrame(SA_pawn)
 deltaDF = pd.DataFrame(SA_delta)
