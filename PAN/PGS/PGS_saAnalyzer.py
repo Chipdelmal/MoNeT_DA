@@ -8,7 +8,7 @@ import compress_pickle as pkl
 from SALib.analyze import sobol, delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
-import squarify
+# import squarify
 import PGS_aux as aux
 import PGS_gene as drv
 
@@ -105,28 +105,28 @@ fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Plots
 ###############################################################################
-methods = list(zip(
-    ("FAST", "Delta", "PAWN", "HDMR"),
-    (fastDF, deltaDF, pawnDF, hdmrDF)
-))
-mIx = 1
-for mIx in range(len(methods)):
-    (method, saRes) = methods[mIx]
-    tag = ('S1' if  method is not 'PAWN' else 'median')
-    fltr = [not (math.isnan(i)) for i in saRes[tag]]
-    (sizes, label) = (
-        abs(saRes[tag][fltr]), 
-        [i.split('_')[-1] for i in saRes['names'][fltr]]
-    )
-    lbl = ['{}\n{:.2f}'.format(a, b) for (a, b) in zip(label, sizes)]
-    (fig, ax) = plt.subplots(figsize=(5,5))
-    squarify.plot(sizes=sizes, label=lbl, alpha=0.5, color=aux.TREE_COLS)
-    ax.set_aspect(1)
-    plt.axis('off')
-    fig.savefig(
-        path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
-        dpi=500, bbox_inches='tight', transparent=True
-    )
+# methods = list(zip(
+#     ("FAST", "Delta", "PAWN", "HDMR"),
+#     (fastDF, deltaDF, pawnDF, hdmrDF)
+# ))
+# mIx = 1
+# for mIx in range(len(methods)):
+#     (method, saRes) = methods[mIx]
+#     tag = ('S1' if  method is not 'PAWN' else 'median')
+#     fltr = [not (math.isnan(i)) for i in saRes[tag]]
+#     (sizes, label) = (
+#         abs(saRes[tag][fltr]), 
+#         [i.split('_')[-1] for i in saRes['names'][fltr]]
+#     )
+#     lbl = ['{}\n{:.2f}'.format(a, b) for (a, b) in zip(label, sizes)]
+#     (fig, ax) = plt.subplots(figsize=(5,5))
+#     squarify.plot(sizes=sizes, label=lbl, alpha=0.5, color=aux.TREE_COLS)
+#     ax.set_aspect(1)
+#     plt.axis('off')
+#     fig.savefig(
+#         path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
+#         dpi=500, bbox_inches='tight', transparent=True
+#     )
 ###############################################################################
 # Export to Disk
 ###############################################################################

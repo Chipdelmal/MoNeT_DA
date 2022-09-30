@@ -32,7 +32,7 @@ python PGS_clsUnifyML.py $USR $DRV $AOI $THS
 ###############################################################################
 # Launch Scripts (SA)
 ###############################################################################
-# for mtr in "WOP" "CPT" "POE" "TTI" "TTO"
-# do
-#     python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
-# done
+for mtr in "WOP" "CPT" "POE" "TTI" "TTO"
+do
+    python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
+done
