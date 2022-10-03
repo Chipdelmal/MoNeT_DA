@@ -2,14 +2,18 @@
 import sys
 from os import path
 import numpy as np
-from numpy import full
 import pandas as pd
+from numpy import full
 from functools import reduce
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
 import PGS_gene as drv
 import matplotlib.pyplot as plt
+import rfpimp as rfp
+import compress_pickle as pkl
+from sklearn.metrics import r2_score, explained_variance_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_validate
 from sklearn.linear_model import QuantileRegressor, LinearRegression
@@ -21,7 +25,7 @@ from sklearn.inspection import plot_partial_dependence
 from sklearn.inspection import PartialDependenceDisplay
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -69,31 +73,52 @@ scoring = [
     'explained_variance', 'max_error',
     'neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2'
 ]
-mlRegression = RandomForestRegressor(
+rf = RandomForestRegressor(
     oob_score=True, criterion='squared_error', # 'absolute_error'
     n_jobs=aux.JOB_DSK*2, verbose=False
 )
-cv = ShuffleSplit(n_splits=5, test_size=0.3, random_state=0)
-scores = cross_validate(
-    mlRegression, X_train, y_train, cv=cv, scoring=scoring
-)
+cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
 print(scores)
 ###############################################################################
 # Train and Plot ICE
 ###############################################################################
-mlRegression.fit(X_train, y_train)
-# (fig, ax) = plt.subplots(figsize=(20, 10))
+rf.fit(X_train, y_train)
+y_pred = rf.predict(X_test)
+scoresFinal = {
+    'r2': r2_score(y_test, y_pred),
+    'explained_variance': explained_variance_score(y_test, y_pred),
+    'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
+    'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
+}
+# Feature importances ---------------------------------------------------------
+impRF = {k: v for (k, v) in zip(indVars[:-1], rf.feature_importances_)}
+plt.barh(indVars[:-1], rf.feature_importances_)
+# Drop col importances --------------------------------------------------------
+featImportance = list(rf.feature_importances_)
+impPM = rfp.importances(rf, X_train, y_train)
+impPMD = impPM.to_dict()['Importance']
+# PDP/ICE Plot ----------------------------------------------------------------
+fNameOut = '{}_{}T_MLR.png'.format(AOI, int(float(THS)*100))
 display = PartialDependenceDisplay.from_estimator(
-    mlRegression, X, indVars[:-1],
-    kind='both',
+    rf, X, indVars[:-1],
     subsample=500, n_jobs=aux.JOB_DSK*2,
     n_cols=round((len(indVars)-1)/2), 
+    kind='both', grid_resolution=200, random_state=0,
     ice_lines_kw={'linewidth': 0.200, 'alpha': 0.175},
-    pd_line_kw={'color': '#f72585'},
-    grid_resolution=20, random_state=0,
+    pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
 for r in range(len(display.axes_)):
     for c in range(len(display.axes_[0])):
         display.axes_[r][c].set_ylabel("")
         display.axes_[r][c].get_legend().remove()
+display.figure_.savefig(
+    path.join(PT_IMG, fNameOut), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+###############################################################################
+# Dump Model to Disk
+###############################################################################
+fName = fNameOut[:-3]+'pkl'
+pkl.dump(rf, path.join(PT_OUT, fName))
