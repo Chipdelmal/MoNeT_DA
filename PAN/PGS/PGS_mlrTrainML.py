@@ -1,5 +1,6 @@
 
 import sys
+import shap
 from os import path
 import numpy as np
 import pandas as pd
@@ -16,13 +17,14 @@ from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_validate
-from sklearn.linear_model import QuantileRegressor, LinearRegression
-from sklearn.linear_model import SGDRegressor, LassoLars, BayesianRidge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import ShuffleSplit
-from sklearn.preprocessing import StandardScaler
+from sklearn.inspection import permutation_importance
 from sklearn.inspection import plot_partial_dependence
 from sklearn.inspection import PartialDependenceDisplay
+# https://shap.readthedocs.io/en/latest/index.html
+# https://mljar.com/blog/feature-importance-in-random-forest/
+# https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
     (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
@@ -77,11 +79,11 @@ rf = RandomForestRegressor(
     oob_score=True, criterion='squared_error', # 'absolute_error'
     n_jobs=aux.JOB_DSK*2, verbose=False
 )
-cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+cv = ShuffleSplit(n_splits=10, test_size=0.01, random_state=0)
 scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
 print(scores)
 ###############################################################################
-# Train and Plot ICE
+# Train Model
 ###############################################################################
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
@@ -91,14 +93,27 @@ scoresFinal = {
     'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
     'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
 }
-# Feature importances ---------------------------------------------------------
+# Permutation scikit ----------------------------------------------------------
+perm_importance = permutation_importance(rf, X_test, y_test)
+sorted_idx = perm_importance.importances_mean.argsort()
+plt.barh(indVars[:-1], perm_importance.importances_mean)
+# SHAP ------------------------------------------------------------------------
+explainer = shap.TreeExplainer(rf)
+shap_values = explainer.shap_values(X_test, approximate=True)
+shap_obj = explainer(X_test, algorithm='permutation')
+shap.summary_plot(shap_values, X_test, plot_type="bar")
+shap.plots.beeswarm(shap_obj)
+# Permutation RF --------------------------------------------------------------
 impRF = {k: v for (k, v) in zip(indVars[:-1], rf.feature_importances_)}
 plt.barh(indVars[:-1], rf.feature_importances_)
 # Drop col importances --------------------------------------------------------
 featImportance = list(rf.feature_importances_)
 impPM = rfp.importances(rf, X_train, y_train)
 impPMD = impPM.to_dict()['Importance']
-# PDP/ICE Plot ----------------------------------------------------------------
+plt.barh(list(impPMD.keys()), list(impPMD.values()))
+###############################################################################
+# PDP/ICE Plots
+###############################################################################
 fNameOut = '{}_{}T_MLR.png'.format(AOI, int(float(THS)*100))
 display = PartialDependenceDisplay.from_estimator(
     rf, X, indVars[:-1],
