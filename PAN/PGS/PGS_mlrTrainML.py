@@ -79,7 +79,7 @@ rf = RandomForestRegressor(
     oob_score=True, criterion='squared_error', # 'absolute_error'
     n_jobs=aux.JOB_DSK*2, verbose=False
 )
-cv = ShuffleSplit(n_splits=10, test_size=0.01, random_state=0)
+cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
 scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
 print(scores)
 ###############################################################################
@@ -97,20 +97,20 @@ scoresFinal = {
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
 plt.barh(indVars[:-1], perm_importance.importances_mean)
+# Importances -----------------------------------------------------------------
+impRF = {k: v for (k, v) in zip(indVars[:-1], rf.feature_importances_)}
+plt.barh(indVars[:-1], rf.feature_importances_)
+# Permutation RF --------------------------------------------------------------
+featImportance = list(rf.feature_importances_)
+impPM = rfp.permutation_importances(rf, X_train, y_train, rfp.oob_regression_r2_score)
+impPMD = impPM.to_dict()['Importance']
+plt.barh(list(impPMD.keys()), list(impPMD.values()))
 # SHAP ------------------------------------------------------------------------
 explainer = shap.TreeExplainer(rf)
 shap_values = explainer.shap_values(X_test, approximate=True)
 shap_obj = explainer(X_test, algorithm='permutation')
 shap.summary_plot(shap_values, X_test, plot_type="bar")
 shap.plots.beeswarm(shap_obj)
-# Permutation RF --------------------------------------------------------------
-impRF = {k: v for (k, v) in zip(indVars[:-1], rf.feature_importances_)}
-plt.barh(indVars[:-1], rf.feature_importances_)
-# Drop col importances --------------------------------------------------------
-featImportance = list(rf.feature_importances_)
-impPM = rfp.importances(rf, X_train, y_train)
-impPMD = impPM.to_dict()['Importance']
-plt.barh(list(impPMD.keys()), list(impPMD.values()))
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
@@ -137,3 +137,15 @@ display.figure_.savefig(
 ###############################################################################
 fName = fNameOut[:-3]+'pkl'
 pkl.dump(rf, path.join(PT_OUT, fName))
+###############################################################################
+# Dump Importances to Disk
+###############################################################################
+iVars = [i[0] for i in aux.SA_RANGES]
+permSci = pd.DataFrame({
+    'names': iVars,
+    'mean': perm_importance['importances_mean'], 
+    'std': perm_importance['importances_std']
+})
+permRF = impPM.reset_index()
+permSci.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'), index=False)
+permRF.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'), index=False)

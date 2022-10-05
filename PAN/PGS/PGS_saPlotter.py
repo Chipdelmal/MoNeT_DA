@@ -41,22 +41,34 @@ for name in SA_NAMES:
     fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt.csv')
     resultsSA[name] = pd.read_csv(fName)
 ###############################################################################
+# Reading ML Exported files
+###############################################################################
+fNameOut = '{}_{}T_MLR.png'.format(AOI, int(float(THS)*100))
+impSci = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'))
+impRfi = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'))
+###############################################################################
 # Selecting sensitivities
 ###############################################################################
 delta = resultsSA['Delta'][['names', 'delta', 'S1']]
 pawn = resultsSA['PAWN'][['names', 'mean', 'median']]
 fast = resultsSA['FAST'][['names', 'S1']]
 hdmr = resultsSA['HDMR'].iloc[:len(aux.SA_RANGES)][['names', 'S1']]
+isci = impSci[['names', 'mean']]
+irfi = impRfi[['Feature', 'Importance']]
 ###############################################################################
 # Reshapping
 ###############################################################################
-iVars = [i[0] for i in aux.SA_RANGES]
 labels = list(delta['names'])
+iVar = [i[0] for i in aux.DATA_HEAD[:-1]]
+six = [list(irfi['Feature']).index(i) for i in iVar]
+# Assemble dataframe ---------------------------------------------------------
 df = pd.DataFrame([
         ['Delta', *(delta['S1']/sum(delta['S1']))], 
         ['PAWN',  *(pawn['mean']/sum(pawn['mean']))], 
         ['FAST',  *(fast['S1']/sum(fast['S1']))],
         ['HDMR',  *(hdmr['S1']/sum(hdmr['S1']))],
+        ['ISCI',  *(isci['mean']/sum(isci['mean']))],
+        ['IRFI',  *([(irfi['Importance']/sum(irfi['Importance']))[i] for i in six])]
     ],
     columns=['name']+labels
 )
@@ -65,11 +77,12 @@ new_header = dfT.iloc[0]
 dfT = dfT[1:]
 dfT.columns = new_header
 dfT = dfT.reset_index()
+dfT.sort_values('Delta', ascending=True, inplace=True)
 ###############################################################################
 # Plotting
 ###############################################################################
-dfT.plot.barh(
-    x='index',
-    stacked=False,
-    title='SA'
+dfT.plot.barh(x='index', stacked=False, title='SA')
+plt.savefig(
+    path.join(PT_IMG, fNameOut[:-3]+'FIMP.png'), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )

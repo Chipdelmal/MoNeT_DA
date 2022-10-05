@@ -103,31 +103,6 @@ deltaDF = pd.DataFrame(SA_delta)
 hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
-# Plots
-###############################################################################
-# methods = list(zip(
-#     ("FAST", "Delta", "PAWN", "HDMR"),
-#     (fastDF, deltaDF, pawnDF, hdmrDF)
-# ))
-# mIx = 1
-# for mIx in range(len(methods)):
-#     (method, saRes) = methods[mIx]
-#     tag = ('S1' if  method is not 'PAWN' else 'median')
-#     fltr = [not (math.isnan(i)) for i in saRes[tag]]
-#     (sizes, label) = (
-#         abs(saRes[tag][fltr]), 
-#         [i.split('_')[-1] for i in saRes['names'][fltr]]
-#     )
-#     lbl = ['{}\n{:.2f}'.format(a, b) for (a, b) in zip(label, sizes)]
-#     (fig, ax) = plt.subplots(figsize=(5,5))
-#     squarify.plot(sizes=sizes, label=lbl, alpha=0.5, color=aux.TREE_COLS)
-#     ax.set_aspect(1)
-#     plt.axis('off')
-#     fig.savefig(
-#         path.join(PT_MTR, f'SA-{AOI}_{MOI}-{method}-{QNT}_qnt'+'.png'), 
-#         dpi=500, bbox_inches='tight', transparent=True
-#     )
-###############################################################################
 # Export to Disk
 ###############################################################################
 outPairs = list(zip(
