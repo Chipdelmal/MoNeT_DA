@@ -96,25 +96,25 @@ scoresFinal = {
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
-plt.barh(indVars[:-1], perm_importance.importances_mean)
+# plt.barh(indVars[:-1], perm_importance.importances_mean)
 # Importances -----------------------------------------------------------------
 impRF = {k: v for (k, v) in zip(indVars[:-1], rf.feature_importances_)}
-plt.barh(indVars[:-1], rf.feature_importances_)
+# plt.barh(indVars[:-1], rf.feature_importances_)
 # Permutation RF --------------------------------------------------------------
 featImportance = list(rf.feature_importances_)
 impPM = rfp.permutation_importances(rf, X_train, y_train, rfp.oob_regression_r2_score)
 impPMD = impPM.to_dict()['Importance']
-plt.barh(list(impPMD.keys()), list(impPMD.values()))
+# plt.barh(list(impPMD.keys()), list(impPMD.values()))
 # SHAP ------------------------------------------------------------------------
-explainer = shap.TreeExplainer(rf)
-shap_values = explainer.shap_values(X_test, approximate=True)
-shap_obj = explainer(X_test, algorithm='permutation')
-shap.summary_plot(shap_values, X_test, plot_type="bar")
-shap.plots.beeswarm(shap_obj)
+# explainer = shap.TreeExplainer(rf)
+# shap_values = explainer.shap_values(X_test, approximate=True)
+# shap_obj = explainer(X_test, algorithm='permutation')
+# shap.summary_plot(shap_values, X_test, plot_type="bar")
+# shap.plots.beeswarm(shap_obj)
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-fNameOut = '{}_{}T_MLR.png'.format(AOI, int(float(THS)*100))
+fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 display = PartialDependenceDisplay.from_estimator(
     rf, X, indVars[:-1],
     subsample=500, n_jobs=aux.JOB_DSK*2,

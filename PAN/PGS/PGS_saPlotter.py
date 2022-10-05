@@ -43,7 +43,7 @@ for name in SA_NAMES:
 ###############################################################################
 # Reading ML Exported files
 ###############################################################################
-fNameOut = '{}_{}T_MLR.png'.format(AOI, int(float(THS)*100))
+fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 impSci = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'))
 impRfi = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'))
 ###############################################################################
@@ -83,6 +83,6 @@ dfT.sort_values('Delta', ascending=True, inplace=True)
 ###############################################################################
 dfT.plot.barh(x='index', stacked=False, title='SA')
 plt.savefig(
-    path.join(PT_IMG, fNameOut[:-3]+'FIMP.png'), 
+    path.join(PT_IMG, fNameOut[:-4]+'-FIMP.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
