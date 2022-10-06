@@ -4,15 +4,9 @@ import shap
 from os import path
 import numpy as np
 import pandas as pd
-from numpy import full
-from functools import reduce
-from datetime import datetime
-import MoNeT_MGDrivE as monet
-import PGS_aux as aux
-import PGS_gene as drv
-import matplotlib.pyplot as plt
-import rfpimp as rfp
 import compress_pickle as pkl
+from datetime import datetime
+import rfpimp as rfp
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
@@ -20,8 +14,11 @@ from sklearn.model_selection import cross_validate
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import ShuffleSplit
 from sklearn.inspection import permutation_importance
-from sklearn.inspection import plot_partial_dependence
 from sklearn.inspection import PartialDependenceDisplay
+from treeinterpreter import treeinterpreter as ti
+import MoNeT_MGDrivE as monet
+import PGS_aux as aux
+import PGS_gene as drv
 # https://shap.readthedocs.io/en/latest/index.html
 # https://mljar.com/blog/feature-importance-in-random-forest/
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
@@ -77,7 +74,7 @@ scoring = [
 ]
 rf = RandomForestRegressor(
     oob_score=True, criterion='squared_error', # 'absolute_error'
-    n_jobs=aux.JOB_DSK*2, verbose=False
+    n_jobs=aux.JOB_DSK*2, verbose=True
 )
 cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
 scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
@@ -93,6 +90,7 @@ scoresFinal = {
     'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
     'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
 }
+print(scoresFinal)
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
@@ -149,3 +147,27 @@ permSci = pd.DataFrame({
 permRF = impPM.reset_index()
 permSci.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'), index=False)
 permRF.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'), index=False)
+
+###############################################################################
+# Evaluate ML
+###############################################################################
+probeX = (
+    ('ren', 24),
+    ('rer', 8),
+    ('rei', 10),
+    ('pct', 0.9),
+    ('pmd', 1.0),
+    ('mfr', 0.1),
+    ('mtf', 0.8),
+    ('fvb', 0.3),
+)
+FEATS = [i[0] for i in probeX]
+# Evaluate models at probe point ----------------------------------------------
+vct = np.array([[i[1] for i in probeX]])
+# pred = rf.predict(vct)
+(prediction, bias, contributions) = ti.predict(rf, vct)
+# -----------------------------------------------------------------------------
+print("* Predicted: {}".format(prediction[0][0]))
+for (c, feature, inVal) in zip(contributions[0], FEATS, vct[0]):
+    ptest = '{:.4f}'.format(c).zfill(3)
+    print('\t{} ({:.2f}): {}'.format(feature, inVal, ptest))

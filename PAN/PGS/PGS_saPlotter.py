@@ -81,8 +81,25 @@ dfT.sort_values('Delta', ascending=True, inplace=True)
 ###############################################################################
 # Plotting
 ###############################################################################
-dfT.plot.barh(x='index', stacked=False, title='SA')
+clr = [
+    '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', 
+    '#00f5d4AA', '#8d99aeAA', '#cdb4dbAA'
+]
+dfT.plot.barh(
+    x='index', stacked=False, xlim=(0, 1),
+    ylabel='', xlabel='Sensitivity/Importance',
+    title='', logx=False, color=clr
+)
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP.png'), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+dfT.plot.barh(
+    x='index', stacked=False, xlim=(0, 1),
+    ylabel='', xlabel='Sensitivity/Importance',
+    title='', logx=True, color=clr
+)
+plt.savefig(
+    path.join(PT_IMG, fNameOut[:-4]+'-FIMP_Log.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
