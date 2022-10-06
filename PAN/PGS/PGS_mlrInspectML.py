@@ -6,6 +6,9 @@ import numpy as np
 import pandas as pd
 import compress_pickle as pkl
 from datetime import datetime
+import matplotlib.pyplot as plt
+from matplotlib.collections import PatchCollection
+from matplotlib.patches import Rectangle
 from treeinterpreter import treeinterpreter as ti
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
@@ -69,3 +72,13 @@ print("\tBias: {}".format(bias[0]))
 for (c, feature, inVal) in zip(contributions[0], FEATS, vct[0]):
     ptest = '{:.4f}'.format(c).zfill(3)
     print('\t{} ({:.2f}): {}'.format(feature, inVal, ptest))
+
+
+rWidth = 1
+(bias, contributions) = (bias, contributions)
+
+(bs, cntr) = (bias[0], contributions[0])
+(fig, ax) = plt.subplots(figsize=(10, 10))
+ax.add_patch(Rectangle((bias, 0), bs+cntr[0], 1))
+ax.set_xlim(-2, 2)
+ax.set_ylim(0, 4)

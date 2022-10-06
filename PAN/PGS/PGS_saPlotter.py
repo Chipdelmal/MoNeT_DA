@@ -71,7 +71,7 @@ df = pd.DataFrame([
         ['HDMR',  *(hdmr['S1']/sum(hdmr['S1']))],
         ['ISCI',  *(isci['mean']/sum(isci['mean']))],
         ['IRFI',  *([(irfi['Importance']/sum(irfi['Importance']))[i] for i in six])],
-        ['SHP',   *(shp['mean']/sum(shp['mean']))]
+        ['SHAP',   *(shp['mean']/sum(shp['mean']))]
     ],
     columns=['name']+labels
 )
@@ -80,7 +80,7 @@ new_header = dfT.iloc[0]
 dfT = dfT[1:]
 dfT.columns = new_header
 dfT = dfT.reset_index()
-dfT.sort_values('SHP', ascending=True, inplace=True)
+dfT.sort_values('SHAP', ascending=True, inplace=True)
 ###############################################################################
 # Plotting
 ###############################################################################
