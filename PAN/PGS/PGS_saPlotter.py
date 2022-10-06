@@ -46,6 +46,7 @@ for name in SA_NAMES:
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 impSci = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'))
 impRfi = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'))
+shpImp = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_SHP-SHP.csv'))
 ###############################################################################
 # Selecting sensitivities
 ###############################################################################
@@ -55,6 +56,7 @@ fast = resultsSA['FAST'][['names', 'S1']]
 hdmr = resultsSA['HDMR'].iloc[:len(aux.SA_RANGES)][['names', 'S1']]
 isci = impSci[['names', 'mean']]
 irfi = impRfi[['Feature', 'Importance']]
+shp = shpImp[['names', 'mean']]
 ###############################################################################
 # Reshapping
 ###############################################################################
@@ -68,7 +70,8 @@ df = pd.DataFrame([
         ['FAST',  *(fast['S1']/sum(fast['S1']))],
         ['HDMR',  *(hdmr['S1']/sum(hdmr['S1']))],
         ['ISCI',  *(isci['mean']/sum(isci['mean']))],
-        ['IRFI',  *([(irfi['Importance']/sum(irfi['Importance']))[i] for i in six])]
+        ['IRFI',  *([(irfi['Importance']/sum(irfi['Importance']))[i] for i in six])],
+        ['SHP',   *(shp['mean']/sum(shp['mean']))]
     ],
     columns=['name']+labels
 )
@@ -77,13 +80,13 @@ new_header = dfT.iloc[0]
 dfT = dfT[1:]
 dfT.columns = new_header
 dfT = dfT.reset_index()
-dfT.sort_values('Delta', ascending=True, inplace=True)
+dfT.sort_values('SHP', ascending=True, inplace=True)
 ###############################################################################
 # Plotting
 ###############################################################################
 clr = [
-    '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', 
-    '#00f5d4AA', '#8d99aeAA', '#cdb4dbAA'
+    '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', '#00f5d4AA', 
+    '#8d99aeAA', '#cdb4dbAA', '#03045eAA'    
 ]
 dfT.plot.barh(
     x='index', stacked=False, xlim=(0, 1),

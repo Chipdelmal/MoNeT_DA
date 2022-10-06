@@ -24,7 +24,7 @@ import PGS_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -73,7 +73,8 @@ scoring = [
     'neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2'
 ]
 rf = RandomForestRegressor(
-    oob_score=True, criterion='squared_error', # 'absolute_error'
+    # n_estimators=100, max_depth=None, max_features="sqrt",
+    oob_score=True, criterion='squared_error',
     n_jobs=aux.JOB_DSK*2, verbose=True
 )
 cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
@@ -104,8 +105,9 @@ impPM = rfp.permutation_importances(rf, X_train, y_train, rfp.oob_regression_r2_
 impPMD = impPM.to_dict()['Importance']
 # plt.barh(list(impPMD.keys()), list(impPMD.values()))
 # SHAP ------------------------------------------------------------------------
-# explainer = shap.TreeExplainer(rf)
-# shap_values = explainer.shap_values(X_test, approximate=True)
+explainer = shap.TreeExplainer(rf)
+shap_values = explainer.shap_values(X_test, approximate=True)
+shapVals = np.abs(shap_values).mean(0)
 # shap_obj = explainer(X_test, algorithm='permutation')
 # shap.summary_plot(shap_values, X_test, plot_type="bar")
 # shap.plots.beeswarm(shap_obj)
@@ -133,6 +135,7 @@ display.figure_.savefig(
 ###############################################################################
 # Dump Model to Disk
 ###############################################################################
+fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 fName = fNameOut[:-3]+'pkl'
 pkl.dump(rf, path.join(PT_OUT, fName))
 ###############################################################################
@@ -144,30 +147,38 @@ permSci = pd.DataFrame({
     'mean': perm_importance['importances_mean'], 
     'std': perm_importance['importances_std']
 })
+shapImp = pd.DataFrame({
+    'names': iVars,
+    'mean': shapVals
+})
 permRF = impPM.reset_index()
 permSci.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'), index=False)
 permRF.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'), index=False)
+shapImp.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_SHP-SHP.csv'), index=False)
 
-###############################################################################
-# Evaluate ML
-###############################################################################
-probeX = (
-    ('ren', 24),
-    ('rer', 8),
-    ('rei', 10),
-    ('pct', 0.9),
-    ('pmd', 1.0),
-    ('mfr', 0.1),
-    ('mtf', 0.8),
-    ('fvb', 0.3),
-)
-FEATS = [i[0] for i in probeX]
-# Evaluate models at probe point ----------------------------------------------
-vct = np.array([[i[1] for i in probeX]])
-# pred = rf.predict(vct)
-(prediction, bias, contributions) = ti.predict(rf, vct)
-# -----------------------------------------------------------------------------
-print("* Predicted: {}".format(prediction[0][0]))
-for (c, feature, inVal) in zip(contributions[0], FEATS, vct[0]):
-    ptest = '{:.4f}'.format(c).zfill(3)
-    print('\t{} ({:.2f}): {}'.format(feature, inVal, ptest))
+
+
+# shap.initjs()
+# row_to_show = 5
+# data_for_prediction = X_test.iloc[row_to_show]
+# shap.force_plot(explainer.expected_value, shap_values[0], data_for_prediction)
+# probeX = (
+#     ('ren', 40),
+#     ('rer', 40),
+#     ('rei', 7),
+#     ('pct', 0.0),
+#     ('pmd', 1.0),
+#     ('mfr', 0.0),
+#     ('mtf', 1.0),
+#     ('fvb', 0.0),
+# )
+# FEATS = [i[0] for i in probeX]
+# # Evaluate models at probe point ----------------------------------------------
+# vct = np.array([[i[1] for i in probeX]])
+# # shap.force_plot(explainer.expected_value, shap_values[0], vct)
+
+# explainer = shap.TreeExplainer(rf)
+# choosen_instance = X_test.iloc[0]
+# shap_values = explainer.shap_values(choosen_instance)
+# shap.initjs()
+# shap.force_plot(explainer.expected_value, shap_values, choosen_instance)
