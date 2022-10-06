@@ -117,10 +117,10 @@ impPMD = impPM.to_dict()['Importance']
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 display = PartialDependenceDisplay.from_estimator(
     rf, X, indVars[:-1],
-    subsample=500, n_jobs=aux.JOB_DSK*2,
+    subsample=750, n_jobs=aux.JOB_DSK*2,
     n_cols=round((len(indVars)-1)/2), 
     kind='both', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.200, 'alpha': 0.175},
+    ice_lines_kw={'linewidth': 0.125, 'alpha': 0.150},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
