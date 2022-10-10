@@ -53,12 +53,12 @@ rf = pkl.load(path.join(PT_OUT, fName))
 # Evaluate ML
 ###############################################################################
 probeX = (
-    ('ren', 24),
+    ('ren', 30),
     ('rer', 20),
-    ('rei', 8),
-    ('pct', 1.0),
-    ('pmd', 1.0),
-    ('mfr', 0.0),
+    ('rei', 13),
+    ('pct', 0.9),
+    ('pmd', 0.9),
+    ('mfr', 0.1),
     ('mtf', 1.0),
     ('fvb', 0.0),
 )
@@ -75,8 +75,9 @@ for (c, feature, inVal) in zip(contributions[0], FEATS, vct[0]):
 ###############################################################################
 # Plot evaluation
 ###############################################################################
-CLR = ('#3b28ccAA', '#f72585AA')
-rWidth = 1
+CLR = ('#3b28cc99', '#f7258A99')
+rWidth = .5
+X_LIM = 2200
 # Figure function -------------------------------------------------------------
 (bs, cntr, vals) = (bias[0], contributions[0], vct[0])
 (x, yTicks) = (bs, [])
@@ -84,15 +85,23 @@ rWidth = 1
 for (ix, v) in enumerate(cntr):
     col = (CLR[0] if (v>=0) else CLR[1])
     y = rWidth*ix
+    hl = (30 if abs(v) > 30 else 0)
+    hs = ('right' if v >= 0 else 'left')
     # Shape -------------------------------------------------------------------
-    rectangle = Rectangle((x, y), v, rWidth, color=col, ec='#00000088')
+    rectangle = Rectangle((x, y), v, rWidth, color=col, ec='#00000088', zorder=2)
     # Add patch ---------------------------------------------------------------
     ax.add_patch(rectangle)
     yHalf = y+(rWidth)/2
+    ax.arrow(
+        x, yHalf, v, 0, 
+        color='#000000AA', head_width=.2, 
+        head_length=hl, lw=.5,
+        length_includes_head=True, shape=hs, zorder=3
+    )
     x = x + v
     yTicks.append(yHalf)
     ax.text(
-        1800, yHalf, '{:.2f} '.format(v), 
+        X_LIM, yHalf, '{:.2f} '.format(v), 
         va='center', ha='right', fontsize=8
     )
     ax.text(
@@ -105,11 +114,11 @@ ax.set_yticklabels(FEATS)
 ax.vlines(
     bias, 0, 1, 
     transform=ax.get_xaxis_transform(), 
-    ls='--', lw=.5, colors='#efc3e6'
+    ls='--', lw=.5, colors='#efc3e600', zorder=-10
 )
 ax.vlines(
     x, 0, y, 
-    ls='--', lw=1, colors='#a663cc'
+    ls='--', lw=1, colors='#00000099', zorder=-10
 )
-ax.set_xlim(0, 1800)
+ax.set_xlim(0, 2200)
 ax.set_ylim(0, rWidth*len(cntr))

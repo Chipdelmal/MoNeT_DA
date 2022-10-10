@@ -14,7 +14,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -65,13 +65,13 @@ iVar = [i[0] for i in aux.DATA_HEAD[:-1]]
 six = [list(irfi['Feature']).index(i) for i in iVar]
 # Assemble dataframe ---------------------------------------------------------
 df = pd.DataFrame([
-        ['Delta', *(delta['S1']/sum(delta['S1']))], 
-        ['PAWN',  *(pawn['mean']/sum(pawn['mean']))], 
-        ['FAST',  *(fast['S1']/sum(fast['S1']))],
-        ['HDMR',  *(hdmr['S1']/sum(hdmr['S1']))],
-        ['ISCI',  *(isci['mean']/sum(isci['mean']))],
+        ['Delta', *([(delta['S1']/sum(delta['S1']))[i] for i in six])], 
+        ['PAWN',  *([(pawn['mean']/sum(pawn['mean']))[i] for i in six])], 
+        ['FAST',  *([(fast['S1']/sum(fast['S1']))[i] for i in six])],
+        ['HDMR',  *([(hdmr['S1']/sum(hdmr['S1']))[i] for i in six])],
+        ['ISCI',  *([(isci['mean']/sum(isci['mean']))[i] for i in six])],
         ['IRFI',  *([(irfi['Importance']/sum(irfi['Importance']))[i] for i in six])],
-        ['SHAP',   *(shp['mean']/sum(shp['mean']))]
+        ['SHAP',  *([(shp['mean']/sum(shp['mean']))[i] for i in six])]
     ],
     columns=['name']+labels
 )

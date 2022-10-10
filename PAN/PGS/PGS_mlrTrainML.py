@@ -75,7 +75,7 @@ scoring = [
 rf = RandomForestRegressor(
     # n_estimators=100, max_depth=None, max_features="sqrt",
     oob_score=True, criterion='squared_error',
-    n_jobs=aux.JOB_DSK*2, verbose=True
+    n_jobs=aux.JOB_DSK*2, verbose=False
 )
 cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
 scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
@@ -117,7 +117,7 @@ shapVals = np.abs(shap_values).mean(0)
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 display = PartialDependenceDisplay.from_estimator(
     rf, X, indVars[:-1],
-    subsample=750, n_jobs=aux.JOB_DSK*2,
+    subsample=1500, n_jobs=aux.JOB_DSK*2,
     n_cols=round((len(indVars)-1)/2), 
     kind='both', grid_resolution=200, random_state=0,
     ice_lines_kw={'linewidth': 0.125, 'alpha': 0.150},
