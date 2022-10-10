@@ -17,9 +17,10 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.1', '0.9'))
+    (USR, DRV) = ('srv', 'linkedDrive')
 else:
     (USR, DRV, AOI, QNT, THS) = sys.argv[1:]
+(AOI, QNT, THS) = (('HLT', 'TRS'), '50', ('0.1', '0.9'))
 EXPS = aux.EXPS
 exp = EXPS[0]
 # Setup number of cores -------------------------------------------------------
@@ -79,19 +80,20 @@ fullFltrB = list(map(all, zip(*fltrB)))
 fullFltr = list(map(all, zip(fullFltrA, fullFltrB)))
 print('* Matches found: {}'.format(sum(fullFltr)))
 DATA_FILTERED = [dta[fullFltr] for dta in (DATA_H, DATA_T)]
-###############################################################################
-# Export data
-###############################################################################
-DATA_FILTERED[0].to_csv(path.join(PT_OUT, 'DTA_FLTR_{}.csv'.format(AOI[0])), index=False)
-DATA_FILTERED[1].to_csv(path.join(PT_OUT, 'DTA_FLTR_{}.csv'.format(AOI[1])), index=False)
-###############################################################################
-# Explore
-###############################################################################
-DATA_FILTERED[0][DATA_FILTERED[0]['WOP'] == max(DATA_FILTERED[0]['WOP'])]
-DATA_FILTERED[1][DATA_FILTERED[1]['WOP'] == min(DATA_FILTERED[1]['WOP'])]
-dfMetric = DATA_FILTERED[0][FEATS].copy()
-dfMetric['HLT'] = DATA_FILTERED[0]['WOP']
-dfMetric['TRS'] = DATA_FILTERED[1]['WOP']
-dfMetric['Delta'] = dfMetric['HLT']-dfMetric['TRS']
-dfMetric[dfMetric['Delta'] == max(dfMetric['Delta'])]
-dfMetric.to_csv(path.join(PT_OUT, 'DTA_Delta_{}-{}.csv'.format(AOI[0], AOI[1])), index=False)
+if DATA_FILTERED[0].shape[0] > 0:
+    ###########################################################################
+    # Export data
+    ###########################################################################
+    DATA_FILTERED[0].to_csv(path.join(PT_OUT, 'DTA_FLTR_{}.csv'.format(AOI[0])), index=False)
+    DATA_FILTERED[1].to_csv(path.join(PT_OUT, 'DTA_FLTR_{}.csv'.format(AOI[1])), index=False)
+    ###########################################################################
+    # Explore
+    ###########################################################################
+    DATA_FILTERED[0][DATA_FILTERED[0]['WOP'] == max(DATA_FILTERED[0]['WOP'])]
+    DATA_FILTERED[1][DATA_FILTERED[1]['WOP'] == min(DATA_FILTERED[1]['WOP'])]
+    dfMetric = DATA_FILTERED[0][FEATS].copy()
+    dfMetric['HLT'] = DATA_FILTERED[0]['WOP']
+    dfMetric['TRS'] = DATA_FILTERED[1]['WOP']
+    dfMetric['Delta'] = dfMetric['HLT']-dfMetric['TRS']
+    dfMetric[dfMetric['Delta'] == max(dfMetric['Delta'])]
+    dfMetric.to_csv(path.join(PT_OUT, 'DTA_Delta_{}-{}.csv'.format(AOI[0], AOI[1])), index=False)

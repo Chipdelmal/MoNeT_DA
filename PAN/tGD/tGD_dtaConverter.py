@@ -14,11 +14,13 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS, NME, TRC) = (
-        'srv2', 'tGD', ('HLT', 'TRS'), '50', ('0.1', '0.9'), 'NM', ('HLT', 'TRS')
+    (USR, DRV) = (
+        'srv', 'linkedDrive'
     )
 else:
     (USR, DRV, AOI, QNT, THS, NME, TRC) = sys.argv[1:]
+    
+(AOI, QNT, THS, NME, TRC) = (('HLT', 'TRS'), '50', ('0.1', '0.9'), 'NM', ('HLT', 'TRS'))
 exp = aux.EXPS[0]
 # Filename --------------------------------------------------------------------
 FNAME = 'DTA_FLTR_{}.csv'
@@ -82,7 +84,7 @@ for ix in range(expsNum):
             ])
             counter = counter + 1
     else:
-        print(fpath)
+        # print(fpath)
         skipped = skipped + 1
 print('{}* Skipped (no PRE): {}/{}{}'.format(CBBL, skipped, expsNum, CEND))
 ###############################################################################

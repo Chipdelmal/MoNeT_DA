@@ -16,7 +16,7 @@ from more_itertools import locate
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'splitDrive', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'tGD', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 exp = '100'
