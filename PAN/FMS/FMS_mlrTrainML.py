@@ -49,7 +49,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} mlrTrainML [{}:{}]'.format(DRV, AOI, THS)
+    '{} mlrTrainML [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
 )
 ###############################################################################
 # Read Dataframe
@@ -77,9 +77,9 @@ rf = RandomForestRegressor(
     oob_score=True, criterion='squared_error',
     n_jobs=aux.JOB_DSK*2, verbose=False
 )
-cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
+cv = ShuffleSplit(n_splits=10, test_size=0.25, random_state=0)
 scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
-print(scores)
+# print(scores)
 ###############################################################################
 # Train Model
 ###############################################################################
@@ -91,7 +91,7 @@ scoresFinal = {
     'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
     'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
 }
-print(scoresFinal)
+# print(scoresFinal)
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
@@ -124,10 +124,10 @@ display = PartialDependenceDisplay.from_estimator(
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
-for r in range(len(display.axes_)):
-    for c in range(len(display.axes_[0])):
-        display.axes_[r][c].set_ylabel("")
-        display.axes_[r][c].get_legend().remove()
+# for r in range(len(display.axes_)):
+#     for c in range(len(display.axes_[0])):
+#         display.axes_[r][c].set_ylabel("")
+#         display.axes_[r][c].get_legend().remove()
 display.figure_.savefig(
     path.join(PT_IMG, fNameOut), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
@@ -138,6 +138,8 @@ display.figure_.savefig(
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 fName = fNameOut[:-3]+'pkl'
 pkl.dump(rf, path.join(PT_OUT, fName))
+pd.DataFrame(scores).to_csv(path.join(PT_OUT, fName[:-4]+'_CV.csv'))
+pd.DataFrame(scoresFinal, index=[0]).to_csv(path.join(PT_OUT, fName[:-4]+'_VL.csv'))
 ###############################################################################
 # Dump Importances to Disk
 ###############################################################################

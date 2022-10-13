@@ -42,7 +42,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} mlrTrainML [{}:{}]'.format(DRV, AOI, THS)
+    '{} mlrTrainML [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
 )
 ###############################################################################
 # Load Model from Disk
@@ -55,7 +55,6 @@ rf = pkl.load(path.join(PT_OUT, fName))
 probeX = (
     ('ren', 30),
     ('rer', 20),
-    ('rei', 13),
     ('pct', 0.9),
     ('pmd', 0.9),
     ('mfr', 0.1),
