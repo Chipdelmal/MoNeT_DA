@@ -8,13 +8,12 @@ import compress_pickle as pkl
 from SALib.analyze import sobol, delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
-import squarify
 import FMS_aux as aux
 import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS4', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
