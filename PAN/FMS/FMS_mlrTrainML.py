@@ -1,6 +1,7 @@
 
 import sys
 import shap
+from math import ceil
 from os import path
 import numpy as np
 import pandas as pd
@@ -118,16 +119,19 @@ fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 display = PartialDependenceDisplay.from_estimator(
     rf, X, indVars[:-1],
     subsample=1500, n_jobs=aux.JOB_DSK*2,
-    n_cols=round((len(indVars)-1)/2), 
+    n_cols=ceil((len(indVars)-1)/2), 
     kind='both', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.125, 'alpha': 0.150},
+    ice_lines_kw={'linewidth': 0.100, 'alpha': 0.100},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
-# for r in range(len(display.axes_)):
-#     for c in range(len(display.axes_[0])):
-#         display.axes_[r][c].set_ylabel("")
-#         display.axes_[r][c].get_legend().remove()
+for r in range(len(display.axes_)):
+    for c in range(len(display.axes_[r])):
+        try:
+            display.axes_[r][c].set_ylabel("")
+            display.axes_[r][c].get_legend().remove()
+        except:
+            continue
 display.figure_.savefig(
     path.join(PT_IMG, fNameOut), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300

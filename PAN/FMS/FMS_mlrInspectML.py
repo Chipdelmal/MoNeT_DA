@@ -53,13 +53,13 @@ rf = pkl.load(path.join(PT_OUT, fName))
 # Evaluate ML
 ###############################################################################
 probeX = (
-    ('ren', 30),
+    ('ren', 15),
     ('rer', 20),
-    ('pct', 0.9),
-    ('pmd', 0.9),
-    ('mfr', 0.1),
-    ('mtf', 1.0),
-    ('fvb', 0.0),
+    ('pct', 0.75),
+    ('pmd', 0.75),
+    ('mfr', 0),
+    ('mtf', 0.5),
+    ('fvb', 0),
 )
 FEATS = [i[0] for i in probeX]
 # Evaluate models at probe point ----------------------------------------------
@@ -121,3 +121,9 @@ ax.vlines(
 )
 ax.set_xlim(0, 2200)
 ax.set_ylim(0, rWidth*len(cntr))
+# Save to disk ----------------------------------------------------------------
+fID = '_'.join([str(int(x[1]*1e3)).zfill(4) for x in probeX])
+fig.savefig(
+    path.join(PT_IMG, fID+f'-{AOI}_{MOI}.png'),
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
