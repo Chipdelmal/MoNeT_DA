@@ -120,7 +120,7 @@ display = PartialDependenceDisplay.from_estimator(
     subsample=1500, n_jobs=aux.JOB_DSK*2,
     n_cols=round((len(indVars)-1)/2), 
     kind='both', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.125, 'alpha': 0.150},
+    ice_lines_kw={'linewidth': 0.050, 'alpha': 0.050},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
