@@ -126,8 +126,11 @@ display = PartialDependenceDisplay.from_estimator(
 display.figure_.subplots_adjust(hspace=.3)
 for r in range(len(display.axes_)):
     for c in range(len(display.axes_[0])):
-        display.axes_[r][c].set_ylabel("")
-        display.axes_[r][c].get_legend().remove()
+        try:
+            display.axes_[r][c].set_ylabel("")
+            display.axes_[r][c].get_legend().remove()
+        except:
+            continue
 display.figure_.savefig(
     path.join(PT_IMG, fNameOut), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
@@ -138,6 +141,8 @@ display.figure_.savefig(
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 fName = fNameOut[:-3]+'pkl'
 pkl.dump(rf, path.join(PT_OUT, fName))
+pd.DataFrame(scores).to_csv(path.join(PT_OUT, fName[:-4]+'_CV.csv'))
+pd.DataFrame(scoresFinal, index=[0]).to_csv(path.join(PT_OUT, fName[:-4]+'_VL.csv'))
 ###############################################################################
 # Dump Importances to Disk
 ###############################################################################
@@ -155,30 +160,3 @@ permRF = impPM.reset_index()
 permSci.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'), index=False)
 permRF.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'), index=False)
 shapImp.to_csv(path.join(PT_OUT, fNameOut[:-4]+'_SHP-SHP.csv'), index=False)
-
-
-
-# shap.initjs()
-# row_to_show = 5
-# data_for_prediction = X_test.iloc[row_to_show]
-# shap.force_plot(explainer.expected_value, shap_values[0], data_for_prediction)
-# probeX = (
-#     ('ren', 40),
-#     ('rer', 40),
-#     ('rei', 7),
-#     ('pct', 0.0),
-#     ('pmd', 1.0),
-#     ('mfr', 0.0),
-#     ('mtf', 1.0),
-#     ('fvb', 0.0),
-# )
-# FEATS = [i[0] for i in probeX]
-# # Evaluate models at probe point ----------------------------------------------
-# vct = np.array([[i[1] for i in probeX]])
-# # shap.force_plot(explainer.expected_value, shap_values[0], vct)
-
-# explainer = shap.TreeExplainer(rf)
-# choosen_instance = X_test.iloc[0]
-# shap_values = explainer.shap_values(choosen_instance)
-# shap.initjs()
-# shap.force_plot(explainer.expected_value, shap_values, choosen_instance)

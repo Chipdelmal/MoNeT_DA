@@ -36,3 +36,10 @@ for mtr in "WOP" "CPT" "POE" "TTI" "TTO"
 do
     python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
 done
+###############################################################################
+# Train ML
+###############################################################################
+for mtr in "WOP" "CPT" "TTI" "TTO"
+do
+    python FMS_mlrTrainML.py $USR $DRV $AOI $THS $mtr
+done
