@@ -4,8 +4,9 @@ from os import sys
 from os import path
 import numpy as np
 import pandas as pd
+from datetime import datetime
 import compress_pickle as pkl
-from SALib.analyze import sobol, delta, pawn, rbd_fast, hdmr
+from SALib.analyze import delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
 # import squarify
@@ -14,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -31,6 +32,12 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = path.join(PT_ROT, 'SUMMARY')
+# Time and head -----------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_ROT, PT_OUT, tS, 
+    '{} SA Analyzer [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
+)
 ###############################################################################
 # Read SA Files
 ###############################################################################
@@ -64,11 +71,11 @@ saVars = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])>1)])])
 saCnst = set([i[0] for i in ([i for i in VARS_RANGES if (len(i[1])<=1)])])
 rsnst = set([i.split('_')[-1] for i in headRes]) - set(PROBLEM['names'])
 # Generate filter -------------------------------------------------------------
-# ix = 70
+ix = 70
 expNum = EXP.shape[0]
 (matchesSizes, outVector) = ([0]*expNum, np.zeros(expNum))
 for ix in range(expNum):
-    print('Processing {:06d}/{:06d}'.format(ix+1, expNum), end='\r')
+    print('* Processing {:06d}/{:06d}'.format(ix+1, expNum), end='\r')
     rowVals = EXP.iloc[ix].to_dict()
     # Fix discrepancy in release size
     rowVals['res'] = round(rowVals['rer'], 2)
