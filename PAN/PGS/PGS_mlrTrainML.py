@@ -49,7 +49,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} mlrTrainML [{}:{}]'.format(DRV, AOI, THS)
+    '{} mlrTrainML [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
 )
 ###############################################################################
 # Read Dataframe
@@ -91,7 +91,7 @@ scoresFinal = {
     'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
     'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
 }
-print(scoresFinal)
+# print(scoresFinal)
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
