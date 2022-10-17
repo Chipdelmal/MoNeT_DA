@@ -5,7 +5,7 @@ from os import path
 import numpy as np
 import pandas as pd
 import compress_pickle as pkl
-from SALib.analyze import delta, pawn, rbd_fast
+from SALib.analyze import delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
 from datetime import datetime
 import FMS_aux as aux
@@ -102,18 +102,20 @@ if len(set(matchesSizes))>1:
 ###############################################################################
 SA_delta = delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=False)
 SA_pawn = pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=False)
+SA_hdmr = hdmr.analyze(PROBLEM, SAMPLER, outVector, print_to_console=False)
 SA_fast = rbd_fast.analyze(PROBLEM, SAMPLER, outVector, print_to_console=False)
 # Compile dataframes ----------------------------------------------------------
 pawnDF = pd.DataFrame(SA_pawn)
 deltaDF = pd.DataFrame(SA_delta)
+hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
 ###############################################################################
 # Export to Disk
 ###############################################################################
 outPairs = list(zip(
-    ['Delta', 'PAWN','FAST'],    #,  'HDMR', 'Sobol']
-    [deltaDF, pawnDF, fastDF],   #,  hdmrDF, sobolDF] 
-    [SA_delta, SA_pawn, SA_fast] #, SA_hdmr, SA_sobol]
+    ['Delta', 'PAWN', 'HDMR', 'FAST'],
+    [deltaDF, pawnDF, hdmrDF, fastDF],
+    [SA_delta, SA_pawn, SA_hdmr, SA_fast]
 ))
 for (name, df, dct) in outPairs:
     fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')

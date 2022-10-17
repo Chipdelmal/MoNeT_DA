@@ -504,3 +504,25 @@ TREE_COLS = [
     '#2614ed', '#FF006E', '#45d40c', '#8338EC', '#1888e3', 
     '#BC1097', '#FFE93E', '#3b479d', '#540d6e', '#7bdff2'
 ]
+
+
+def getSASortedDF(df, column, sortingLabels, normalized=True):
+    srtNames = [i.replace('i_', '') for i in sortingLabels]
+    srtNames = list(map(lambda x: x.replace('rer', 'res'), srtNames))
+    try:
+        # SA dataframes -------------------------------------------------------
+        names = list(df['names'])
+        names = list(map(lambda x: x.replace('rer', 'res'), names))
+    except:
+        # ML dataframes -------------------------------------------------------
+        names = list(df['Feature'])
+        names = [i.replace('i_', '') for i in names]
+    sortIx = [names.index(lbl) for lbl in srtNames]
+    # Calculate return --------------------------------------------------------
+    if normalized:
+        norms = df[column]/np.nansum(df[column])
+    else:
+        norms = df[column]
+    # Return sorted -----------------------------------------------------------
+    srtSA = [norms[ix] for ix in sortIx]
+    return srtSA
