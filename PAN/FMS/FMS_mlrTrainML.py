@@ -8,6 +8,7 @@ import pandas as pd
 import compress_pickle as pkl
 from datetime import datetime
 import rfpimp as rfp
+import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
@@ -25,7 +26,7 @@ import FMS_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -116,10 +117,12 @@ shapVals = np.abs(shap_values).mean(0)
 # PDP/ICE Plots
 ###############################################################################
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
+validFeat = [ix for (ix, sal) in enumerate(aux.SA_RANGES) if (len(sal[1])>1)]
+(fig, ax) = plt.subplots(figsize=(16, 2.75))
 display = PartialDependenceDisplay.from_estimator(
-    rf, X, indVars[:-1],
-    subsample=1500, n_jobs=aux.JOB_DSK*2,
-    n_cols=ceil((len(indVars)-1)/2), 
+    rf, X, features=validFeat, ax=ax,
+    subsample=2000, n_jobs=aux.JOB_DSK*4,
+    n_cols=ceil((len(indVars)-1)), 
     kind='both', grid_resolution=200, random_state=0,
     ice_lines_kw={'linewidth': 0.050, 'alpha': 0.050},
     pd_line_kw={'color': '#f72585'}
