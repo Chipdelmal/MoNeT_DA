@@ -26,7 +26,7 @@ import FMS_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -124,13 +124,14 @@ display = PartialDependenceDisplay.from_estimator(
     subsample=2000, n_jobs=aux.JOB_DSK*4,
     n_cols=ceil((len(indVars)-1)), 
     kind='both', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.050, 'alpha': 0.050},
+    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
 for r in range(len(display.axes_)):
     for c in range(len(display.axes_[r])):
         try:
+            display.axes_[r][c].set_xlabel("")
             display.axes_[r][c].set_ylabel("")
             display.axes_[r][c].get_legend().remove()
         except:
