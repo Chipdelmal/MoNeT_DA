@@ -60,20 +60,19 @@ shp = shpImp[['names', 'mean']]
 ###############################################################################
 # Reshapping
 ###############################################################################
-labels = list(delta['names'])
 iVar = [i[0] for i in aux.DATA_HEAD[:-1]]
-six = [list(irfi['Feature']).index(i) for i in iVar]
+validFeat = [sal[0] for sal in aux.SA_RANGES if (len(sal[1])>1)]
 # Assemble dataframe ---------------------------------------------------------
 df = pd.DataFrame([
-        ['Delta', *([(delta['S1']/sum(delta['S1']))[i] for i in six])], 
-        ['PAWN',  *([(pawn['mean']/sum(pawn['mean']))[i] for i in six])], 
-        ['FAST',  *([(fast['S1']/sum(fast['S1']))[i] for i in six])],
-        ['HDMR',  *([(hdmr['S1']/sum(hdmr['S1']))[i] for i in six])],
-        ['ISCI',  *([(isci['mean']/sum(isci['mean']))[i] for i in six])],
-        ['IRFI',  *([(irfi['Importance']/sum(irfi['Importance']))[i] for i in six])],
-        ['SHAP',  *([(shp['mean']/sum(shp['mean']))[i] for i in six])]
+        ['Delta', *aux.getSASortedDF(delta, 'S1', validFeat)], 
+        # ['PAWN',  *aux.getSASortedDF(pawn, 'mean', validFeat)], 
+        ['FAST',  *aux.getSASortedDF(fast, 'S1', validFeat)], 
+        ['HDMR',  *aux.getSASortedDF(hdmr, 'S1', validFeat)], 
+        ['ISCI',  *aux.getSASortedDF(isci, 'mean', validFeat)], 
+        ['IRFI',  *aux.getSASortedDF(irfi, 'Importance', validFeat)], 
+        ['SHAP',  *aux.getSASortedDF(shp, 'mean', validFeat)], 
     ],
-    columns=['name']+labels
+    columns=['name']+validFeat
 )
 dfT = df.transpose()
 new_header = dfT.iloc[0]
@@ -88,20 +87,24 @@ clr = [
     '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', '#00f5d4AA', 
     '#8d99aeAA', '#cdb4dbAA', '#03045eAA'    
 ]
+(fig, ax) = plt.subplots(figsize=(4, 2.75))
 dfT.plot.barh(
-    x='index', stacked=False, xlim=(0, 1),
+    x='index', stacked=False, xlim=(0, 1), ax=ax,
     ylabel='', xlabel='Sensitivity/Importance',
     title='', logx=False, color=clr
 )
+plt.legend(loc='lower right')
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
+(fig, ax) = plt.subplots(figsize=(4, 2.75))
 dfT.plot.barh(
-    x='index', stacked=False, xlim=(0, 1),
+    x='index', stacked=False, xlim=(1e-3, 1), ax=ax,
     ylabel='', xlabel='Sensitivity/Importance',
     title='', logx=True, color=clr
 )
+plt.legend(loc='lower right')
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP_Log.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
