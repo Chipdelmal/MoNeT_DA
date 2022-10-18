@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import MoNeT_MGDrivE as monet
-import PGS_gene_FMS3 as FMS3
-import PGS_gene_FMS4 as FMS4
-import PGS_gene_FMS5 as FMS5
-import PGS_gene_PGS as PGS
-import PGS_gene_IIT as IIT
-import PGS_gene_RDL as RDL
-import PGS_gene_RDF as RDF
+import CEF_gene_FMS3 as FMS3
+import CEF_gene_FMS4 as FMS4
+import CEF_gene_FMS5 as FMS5
+import CEF_gene_PGS as PGS
+import CEF_gene_IIT as IIT
+import CEF_gene_RDL as RDL
+import CEF_gene_RDF as RDF
 
 ###############################################################################
 # Drive

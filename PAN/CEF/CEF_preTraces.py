@@ -8,8 +8,8 @@ import compress_pickle as pkl
 from joblib import Parallel, delayed
 from more_itertools import locate
 import MoNeT_MGDrivE as monet
-import PGS_aux as aux
-import PGS_gene as drv
+import CEF_aux as aux
+import CEF_gene as drv
 import warnings
 warnings.filterwarnings("ignore")
 
