@@ -26,7 +26,7 @@ import FMS_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'FMS3', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -140,6 +140,17 @@ display.figure_.savefig(
     path.join(PT_IMG, fNameOut), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
+###############################################################################
+# Interaction
+###############################################################################
+# display = PartialDependenceDisplay.from_estimator(
+#     rf, X, features=[[0,1]], 
+#     subsample=2000, n_jobs=aux.JOB_DSK*4,
+#     n_cols=ceil((len(indVars)-1)), 
+#     kind='average', grid_resolution=200, random_state=0,
+#     ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
+#     pd_line_kw={'color': '#f72585'}
+# )
 ###############################################################################
 # Dump Model to Disk
 ###############################################################################
