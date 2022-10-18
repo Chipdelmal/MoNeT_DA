@@ -4,8 +4,8 @@
 import sys
 from os import path
 from glob import glob
-import PGS_aux as aux
-import PGS_gene as drv
+import CEF_aux as aux
+import CEF_gene as drv
 import numpy as np
 from datetime import datetime
 import MoNeT_MGDrivE as monet

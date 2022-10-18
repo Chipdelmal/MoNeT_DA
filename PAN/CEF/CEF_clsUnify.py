@@ -6,8 +6,8 @@ import pandas as pd
 from functools import reduce
 from datetime import datetime
 import MoNeT_MGDrivE as monet
-import PGS_aux as aux
-import PGS_gene as drv
+import CEF_aux as aux
+import CEF_gene as drv
 
 if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS) = ('srv', 'PGS', '50', 'HLT', '0.1')

@@ -14,6 +14,6 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-bash PGS_preCrunch.sh $USR $DRV $AOI
-bash PGS_pstCrunch.sh $USR $DRV $AOI $QNT
-bash PGS_clsCrunch.sh $USR $DRV $AOI $QNT $THS
+bash CEF_preCrunch.sh $USR $DRV $AOI
+bash CEF_pstCrunch.sh $USR $DRV $AOI $QNT
+bash CEF_clsCrunch.sh $USR $DRV $AOI $QNT $THS

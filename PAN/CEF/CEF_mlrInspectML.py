@@ -12,8 +12,8 @@ from matplotlib.patches import Rectangle
 import matplotlib.patches as mpatches
 from treeinterpreter import treeinterpreter as ti
 import MoNeT_MGDrivE as monet
-import PGS_aux as aux
-import PGS_gene as drv
+import CEF_aux as aux
+import CEF_gene as drv
 
 
 if monet.isNotebook():

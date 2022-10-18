@@ -6,8 +6,8 @@ from glob import glob
 from joblib import dump
 from datetime import datetime
 import MoNeT_MGDrivE as monet
-import PGS_aux as aux
-import PGS_gene as drv
+import CEF_aux as aux
+import CEF_gene as drv
 
 if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS, TRC) = ('srv', 'PGS', 'HLT', '50', '0.1', 'HLT')

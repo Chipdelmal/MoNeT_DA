@@ -12,6 +12,6 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-python PGS_pstFraction.py $USR $DRV $AOI
-python PGS_pstProcess.py $USR $DRV $AOI $QNT
-python PGS_pstProcessML.py $USR $DRV $AOI $QNT
+python CEF_pstFraction.py $USR $DRV $AOI
+python CEF_pstProcess.py $USR $DRV $AOI $QNT
+python CEF_pstProcessML.py $USR $DRV $AOI $QNT

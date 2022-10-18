@@ -17,8 +17,8 @@ from sklearn.inspection import permutation_importance
 from sklearn.inspection import PartialDependenceDisplay
 from treeinterpreter import treeinterpreter as ti
 import MoNeT_MGDrivE as monet
-import PGS_aux as aux
-import PGS_gene as drv
+import CEF_aux as aux
+import CEF_gene as drv
 # https://shap.readthedocs.io/en/latest/index.html
 # https://mljar.com/blog/feature-importance-in-random-forest/
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values

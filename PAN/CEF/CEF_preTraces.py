@@ -6,7 +6,6 @@ from os import path
 from datetime import datetime
 import compress_pickle as pkl
 from joblib import Parallel, delayed
-from more_itertools import locate
 import MoNeT_MGDrivE as monet
 import CEF_aux as aux
 import CEF_gene as drv
