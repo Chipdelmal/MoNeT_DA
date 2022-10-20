@@ -14,7 +14,7 @@ import CEF_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'TTI')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -87,18 +87,20 @@ clr = [
     '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', '#00f5d4AA', 
     '#8d99aeAA', '#cdb4dbAA', '#03045eAA'    
 ]
+(fig, ax) = plt.subplots(figsize=(4, 2))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(0, 1),
-    ylabel='', xlabel='Sensitivity/Importance',
+    ylabel='', xlabel='',
     title='', logx=False, color=clr
 )
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
+(fig, ax) = plt.subplots(figsize=(4, 2))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(0, 1),
-    ylabel='', xlabel='Sensitivity/Importance',
+    ylabel='', xlabel='',
     title='', logx=True, color=clr
 )
 plt.savefig(

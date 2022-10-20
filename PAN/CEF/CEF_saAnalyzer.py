@@ -4,6 +4,7 @@ from os import sys
 from os import path
 import numpy as np
 import pandas as pd
+from datetime import datetime
 import compress_pickle as pkl
 from SALib.analyze import sobol, delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
@@ -14,7 +15,7 @@ import CEF_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -31,6 +32,12 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = path.join(PT_ROT, 'SUMMARY')
+# Time and head -----------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_ROT, PT_OUT, tS, 
+    '{} SA Analyzer [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
+)
 ###############################################################################
 # Read SA Files
 ###############################################################################

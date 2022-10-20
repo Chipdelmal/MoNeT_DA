@@ -7,6 +7,8 @@ import pandas as pd
 import compress_pickle as pkl
 from datetime import datetime
 import rfpimp as rfp
+from math import ceil
+import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
@@ -79,7 +81,6 @@ rf = RandomForestRegressor(
 )
 cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
 scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
-print(scores)
 ###############################################################################
 # Train Model
 ###############################################################################
@@ -91,7 +92,6 @@ scoresFinal = {
     'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
     'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
 }
-print(scoresFinal)
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
@@ -115,22 +115,39 @@ shapVals = np.abs(shap_values).mean(0)
 # PDP/ICE Plots
 ###############################################################################
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
+(fig, ax) = plt.subplots(figsize=(16, 2))
 display = PartialDependenceDisplay.from_estimator(
-    rf, X, indVars[:-1],
+    rf, X, indVars[:-1], ax=ax,
     subsample=1500, n_jobs=aux.JOB_DSK*2,
-    n_cols=round((len(indVars)-1)/2), 
+    n_cols=round((len(indVars)-1)), 
     kind='both', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.125, 'alpha': 0.150},
+    ice_lines_kw={'linewidth': 0.100, 'alpha': 0.100},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
 for r in range(len(display.axes_)):
-    for c in range(len(display.axes_[0])):
-        display.axes_[r][c].set_ylabel("")
-        display.axes_[r][c].get_legend().remove()
+    for c in range(len(display.axes_[r])):
+        try:
+            display.axes_[r][c].autoscale(enable=True, axis='x', tight=True)
+            display.axes_[r][c].set_xlabel("")
+            display.axes_[r][c].set_ylabel("")
+            display.axes_[r][c].get_legend().remove()
+        except:
+            continue
 display.figure_.savefig(
     path.join(PT_IMG, fNameOut), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+###############################################################################
+# Interaction
+###############################################################################
+display = PartialDependenceDisplay.from_estimator(
+    rf, X, features=[['i_mfr', 'i_fvb']], 
+    subsample=2000, n_jobs=aux.JOB_DSK*4,
+    n_cols=ceil((len(indVars)-1)), 
+    kind='average', grid_resolution=200, random_state=0,
+    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
+    pd_line_kw={'color': '#f72585'}
 )
 ###############################################################################
 # Dump Model to Disk

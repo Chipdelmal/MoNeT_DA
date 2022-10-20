@@ -53,14 +53,14 @@ rf = pkl.load(path.join(PT_OUT, fName))
 # Evaluate ML
 ###############################################################################
 probeX = (
-    ('ren', 30),
+    ('ren', 26),
     ('rer', 20),
-    ('rei', 13),
-    ('pct', 0.9),
-    ('pmd', 0.9),
-    ('mfr', 0.1),
-    ('mtf', 1.0),
-    ('fvb', 0.0),
+    ('rei', 8),
+    ('pct', 0.90),
+    ('pmd', 0.75),
+    ('mfr', 0.20),
+    ('mtf', 0.75),
+    ('fvb', 0.20),
 )
 FEATS = [i[0] for i in probeX]
 # Evaluate models at probe point ----------------------------------------------
@@ -77,7 +77,7 @@ for (c, feature, inVal) in zip(contributions[0], FEATS, vct[0]):
 ###############################################################################
 CLR = ('#3b28cc99', '#f7258A99')
 rWidth = .5
-X_LIM = 2200
+X_LIM = 4000
 # Figure function -------------------------------------------------------------
 (bs, cntr, vals) = (bias[0], contributions[0], vct[0])
 (x, yTicks) = (bs, [])
@@ -88,7 +88,10 @@ for (ix, v) in enumerate(cntr):
     hl = (30 if abs(v) > 30 else 0)
     hs = ('right' if v >= 0 else 'left')
     # Shape -------------------------------------------------------------------
-    rectangle = Rectangle((x, y), v, rWidth, color=col, ec='#00000088', zorder=2)
+    rectangle = Rectangle(
+        (x, y), v, rWidth, 
+        color=col, ec='#00000088', zorder=2
+    )
     # Add patch ---------------------------------------------------------------
     ax.add_patch(rectangle)
     yHalf = y+(rWidth)/2
@@ -120,5 +123,11 @@ ax.vlines(
     x, 0, y, 
     ls='--', lw=1, colors='#00000099', zorder=-10
 )
-ax.set_xlim(0, 2200)
+ax.set_xlim(0, X_LIM)
 ax.set_ylim(0, rWidth*len(cntr))
+# Save to disk ----------------------------------------------------------------
+fID = '_'.join([str(int(x[1]*1e3)).zfill(4) for x in probeX])
+fig.savefig(
+    path.join(PT_IMG, fID+f'-{AOI}_{MOI}.png'),
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
