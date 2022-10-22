@@ -15,7 +15,7 @@ import FMS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS5', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -97,7 +97,7 @@ clr = [
 (fig, ax) = plt.subplots(figsize=(4, 2.75))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(0, 1), ax=ax,
-    ylabel='', xlabel='Sensitivity/Importance',
+    ylabel='', xlabel='',
     title='', logx=False, color=clr
 )
 plt.legend(loc='lower right')
@@ -108,7 +108,7 @@ plt.savefig(
 (fig, ax) = plt.subplots(figsize=(4, 2.75))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(1e-3, 1), ax=ax,
-    ylabel='', xlabel='Sensitivity/Importance',
+    ylabel='', xlabel='',
     title='', logx=True, color=clr
 )
 plt.legend(loc='lower right')

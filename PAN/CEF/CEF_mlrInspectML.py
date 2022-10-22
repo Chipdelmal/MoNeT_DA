@@ -53,14 +53,14 @@ rf = pkl.load(path.join(PT_OUT, fName))
 # Evaluate ML
 ###############################################################################
 probeX = (
-    ('ren', 26),
-    ('rer', 20),
+    ('ren', 30),
+    ('rer', 30),
     ('rei', 8),
-    ('pct', 0.90),
-    ('pmd', 0.75),
-    ('mfr', 0.20),
-    ('mtf', 0.75),
-    ('fvb', 0.20),
+    ('pct', 1),
+    ('pmd', 1),
+    ('mfr', 0),
+    ('mtf', 1),
+    ('fvb', 0),
 )
 FEATS = [i[0] for i in probeX]
 # Evaluate models at probe point ----------------------------------------------
@@ -111,6 +111,10 @@ for (ix, v) in enumerate(cntr):
         0, yHalf, ' {:.2f}'.format(vals[ix]), 
         va='center', ha='left', fontsize=8
     )
+ax.text(
+    x, yHalf+.5, '{:02d}'.format(int(prediction[0][0])), 
+    va='center', ha='center', fontsize=10
+)
 # Add labels and ticks --------------------------------------------------------
 ax.set_yticks(yTicks)
 ax.set_yticklabels(FEATS)
