@@ -32,7 +32,7 @@ OVW = True
 (JOB_DSK, JOB_SRV) = (8, 20)
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     (75e3*4), (352e3*1.25), (1000*1.25),
-    (0, 10*int(365)), 
+    (389, 2579), # (0, 10*int(365)), 
     False
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)

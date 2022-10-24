@@ -237,6 +237,7 @@ def exportTracesPlot(
     transparent=False, ticksHide=True, sampRate=1,
     fontsize=5, labelspacing=.1
 ):
+    # print(STYLE['xRange'][0])
     if transparent:
         plt.rcParams.update({
             "figure.facecolor":  (1.0, 0.0, 0.0, 0.0),
@@ -261,8 +262,8 @@ def exportTracesPlot(
         # axTemp.yaxis.set_tick_params(width=0)
         axTemp.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
         axTemp.set_axis_off()
-    axTemp.xaxis.set_ticks(np.arange(0, STYLE['xRange'][1], 365))
-    axTemp.yaxis.set_ticks(np.arange(0, STYLE['yRange'][1], STYLE['yRange'][1]/4))
+    axTemp.xaxis.set_ticks(np.arange(STYLE['xRange'][0], STYLE['xRange'][1], 365))
+    axTemp.yaxis.set_ticks(np.arange(STYLE['yRange'][0], STYLE['yRange'][1], STYLE['yRange'][1]/4))
     axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
     axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
 
@@ -321,6 +322,7 @@ def exportTracesPlot(
             axTemp.spines[axis].set_linewidth(borderWidth)
     else:
         pad = 0
+    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
     figArr[0].savefig(
             "{}/{}.png".format(PATH_IMG, nS),
             dpi=STYLE['dpi'], facecolor=None,
@@ -331,4 +333,22 @@ def exportTracesPlot(
     plt.cla() 
     plt.close('all')
     plt.gcf()
+    return None
+
+
+def exportPreTracesParallel(
+            exIx, STYLE, PT_IMG,
+            border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
+            xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1,
+            transparent=True, sampRate=1
+        ):
+    monet.printProgress(exIx[0], xpNum, digs)
+    repFilePath = exIx[1][1]
+    repDta = pkl.load(repFilePath)
+    name = path.splitext(repFilePath.split('/')[-1])[0][:-4]
+    exportTracesPlot(
+        repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
+        border=border, borderColor=borderColor, borderWidth=borderWidth,
+        vLines=vLines, transparent=transparent, sampRate=sampRate
+    )
     return None

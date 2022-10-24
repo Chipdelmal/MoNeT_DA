@@ -11,10 +11,11 @@ from os import path
 import compress_pickle as pkl
 import TPT_aux as aux
 import TPT_gene as drv
+import TPT_functions as fun
 
 
 if monet.isNotebook():
-    (USR, AOI, DRV, SPE) = ('dsk', 'INC', 'LDR', 'gambiae')
+    (USR, AOI, DRV, SPE) = ('srv', 'INC', 'LDR', 'coluzii_med')
 else:
     (USR, AOI, DRV, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -73,7 +74,7 @@ for exp in EXPS:
     ###########################################################################
     (xpNum, digs) = monet.lenAndDigits(fLists)
     Parallel(n_jobs=JOB)(
-        delayed(monet.exportPreTracesParallel)(
+        delayed(fun.exportPreTracesParallel)(
             exIx, STYLE, PT_IMG, 
             xpNum=xpNum, digs=digs, autoAspect=True,
             border=True, borderColor='#000000AA', borderWidth=1,
