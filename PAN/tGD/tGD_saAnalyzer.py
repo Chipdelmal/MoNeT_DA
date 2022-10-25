@@ -5,7 +5,7 @@ from os import path
 import numpy as np
 import pandas as pd
 import compress_pickle as pkl
-from SALib.analyze import sobol, delta, pawn, rbd_fast, hdmr
+from SALib.analyze import delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
 import matplotlib.pyplot as plt
 # import squarify
@@ -16,7 +16,7 @@ from more_itertools import locate
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'tGD', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'tGD', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 exp = '100'
@@ -95,21 +95,64 @@ print(problem)
 ###############################################################################
 # Run SA
 ###############################################################################
-# SA_sobol = sobol.analyze(PROBLEM, outVector, print_to_console=True)
-SA_delta = delta.analyze(problem, X, Y, print_to_console=True)
-SA_pawn  = pawn.analyze(problem, X, Y, print_to_console=True)
-SA_fast  = rbd_fast.analyze(problem, X, Y, print_to_console=True)
+SA_delta = delta.analyze(PROBLEM, SAMPLER, Y, print_to_console=False)
+SA_pawn = pawn.analyze(PROBLEM, SAMPLER, Y, print_to_console=False)
+SA_hdmr = hdmr.analyze(PROBLEM, SAMPLER, Y, print_to_console=False)
+SA_fast = rbd_fast.analyze(PROBLEM, SAMPLER, Y, print_to_console=False)
 # Compile dataframes ----------------------------------------------------------
 pawnDF = pd.DataFrame(SA_pawn)
 deltaDF = pd.DataFrame(SA_delta)
+hdmrDF = pd.DataFrame({'S1': SA_hdmr['ST'], 'S1_conf': SA_hdmr['ST_conf'], 'names': SA_hdmr['names']})
 fastDF = pd.DataFrame(SA_fast)
+###############################################################################
+# Plot SA
+###############################################################################
+delta = deltaDF[['names', 'delta', 'S1']]
+pawn = pawnDF[['names', 'mean', 'median']]
+fast = hdmrDF[['names', 'S1']]
+hdmr = fastDF.iloc[:len(aux.SA_RANGES)][['names', 'S1']]
+# Re-shape --------------------------------------------------------------------
+iVar = [i[0] for i in aux.DATA_HEAD[:-1]]
+validFeat = [sal[0] for sal in aux.SA_RANGES if (len(sal[1])>1)]
+# Assemble dataframe ----------------------------------------------------------
+df = pd.DataFrame([
+        ['Delta', *aux.getSASortedDF(delta, 'S1', validFeat)], 
+        ['PAWN',  *aux.getSASortedDF(pawn, 'median', validFeat)], 
+        ['FAST',  *aux.getSASortedDF(fast, 'S1', validFeat)], 
+        ['HDMR',  *aux.getSASortedDF(hdmr, 'S1', validFeat)], 
+    ],
+    columns=['name']+validFeat
+)
+dfT = df.transpose()
+new_header = dfT.iloc[0]
+dfT = dfT[1:]
+dfT.columns = new_header
+dfT = dfT.reset_index()
+dfT.sort_values('Delta', ascending=True, inplace=True)
+# Barchart --------------------------------------------------------------------
+clr = [
+    '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', '#00f5d4AA', 
+    '#8d99aeAA', '#cdb4dbAA', '#03045eAA'    
+]
+(fig, ax) = plt.subplots(figsize=(4, 2))
+dfT.plot.barh(
+    x='index', stacked=False, xlim=(0, 1), ax=ax,
+    ylabel='', xlabel='',
+    title='', logx=False, color=clr
+)
+plt.legend(loc='lower right', frameon=False)
+plt.savefig(
+    path.join(PT_IMG, f'SA-{AOI}_{MOI}-{QNT}_qnt.svg'), 
+    format='svg', facecolor='w', bbox_inches='tight', 
+    pad_inches=0.1, dpi=300, transparent=False
+)
 ###############################################################################
 # Export to Disk
 ###############################################################################
 outPairs = list(zip(
-    ['Delta', 'PAWN', 'FAST'],
-    [deltaDF, pawnDF, fastDF],
-    [SA_delta, SA_pawn, SA_fast]
+    ['Delta', 'PAWN', 'HDMR', 'FAST'],
+    [deltaDF, pawnDF, hdmrDF, fastDF],
+    [SA_delta, SA_pawn, SA_hdmr, SA_fast]
 ))
 for (name, df, dct) in outPairs:
     fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')

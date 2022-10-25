@@ -6,14 +6,16 @@ from glob import glob
 import tGD_aux as aux
 import tGD_fun as fun
 import tGD_gene as drv
-import tGD_plots as plots
+import tGD_plots as plot
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
+# import warnings
+# warnings.filterwarnings("ignore")
 
 
 (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, DRV, AOI) = ('dsk', 'tGD', 'HLT')
+# (USR, DRV, AOI) = ('srv2', 'tGD', 'HLT')
 (FMT, SKP, MF, FZ) = ('bz2', False, (True, True), False)
 EXP = aux.EXPS
 ##############################################################################
@@ -21,7 +23,9 @@ EXP = aux.EXPS
 ##############################################################################
 exp = EXP[0]
 for exp in EXP:
-    (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, DRV, exp)
+    (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
+        USR, DRV, exp
+    )
     PT_IMG = PT_IMG + 'preTraces/'
     monet.makeFolder(PT_IMG)
     drive = drv.driveSelector(DRV, AOI)
@@ -64,7 +68,7 @@ for exp in EXP:
         (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
         name = fLists[i][0].split('/')[-1].split('.')[0][:-4]
         # Export plots --------------------------------------------------------
-        monet.exportTracesPlot(
+        plot.exportTracesPlot(
             repDta, name, STYLE, PT_IMG, append='TRA', 
             wopPrint=False, transparent=True
         )

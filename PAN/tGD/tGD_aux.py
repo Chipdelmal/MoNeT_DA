@@ -309,7 +309,30 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.lzma'):
         ids.append(sorted(list(colSet)))
     return ids
 
+
 def replaceExpBase(tracePath, refFile):
     head = '/'.join(tracePath.split('/')[:-1])
     tail = tracePath.split('-')[-1]
     return '{}/{}-{}'.format(head, refFile, tail)
+
+
+def getSASortedDF(df, column, sortingLabels, normalized=True):
+    srtNames = [i.replace('i_', '') for i in sortingLabels]
+    srtNames = list(map(lambda x: x.replace('rer', 'res'), srtNames))
+    try:
+        # SA dataframes -------------------------------------------------------
+        names = list(df['names'])
+        names = list(map(lambda x: x.replace('rer', 'res'), names))
+    except:
+        # ML dataframes -------------------------------------------------------
+        names = list(df['Feature'])
+        names = [i.replace('i_', '') for i in names]
+    sortIx = [names.index(lbl) for lbl in srtNames]
+    # Calculate return --------------------------------------------------------
+    if normalized:
+        norms = df[column]/np.nansum(df[column])
+    else:
+        norms = df[column]
+    # Return sorted -----------------------------------------------------------
+    srtSA = [norms[ix] for ix in sortIx]
+    return srtSA
