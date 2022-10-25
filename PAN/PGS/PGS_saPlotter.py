@@ -4,6 +4,7 @@ from os import sys
 from os import path
 import numpy as np
 import pandas as pd
+from datetime import datetime
 import compress_pickle as pkl
 from SALib.analyze import sobol, delta, pawn, rbd_fast, hdmr
 import MoNeT_MGDrivE as monet
@@ -14,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS3', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -32,6 +33,12 @@ PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = path.join(PT_ROT, 'SUMMARY')
+# Time and head -----------------------------------------------------------
+tS = datetime.now()
+monet.printExperimentHead(
+    PT_ROT, PT_OUT, tS, 
+    '{} SA Plotter [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
+)
 ###############################################################################
 # Reading SA Exported files
 ###############################################################################
@@ -87,24 +94,24 @@ clr = [
     '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', '#00f5d4AA', 
     '#8d99aeAA', '#cdb4dbAA', '#03045eAA'    
 ]
-(fig, ax) = plt.subplots(figsize=(4, 2.75))
+(fig, ax) = plt.subplots(figsize=(4, 2))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(0, 1), ax=ax,
-    ylabel='', xlabel='Sensitivity/Importance',
+    ylabel='', xlabel='',
     title='', logx=False, color=clr
 )
-plt.legend(loc='lower right')
+plt.legend(loc='lower right', frameon=False)
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
-(fig, ax) = plt.subplots(figsize=(4, 2.75))
+(fig, ax) = plt.subplots(figsize=(8, 4))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(1e-3, 1), ax=ax,
-    ylabel='', xlabel='Sensitivity/Importance',
+    ylabel='', xlabel='',
     title='', logx=True, color=clr
 )
-plt.legend(loc='lower right')
+plt.legend(loc='lower right', frameon=False)
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP_Log.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300

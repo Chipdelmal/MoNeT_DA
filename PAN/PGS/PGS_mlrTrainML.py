@@ -7,6 +7,7 @@ import pandas as pd
 import compress_pickle as pkl
 from datetime import datetime
 import rfpimp as rfp
+import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
@@ -24,7 +25,7 @@ import PGS_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -79,7 +80,6 @@ rf = RandomForestRegressor(
 )
 cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
 scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
-print(scores)
 ###############################################################################
 # Train Model
 ###############################################################################
@@ -114,19 +114,23 @@ shapVals = np.abs(shap_values).mean(0)
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
+clr = '#3a86ff' if MOI=='CPT' else '#03045e' 
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
+(fig, ax) = plt.subplots(figsize=(16, 16/8))
 display = PartialDependenceDisplay.from_estimator(
-    rf, X, indVars[:-1],
+    rf, X, indVars[:-1], ax=ax,
     subsample=1500, n_jobs=aux.JOB_DSK*2,
-    n_cols=round((len(indVars)-1)/2), 
+    n_cols=round((len(indVars)-1)), 
     kind='both', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.050, 'alpha': 0.050},
+    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1, 'color': clr},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
 for r in range(len(display.axes_)):
     for c in range(len(display.axes_[0])):
         try:
+            display.axes_[r][c].autoscale(enable=True, axis='x', tight=True)
+            display.axes_[r][c].set_xlabel("")
             display.axes_[r][c].set_ylabel("")
             display.axes_[r][c].get_legend().remove()
         except:

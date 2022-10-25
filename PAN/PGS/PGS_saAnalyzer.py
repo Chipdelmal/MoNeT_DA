@@ -99,7 +99,6 @@ if len(set(matchesSizes))>1:
 ###############################################################################
 # Run SA
 ###############################################################################
-# SA_sobol = sobol.analyze(PROBLEM, outVector, print_to_console=True)
 SA_delta = delta.analyze(PROBLEM, SAMPLER, outVector, print_to_console=False)
 SA_pawn = pawn.analyze(PROBLEM, SAMPLER, outVector, print_to_console=False)
 SA_hdmr = hdmr.analyze(PROBLEM, SAMPLER, outVector, print_to_console=False)
