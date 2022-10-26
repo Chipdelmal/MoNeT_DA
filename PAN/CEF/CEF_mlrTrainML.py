@@ -14,6 +14,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_validate
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import ShuffleSplit
 from sklearn.inspection import permutation_importance
 from sklearn.inspection import PartialDependenceDisplay
@@ -70,17 +71,24 @@ dfIn = df[indVars].drop('i_grp', axis=1)
 ###############################################################################
 # Train Model
 ###############################################################################
+(K_SPLITS, T_SIZE) = (10, .2)
 scoring = [
     'explained_variance', 'max_error',
     'neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2'
 ]
-rf = RandomForestRegressor(
-    # n_estimators=100, max_depth=None, max_features="sqrt",
-    oob_score=True, criterion='squared_error',
-    n_jobs=aux.JOB_DSK*2, verbose=False
+# rf = RandomForestRegressor(
+#     # n_estimators=100, max_depth=None, max_features="sqrt",
+#     oob_score=True, criterion='squared_error',
+#     n_jobs=aux.JOB_DSK*2, verbose=False
+# )
+rf = GradientBoostingClassifier(
+    n_estimators=100, learning_rate=1.0,
+    max_depth=1
 )
-cv = ShuffleSplit(n_splits=10, test_size=0.1, random_state=0)
-scores = cross_validate(rf, X_train, y_train, cv=cv, scoring=scoring)
+cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
+scores = cross_validate(
+    rf, X_train, y_train, cv=cv, scoring=scoring, n_jobs=K_SPLITS
+)
 ###############################################################################
 # Train Model
 ###############################################################################
@@ -114,6 +122,7 @@ shapVals = np.abs(shap_values).mean(0)
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
+clr = '#3a86ff' if MOI=='CPT' else '#03045e' 
 fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 (fig, ax) = plt.subplots(figsize=(16, 2))
 display = PartialDependenceDisplay.from_estimator(
@@ -121,7 +130,7 @@ display = PartialDependenceDisplay.from_estimator(
     subsample=1500, n_jobs=aux.JOB_DSK*2,
     n_cols=round((len(indVars)-1)), 
     kind='both', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.100, 'alpha': 0.100},
+    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1, 'color': clr},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=.3)
