@@ -11,14 +11,13 @@ from math import ceil
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import cross_validate
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import train_test_split, cross_validate
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
+from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegressor
 from sklearn.model_selection import ShuffleSplit
 from sklearn.inspection import permutation_importance
 from sklearn.inspection import PartialDependenceDisplay
-from treeinterpreter import treeinterpreter as ti
 import MoNeT_MGDrivE as monet
 import CEF_aux as aux
 import CEF_gene as drv
@@ -71,20 +70,36 @@ dfIn = df[indVars].drop('i_grp', axis=1)
 ###############################################################################
 # Train Model
 ###############################################################################
-(K_SPLITS, T_SIZE) = (10, .2)
+(MOD_SEL, K_SPLITS, T_SIZE) = ('rf', 10, .2)
 scoring = [
     'explained_variance', 'max_error',
     'neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2'
 ]
-# rf = RandomForestRegressor(
-#     # n_estimators=100, max_depth=None, max_features="sqrt",
-#     oob_score=True, criterion='squared_error',
-#     n_jobs=aux.JOB_DSK*2, verbose=False
-# )
-rf = GradientBoostingClassifier(
-    n_estimators=100, learning_rate=1.0,
-    max_depth=1
-)
+# Select the type of regressor ------------------------------------------------
+if MOD_SEL=='rf':
+    rf = RandomForestRegressor(
+        # n_estimators=100, max_depth=None, max_features="sqrt",
+        oob_score=True, criterion='squared_error',
+        n_jobs=aux.JOB_DSK*2, 
+        verbose=False
+    )
+elif MOD_SEL=='ada':
+    rf = AdaBoostRegressor(
+        DecisionTreeRegressor(max_depth=10), 
+        loss='linear', n_estimators=100
+    )
+elif MOD_SEL=='gb':
+    rf = GradientBoostingRegressor(
+        n_estimators=100, max_leaf_nodes=75, max_depth=30, 
+        verbose=True
+    )
+elif MOD_SEL=='hgb':
+    rf = HistGradientBoostingRegressor(
+        loss='quantile', quantile=.5, 
+        max_iter=100, max_leaf_nodes=100, max_depth=30, 
+        verbose=True
+    )
+# Cross-validate --------------------------------------------------------------
 cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
 scores = cross_validate(
     rf, X_train, y_train, cv=cv, scoring=scoring, n_jobs=K_SPLITS
@@ -100,6 +115,7 @@ scoresFinal = {
     'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
     'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
 }
+scoresFinal
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
