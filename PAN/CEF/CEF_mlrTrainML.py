@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegressor
-from sklearn.model_selection import ShuffleSplit
+from sklearn.model_selection import GridSearchCV, ShuffleSplit
 from sklearn.inspection import permutation_importance
 from sklearn.inspection import PartialDependenceDisplay
 import MoNeT_MGDrivE as monet
@@ -70,7 +70,7 @@ dfIn = df[indVars].drop('i_grp', axis=1)
 ###############################################################################
 # Train Model
 ###############################################################################
-(MOD_SEL, K_SPLITS, T_SIZE) = ('rf', 10, .2)
+(MOD_SEL, K_SPLITS, T_SIZE) = ('rfg', 10, .1)
 scoring = [
     'explained_variance', 'max_error',
     'neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2'
@@ -78,14 +78,22 @@ scoring = [
 # Select the type of regressor ------------------------------------------------
 if MOD_SEL=='rf':
     rf = RandomForestRegressor(
-        # n_estimators=100, max_depth=None, max_features="sqrt",
+        n_estimators=100, max_depth=None, max_features="sqrt",
         oob_score=True, criterion='squared_error',
         n_jobs=aux.JOB_DSK*2, 
         verbose=False
     )
+    param_grid = [{
+        'n_estimators': [50, 100], 
+        'max_depth': ['20', '50', None]
+    }]
+    clf = GridSearchCV(
+        estimator=rf, param_grid=param_grid,
+        n_jobs=20
+    )
 elif MOD_SEL=='ada':
     rf = AdaBoostRegressor(
-        DecisionTreeRegressor(max_depth=10), 
+        DecisionTreeRegressor(max_depth=50), 
         loss='linear', n_estimators=100
     )
 elif MOD_SEL=='gb':
@@ -95,10 +103,33 @@ elif MOD_SEL=='gb':
     )
 elif MOD_SEL=='hgb':
     rf = HistGradientBoostingRegressor(
-        loss='quantile', quantile=.5, 
+        loss='quantile', quantile=.75, 
         max_iter=100, max_leaf_nodes=100, max_depth=30, 
         verbose=True
     )
+if MOD_SEL=='rfg':
+    rf_o = RandomForestRegressor(
+        oob_score=True, criterion='squared_error',
+        n_jobs=aux.JOB_DSK*2, 
+        verbose=False
+    )
+    param_grid = [{
+        'n_estimators': [50, 100, 200], 
+        'max_depth':    [20, 25, 30, 50, None],
+        'max_features': ['sqrt', 'log2', None]
+    }]
+    rf = GridSearchCV(
+        estimator=rf_o, param_grid=param_grid,
+        n_jobs=8, verbose=2
+    )
+    # clf.fit(X_train, y_train)
+    # clf.score(X_train, y_train)
+    # scrs = {
+    #     'params': clf.best_params_, 
+    #     'score': clf.best_score_, 
+    #     'estimator': clf.best_estimator_
+    # }
+    # rf = scrs['estimator']
 # Cross-validate --------------------------------------------------------------
 cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
 scores = cross_validate(
