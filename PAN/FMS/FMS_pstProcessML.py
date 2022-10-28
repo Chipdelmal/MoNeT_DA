@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 # warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT) = ('srv', 'PGS', 'HLT', '50')
+    (USR, DRV, AOI, QNT) = ('srv', 'FMS3', 'HLT', '50')
 else:
     (USR, DRV, AOI, QNT) = sys.argv[1:]
 GRID_REF = False

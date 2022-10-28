@@ -30,7 +30,7 @@ python FMS_clsUnifyML.py $USR $DRV $AOI $THS
 ##############################################################################
 # Launch Scripts (SA)
 ##############################################################################
-for mtr in "WOP" "CPT" "POE" "TTI" "TTO"
+for mtr in "WOP" "CPT" "POE" "TTI"
 do
     python FMS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
 done

@@ -9,7 +9,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, AOI, MTR) = ('srv', 'PGS', 'HLT', 'WOP')
+    (USR, DRV, AOI, MTR) = ('srv', 'FMS3', 'HLT', 'WOP')
 else:
     (USR, DRV, AOI, MTR) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # Setup number of threads -----------------------------------------------------
