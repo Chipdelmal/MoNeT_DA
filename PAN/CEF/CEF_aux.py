@@ -624,3 +624,7 @@ def getSASortedDF(df, column, sortingLabels, normalized=True):
     # Return sorted -----------------------------------------------------------
     srtSA = [norms[ix] for ix in sortIx]
     return srtSA
+
+def adjRSquared(rSquared, samplesNum, featuresNum):
+    rAdj = 1-(1-rSquared)*(samplesNum-1)/(samplesNum-featuresNum-1)
+    return rAdj

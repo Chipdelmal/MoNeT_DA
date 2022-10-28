@@ -10,6 +10,7 @@ import rfpimp as rfp
 from math import ceil
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score, explained_variance_score
+from sklearn.metrics import d2_absolute_error_score, median_absolute_error
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.tree import DecisionTreeRegressor
@@ -26,7 +27,7 @@ import CEF_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -85,7 +86,7 @@ if MOD_SEL=='rf':
     )
     param_grid = [{
         'n_estimators': [50, 100], 
-        'max_depth': ['20', '50', None]
+        'max_depth':    ['20', '50', None]
     }]
     clf = GridSearchCV(
         estimator=rf, param_grid=param_grid,
@@ -122,14 +123,17 @@ if MOD_SEL=='rfg':
         estimator=rf_o, param_grid=param_grid,
         n_jobs=8, verbose=2
     )
-    # clf.fit(X_train, y_train)
-    # clf.score(X_train, y_train)
-    # scrs = {
-    #     'params': clf.best_params_, 
-    #     'score': clf.best_score_, 
-    #     'estimator': clf.best_estimator_
-    # }
-    # rf = scrs['estimator']
+elif MOD_SEL=='gbg':
+    rf_o = GradientBoostingRegressor()
+    param_grid = [{
+        'n_estimators':     [50, 100, 200], 
+        'max_leaf_nodes':   [20, 30, 50, 75, None],
+        'max_depth':        [20, 30, None]
+    }]
+    rf = GridSearchCV(
+        estimator=rf_o, param_grid=param_grid,
+        n_jobs=8, verbose=2
+    )
 # Cross-validate --------------------------------------------------------------
 cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
 scores = cross_validate(
@@ -141,12 +145,16 @@ scores = cross_validate(
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
 scoresFinal = {
-    'r2': r2_score(y_test, y_pred),
+    'root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
+    'mean_absolute_error': mean_absolute_error(y_test, y_pred),
+    'median_absolute_error ': median_absolute_error(y_test, y_pred),
     'explained_variance': explained_variance_score(y_test, y_pred),
-    'neg_root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
-    'neg_mean_absolute_error': mean_absolute_error(y_test, y_pred)
+    'r2': r2_score(y_test, y_pred),
+    'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
 }
-scoresFinal
+scoresFinal['r2Adj'] = aux.adjRSquared(
+    scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
+)
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
