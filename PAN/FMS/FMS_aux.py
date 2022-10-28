@@ -13,7 +13,7 @@ import MoNeT_MGDrivE as monet
 from matplotlib.colors import LinearSegmentedColormap, ColorConverter
 
 XP_ID = 'FMS'
-MAX_REPS = 120
+MAX_REPS = 250
 ###############################################################################
 # System Constants
 ###############################################################################
