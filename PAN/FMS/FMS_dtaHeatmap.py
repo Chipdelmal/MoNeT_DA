@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS4', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_pct']
@@ -100,20 +100,20 @@ uqVal = {i: list(DATA[i].unique()) for i in headerInd}
 # Filter dataframe
 ###############################################################################
 fltr = {
-    'i_ren': 12,
-    'i_res': 0.5,
-    'i_pct': 1.0, 
-    'i_pmd': 1.0, 
-    'i_mfr': 0.0, 
-    'i_mtf': 1.0,
-    'i_fvb': 0.0,
+    'i_ren': 12.0,
+    'i_res': 0.50,
+    'i_pct': 0.90, 
+    'i_pmd': 0.90, 
+    'i_mfr': 0.00, 
+    'i_mtf': 0.75,
+    'i_fvb': 0.00,
     'i_grp': 0
 }
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
 sweep = uqVal[kSweep]
 sw = sweep[1]
-for sw in sweep:
+for sw in [0.9]: # sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]
     dfSrf = DATA[ks]
@@ -239,6 +239,7 @@ for sw in sweep:
     fName = fName+'-{}Q_{}T'.format(QNT, thsStr)
     # Save file ---------------------------------------------------------------
     # print(path.join(PT_IMG, fName+'.png'))
+    print(path.join(PT_IMG, fName+'.png'))
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
         dpi=500, bbox_inches='tight', transparent=True
