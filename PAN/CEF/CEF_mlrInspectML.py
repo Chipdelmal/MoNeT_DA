@@ -55,7 +55,7 @@ rf = pkl.load(path.join(PT_OUT, fName))
 probeX = (
     ('ren', 30),
     ('rer', 30),
-    ('rei', 8),
+    ('rei', 7),
     ('pct', 1),
     ('pmd', 1),
     ('mfr', 0),
