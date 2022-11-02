@@ -27,7 +27,7 @@ import CEF_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -71,7 +71,7 @@ dfIn = df[indVars].drop('i_grp', axis=1)
 ###############################################################################
 # Train Model
 ###############################################################################
-(MOD_SEL, K_SPLITS, T_SIZE) = ('rfg', 10, .1)
+(MOD_SEL, K_SPLITS, T_SIZE) = ('rf', 10, .1)
 scoring = [
     'explained_variance', 'max_error',
     'neg_mean_absolute_error', 'neg_root_mean_squared_error', 'r2'
