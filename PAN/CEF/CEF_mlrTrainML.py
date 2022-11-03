@@ -9,6 +9,7 @@ from datetime import datetime
 import rfpimp as rfp
 from math import ceil
 import matplotlib.pyplot as plt
+from xgboost import XGBRFRegressor
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -27,7 +28,7 @@ import CEF_gene as drv
 # https://www.kaggle.com/code/vikumsw/explaining-random-forest-model-with-shapely-values
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -104,8 +105,8 @@ elif MOD_SEL=='gb':
     )
 elif MOD_SEL=='hgb':
     rf = HistGradientBoostingRegressor(
-        loss='quantile', quantile=.75, 
-        max_iter=100, max_leaf_nodes=100, max_depth=30, 
+        loss='quantile', quantile=.5, 
+        max_iter=1000, max_leaf_nodes=100, max_depth=30, 
         verbose=True
     )
 if MOD_SEL=='rfg':
@@ -134,6 +135,31 @@ elif MOD_SEL=='gbg':
         estimator=rf_o, param_grid=param_grid,
         n_jobs=8, verbose=2
     )
+elif MOD_SEL=='xgb':
+    if MOI=='CPT':
+        mono = aux.SA_MONOTONIC_CPT
+    else:
+        mono = aux.SA_MONOTONIC_WOP
+    rf = XGBRFRegressor(
+        n_jobs=aux.JOB_DSK*2,
+        n_estimators=500, max_depth=None,
+        tree_method='hist',
+        # learning_rate=0.4,
+        # booster='dart',
+        max_bin=5000,
+        # normalize_type='tree',
+        # grow_policy='lossguide',
+        # learning_rate=1, subsample=0.9,
+        # monotone_constraints=mono,
+        # colsample_bynode=1/3, reg_lambda=0, 
+        # min_child_weight=2,
+        # rate_drop=0.1,
+        # skip_drop=0.5,
+        # max_leaves=None,
+        objective='reg:squarederror',
+        eval_metric='mae',
+        verbose=2
+    )
 # Cross-validate --------------------------------------------------------------
 cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
 scores = cross_validate(
@@ -155,6 +181,7 @@ scoresFinal = {
 scoresFinal['r2Adj'] = aux.adjRSquared(
     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
 )
+print(scoresFinal)
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_test, y_test)
 sorted_idx = perm_importance.importances_mean.argsort()
@@ -206,7 +233,7 @@ display.figure_.savefig(
 # Interaction
 ###############################################################################
 display = PartialDependenceDisplay.from_estimator(
-    rf, X, features=[['i_mfr', 'i_fvb']], 
+    rf, X, features=[['i_pct', 'i_pmd']], 
     subsample=2000, n_jobs=aux.JOB_DSK*4,
     n_cols=ceil((len(indVars)-1)), 
     kind='average', grid_resolution=200, random_state=0,
