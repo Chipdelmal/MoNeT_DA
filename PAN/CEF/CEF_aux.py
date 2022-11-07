@@ -49,15 +49,13 @@ SA_RANGES = (
 )
 SA_MONOTONIC_WOP = {
     'i_ren': 0, 'i_res': 0, 'i_rei': 0,
-    'i_mtf': 1, 
     'i_pct': 1, 'i_pmd': 1,
-    'i_mfr': -1, 'i_fvb': -1
+    'i_mfr': -1, 'i_mtf': 1, 'i_fvb': -1
 }
 SA_MONOTONIC_CPT = {
     'i_ren': 0, 'i_res': 0, 'i_rei': 0,
-    'i_mtf': -1, 
     'i_pct': -1, 'i_pmd': -1,
-    'i_mfr': 1, 'i_fvb': 1
+    'i_mfr': 1, 'i_mtf': -1, 'i_fvb': 1
 }
 ###############################################################################
 # Files and DA constants

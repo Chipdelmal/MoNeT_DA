@@ -79,6 +79,7 @@ scoring = [
 ]
 # Select the type of regressor ------------------------------------------------
 if MOD_SEL=='rf':
+    modID = ''
     rf = RandomForestRegressor(
         n_estimators=100, max_depth=None, max_features="sqrt",
         oob_score=True, criterion='squared_error',
@@ -104,9 +105,16 @@ elif MOD_SEL=='gb':
         verbose=True
     )
 elif MOD_SEL=='hgb':
+    modID = 'hgb'
+    if MOI=='CPT':
+        mono = aux.SA_MONOTONIC_CPT
+    else:
+        mono = aux.SA_MONOTONIC_WOP
     rf = HistGradientBoostingRegressor(
-        loss='quantile', quantile=.5, 
-        max_iter=1000, max_leaf_nodes=100, max_depth=30, 
+        loss='quantile', quantile=.25, 
+        max_iter=1000, max_leaf_nodes=75, max_depth=None, 
+        max_bins=255,
+        monotonic_cst=list(mono.values()),
         verbose=True
     )
 if MOD_SEL=='rfg':
@@ -205,7 +213,7 @@ shapVals = np.abs(shap_values).mean(0)
 # PDP/ICE Plots
 ###############################################################################
 clr = '#3a86ff' if MOI=='CPT' else '#03045e' 
-fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
+fNameOut = '{}_{}T_{}-{}MLR.png'.format(AOI, int(float(THS)*100), MOI, modID)
 (fig, ax) = plt.subplots(figsize=(16, 2))
 display = PartialDependenceDisplay.from_estimator(
     rf, X, indVars[:-1], ax=ax,
@@ -220,6 +228,10 @@ for r in range(len(display.axes_)):
     for c in range(len(display.axes_[r])):
         try:
             display.axes_[r][c].autoscale(enable=True, axis='x', tight=True)
+            if MOI=='CPT':
+                display.axes_[r][c].set_ylim(0, 1)
+            else:
+                display.axes_[r][c].set_ylim(0, aux.XRAN[1])
             display.axes_[r][c].set_xlabel("")
             display.axes_[r][c].set_ylabel("")
             display.axes_[r][c].get_legend().remove()
