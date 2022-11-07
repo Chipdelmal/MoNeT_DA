@@ -6,7 +6,9 @@ import numpy as np
 from glob import glob
 import TPT_aux as aux
 import TPT_gene as drv
+from os import path
 from datetime import datetime
+import numpy as np
 import compress_pickle as pkl
 import MoNeT_MGDrivE as monet
 from more_itertools import locate
@@ -103,4 +105,10 @@ for exp in EXPS:
                 exIx, PT_OUT
             ) for exIx in expIter
         )
-
+###############################################################################
+# Explore
+###############################################################################
+pth = '/RAID5/marshallShare/TP13_figure_coluzii_low/X10000/POSTPROCESS'
+exp = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_0000000-HUM_00_rto.npy'
+exp = 'E_15_00500_00450000000_000100000000_0017500_0011700_0000000_0098700_0098700-HUM_00_rto.npy'
+np.load(path.join(pth, exp))
