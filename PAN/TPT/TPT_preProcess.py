@@ -3,8 +3,10 @@
 
 import os
 import sys
+from os import path
 from datetime import datetime
 import MoNeT_MGDrivE as monet
+import compress_pickle as pkl
 from joblib import Parallel, delayed
 from more_itertools import locate
 import TPT_aux as aux
@@ -89,3 +91,12 @@ for exp in EXPS:
             sexFilenameIdentifiers=sexID
         ) for exIx in expIter
     )
+###############################################################################
+# Explore
+###############################################################################
+pth = '/RAID5/marshallShare/TP13_figure_gambiae_low/X2500/PREPROCESS'
+exp = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_0000000-INC_00_rto.npy'
+exp = "E_15_00500_00400000000_000100000000_0017500_0011700_0000000_0089000_0089000-INC_00_sum.bz"
+raw = pkl.load(path.join(pth, exp))
+max(raw['population'].T[1])
+
