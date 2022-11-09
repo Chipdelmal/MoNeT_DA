@@ -9,7 +9,7 @@ from math import ceil
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from datetime import datetime
-from sklearn.preprocessing import MinMaxScaler
+# from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -61,11 +61,14 @@ df = pd.read_csv(path.join(PT_OUT, fName))
 indVars = [i[0] for i in aux.DATA_HEAD]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = (dfIn, df[MOI])
-(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.2)
+(X_trainR, X_testR, y_train, y_test) = [
+    np.array(i) for i in train_test_split(X, y, test_size=0.2)
+]
 # Scale input -----------------------------------------------------------------
-SCALER = MinMaxScaler(feature_range=(0, 1))
-SCALER.fit(X_trainR)
-(X_train, X_test) = (SCALER.transform(X_trainR), SCALER.transform(X_testR))
+# SCALER = MinMaxScaler(feature_range=(0, 1))
+# SCALER.fit(X_trainR)
+# (X_train, X_test) = (SCALER.transform(X_trainR), SCALER.transform(X_testR))
+(X_train, X_test) = (X_trainR, X_testR)
 ###############################################################################
 # Train Model
 ###############################################################################
@@ -124,13 +127,17 @@ shapVals = np.abs(shap_values).mean(0)
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-clr = '#3a86ff' if MOI=='CPT' else '#03045e' 
+SAMP_NUM = 100
+clr = '#3a86ff' if MOI=='CPT' else '#03045e'
+X_plots = np.copy(X_train)
+np.random.shuffle(X_plots)
 (fig, ax) = plt.subplots(figsize=(16, 2))
 display = PartialDependenceDisplay.from_estimator(
-    rf, X, indVars[:-1], ax=ax,
-    subsample=1500, n_jobs=aux.JOB_DSK*2,
+    rf, X_plots[:SAMP_NUM], list(range(X_plots.shape[1])), 
+    ax=ax, kind='both', subsample=SAMP_NUM, 
+    n_jobs=aux.JOB_DSK*8,
     n_cols=round((len(indVars)-1)), 
-    kind='both', grid_resolution=200, random_state=0,
+    grid_resolution=200, random_state=0,
     ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1, 'color': clr},
     pd_line_kw={'color': '#f72585'}
 )

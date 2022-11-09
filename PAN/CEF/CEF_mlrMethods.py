@@ -1,5 +1,7 @@
 
+from sklearn.pipeline import make_pipeline
 from xgboost import XGBRFRegressor
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import GridSearchCV
@@ -82,8 +84,11 @@ def selectML(method, MOI):
         )
     elif method=='mlp':
         modID = 'mlp'
-        rf = MLPRegressor(
-            hidden_layer_sizes=(100, 50), 
-            verbose=True
+        rf = make_pipeline(
+            MinMaxScaler(),
+            MLPRegressor(
+                hidden_layer_sizes=(100, 50), 
+                verbose=True
+            )
         )
     return (rf, modID)
