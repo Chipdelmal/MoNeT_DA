@@ -19,6 +19,15 @@ def selectML(method, MOI):
             n_jobs=aux.JOB_DSK*2, 
             verbose=True
         )
+    elif method=='mlp':
+        modID = 'mlp'
+        rf = make_pipeline(
+            MinMaxScaler(),
+            MLPRegressor(
+                hidden_layer_sizes=(25, 25, 25), 
+                verbose=True
+            )
+        )
     elif method=='ada':
         rf = AdaBoostRegressor(
             DecisionTreeRegressor(max_depth=50), 
@@ -81,14 +90,5 @@ def selectML(method, MOI):
             objective='reg:squarederror',
             eval_metric='mae',
             verbose=2
-        )
-    elif method=='mlp':
-        modID = 'mlp'
-        rf = make_pipeline(
-            MinMaxScaler(),
-            MLPRegressor(
-                hidden_layer_sizes=(100, 50), 
-                verbose=True
-            )
         )
     return (rf, modID)
