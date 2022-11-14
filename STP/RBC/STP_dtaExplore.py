@@ -10,9 +10,6 @@ from datetime import datetime
 import numpy as np
 from numpy.lib.arraypad import pad
 import pandas as pd
-import matplotlib.pyplot as plt
-import plotly.express as px
-from sklearn import preprocessing
 from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
@@ -24,7 +21,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('lab', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('srv', 'PAN', 'HLT', 'SDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -105,7 +102,7 @@ constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR.csv'), index=False)
 # Filter Output with Constraints
 ###############################################################################
 # Design constraints ----------------------------------------------------------
-(sexLim, renLim, resLim) = (1, 12, 1)
+(sexLim, renLim, resLim) = (1, 50, 1.1)
 # Goals constraints -----------------------------------------------------------
 cptLim = (-0.1, 1.1)
 poeLim = (-.1, 1)

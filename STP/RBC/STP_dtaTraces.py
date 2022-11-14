@@ -15,7 +15,7 @@ import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, TRC) = ('lab', 'SPA', 'HLT', 'LDR', '50', 'HLT')
+    (USR, LND, AOI, DRV, QNT, TRC) = ('srv', 'PAN', 'HLT', 'SDR', '50', 'HLT')
 else:
     (USR, LND, AOI, DRV, QNT, TRC) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -65,8 +65,9 @@ for pt_root in PT_ROTs:
     ###############################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-        "width": .5, "alpha": .5, "dpi": 300, "legend": True,
-        "aspect": 1, "colors": CLR, "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1)
+        "width": .5, "alpha": .5, "dpi": 300, "legend": False,
+        "aspect": 1/3, "colors": CLR, 
+        "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1)
     }
     # print('YRAN: {}'.format(STYLE))
     ###############################################################################
@@ -78,7 +79,9 @@ for pt_root in PT_ROTs:
             exIx, fNum,
             aux.STABLE_T, 0, QNT, STYLE, pt_img,
             digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
-            poePrint=False, mnfPrint=False, ticksHide=TICKS_HIDE,
+            poePrint=False, mnfPrint=False, 
+            wopPrint=False, cptPrint=False,
+            ticksHide=TICKS_HIDE,
             transparent=True, sampRate=aux.SAMP_RATE
         ) for exIx in subset
     )
