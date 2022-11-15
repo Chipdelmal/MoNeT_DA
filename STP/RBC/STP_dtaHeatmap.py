@@ -1,29 +1,21 @@
 import sys
-from math import exp
-from os import minor, path
-from re import match
-from glob import glob
-from itertools import product
-from joblib import dump, load
-from datetime import datetime
+from os import path
 import numpy as np
-from numpy.lib.arraypad import pad
 import pandas as pd
 import matplotlib.pyplot as plt
-from joblib import Parallel, delayed
 import MoNeT_MGDrivE as monet
 import STP_aux as aux
 import STP_gene as drv
 import STP_land as lnd
 import STP_auxDebug as dbg
-from more_itertools import locate
 from sklearn.model_selection import ParameterGrid
 import warnings
 warnings.filterwarnings("ignore",category=UserWarning)
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('lab', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('srv', 'PAN', 'HLT', 'LDR', '50', 'WOP')
     iVars = ['i_ren', 'i_res', 'i_sex']
+    # iVars = ['i_fch', 'i_fcb', 'i_ren']
 else:
     (USR, LND, AOI, DRV, QNT, MOI) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
@@ -120,7 +112,7 @@ fltr = {
 [fltr.pop(i) for i in HD_IND]
 # Sweep over values -----------------------------------------------------------
 sweep = uqVal[kSweep]
-sw = sweep[0]
+# sw = sweep[12]
 for sw in sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]
@@ -146,10 +138,14 @@ for sw in sweep:
     # Get ranges --------------------------------------------------------------
     (a, b) = ((min(x), max(x)), (min(y), max(y)))
     (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
+    if (iVars[0]=='i_ren') and (iVars[1]=='i_res') and (iVars[2]=='i_sex'):
+        ran = ((0, 24), (0, 1), (0, 10*365/2)) 
+    if (iVars[0]=='i_fch') and (iVars[1]=='i_fcb') and (iVars[2]=='i_ren'):
+        ran = ((0, max(x)), (0, 0.15795), (0, 10*365/2))
     ###########################################################################
     # Plot
     ###########################################################################
-    (fig, ax) = plt.subplots(figsize=(10, 8))
+    (fig, ax) = plt.subplots(figsize=(10, 10))
     # Experiment points, contour lines, response surface ----------------------
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
     cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#000000', linewidths=.5, alpha=1)
@@ -190,7 +186,8 @@ for sw in sweep:
         for (l, s) in zip(cc.levels, strs):
             fmt[l] = s
         ax.clabel(
-            cc, cc.levels[1::2], inline=True, fontsize=20, fmt=fmt,
+            cc, cc.levels[1::2], inline=True, 
+            fontsize=20, fmt=fmt,
             rightside_up=False, inline_spacing=5
         )
     else:
@@ -203,23 +200,20 @@ for sw in sweep:
     ax.set_yscale(ySca)
     renB = (HD_IND[0]=='i_ren') or (HD_IND[1]=='i_ren')
     resB = (HD_IND[0]=='i_res') or (HD_IND[1]=='i_res')
-    if renB and resB:
-        ax.xaxis.set_ticks(np.arange(0, 24, 4))
-        ax.yaxis.set_ticks(np.arange(0, 1, 0.2))
+    # if renB and resB:
+    #     ax.xaxis.set_ticks(np.arange(0, 24, 4))
+    #     ax.yaxis.set_ticks(np.arange(0, 1, 0.2))
     plt.xlim(ran[0][0], ran[0][1])
     plt.ylim(ran[1][0], ran[1][1])
     if TICKS_HIDE:
-        ax.axes.xaxis.set_ticklabels([])
-        ax.axes.yaxis.set_ticklabels([])
-        # ax.axes.xaxis.set_visible(False)
-        # ax.axes.yaxis.set_visible(False)
-        ax.xaxis.set_tick_params(width=0)
-        ax.yaxis.set_tick_params(width=0)
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
         ax.tick_params(
             left=False, labelleft=False, bottom=False, labelbottom=False
         )
-        ax.set_axis_off()
-    fig.tight_layout()
+        plt.tight_layout(pad=0, w_pad=0, h_pad=0)
+        plt.axis('off')
+    # ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
     ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
     ###########################################################################
     # Export File
@@ -240,7 +234,7 @@ for sw in sweep:
     print(path.join(PT_IMG, fName+'.png'))
     fig.savefig(
         path.join(PT_IMG, fName+'.png'), 
-        dpi=500, bbox_inches='tight', pad=0
+        dpi=500, bbox_inches='tight', pad_inches=0
     )
     # Clearing and closing (fig, ax) ------------------------------------------
     plt.clf()

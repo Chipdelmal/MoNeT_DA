@@ -97,7 +97,8 @@ def exportPstTracesParallel(
     # STYLE['yRange'] = (0,  pop*popScaler)
     monet.exportTracesPlot(
         repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
-        vLines=[tti, tto, 0], hLines=[mnf*pop], labelPos=labelPos, 
+        vLines=[tti, tto, 0], hLines=[], #[mnf*pop], 
+        labelPos=labelPos, 
         border=border, borderColor=borderColor, borderWidth=borderWidth,
         autoAspect=autoAspect, popScaler=popScaler,
         wop=wop, wopPrint=wopPrint, 
@@ -163,9 +164,9 @@ def exportTracesPlot(
         axTemp.axvline(vLines[1], alpha=0.75, ls='-.', lw=.35, color='#FF1A4B', zorder=0)
 
     for hline in hLines:
-        axTemp.axhline(hline, alpha=.25, zorder=10, ls='--', lw=.35, color='#000000')
+        axTemp.axhline(hline, alpha=0, zorder=10, ls='--', lw=.35, color='#000000')
     for vline in vLines[2:]:
-        axTemp.axvline(vline, alpha=.25, zorder=10, ls='--', lw=.35, color='#000000')
+        axTemp.axvline(vline, alpha=0, zorder=10, ls='--', lw=.35, color='#000000')
     # Print metrics -----------------------------------------------------------
     if  wopPrint:
         axTemp.text(

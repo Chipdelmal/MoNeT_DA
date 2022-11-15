@@ -65,7 +65,7 @@ for pt_root in PT_ROTs:
     ###############################################################################
     (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
     STYLE = {
-        "width": .5, "alpha": .5, "dpi": 300, "legend": False,
+        "width": 1.5, "alpha": .5, "dpi": 300, "legend": False,
         "aspect": 1/3, "colors": CLR, 
         "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1)
     }

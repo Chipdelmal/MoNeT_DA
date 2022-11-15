@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT, NME, TRC) = (
         'srv', 'PAN', 'HLT',
-        'SDR', '50', 'BD', 
+        'SDR', '50', 'FC', 
         'HLT'
     )
 else:
@@ -32,6 +32,8 @@ if NME == 'SX':
     FNAME = 'DTA_FLTR_SX.csv'
 elif NME == 'BD':
     FNAME = 'DTA_FLTR_BD.csv'
+elif NME == 'FC':
+    FNAME = 'DTA_FLTR_FC.csv'
 else:
     FNAME = 'DTA_FLTR.csv'
 # Setup number of cores -------------------------------------------------------

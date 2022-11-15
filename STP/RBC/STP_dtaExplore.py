@@ -121,8 +121,8 @@ constrained = DATA[
     np.isclose(DATA['i_hrf'], 0.956)    &
     np.isclose(DATA['i_rsg'], 0.079)    &
     np.isclose(DATA['i_gsv'], 1.e-02)   &
-    (2 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
-    (.05 <= DATA['i_res'])      & (DATA['i_res'] <= resLim)
+    (0 <= DATA['i_ren'])        & (DATA['i_ren'] <= renLim)         &
+    (0 <= DATA['i_res'])      & (DATA['i_res'] <= resLim)
 ]
 # print(DATA['i_fcb'].unique())
 constrained.shape
@@ -131,6 +131,37 @@ print('{}* Found {}/{} matches (FLTR_BD){}'.format(
 	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
 ))
 constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR_BD.csv'), index=False)
+###############################################################################
+# Filter Output with Constraints
+###############################################################################
+# Design constraints ----------------------------------------------------------
+(sexLim, renLim, resLim) = (1, 12, 0.5)
+# Goals constraints -----------------------------------------------------------
+cptLim = (-0.1, 1.1)
+poeLim = (-.1, 1)
+ttiLim = (-1, 4*365)
+ttoLim = (-1, 6*365)
+wopLim = (0, 10*365)
+mnfLim = (0, 1)
+# Filter and return dataframe -------------------------------------------------
+constrained = DATA[
+    (DATA['i_grp'] == 0) &
+    (DATA['i_sex'] == sexLim)           &
+    np.isclose(DATA['i_fcr'], 0)        &
+    np.isclose(DATA['i_hrm'], 1.0)      &
+    np.isclose(DATA['i_hrf'], 0.956)    &
+    np.isclose(DATA['i_rsg'], 0.079)    &
+    np.isclose(DATA['i_gsv'], 1.e-02)   &
+    np.isclose(DATA['i_ren'], renLim)   &
+    np.isclose(DATA['i_res'], resLim)
+]
+# print(DATA['i_fcb'].unique())
+constrained.shape
+# Export data -----------------------------------------------------------------
+print('{}* Found {}/{} matches (FLTR_FC){}'.format(
+	monet.CBBL, constrained.shape[0], DATA.shape[0], monet.CEND
+))
+constrained.to_csv(path.join(PT_OUT, 'DTA_FLTR_FC.csv'), index=False)
 ###############################################################################
 # Sex
 ###############################################################################
