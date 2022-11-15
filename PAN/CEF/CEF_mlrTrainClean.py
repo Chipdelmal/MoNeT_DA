@@ -194,15 +194,15 @@ shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
 ###############################################################################
 # Test
 ###############################################################################
-probeX = (
-    ('ren', 20),
-    ('rer', 10),
-    ('rei', 4),
-    ('pct', 1),
-    ('pmd', 1),
-    ('mfr', .50),
-    ('mtf', 1),
-    ('fvb', .50),
-)
-vct = np.array([[i[1] for i in probeX]])
-rf.predict(vct)
+# probeX = (
+#     ('ren', 20),
+#     ('rer', 10),
+#     ('rei', 4),
+#     ('pct', 1),
+#     ('pmd', 1),
+#     ('mfr', .50),
+#     ('mtf', 1),
+#     ('fvb', .50),
+# )
+# vct = np.array([[i[1] for i in probeX]])
+# rf.predict(vct)
