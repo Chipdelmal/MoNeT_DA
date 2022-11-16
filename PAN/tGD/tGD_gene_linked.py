@@ -13,13 +13,16 @@ locus = (0, 1)
 # Ecology genotype counts
 ###############################################################################
 ECO_DICT = OrderedDict((
-    ('W', (('W', locus), )),
-    ('H', (('H', locus), )),
-    ('R', (('R', locus), )),
-    ('B', (('B', locus), ))
+    ('W',     (('W', locus), )),
+    ('H',     (('H', locus), )),
+    ('R+B',   (('R', locus), ('B', locus))),
+    ('Total', (
+        ('W', locus), 
+        ('H', locus), 
+        ('R', locus), ('B', locus))
+    )
 ))
 LDR_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
-LDR_ECO
 ###############################################################################
 # Health genotype counts
 ###############################################################################

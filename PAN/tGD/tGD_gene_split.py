@@ -18,14 +18,13 @@ genotypes = (
 # Ecology genotype counts
 ###############################################################################
 ECO_DICT = OrderedDict((
-    ('B',   (('B', locB), )),
-    ('W',   (('W', locB), )),
-    ('C',   (('C', locA), )),
-    ('H',   (('H', locB), )),
-    ('R',   (('R', locB), )),
+    ('R+B',   (('B', locB), ('R', locB))),
+    ('W',     (('W', locB), )),
+    ('H',     (('H', locB), )),
     ('Total', (
-            ('W', locA), ('C', locA), 
-            ('H', locB), ('W', locB), ('R', locB), ('B', locB)
+            ('H', locB), 
+            ('W', locB), 
+            ('R', locB), ('B', locB)
         )
     )
 ))
