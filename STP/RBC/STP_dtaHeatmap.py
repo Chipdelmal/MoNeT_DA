@@ -10,10 +10,11 @@ import STP_land as lnd
 import STP_auxDebug as dbg
 from sklearn.model_selection import ParameterGrid
 import warnings
-warnings.filterwarnings("ignore",category=UserWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+pd.options.mode.chained_assignment = None
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MOI) = ('srv', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MOI) = ('srv', 'PAN', 'HLT', 'SDR', '50', 'WOP')
     iVars = ['i_ren', 'i_res', 'i_sex']
     # iVars = ['i_fch', 'i_fcb', 'i_ren']
 else:
@@ -75,8 +76,9 @@ if MOI == 'TTI':
     (zmin, zmax) = (45, 90)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/15), 'linear')
 elif MOI == 'WOP':
-    (zmin, zmax) = (-1, MAX_TIME*365)
+    (zmin, zmax) = (-1, MAX_TIME*365/2)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    lvls = [i*365 for i in np.arange(0.5, 5, .5)]
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1.05)
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/25), 'linear')
@@ -113,12 +115,34 @@ fltr = {
 # Sweep over values -----------------------------------------------------------
 sweep = uqVal[kSweep]
 # sw = sweep[12]
+sw = sweep[0]
 for sw in sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]
     dfSrf = DATA[ks]
     if dfSrf.shape[0] < 4:
         continue
+    ###########################################################################
+    # Add no releases cases
+    ###########################################################################
+    if (iVars[0]=='i_ren') and (iVars[1]=='i_res'):
+        fltrZero = [DATA['i_ren']==0, DATA['i_res']==0, DATA['i_sex']==1]
+        zeroEntry = DATA[list(map(all, zip(*fltrZero)))].iloc[0].copy()
+        (ren, res) = [list(DATA[i].unique()) for i in ('i_ren', 'i_res')]
+        for renT in ren:
+            tmp = zeroEntry.copy()
+            tmp['i_ren']=renT
+            tmp['i_res']=0
+            tmp['i_sex']=dfSrf.iloc[0]['i_sex']
+            dfSrf.loc[-1]=tmp
+            dfSrf = dfSrf.reset_index(drop=True)
+        for resT in res:
+            tmp = zeroEntry.copy()
+            tmp['i_ren']=0
+            tmp['i_res']=resT
+            tmp['i_sex']=dfSrf.iloc[0]['i_sex']
+            dfSrf.loc[-1]=tmp
+            dfSrf = dfSrf.reset_index(drop=True)
     ###########################################################################
     # Generate Surface
     ###########################################################################
