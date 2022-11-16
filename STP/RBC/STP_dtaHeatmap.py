@@ -163,7 +163,7 @@ for sw in sweep:
     (a, b) = ((min(x), max(x)), (min(y), max(y)))
     (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
     if (iVars[0]=='i_ren') and (iVars[1]=='i_res') and (iVars[2]=='i_sex'):
-        ran = ((0, 24), (0, 1), (0, 10*365/2)) 
+        ran = ((1, 24), (0.05, 1), (0, 10*365/2)) 
     if (iVars[0]=='i_fch') and (iVars[1]=='i_fcb') and (iVars[2]=='i_ren'):
         ran = ((0, max(x)), (0, 0.15795), (0, 10*365/2))
     ###########################################################################
@@ -174,6 +174,8 @@ for sw in sweep:
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
     cc = ax.contour(rsS[0], rsS[1], rsS[2], levels=lvls, colors='#000000', linewidths=.5, alpha=1)
     cs = ax.contourf(rsS[0], rsS[1], rsS[2], levels=lvls, cmap=cmap, extend='max')
+    if (iVars[0]=='i_ren') and (iVars[1]=='i_res') and (iVars[2]=='i_sex'):
+        cc.collections[0].remove()
     # cs.cmap.set_over('red')
     # cs.cmap.set_under('white')
     # Color bar ---------------------------------------------------------------
