@@ -30,7 +30,7 @@ HLT_DICT = OrderedDict((
     ('H*', (('H', locus), )),
     ('O-', (('W', locus), ('R', locus), ('B', locus)))
 ))
-LDR_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
+LDR_HLT = monet.geneFrequencies(HLT_DICT, genotypes)
 
 ###############################################################################
 # Trash genotype counts
