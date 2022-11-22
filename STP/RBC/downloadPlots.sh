@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DRIVES=("LDR" "SDR")
-SPATIAL=("265_DP" "265_SP" "265_DR" "265_SR" "265_DS" "265_SS") # "265_SF" "265_DF")
+DRIVES=("SDR" "LDR")
+SPATIAL=("265_DR" "265_SR" "265_DS" "265_SS" "265_DP" "265_SP") # "265_SF" "265_DF")
 ###############################################################################
 # Download Geo
 ###############################################################################
@@ -43,9 +43,9 @@ if true; then
             echo "--------- Downloading ${drive}:${spatial} ---------"
             echo "- From: ~/STP_Grid/$drive/SPA/$spatial/img/"
             echo "- To:    /STP_new/$drive/SPA/$spatial/img/"
-            scp -r \
-                "lab:/RAID5/marshallShare/STP_Grid/$drive/SPA/$spatial/img/preTraces/*.png"  \
-                "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/SPA/$spatial/img/preTraces/"
+            # scp -r \
+            #     "lab:/RAID5/marshallShare/STP_Grid/$drive/SPA/$spatial/img/preTraces/*.png"  \
+            #     "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/SPA/$spatial/img/preTraces/"
             scp -r \
                 "lab:/RAID5/marshallShare/STP_Grid/$drive/SPA/$spatial/img/pstTraces/*.png"  \
                 "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/SPA/$spatial/img/pstTraces/"
