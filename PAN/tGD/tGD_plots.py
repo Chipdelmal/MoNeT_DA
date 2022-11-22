@@ -16,14 +16,16 @@ def exportTracesPlot(
     axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
     axTemp.axes.xaxis.set_ticklabels([])
     axTemp.axes.yaxis.set_ticklabels([])
-    axTemp.axes.xaxis.set_visible(False)
-    axTemp.axes.yaxis.set_visible(False)
-    axTemp.xaxis.set_tick_params(width=1)
-    axTemp.yaxis.set_tick_params(width=1)
+    axTemp.axes.xaxis.set_visible(True)
+    axTemp.axes.yaxis.set_visible(True)
+    # axTemp.xaxis.set_tick_params(width=0)
+    # axTemp.yaxis.set_tick_params(width=0)
     axTemp.xaxis.set_ticks(np.arange(0, STYLE['xRange'][1], 365))
     axTemp.yaxis.set_ticks(np.arange(0, STYLE['yRange'][1], STYLE['yRange'][1]/4))
-    axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
-    axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
+    # axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
+    # axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
+    axTemp.margins(x=0)
+    axTemp.margins(y=0)
 
     if wopPrint:
         axTemp.text(
@@ -44,17 +46,18 @@ def exportTracesPlot(
         axTemp.axvline(vLines[0], alpha=0.75, ls='-.', lw=.35, color='#FF1A4B', zorder=0)
         axTemp.axvline(vLines[1], alpha=0.75, ls='-.', lw=.35, color='#FF1A4B', zorder=0)
 
-    axTemp.axhline(
-            hLines, alpha=.25, zorder=10, ls='--', lw=.35, color='#000000'
-        )
+    # axTemp.axhline(
+    #         hLines, alpha=.25, zorder=10, ls='--', lw=.35, color='#000000'
+    #     )
     for vline in vLines[2:]:
         axTemp.axvline(vline, alpha=.25, zorder=10, ls='--', lw=.35, color='#000000')
     axTemp.tick_params(color=(0, 0, 0, 0.5))
+    plt.axis("tight")  # gets rid of white border
     figArr[0].savefig(
             "{}/{}.svg".format(PATH_IMG, nS),
             dpi=STYLE['dpi'], facecolor=None, edgecolor='w',
             orientation='portrait', format='svg',
-            transparent=transparent, bbox_inches='tight', pad_inches=0.05
+            transparent=transparent, bbox_inches='tight', pad_inches=0
         )
     plt.close('all')
     return True

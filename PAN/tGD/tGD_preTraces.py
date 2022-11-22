@@ -15,7 +15,7 @@ import compress_pickle as pkl
 
 
 (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, DRV, AOI) = ('srv2', 'tGD', 'HLT')
+# (USR, DRV, AOI) = ('srv', 'tGD', 'ECO')
 (FMT, SKP, MF, FZ) = ('bz2', False, (True, True), False)
 EXP = aux.EXPS
 ##############################################################################
@@ -33,7 +33,7 @@ for exp in EXP:
     # print(YRAN)
     STYLE = {
         "width": .5, "alpha": .9, "dpi": 200, "legend": True,
-        "aspect": .5, "colors": CLR, "xRange": [0, (365*5)],
+        "aspect": .5, "colors": CLR, "xRange": [0, (365*10)],
         "yRange": YRAN # (0, 7.5e3)
     }
     # if (AOI=='TRS') or (AOI=='WLD'):
