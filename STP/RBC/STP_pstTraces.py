@@ -18,7 +18,7 @@ import STP_land as lnd
 import STP_auxDebug as dbg
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV, QNT, THS) = ('lab', 'HLT', 'PAN', 'LDR', '50', '0.1')
+    (USR, AOI, LND, DRV, QNT, THS) = ('srv', 'HLT', 'SPA', 'LDR', '50', '0.1')
     JOB = aux.JOB_DSK
 else:
     (USR, AOI, LND, DRV, QNT, THS) = (
@@ -130,7 +130,9 @@ for exp in EXPS:
             exIx, expsNum,
             aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
             digs=digs, border=True, autoAspect=True, labelPos=(.8, .5),
-            sampRate=aux.SAMP_RATE, labelspacing=.025
+            sampRate=aux.SAMP_RATE, labelspacing=.025, popScaler=1.1,
+            poePrint=False, mnfPrint=False, 
+            wopPrint=False, cptPrint=False
         ) for exIx in expsIter
     )
     # Export gene legend ------------------------------------------------------

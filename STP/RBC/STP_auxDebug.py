@@ -66,7 +66,7 @@ def exportPreTracesParallel(
     repFilePath = exIx[1][1]
     repDta = pkl.load(repFilePath)
     name = path.splitext(repFilePath.split('/')[-1])[0][:-4]
-    monet.exportTracesPlot(
+    exportTracesPlot(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
         border=border, borderColor=borderColor, borderWidth=borderWidth,
         sampRate=sampRate
@@ -94,13 +94,13 @@ def exportPstTracesParallel(
     print(fmtStr.format(monet.CBBL, padi, expsNum, monet.CEND), end='\r')
     # Traces ------------------------------------------------------------------
     pop = repDta['landscapes'][0][STABLE_T][-1]
-    # STYLE['yRange'] = (0,  pop*popScaler)
-    monet.exportTracesPlot(
+    STYLE['yRange'] = (0,  pop*popScaler)
+    exportTracesPlot(
         repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
         vLines=[tti, tto, 0], hLines=[], #[mnf*pop], 
         labelPos=labelPos, 
         border=border, borderColor=borderColor, borderWidth=borderWidth,
-        autoAspect=autoAspect, popScaler=popScaler,
+        autoAspect=autoAspect, popScaler=1,
         wop=wop, wopPrint=wopPrint, 
         cpt=cpt, cptPrint=cptPrint,
         poe=poe, poePrint=poePrint,
@@ -130,13 +130,7 @@ def exportTracesPlot(
         })
     figArr = monet.plotNodeTraces(tS, STYLE, sampRate=sampRate)
     axTemp = figArr[0].get_axes()[0]
-    STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*popScaler)
-    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
-    axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
-    if autoAspect:
-        axTemp.set_aspect(aspect=monet.scaleAspect(STYLE["aspect"], STYLE))
-    else:
-        axTemp.set_aspect(aspect=STYLE["aspect"])
+
     if ticksHide:
         axTemp.axes.xaxis.set_ticklabels([])
         axTemp.axes.yaxis.set_ticklabels([])
@@ -151,7 +145,7 @@ def exportTracesPlot(
 
     
     days = tS['landscapes'][0].shape[0]*sampRate
-    print([vLines, wop, days])
+    # print([vLines, wop, days])
 
     if (vLines[0] > 0) and (vLines[1] <= days) and (wop > 0) and (vLines[0] < vLines[1]):
         axTemp.axvspan(vLines[0], vLines[1], alpha=0.15, facecolor='#3687ff', zorder=0)
@@ -170,14 +164,14 @@ def exportTracesPlot(
     # Print metrics -----------------------------------------------------------
     if  wopPrint:
         axTemp.text(
-            labelPos[0], labelPos[1]-labelspacing*0, 'WOP: '+str(int(wop)),
+            labelPos[0], labelPos[1]-labelspacing*0, 'WOP: {:.2f}'.format(wop/365),
             verticalalignment='bottom', horizontalalignment='left',
             transform=axTemp.transAxes,
             color='#00000055', fontsize=fontsize
         )
     if cptPrint:
         axTemp.text(
-            labelPos[0], labelPos[1]-labelspacing*1, 'CPT: {:.3f}'.format(cpt),
+            labelPos[0], labelPos[1]-labelspacing*1, 'POP: {:.2f}'.format(int(STYLE['yRange'][1])/1e6),
             verticalalignment='bottom', horizontalalignment='left',
             transform=axTemp.transAxes,
             color='#00000055', fontsize=fontsize
@@ -207,6 +201,15 @@ def exportTracesPlot(
             axTemp.spines[axis].set_linewidth(borderWidth)
     else:
         pad = 0
+    
+    STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*popScaler)
+    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+    axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
+    if autoAspect:
+        axTemp.set_aspect(aspect=monet.scaleAspect(STYLE["aspect"], STYLE))
+    else:
+        axTemp.set_aspect(aspect=STYLE["aspect"])
+        
     figArr[0].savefig(
             "{}/{}.png".format(PATH_IMG, nS),
             dpi=STYLE['dpi'], facecolor=None,

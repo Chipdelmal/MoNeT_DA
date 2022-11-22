@@ -13,14 +13,14 @@ import MoNeT_MGDrivE as monet
 # #############################################################################
 OVW = True
 REL_START = 100
-SPA_EXP = {'265_SR', '265_DR', '265_SS', '265_SP', '265_SF', '265_DP', '265_DS', '265_DF'}
+SPA_EXP = {'265_SR', '265_DR', '265_SS', '265_DS', '265_SP', '265_DP'} #, '265_DF', '265_SF'}
 (JOB_DSK, JOB_SRV) = (8, 60)
 (POP_SIZE, XRAN, FZ) = (
     1e7*1.25, # 2e6*1.5/2, 
-    (0, 10*int(365)), 
+    (100, 10*int(365)), 
     True
 )
-(STABLE_T, MLR, SAMP_RATE) = (0, False, 2)
+(STABLE_T, MLR, SAMP_RATE) = (-1, False, 2)
 (XP_ID, DRV, XP_PTRN, NO_REL_PAT) = (
     'STP', 'LDR/SDR',
     'E_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00'
@@ -154,8 +154,8 @@ def getExps(LND):
     else:
         spaLnd = (
             '265_DR', '265_SR',
-            '265_SS', '265_SP', '265_SF', 
-            '265_DS', '265_DP', '265_DF'
+            '265_DS', '265_SS', # '265_SF', 
+            '265_DP', '265_SP', # '265_DF'
         )
         return spaLnd
 
