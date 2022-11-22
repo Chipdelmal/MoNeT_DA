@@ -21,12 +21,12 @@ import STP_auxDebug as plo
 
 
 if monet.isNotebook():
-    (USR, REL, CLS) = ('lab', '265', 75)
+    (USR, REL, CLS) = ('dsk', '265', 15)
 else:
     (USR, REL, CLS) = (sys.argv[1], sys.argv[2], int(sys.argv[3]))
 STP_ONLY = True
 CLUSTER_EXPORT = False
-(CLUSTERS, LABELS) = (False, False)
+(CLUSTERS, LABELS) = (True, True)
 (SITES_STUDY, SITES_SOUTH) = (True, False)
 ###############################################################################
 # Selecting Paths
@@ -76,7 +76,7 @@ psiN = normalize(psi, axis=1, norm='l2')
 ###############################################################################
 # Export
 ###############################################################################
-df.to_csv(PTH_PTS+'clusters_'+str(CLS).zfill(3)+'.csv')
+# df.to_csv(PTH_PTS+'clusters_'+str(CLS).zfill(3)+'.csv')
 # sns.scatterplot(data=df, x="lon", y="lat", style="clst")
 clstIDs = list(sorted(set(df['clst'])))
 centroid = []
@@ -85,10 +85,10 @@ for clstID in clstIDs:
     tmpDF = df[df['clst'] == clstID]
     centroid.append([np.mean(i) for i in (tmpDF['lon'], tmpDF['lat'])])
     groupings.append(list(tmpDF['id']))
-pkl.dump(groupings, PTH_PTS+'clusters_'+str(CLS).zfill(3), compression='bz2')
-# #############################################################################
+# pkl.dump(groupings, PTH_PTS+'clusters_'+str(CLS).zfill(3), compression='bz2')
+###############################################################################
 # Export Map
-# #############################################################################
+###############################################################################
 COLORS = plo.COLORS
 (minLat, minLong) = (-0.045, 6.4)
 (maxLat, maxLong) = (1.75, 7.5)
@@ -167,9 +167,9 @@ if LABELS:
         ax.annotate(
             i, xy=(x, y), size=1, 
             ha='center', va='center', color='white',
-            zorder=10, fontsize=0.5
+            zorder=10, # fontsize=0.5
         )
-plo.plotNetworkOnMap(mL, psiN, xy, xy, c='#04011f55', lw=.1)
+# plo.plotNetworkOnMap(mL, psiN, xy, xy, c='#04011f55', lw=.1)
 fig.savefig(
     PTH_PTS+prep+str(CLS).zfill(3)+'.png', 
     dpi=2000, bbox_inches='tight', pad_inches=0
@@ -217,7 +217,7 @@ fig.savefig(
     dpi=2000, 
     bbox_inches='tight', pad_inches=0
 )
-plt.close('all')
+# plt.close('all')
 # #############################################################################
 # Kernel Heatmap
 # #############################################################################
