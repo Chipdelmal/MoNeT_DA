@@ -37,7 +37,7 @@ HLT_DICT = OrderedDict((
     ('H*', (('H', locB), )),
     ('O-', (('W', locB), ('R', locB), ('B', locB)))
 ))
-SDR_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
+SDR_HLT = monet.geneFrequencies(HLT_DICT, genotypes)
 
 ###############################################################################
 # Trash genotype counts
@@ -76,7 +76,7 @@ def driveParameters(TYPE, popSize):
         yRange = popSize*2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*SDR_HLT)
-        yRange = popSize/2
+        yRange = popSize*2
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(*SDR_TRS)
         yRange = popSize*2
