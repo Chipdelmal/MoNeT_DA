@@ -230,3 +230,5 @@ def selectPathGeo(USR):
     return PTH_ROT
 
 
+def rescaleRGBA(colorsTuple, colors=255):
+    return [i/colors for i in colorsTuple]

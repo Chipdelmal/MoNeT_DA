@@ -50,3 +50,5 @@ lnd = srv.Landscape(
 )
 bbox = lnd.getBoundingBox()
 trpMsk = srv.genFixedTrapsMask(lnd.trapsFixed)
+
+# np.sum(srv.calcDistanceMatrix(np.asarray(SITES[['lon', 'lat']]), distFun=srv.haversineDistance), axis=1)
