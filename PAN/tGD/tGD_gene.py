@@ -52,6 +52,8 @@ def driveSelector(DRIVE, TYPE, popSize=(11000)):
     ###########################################################################
     if TYPE == 'ECO':
         colors = monet.COLEN
+    if TYPE == 'CAP':
+        colors = ['#ff595e', '#8ac926', '#1982c4', '#6a4c93', '#ffca3a']
     elif TYPE == 'HLT':
         colors = COLHN
     elif TYPE == 'TRS':

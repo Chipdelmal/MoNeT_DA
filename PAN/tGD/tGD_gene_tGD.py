@@ -52,6 +52,23 @@ ECO_DICT = OrderedDict((
 TGD_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
 ###############################################################################
+# Trash Plot genotype counts
+###############################################################################
+CAP_DICT = OrderedDict((
+    ('W', (('W', locA), )),
+    ('C', (('P', locA), ('M', locA))),
+    ('R+B', (('R', locA), ('B', locA))),
+    ('Total', (
+            ('W', locA), 
+            ('P', locA), ('M', locA),
+            ('R', locA), ('B', locA)
+        )
+    )
+))
+# TGD_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
+TGD_CAP = monet.geneFrequencies(CAP_DICT, genotypes)
+
+###############################################################################
 # Health genotype counts
 ###############################################################################
 HLT_DICT = OrderedDict((
@@ -94,6 +111,9 @@ TGD_CST = monet.carrierFrequencies(CST_DICT, genotypes)
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*TGD_ECO)
+        yRange = popSize*2
+    if TYPE == 'CAP':
+        aggD = monet.generateAggregationDictionary(*TGD_CAP)
         yRange = popSize*2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*TGD_HLT)
