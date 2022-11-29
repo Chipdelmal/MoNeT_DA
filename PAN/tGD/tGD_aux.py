@@ -120,6 +120,8 @@ def selectPath(USR, DRV, EXP):
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220926_SA/{}/{}/'.format(DRV, EXP)
     elif USR == 'srv2':
         PATH_ROOT = '/RAID5/marshallShare/tGD/20220602/{}/{}/'.format(DRV, EXP)
+    elif USR == 'srv3':
+        PATH_ROOT = '/RAID5/marshallShare/tGD/20221030/{}/{}/'.format(DRV, EXP)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/tGD/{}/{}/'.format(DRV, EXP)
     else:
