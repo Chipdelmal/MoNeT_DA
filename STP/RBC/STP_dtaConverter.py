@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 if monet.isNotebook():
     (USR, LND, AOI, DRV, QNT, NME, TRC) = (
         'srv', 'PAN', 'HLT',
-        'SDR', '50', 'FC', 
+        'SDR', '50', 'BD', 
         'HLT'
     )
 else:

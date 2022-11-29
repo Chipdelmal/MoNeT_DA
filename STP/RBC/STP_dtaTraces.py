@@ -67,7 +67,7 @@ for pt_root in PT_ROTs:
     STYLE = {
         "width": 1.5, "alpha": .5, "dpi": 300, "legend": False,
         "aspect": 1/3, "colors": CLR, 
-        "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1)
+        "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.1)
     }
     # print('YRAN: {}'.format(STYLE))
     ###############################################################################
@@ -82,7 +82,8 @@ for pt_root in PT_ROTs:
             poePrint=False, mnfPrint=False, 
             wopPrint=False, cptPrint=False,
             ticksHide=TICKS_HIDE,
-            transparent=True, sampRate=aux.SAMP_RATE
+            transparent=True, sampRate=aux.SAMP_RATE,
+            popScaler=1.1
         ) for exIx in subset
     )
 # Export gene legend ------------------------------------------------------
