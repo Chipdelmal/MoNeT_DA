@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DRIVES=("SDR" "LDR")
+DRIVES=("LDR" "SDR")
 SPATIAL=("265_DR" "265_SR" "265_DS" "265_SS" "265_DP" "265_SP") # "265_SF" "265_DF")
 ###############################################################################
 # Download Geo
@@ -17,25 +17,25 @@ fi
 ###############################################################################
 # Download Panmictic
 ###############################################################################
-if false; then
+if true; then
     for idx in "${!DRIVES[@]}"; do
         drive="${DRIVES[$idx]}"
         echo "--------- Downloading ${drive}:PAN ---------"
-        scp -r \
-            "lab:/RAID5/marshallShare/STP_Grid/$drive/PAN/000000/img/preTraces"  \
-            "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/PAN/000000/img"
+        # scp -r \
+        #     "lab:/RAID5/marshallShare/STP_Grid/$drive/PAN/000000/img/preTraces"  \
+        #     "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/PAN/000000/img"
         scp -r \
             "lab:/RAID5/marshallShare/STP_Grid/$drive/PAN/000000/img/dtaTraces"  \
-            "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/PAN/000000/img"
-        scp -r \
-            "lab:/RAID5/marshallShare/STP_Grid/$drive/PAN/ML/img/" \
-            "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/PAN/ML"
+            "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/img"
+        # scp -r \
+        #     "lab:/RAID5/marshallShare/STP_Grid/$drive/PAN/ML/img/" \
+        #     "/home/chipdelmal/Documents/WorkSims/STP_new/$drive/PAN/ML"
     done
 fi
 ###############################################################################
 # Download Spatial
 ###############################################################################
-if true; then
+if false; then
     for idx in "${!DRIVES[@]}"; do
         drive=${DRIVES[$idx]} 
         for jdx in "${!SPATIAL[@]}"; do
