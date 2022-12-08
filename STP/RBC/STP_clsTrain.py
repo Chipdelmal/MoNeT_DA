@@ -14,8 +14,9 @@ from sklearn import metrics
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
+from math import radians
 from contextlib import redirect_stdout
-from pdpbox import pdp, get_dataset, info_plots
+# from pdpbox import pdp, get_dataset, info_plots
 from sklearn.inspection import partial_dependence, plot_partial_dependence
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
@@ -26,7 +27,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MTR) = ('lab', 'PAN', 'HLT', 'SDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('srv', 'PAN', 'HLT', 'LDR', '50', 'WOP')
     VT_SPLIT = aux.VT_TRAIN
 else:
     (USR, LND, AOI, DRV, QNT, MTR) = (
@@ -167,6 +168,13 @@ with open(modelPath+'_RFI.csv', 'w') as f:
 ###############################################################################
 # Statistics & Model Export
 ###############################################################################
+plotSort = [
+    'i_fch', 'i_fcb', 'i_fcr', 'i_hrm', 'i_hrf', 'i_rsg',
+    'i_gsv',
+    'i_ren', 'i_res',
+    'i_sxm', 'i_sxg', 'i_sxn'
+]
+plotSort.reverse()
 COLS = list(DATA.columns)
 (FEATS, LABLS) = (
     [i for i in COLS if i[0]=='i'],
@@ -177,10 +185,11 @@ FEATS.remove('i_grp')
 col = [i[2] for i in aux.DICE_PARS if i[0]==MTR][0]
 (fig, ax) = plt.subplots(figsize=(3, 10), ncols=1, sharey=True)
 ax.barh(
-    sorted(FEATS, reverse=True), 
-    [impDCD[i] for i in sorted(FEATS, reverse=True)], 
+    plotSort, 
+    [impDCD[i] for i in plotSort], #sorted(FEATS, reverse=True)], 
     align='center', zorder=10, 
-    color=col[:-2]+'AA'
+    color=col[:-2]+'AA',
+    height=0.9
 )
 ax.grid(1)
 ax.set_xlim(0, .5)
@@ -194,6 +203,101 @@ if TICKS_HIDE:
     # ax.xaxis.set_tick_params(width=0)
     # ax.yaxis.set_tick_params(width=0)
     ax.tick_params(left=False, labelleft=False, bottom=False, labelbottom=False)
-    # ax.set_axis_off()
+    ax.set_axis_off()
 fig.tight_layout()
-fig.savefig(path.join(PT_IMG, 'FIMP_{}.png'.format(MTR)), dpi=750)
+fig.savefig(
+    path.join(PT_IMG, 'FIMP_{}.png'.format(MTR)), 
+    dpi=750, bbox_inches='tight', pad_inches=0, transparent=True
+)
+
+
+
+# (cat, val) = (list(impDC['Importance'].index), list(impDC['Importance'].values))
+# polarBarChart(
+#     cat, val, 
+#     ticksStep=5,
+#     colors=['#000000']*len(cat),
+#     rRange=(0, 180)
+# )
+# def polarBarChart(
+#         xVals, yVals,
+#         figAx=None,
+#         logScale=False, ticksStep=10,
+#         rRange=(0, 270), yRange=None,
+#         colors=['#000000'],
+#         labels=True, labelQty=False,
+#         origin='N', direction=1,
+#         ticksFmt={
+#             'lw': 1, 'range': (-0.5, -0.25), 
+#             'color': '#000000DD', 'fontsize': 8, 'fmt': '{:.1f}'
+#         },
+#         labelFmt={
+#             'color': '#000000EE', 'fontsize': 10, 
+#             'ha': 'left', 'fmt': '{:.1f}'
+#         }
+#     ):
+#     # Generate (fig, ax) if needed --------------------------------------------
+#     if figAx is None:
+#         (fig, ax) = plt.subplots(
+#             figsize=(8, 8), subplot_kw={"projection": "polar"}
+#         )
+#     else:
+#         (fig, ax) = figAx
+#     # Get value ranges --------------------------------------------------------
+#     (minValY, maxValY) = [
+#         0 if not yRange else yRange[0],
+#         max(yVals) if not yRange else yRange[1]
+#     ]
+#     if not yRange:
+#         yRange = (minValY, maxValY)
+#     # Define grid -------------------------------------------------------------
+#     stepSizeY = maxValY/ticksStep
+#     gridY = np.arange(minValY, maxValY+maxValY/stepSizeY, stepSizeY)
+#     # Log-scale if needed -----------------------------------------------------
+#     if logScale:
+#         (gridYSca, yValsSca, yRangeSca) =  [
+#             [log10(i+1) for i in j] for j in (gridY, yVals, yRange)
+#         ]
+#     else:
+#         (gridYSca, yValsSca, yRangeSca) =  (gridY, yVals, yRange)
+#     # Convert heights into radii ----------------------------------------------
+#     (angleHeights, grids) = [
+#         [np.interp(i, yRangeSca, rRange) for i in j] 
+#         for j in (yValsSca, gridYSca)
+#     ]
+#     # Generate Plot -----------------------------------------------------------
+#     for (i, ang) in enumerate(angleHeights):
+#         ax.barh(i, radians(ang), color=colors[i])
+#     # Gridlines and axes ------------------------------------------------------
+#     ax.vlines(
+#         [radians(i) for i in grids[:ticksStep+1]], 
+#         len(xVals)+ticksFmt['range'][0], len(xVals)+ticksFmt['range'][1],
+#         colors=ticksFmt['color']
+#     )
+#     ax.xaxis.grid(False)
+#     ax.yaxis.grid(False)
+#     ax.set_ylim(-.5, len(yVals)-0.1)
+#     ax.spines['polar'].set_visible(False)
+#     ax.set_theta_zero_location(origin)
+#     ax.set_theta_direction(direction)
+#     ax.set_rlabel_position(0)
+#     # Labels ------------------------------------------------------------------
+#     labelsText = [ticksFmt['fmt'].format(i) for i in gridY] if labels else []
+#     ax.set_thetagrids(
+#         grids[:ticksStep+1], labelsText[:ticksStep+1], 
+#         color=ticksFmt['color']
+#     )
+#     # Categories Markers ------------------------------------------------------
+#     if labelQty:
+#         labelText = [
+#             f' {w} ('+labelFmt['fmt'].format(v)+')' for (w, v) in zip(xVals, yVals)
+#         ]
+#     else:
+#         labelText = [f' {i}' for i in xVals]
+#     ax.set_rgrids(
+#         [i for i in range(len(xVals))], 
+#         labels=labelText,
+#         va='center', **labelFmt
+#     )
+#     # Return results ----------------------------------------------------------
+#     return (fig, ax)
