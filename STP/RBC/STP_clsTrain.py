@@ -27,7 +27,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MTR) = ('srv', 'PAN', 'HLT', 'LDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('srv', 'PAN', 'HLT', 'SDR', '50', 'WOP')
     VT_SPLIT = aux.VT_TRAIN
 else:
     (USR, LND, AOI, DRV, QNT, MTR) = (
@@ -174,6 +174,8 @@ plotSort = [
     'i_ren', 'i_res',
     'i_sxm', 'i_sxg', 'i_sxn'
 ]
+colors = ['#3a0ca3']*6+['#4895ef']*1+['#f72585']*2+['#06d6a0']*3
+colors.reverse()
 plotSort.reverse()
 COLS = list(DATA.columns)
 (FEATS, LABLS) = (
@@ -188,8 +190,9 @@ ax.barh(
     plotSort, 
     [impDCD[i] for i in plotSort], #sorted(FEATS, reverse=True)], 
     align='center', zorder=10, 
-    color=col[:-2]+'AA',
-    height=0.9
+    color=colors,
+    height=0.9,
+    alpha=.85
 )
 ax.grid(1)
 ax.set_xlim(0, .5)
