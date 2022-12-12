@@ -1,20 +1,18 @@
 
 import sys
 import shap
-from os import path
 import numpy as np
+from os import path
 import pandas as pd
+from math import ceil
 import compress_pickle as pkl
-from datetime import datetime
-import rfpimp as rfp
 import matplotlib.pyplot as plt
-from sklearn import preprocessing
+from datetime import datetime
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split, cross_validate
-from sklearn.neural_network import MLPRegressor
-from sklearn.model_selection import GridSearchCV, ShuffleSplit
+from sklearn.model_selection import ShuffleSplit
 from sklearn.inspection import permutation_importance
 from sklearn.inspection import PartialDependenceDisplay
 import MoNeT_MGDrivE as monet
@@ -89,9 +87,9 @@ scoresFinal = {
     'explained_variance': explained_variance_score(y_test, y_pred),
     'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
 }
-scoresFinal['r2Adj'] = aux.adjRSquared(
-    scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
-)
+# scoresFinal['r2Adj'] = aux.adjRSquared(
+#     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
+# )
 print(scoresFinal)
 # Cross-validate --------------------------------------------------------------
 cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
@@ -164,14 +162,14 @@ display.figure_.savefig(
 ###############################################################################
 # Interaction
 ###############################################################################
-# display = PartialDependenceDisplay.from_estimator(
-#     rf, X, features=[['i_pct', 'i_pmd']], 
-#     subsample=2000, n_jobs=aux.JOB_DSK*4,
-#     n_cols=ceil((len(indVars)-1)), 
-#     kind='average', grid_resolution=200, random_state=0,
-#     ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
-#     pd_line_kw={'color': '#f72585'}
-# )
+display = PartialDependenceDisplay.from_estimator(
+    rf, X, features=[['i_fvb', 'i_mfr']], 
+    subsample=2000, n_jobs=aux.JOB_DSK*4,
+    n_cols=ceil((len(indVars)-1)), 
+    kind='average', grid_resolution=200, random_state=0,
+    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
+    pd_line_kw={'color': '#f72585'}
+)
 ###############################################################################
 # Dump Model to Disk
 ###############################################################################
