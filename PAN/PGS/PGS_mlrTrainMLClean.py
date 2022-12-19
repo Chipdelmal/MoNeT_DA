@@ -162,18 +162,18 @@ display.figure_.savefig(
 ###############################################################################
 # Interaction
 ###############################################################################
-display = PartialDependenceDisplay.from_estimator(
-    rf, X, features=[[5, 7]], 
-    subsample=500, n_jobs=aux.JOB_SRV*4,
-    n_cols=ceil((len(indVars)-1)), 
-    kind='average', grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
-    pd_line_kw={'color': '#f72585'}
-)
-display.figure_.savefig(
-    path.join(PT_IMG, fNameOut+'_inter.png'), 
-    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
-)
+# display = PartialDependenceDisplay.from_estimator(
+#     rf, X, features=[[5, 7]], 
+#     subsample=500, n_jobs=aux.JOB_SRV*4,
+#     n_cols=ceil((len(indVars)-1)), 
+#     kind='average', grid_resolution=200, random_state=0,
+#     ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
+#     pd_line_kw={'color': '#f72585'}
+# )
+# display.figure_.savefig(
+#     path.join(PT_IMG, fNameOut+'_inter.png'), 
+#     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+# )
 ###############################################################################
 # Dump Model to Disk
 ###############################################################################
