@@ -18,7 +18,7 @@ import MoNeT_MGDrivE as monet
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT) = ('dsk', 'PAN', 'HLT', 'LDR', '50')
+    (USR, LND, AOI, DRV, QNT) = ('srv', 'PAN', 'HLT', 'LDR', '50')
 else:
     (USR, LND, AOI, DRV, QNT) = (
         sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]

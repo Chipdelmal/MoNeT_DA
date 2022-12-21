@@ -27,7 +27,7 @@ import STP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, LND, AOI, DRV, QNT, MTR) = ('srv', 'PAN', 'HLT', 'SDR', '50', 'WOP')
+    (USR, LND, AOI, DRV, QNT, MTR) = ('srv', 'PAN', 'HLT', 'LDR', '50', 'WOP')
     VT_SPLIT = aux.VT_TRAIN
 else:
     (USR, LND, AOI, DRV, QNT, MTR) = (
