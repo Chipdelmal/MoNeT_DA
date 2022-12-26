@@ -27,7 +27,7 @@ def selectML(method, MOI):
                 hidden_layer_sizes=(25, 25, 25),
                 learning_rate='adaptive', 
                 tol=0.00001,
-                verbose=True
+                verbose=False
             )
         )
     elif method=='ada':

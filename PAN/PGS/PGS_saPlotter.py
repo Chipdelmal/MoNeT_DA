@@ -15,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -50,9 +50,9 @@ for name in SA_NAMES:
 ###############################################################################
 # Reading ML Exported files
 ###############################################################################
-fNameOut = '{}_{}T_{}-MLR.png'.format(AOI, int(float(THS)*100), MOI)
+fNameOut = '{}_{}T_{}-mlp-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 impSci = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'))
-impRfi = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'))
+# impRfi = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'))
 shpImp = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_SHP-SHP.csv'))
 ###############################################################################
 # Selecting sensitivities
@@ -62,7 +62,7 @@ pawn = resultsSA['PAWN'][['names', 'mean', 'median']]
 fast = resultsSA['FAST'][['names', 'S1']]
 hdmr = resultsSA['HDMR'].iloc[:len(aux.SA_RANGES)][['names', 'S1']]
 isci = impSci[['names', 'mean']]
-irfi = impRfi[['Feature', 'Importance']]
+# irfi = impRfi[['Feature', 'Importance']]
 shp = shpImp[['names', 'mean']]
 ###############################################################################
 # Reshapping
@@ -76,7 +76,7 @@ df = pd.DataFrame([
         ['FAST',  *aux.getSASortedDF(fast, 'S1', validFeat)], 
         ['HDMR',  *aux.getSASortedDF(hdmr, 'S1', validFeat)], 
         ['ISCI',  *aux.getSASortedDF(isci, 'mean', validFeat)], 
-        ['IRFI',  *aux.getSASortedDF(irfi, 'Importance', validFeat)], 
+        # ['IRFI',  *aux.getSASortedDF(irfi, 'Importance', validFeat)], 
         ['SHAP',  *aux.getSASortedDF(shp, 'mean', validFeat)], 
     ],
     columns=['name']+validFeat
@@ -94,24 +94,26 @@ clr = [
     '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', '#00f5d4AA', 
     '#8d99aeAA', '#cdb4dbAA', '#03045eAA'    
 ]
-(fig, ax) = plt.subplots(figsize=(4, 2))
+(fig, ax) = plt.subplots(figsize=(2.5, 2.5))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(0, 1), ax=ax,
     ylabel='', xlabel='',
     title='', logx=False, color=clr
 )
 plt.legend(loc='lower right', frameon=False)
+ax.set_xlabel("Importance")
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
-(fig, ax) = plt.subplots(figsize=(8, 4))
+(fig, ax) = plt.subplots(figsize=(2.5, 2.5))
 dfT.plot.barh(
     x='index', stacked=False, xlim=(1e-3, 1), ax=ax,
     ylabel='', xlabel='',
     title='', logx=True, color=clr
 )
 plt.legend(loc='lower right', frameon=False)
+ax.set_xlabel("Log-Importance")
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP_Log.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300

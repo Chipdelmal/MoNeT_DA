@@ -22,7 +22,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'CPT')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -58,6 +58,7 @@ df = pd.read_csv(path.join(PT_OUT, fName))
 # Split I/O
 ###############################################################################
 indVars = [i[0] for i in aux.DATA_HEAD]
+indVarsLabel = [i[2:] for i in indVars][:-1]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
 y = (y if MOI=='CPT' else y/aux.XRAN[1])
@@ -127,7 +128,7 @@ shapVals = np.abs(shap_values).mean(0)
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 3000
+SAMP_NUM = 5000
 clr = '#3a86ff' if MOI=='CPT' else '#03045e'
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
@@ -141,16 +142,18 @@ display = PartialDependenceDisplay.from_estimator(
     ice_lines_kw={'linewidth': 0.1, 'alpha': 0.075, 'color': clr},
     pd_line_kw={'color': '#f72585'}
 )
-display.figure_.subplots_adjust(hspace=.3)
+display.figure_.subplots_adjust(hspace=0.4)
+ix = -1
 for r in range(len(display.axes_)):
     for c in range(len(display.axes_[r])):
         try:
+            ix = ix+1
             display.axes_[r][c].autoscale(enable=True, axis='x', tight=True)
             if MOI=='CPT':
                 display.axes_[r][c].set_ylim(0, 1)
             else:
                 display.axes_[r][c].set_ylim(0, 1)
-            display.axes_[r][c].set_xlabel("")
+            display.axes_[r][c].set_xlabel(indVarsLabel[ix])
             display.axes_[r][c].set_ylabel("")
             display.axes_[r][c].get_legend().remove()
         except:
