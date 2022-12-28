@@ -32,21 +32,21 @@ python PGS_clsUnifyML.py $USR $DRV $AOI $THS
 ###############################################################################
 # Launch Scripts (SA)
 ###############################################################################
-for mtr in "WOP" "CPT" "POE" "TTI" "TTO"
+for mtr in "WOP" "CPT" "POE"
 do
     python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
 done
 ###############################################################################
 # Train ML
 ###############################################################################
-for mtr in "WOP" "CPT" "TTI"
+for mtr in "WOP" "CPT"
 do
     python PGS_mlrTrainMLClean.py $USR $DRV $AOI $THS $mtr
 done
 ###############################################################################
 # Plot
 ###############################################################################
-for mtr in "WOP" "CPT" "TTI"
+for mtr in "WOP" "CPT"
 do
     python PGS_saPlotter.py $USR $DRV $QNT $AOI $THS $mtr
 done
