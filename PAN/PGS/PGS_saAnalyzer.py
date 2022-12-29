@@ -15,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -120,4 +120,8 @@ for (name, df, dct) in outPairs:
     fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{name}-{QNT}_qnt')
     df.to_csv(fName+'.csv', index=False)
     pkl.dump(dct, fName+'.pkl')
-
+###############################################################################
+# Interaction Effect Exploration
+###############################################################################
+ix = SA_hdmr['Term'].index('mfr/fvb')
+SA_hdmr.keys()

@@ -15,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -86,7 +86,7 @@ new_header = dfT.iloc[0]
 dfT = dfT[1:]
 dfT.columns = new_header
 dfT = dfT.reset_index()
-dfT.sort_values('SHAP', ascending=True, inplace=True)
+dfT.sort_values('ISCI', ascending=True, inplace=True)
 ###############################################################################
 # Plotting
 ###############################################################################
