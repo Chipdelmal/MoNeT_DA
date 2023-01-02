@@ -46,7 +46,7 @@ for fid in ('SCA', 'REG'):
     dataFrames = []
     mtr = 'MNX'
     for mtr in ['TTI', 'TTO', 'WOP']:
-        # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
+        print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
         pth = path.join(PT_OUT, '{}_{}_{}_{}_qnt.csv'.format(fid, AOI, mtr, QNT))
         dta = pd.read_csv(pth)
         dataCols = [k for k in dta.columns if k[0]=='i']+[THS]
@@ -54,12 +54,12 @@ for fid in ('SCA', 'REG'):
         dta = dta.rename(columns={THS: mtr})
         dataFrames.append(dta)
     for mtr in ['POE', 'CPT']:
-        # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
+        print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
         pth = path.join(PT_OUT, '{}_{}_{}_{}_qnt.csv'.format(fid, AOI, mtr, QNT))
         dta = pd.read_csv(pth)
         dataFrames.append(dta)
     for mtr in ['MNX', ]:
-        # print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
+        print(monet.CBBL+'* Processing {}'.format(mtr)+monet.CEND, end='\r')
         pth = path.join(PT_OUT, '{}_{}_{}_{}_qnt.csv'.format(fid, AOI, mtr, QNT))
         dta = pd.read_csv(pth)
         dataCols = [k for k in dta.columns if k[0]=='i']+['min']

@@ -10,7 +10,7 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_mfr']
@@ -115,7 +115,10 @@ fltr = {
 # Sweep over values -----------------------------------------------------------
 # sweep = uqVal[kSweep]
 kSweep = ['i_fvb', 'i_mfr']
-sweep = [0.0, 0.05, 0.15, 0.25, 0.35, 0.45, 0.50]
+sweep = [
+    0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 
+    0.30, 0.35, 0.40, 0.45, 0.50
+]
 for sa in sweep:
     fltr[kSweep[0]] = sa
     for sw in sweep: # sweep:

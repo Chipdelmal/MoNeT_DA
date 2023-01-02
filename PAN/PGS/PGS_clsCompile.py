@@ -9,7 +9,7 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, MTR) = ('srv', 'PGS', '50', 'HLT', 'WOP')
+    (USR, DRV, QNT, AOI, MTR) = ('srv', 'PGS', '50', 'HLT', 'CPT')
 else:
     (USR, DRV, QNT, AOI, MTR) = (
         sys.argv[1], sys.argv[2], sys.argv[3], 
