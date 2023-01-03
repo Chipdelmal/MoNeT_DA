@@ -24,6 +24,7 @@ python PGS_dtaExplore.py $USR $DRV $QNT $AOI $THS $AOI
 ###############################################################################
 # Launch Scripts (ML)
 ###############################################################################
+python PGS_pstProcessML.py $USR $DRV $AOI $QNT
 for mtr in "WOP" "CPT" "TTI" "TTO" "MNX"
 do
     python PGS_clsCompileML.py $USR $DRV $AOI $mtr
