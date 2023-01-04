@@ -1,10 +1,14 @@
 
+
 import sys
+import math
 import numpy as np
 from os import path
 import pandas as pd
 from datetime import datetime
+import plotly.graph_objs as go
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import MoNeT_MGDrivE as monet
 from sklearn.cluster import KMeans
 import PGS_aux as aux
@@ -71,21 +75,118 @@ ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in cats])]
 dfFltr = DATA[ks]
 # Filter dataset for outcome --------------------------------------------------
 outs = [i for i in list(DATA.columns) if i[0]!='i']
-poeDFRaw = dfFltr[dfFltr['POE']>=0.9]
-poeDF = poeDFRaw.drop(labels=cats, axis=1).drop(labels=outs, axis=1)
+poeDFRaw = dfFltr[dfFltr['POE']>=0]
+# Feature creation ------------------------------------------------------------
+poeDFRaw['mfr+fvb'] = poeDFRaw['i_mfr']+poeDFRaw['i_fvb']
+poeDFRaw['ren*res'] = poeDFRaw['i_ren']*poeDFRaw['i_res']
+poeDFRaw['POE_C'] = [math.floor(i*10) for i in poeDFRaw['POE']]
+# Drop ranges -----------------------------------------------------------------
+# poeDF = poeDFRaw.drop(labels=cats, axis=1).drop(labels=outs, axis=1)
 ###############################################################################
 # Explore ranges
 ###############################################################################
-poeDF['mfr+fvb'] = poeDF['i_mfr']+poeDF['i_fvb']
-poeDF['ren*res'] = poeDF['i_ren']*poeDF['i_res']
-# Explore ---------------------------------------------------------------------
+poeDF = poeDFRaw[poeDFRaw['POE']>=0.0]
 min(poeDF['i_ren'].unique())
 min(poeDF['i_res'].unique())
 sorted(poeDF['i_mfr'].unique())
 sorted(poeDF['i_fvb'].unique())
-poeDF[poeDF['mfr+fvb']>=0.4]
 ###############################################################################
 # Cluster
 ###############################################################################
-y_pred = KMeans(n_clusters=4).fit_predict(poeDF)
-poeDF['KMeans'] = y_pred
+# y_pred = KMeans(n_clusters=4).fit_predict(poeDF['POE'])
+# poeDF['KMeans'] = y_pred
+###############################################################################
+# Matplotlib
+###############################################################################
+COLORS = [
+    '#f7258570', '#b5179e65', '#7209b760', '#560bad55', '#480ca850',
+    '#3a0ca345', '#3f37c940', '#4361ee35', '#4895ef30', '#4cc9f025',
+    '#B4E9F120'
+][::-1]
+jitter = np.random.normal(0, 0.01, size=(1, poeDF.shape[0]))[0]
+plt.scatter(
+    poeDF['mfr+fvb']+jitter, poeDF['ren*res'],
+    s=0.05, color=[COLORS[i] for i in poeDF['POE_C']]
+)
+plt.savefig(
+    path.join(path.dirname(path.realpath(__file__)), 'scatter.png'), 
+    dpi=500, bbox_inches='tight', transparent=False, pad_inches=0
+)
+
+COLORS = [
+    '#f7258550', '#b5179e50', '#7209b750', '#560bad50', '#480ca850',
+    '#3a0ca350', '#3f37c950', '#4361ee50', '#4895ef50', '#4cc9f050',
+    '#ECF9FD50'
+][::-1]
+jitter = np.random.normal(0, 0.01, size=(1, poeDF.shape[0]))[0]
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.scatter(
+    poeDF['i_fvb']+jitter, poeDF['i_mfr']+jitter, poeDF['ren*res'],
+    s=0.05, color=[COLORS[i] for i in poeDF['POE_C']]
+)
+ax.show()
+###############################################################################
+# HTML
+###############################################################################
+# REN -------------------------------------------------------------------------
+jitter = np.random.normal(0, 0.01, size=(1, poeDF.shape[0]))[0]
+poeDF['fvb'] = poeDF['i_fvb']+jitter
+jitter = np.random.normal(0, 0.01, size=(1, poeDF.shape[0]))[0]
+poeDF['mfr'] = poeDF['i_mfr']+jitter
+fig = go.Figure(data=go.Scatter3d(
+    x=poeDF['fvb'], 
+    y=poeDF['mfr'], 
+    z=poeDF['i_ren'],
+    mode='markers',
+    marker=dict(
+        size=2,
+        color=poeDF['POE'],
+        colorscale='Purples',
+        opacity=0.5
+    )
+))
+fig.write_html(
+    path.join(
+        path.dirname(path.realpath(__file__)), 
+        'scatter-ren.html'
+    )
+)
+# RES -------------------------------------------------------------------------
+fig = go.Figure(data=go.Scatter3d(
+    x=poeDF['fvb'], 
+    y=poeDF['mfr'], 
+    z=poeDF['i_res'],
+    mode='markers',
+    marker=dict(
+        size=2,
+        color=poeDF['POE'],
+        colorscale='Purples',
+        opacity=0.5
+    )
+))
+fig.write_html(
+    path.join(
+        path.dirname(path.realpath(__file__)), 
+        'scatter-res.html'
+    )
+)
+# REN*RES ---------------------------------------------------------------------
+fig = go.Figure(data=go.Scatter3d(
+    x=poeDF['fvb'], 
+    y=poeDF['mfr'], 
+    z=poeDF['ren*res'],
+    mode='markers',
+    marker=dict(
+        size=2,
+        color=poeDF['POE'],
+        colorscale='Purples',
+        opacity=0.5
+    )
+))
+fig.write_html(
+    path.join(
+        path.dirname(path.realpath(__file__)), 
+        'scatter-ren_res.html'
+    )
+)
