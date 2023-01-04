@@ -71,10 +71,21 @@ ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in cats])]
 dfFltr = DATA[ks]
 # Filter dataset for outcome --------------------------------------------------
 outs = [i for i in list(DATA.columns) if i[0]!='i']
-poeDF = dfFltr[dfFltr['POE']>=0.9]
-poeDFClean = poeDF.drop(labels=cats, axis=1).drop(labels=outs, axis=1)
+poeDFRaw = dfFltr[dfFltr['POE']>=0.9]
+poeDF = poeDFRaw.drop(labels=cats, axis=1).drop(labels=outs, axis=1)
+###############################################################################
+# Explore ranges
+###############################################################################
+poeDF['mfr+fvb'] = poeDF['i_mfr']+poeDF['i_fvb']
+poeDF['ren*res'] = poeDF['i_ren']*poeDF['i_res']
+# Explore ---------------------------------------------------------------------
+min(poeDF['i_ren'].unique())
+min(poeDF['i_res'].unique())
+sorted(poeDF['i_mfr'].unique())
+sorted(poeDF['i_fvb'].unique())
+poeDF[poeDF['mfr+fvb']>=0.4]
 ###############################################################################
 # Cluster
 ###############################################################################
-y_pred = KMeans(n_clusters=4).fit_predict(poeDFClean)
-poeDFClean['KMeans'] = y_pred
+y_pred = KMeans(n_clusters=4).fit_predict(poeDF)
+poeDF['KMeans'] = y_pred
