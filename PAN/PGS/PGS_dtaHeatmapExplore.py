@@ -15,7 +15,7 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -85,11 +85,101 @@ poeDFRaw['POE_C'] = [math.floor(i*10) for i in poeDFRaw['POE']]
 ###############################################################################
 # Explore ranges
 ###############################################################################
-poeDF = poeDFRaw[poeDFRaw['POE']>=0.75]
+poeDF = poeDFRaw[poeDFRaw['POE']>=0.5]
 min(poeDF['i_ren'].unique())
 min(poeDF['i_res'].unique())
 sorted(poeDF['i_mfr'].unique())
 sorted(poeDF['i_fvb'].unique())
+if MOI=='POE':
+    colScale = 'Reds'
+elif MOI=='CPT':
+    colScale = 'Purples'
+elif MOI=='WOP':
+    colScale = 'Blues'
+###############################################################################
+# HTML
+###############################################################################
+jitter = np.random.normal(0, 0.005, size=(1, poeDF.shape[0]))[0]
+poeDF['fvb'] = poeDF['i_fvb']+jitter
+jitter = np.random.normal(0, 0.005, size=(1, poeDF.shape[0]))[0]
+poeDF['mfr'] = poeDF['i_mfr']+jitter
+# REN -------------------------------------------------------------------------
+fig = go.Figure(data=go.Scatter3d(
+    x=poeDF['fvb'], y=poeDF['mfr'], z=poeDF['i_ren'],
+    customdata=np.dstack((poeDF['i_res']*10, poeDF[MOI]))[0],
+    mode='markers',
+    marker=dict(
+        size=2,
+        color=poeDF[MOI],
+        colorscale=colScale,
+        opacity=0.35
+    ),
+    hovertemplate="fvb:%{x:.3f}<br>mfr:%{y:.3f}<br>ren:%{z:.3f}<br>res:%{customdata[0]:.3f}<br>MOI:%{customdata[1]:.3f}"
+))
+fig.update_layout(
+    scene = dict(
+        xaxis_title='female viability (fvb)',
+        yaxis_title='male fertility (mfr)',
+        zaxis_title='number of releases (ren)',
+    )
+)
+fig.write_html(path.join(PT_IMG, f'scatter-{MOI}-ren.html'))
+# RES -------------------------------------------------------------------------
+fig = go.Figure(data=go.Scatter3d(
+    x=poeDF['fvb'], y=poeDF['mfr'], z=poeDF['i_res']*10,
+    customdata=np.dstack((poeDF['i_ren'], poeDF[MOI]))[0],
+    mode='markers',
+    marker=dict(
+        size=2,
+        color=poeDF[MOI],
+        colorscale=colScale,
+        opacity=0.35
+    ),
+    hovertemplate="fvb:%{x:.3f}<br>mfr:%{y:.3f}<br>res:%{z:.3f}<br>ren:%{customdata[0]:.3f}<br>MOI:%{customdata[1]:.3f}"
+))
+fig.update_layout(
+    scene = dict(
+        xaxis_title='female viability (fvb)',
+        yaxis_title='male fertility (mfr)',
+        zaxis_title='size of releases [eggs/adult] (ren)',
+    )
+)
+fig.write_html(path.join(PT_IMG, f'scatter-{MOI}-res.html'))
+# REN*RES ---------------------------------------------------------------------
+fig = go.Figure(data=go.Scatter3d(
+    x=poeDF['fvb'], y=poeDF['mfr'], z=poeDF['ren*res']*10,
+    customdata=np.dstack((poeDF['i_ren'], poeDF['i_res']*10, poeDF[MOI]))[0],
+    mode='markers',
+    marker=dict(
+        size=2,
+        color=poeDF[MOI],
+        colorscale=colScale,
+        opacity=0.35
+    ),
+    hovertemplate="fvb:%{x:.3f}<br>mfr:%{y:.3f}<br>tot:%{z:.3f}<br>ren:%{customdata[0]:.3f}<br>res:%{customdata[1]:.3f}<br>MOI:%{customdata[2]:.3f}"
+))
+fig.update_layout(
+    scene = dict(
+        xaxis = dict(nticks=5, range=[0, 0.5]),
+        yaxis = dict(nticks=5, range=[0, 0.5]),
+        zaxis = dict(nticks=5, range=[0, 10e3]),
+        xaxis_title='female viability (fvb)',
+        yaxis_title='male fertility (mfr)',
+        zaxis_title='total released mosquitoes [eggs/adult] (ren*res)',
+    )
+)
+fig.write_html(path.join(PT_IMG, f'scatter-{MOI}-ren_res.html'))
+###############################################################################
+# Explore
+###############################################################################
+fltrXP = [
+    poeDF['i_ren'] <= 26,
+    poeDF['i_res'] <= 50/2,
+    # poeDF['i_fvb'] <= .2,
+    # poeDF['i_mfr'] <=.2
+]
+mask = [all(i) for i in zip(*fltrXP)]
+poeDF[mask].sort_values(by=['i_fvb', 'i_mfr'])
 ###############################################################################
 # Cluster
 ###############################################################################
@@ -126,76 +216,3 @@ sorted(poeDF['i_fvb'].unique())
 #     s=0.05, color=[COLORS[i] for i in poeDF['POE_C']]
 # )
 # ax.show()
-###############################################################################
-# HTML
-###############################################################################
-jitter = np.random.normal(0, 0.01, size=(1, poeDF.shape[0]))[0]
-poeDF['fvb'] = poeDF['i_fvb']+jitter
-jitter = np.random.normal(0, 0.01, size=(1, poeDF.shape[0]))[0]
-poeDF['mfr'] = poeDF['i_mfr']+jitter
-# REN -------------------------------------------------------------------------
-fig = go.Figure(data=go.Scatter3d(
-    x=poeDF['fvb'], y=poeDF['mfr'], z=poeDF['i_ren'],
-    customdata=np.dstack((poeDF['i_res']*10, poeDF['POE']))[0],
-    mode='markers',
-    marker=dict(
-        size=2,
-        color=poeDF['POE'],
-        colorscale='Purples',
-        opacity=0.35
-    ),
-    hovertemplate="fvb:%{x:.3f}<br>mfr:%{y:.3f}<br>ren:%{z:.3f}<br>res:%{customdata[0]:.3f}<br>POE:%{customdata[1]:.3f}"
-))
-fig.update_layout(
-    scene = dict(
-        xaxis_title='female viability (fvb)',
-        yaxis_title='male fertility (mfr)',
-        zaxis_title='number of releases (ren)',
-    )
-)
-fig.write_html(path.join(PT_IMG, 'scatter-ren.html'))
-# RES -------------------------------------------------------------------------
-fig = go.Figure(data=go.Scatter3d(
-    x=poeDF['fvb'], y=poeDF['mfr'], z=poeDF['i_res']*10,
-    customdata=np.dstack((poeDF['i_ren'], poeDF['POE']))[0],
-    mode='markers',
-    marker=dict(
-        size=2,
-        color=poeDF['POE'],
-        colorscale='Purples',
-        opacity=0.35
-    ),
-    hovertemplate="fvb:%{x:.3f}<br>mfr:%{y:.3f}<br>res:%{z:.3f}<br>ren:%{customdata[0]:.3f}<br>POE:%{customdata[1]:.3f}"
-))
-fig.update_layout(
-    scene = dict(
-        xaxis_title='female viability (fvb)',
-        yaxis_title='male fertility (mfr)',
-        zaxis_title='size of releases [eggs/adult] (ren)',
-    )
-)
-fig.write_html(path.join(PT_IMG, 'scatter-res.html'))
-# REN*RES ---------------------------------------------------------------------
-fig = go.Figure(data=go.Scatter3d(
-    x=poeDF['fvb'], y=poeDF['mfr'], z=poeDF['ren*res']*10,
-    customdata=np.dstack((poeDF['i_ren'], poeDF['i_res']*10, poeDF['POE']))[0],
-    mode='markers',
-    marker=dict(
-        size=2,
-        color=poeDF['POE'],
-        colorscale='Purples',
-        opacity=0.35
-    ),
-    hovertemplate="fvb:%{x:.3f}<br>mfr:%{y:.3f}<br>tot:%{z:.3f}<br>ren:%{customdata[0]:.3f}<br>res:%{customdata[1]:.3f}<br>POE:%{customdata[2]:.3f}"
-))
-fig.update_layout(
-    scene = dict(
-        xaxis = dict(nticks=5, range=[0, 0.5]),
-        yaxis = dict(nticks=5, range=[0, 0.5]),
-        zaxis = dict(nticks=5, range=[0, 10e3]),
-        xaxis_title='female viability (fvb)',
-        yaxis_title='male fertility (mfr)',
-        zaxis_title='total released mosquitoes [eggs/adult] (ren*res)',
-    )
-)
-fig.write_html(path.join(PT_IMG, 'scatter-ren_res.html'))
