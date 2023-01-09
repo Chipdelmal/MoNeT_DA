@@ -635,3 +635,7 @@ def unison_shuffled_copies(a, b, size=1000):
     assert len(a) == len(b)
     p = np.random.permutation(len(a))
     return a[p][:size], b[p][:size]
+
+
+def getExpFname(pDict, DATA_HEAD, DATA_SCA, DATA_PAD):
+    return 1

@@ -10,7 +10,7 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, TRC) = ('srv', 'PGS', 'HLT', '50', '0.1', 'HLT')
+    (USR, DRV, QNT, AOI, THS, TRC) = ('srv', 'PGS', '50', 'HLT', '0.1', 'HLT')
 else:
     (USR, DRV, QNT, AOI, THS, TRC) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -58,12 +58,17 @@ COLS = list(DATA.columns)
 ###############################################################################
 # Filter Output with Constraints
 ###############################################################################
-(renRge, resRge) = ((1, 50), (1, 50))
+(renRge, resRge) = ((1, 52), (1, 50))
 wopRge = (-10*365, 15*365)
 fltr = (
     renRge[0] <= DATA['i_ren'], DATA['i_ren'] <= renRge[1],
     resRge[0] <= DATA['i_res'], DATA['i_res'] <= resRge[1],
     wopRge[0] <= DATA['WOP'],   DATA['WOP']   <= wopRge[1],
+    0 <= DATA['i_fvb'], DATA['i_fvb'] <= .25,
+    0 <= DATA['i_mfr'], DATA['i_mfr'] <= .25,
+    DATA['i_pmd'] == 0.75,
+    DATA['i_mtf'] == 0.75,
+    DATA['i_pct'] == 0.90
 )
 constrained = DATA[list(map(all, zip(*fltr)))]
 constrainedFiles = DATA_FILE[list(map(all, zip(*fltr)))]
