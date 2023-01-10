@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
 from matplotlib.colors import LinearSegmentedColormap, ColorConverter
 
-XP_ID = 'FMS'
-MAX_REPS = 250
+XP_ID = 'IFE'
+MAX_REPS = 60
 ###############################################################################
 # System Constants
 ###############################################################################
@@ -32,21 +32,24 @@ MAX_REPS = 250
 ###############################################################################
 # Sensitivity Analysis
 ###############################################################################
-SA_SAMPLES = 2**(14)
+SA_SAMPLES = 2**14*2
 SA_RANGES = (
-    ('ren', (1, 48)), 
-    ('rer', (1, 50)), 
+    ('ren', (1,  52)), 
+    ('rer', (1,  50)), 
+    ('rei', (1,  15)),
     ('pct', (.75, 1)), 
     ('pmd', (.75, 1)), 
-    ('mfr', (0, )), 
-    ('mtf', (.50, 1)), 
-    ('fvb', (0, ))
+    ('mfr', (0, .25)), 
+    ('mtf', (.5,  1)), 
+    ('fvb', (0, .25)),
+    ('rsg', (0, .25)),
+    ('lfs', (0, .50)),
 )
 ###############################################################################
 # Files and DA constants
 ###############################################################################
-(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00')
-REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
+(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}_{}_{}_{}_{}_{}_{}-{}_{}_{}.{}', '00')
+REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000_00000000_00000000'
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
@@ -54,27 +57,31 @@ REF_FILE = 'E_0000_000000_00000000_00000000_00000000_00000000_00000000'
 # Data Analysis ---------------------------------------------------------------
 (DATA_HEAD, DATA_SCA, DATA_PAD, DATA_TYPE) = (
     (
-        ('i_ren', 1), ('i_res', 2), 
-        ('i_pct', 3), ('i_pmd', 4), 
-        ('i_mfr', 5), ('i_mtf', 6), ('i_fvb', 7),
-        ('i_grp', 9)
+        ('i_ren', 1), ('i_res', 2), ('i_rei', 3),
+        ('i_pct', 4), ('i_pmd', 5), 
+        ('i_mfr', 6), ('i_mtf', 7), ('i_fvb', 8),
+        ('i_rsg', 9), ('i_lfs', 10)
+        ('i_grp', 11)
     ),
     {
-        'i_ren': 1e0, 'i_res': 1e1,
-        'i_pct': 1e6, 'i_pmd': 1e6, 
-        'i_mfr': 1e6, 'i_mtf': 1e6, 'i_fvb': 1e6,
+        'i_ren': 1e0,  'i_res': 1e8, 'i_rei': 1e0,
+        'i_pct': 1e10, 'i_pmd': 1e10, 
+        'i_mfr': 1e10, 'i_mtf': 1e10, 'i_fvb': 1e10,
+        'i_rsg': 1e10, 'i_lfs': 1e10,
         'i_grp': 1e0
     },
     {
-        'i_ren': 4, 'i_res': 6,
-        'i_pct': 8, 'i_pmd': 8, 
-        'i_mfr': 8, 'i_mtf': 8, 'i_fvb': 8,
+        'i_ren': 4,  'i_res': 14, 'i_rei': 4,
+        'i_pct': 12, 'i_pmd': 12, 
+        'i_mfr': 12, 'i_mtf': 12, 'i_fvb': 12,
+        'i_rsg': 12, 'i_lfs': 12,
         'i_grp': 2
     },
     {
-        'i_ren': np.int8,   'i_res': np.double,
+        'i_ren': np.int8,   'i_res': np.double, 'i_rei': np.int8,
         'i_pct': np.double, 'i_pmd': np.double, 
         'i_mfr': np.double, 'i_mtf': np.double, 'i_fvb': np.double,
+        'i_rsg': np.double, 'i_lfs': np.double,
         'i_grp': np.int8
     }
 )
@@ -182,11 +189,11 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 ###############################################################################
 def selectPath(USR, DRV=None):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/fem_pgSIT/{}/'.format(DRV)
+        PATH_ROOT = '/RAID5/marshallShare/ifegenia/{}/'.format(DRV)
     elif USR == 'lab':
-        PATH_ROOT = '/Volumes/marshallShare/fem_pgSIT/{}/'.format(DRV)
+        PATH_ROOT = '/Volumes/marshallShare/ifegenia/{}/'.format(DRV)
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/fem_pgSIT/{}/'.format(DRV)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/ifegenia/{}/'.format(DRV)
     (PATH_IMG, PATH_DATA) = (
         '{}img/'.format(PATH_ROOT), 
         '{}'.format(PATH_ROOT)
