@@ -6,8 +6,8 @@ import pandas as pd
 import compress_pickle as pkl
 from SALib.sample import latin
 import MoNeT_MGDrivE as monet
-import FMS_aux as aux
-import FMS_gene as drv
+import IFE_aux as aux
+import IFE_gene as drv
 
 
 if monet.isNotebook():
@@ -40,6 +40,7 @@ problem = {
 param_values = latin.sample(problem, SAMPLES_NUM)
 df = pd.DataFrame(param_values, columns=saNames)
 df['ren'] = [int(i) for i in round(df['ren'])]
+df['rei'] = [int(i) for i in round(df['rei'])]
 ###############################################################################
 # Ammending Experiments DF
 ###############################################################################
