@@ -22,7 +22,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
