@@ -15,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -44,7 +44,7 @@ monet.printExperimentHead(
 (PROBLEM, SAMPLER, EXP) = (
     pkl.load(path.join(PT_MTR, 'SA_experiment.pkl')),
     np.load(path.join(PT_MTR, 'SA_experiment.npy')),
-    pd.read_csv (path.join(PT_MTR, 'SA_experiment.csv'))
+    pd.read_csv(path.join(PT_MTR, 'SA_experiment.csv'))
 )
 ###############################################################################
 # Read Results CSV

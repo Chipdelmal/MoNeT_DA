@@ -22,7 +22,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -63,7 +63,9 @@ dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
 if MOI=='WOP':
     y = y/aux.XRAN[1]
-(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.2)
+elif MOI=='CPT':
+    y = 1-y
+(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.25)
 (X_train, X_test) = (X_trainR, X_testR)
 ###############################################################################
 # Select Model and Scores

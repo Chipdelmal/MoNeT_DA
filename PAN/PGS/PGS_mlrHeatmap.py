@@ -35,7 +35,7 @@ thsStr = str(int(float(THS)*100))
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, fldr)
 PT_OUT = path.join(PT_ROT, 'ML')
-PT_IMG = path.join(PT_OUT, 'img')
+PT_IMG = path.join(PT_OUT, 'img', 'heat')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
 PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 # Time and head ---------------------------------------------------------------
