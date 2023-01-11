@@ -9,7 +9,6 @@ from itertools import product
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
 import PGS_gene as drv
-import PGS_mlrMethods as mth
 
 if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
@@ -24,7 +23,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = True
+TICKS_HIDE = False
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
 (HD_IND) = ([iVars[0], iVars[1]]) 
@@ -60,17 +59,19 @@ rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [25.0],
-    'i_res': [50.0],
+    'i_ren': [30.0],
+    'i_res': [25.0],
     'i_rei': [7],
     'i_pct': [1.00], 
     'i_pmd': [1.00], 
-    'i_mfr': np.arange(0, .3, 0.01), 
+    'i_mfr': np.arange(0, .25, 0.01), 
     'i_mtf': [0.75],
-    'i_fvb': np.arange(0, .3, 0.01)
+    'i_fvb': np.arange(0, .25, 0.01)
 }
+fltrTitle = fltr.copy()
 # Assemble factorials ---------------------------------------------------------
 sweeps = [i for i in fltr.keys() if len(fltr[i])>1]
+[fltrTitle.pop(i) for i in sweeps]
 combos = list(zip(*product(fltr[sweeps[0]], fltr[sweeps[1]])))
 factNum = len(combos[0])
 for i in range(len(combos)):
@@ -97,7 +98,7 @@ scalers = [1, 1, 1]
 )
 rs = monet.calcResponseSurface(
     x, y, z, 
-    scalers=scalers, mthd='linear', 
+    scalers=scalers, mthd='cubic', 
     xAxis=xSca, yAxis=ySca,
     xLogMin=xLogMin, yLogMin=yLogMin,
     DXY=(ngdx, ngdy)
@@ -119,13 +120,12 @@ if MOI == 'TT0':
     cntr = [2*365]
 elif MOI == 'WOP':
     (zmin, zmax) = (0, 1)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
+    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
     cntr = [.5]
-    lvls = [cntr[0]-1, cntr[0]]
 elif MOI == 'CPT':
     (zmin, zmax) = (-.05, 1.05)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-    cntr = [.5]
+    cntr = [.25]
 elif MOI == 'POE':
     (zmin, zmax) = (0.1, 1.05)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
@@ -136,7 +136,7 @@ elif MOI == 'POE':
 # Plot
 ###############################################################################
 (fig, ax) = plt.subplots(figsize=(10, 8))
-xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
+xy = ax.plot(rsG[0], rsG[1], 'k.', ms=1, alpha=.25, marker='.')
 cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
     levels=cntr, colors=drive['colors'][-1][:-2], 
@@ -148,3 +148,50 @@ cs = ax.contourf(
 )
 # cs.cmap.set_over('red')
 cs.cmap.set_under('white')
+# Color bar ---------------------------------------------------------------
+if not TICKS_HIDE:
+    cbar = fig.colorbar(cs)
+    cbar.ax.get_yaxis().labelpad = 25
+    cbar.ax.set_ylabel('{}'.format(MOI), fontsize=15, rotation=270)
+# Grid and ticks ----------------------------------------------------------
+if xSca == 'log':
+    gZeroX = [i for i in list(sorted(set(x))) if i>0] 
+    ax.set_xticks([i/scalers[0] for i in gZeroX])
+    ax.axes.xaxis.set_ticklabels(gZeroX)
+else:
+    ax.set_xticks([i/scalers[0] for i in list(sorted(set(x)))])
+    ax.axes.xaxis.set_ticklabels(sorted(set(x)))
+if ySca == 'log':
+    gZeroY = [i for i in list(sorted(set(y))) if i>0] 
+    ax.set_yticks([i/scalers[1] for i in gZeroY])
+    ax.axes.yaxis.set_ticklabels(gZeroY)
+else:
+    ax.set_yticks([i/scalers[1] for i in list(sorted(set(y)))])
+    ax.axes.yaxis.set_ticklabels(sorted(set(y)))
+ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
+ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
+# Labels ------------------------------------------------------------------
+if not TICKS_HIDE:
+    ax.set_xlabel(HD_IND[0])
+    ax.set_ylabel(HD_IND[1])
+    pTitle = ' '.join(['[{}: {}]'.format(i, fltrTitle[i]) for i in fltrTitle])
+    plt.title(pTitle, fontsize=7.5)
+# Axes scales and limits --------------------------------------------------
+ax.set_xscale(xSca)
+ax.set_yscale(ySca)
+plt.xlim(ran[0][0], ran[0][1])
+plt.ylim(ran[1][0], ran[1][1])
+if TICKS_HIDE:
+    ax.axes.xaxis.set_ticklabels([])
+    ax.axes.yaxis.set_ticklabels([])
+    # ax.axes.xaxis.set_visible(False)
+    # ax.axes.yaxis.set_visible(False)
+    ax.xaxis.set_tick_params(width=0)
+    ax.yaxis.set_tick_params(width=0)
+    ax.tick_params(
+        left=False, labelleft=False, bottom=False, labelbottom=False
+    )
+    ax.set_axis_off()
+fig.tight_layout()
+ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
+ax.set_facecolor("#00000000")
