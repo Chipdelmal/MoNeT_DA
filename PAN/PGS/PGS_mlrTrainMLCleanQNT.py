@@ -22,9 +22,9 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
-    (USR, DRV, QNT, AOI, THS) = sys.argv[1:]
+    (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -47,7 +47,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} mlrTrainML [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
+    '{} mlrTrainMLQNT [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
 )
 ###############################################################################
 # Read Dataframe
@@ -61,7 +61,8 @@ indVars = [i[0] for i in aux.DATA_HEAD]
 indVarsLabel = [i[2:] for i in indVars][:-1]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
-y = (y if MOI=='CPT' else y/aux.XRAN[1])
+if MOI=='WOP':
+    y = y/aux.XRAN[1]
 (X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.2)
 (X_train, X_test) = (X_trainR, X_testR)
 ###############################################################################
@@ -131,7 +132,12 @@ shapVals = np.abs(shap_values).mean(0)
 # PDP/ICE Plots
 ###############################################################################
 SAMP_NUM = 5000
-clr = '#3a86ff' if MOI=='CPT' else '#03045e'
+if MOI=='CPT':
+    clr = '#3a86ff'
+elif MOI=='POE':
+    clr = '#7b2cbf'
+else:
+    clr = '#03045e'
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
 (fig, ax) = plt.subplots(figsize=(16, 2))
