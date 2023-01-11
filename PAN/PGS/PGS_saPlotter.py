@@ -15,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -86,7 +86,7 @@ new_header = dfT.iloc[0]
 dfT = dfT[1:]
 dfT.columns = new_header
 dfT = dfT.reset_index()
-dfT.sort_values('ISCI', ascending=True, inplace=True)
+dfT.sort_values('Delta', ascending=True, inplace=True)
 ###############################################################################
 # Plotting
 ###############################################################################
@@ -116,5 +116,43 @@ plt.legend(loc='lower right', frameon=False)
 ax.set_xlabel("Log-Importance")
 plt.savefig(
     path.join(PT_IMG, fNameOut[:-4]+'-FIMP_Log.png'), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+###############################################################################
+# SA
+###############################################################################
+clr = [
+    '#FF1A4BAA', '#3a86ffAA', '#03045eAA', '#00f5d4AA', 
+    '#8338ecAA','#8d99aeAA', '#cdb4dbAA'
+]
+dfSA = dfT.drop(['ISCI', 'SHAP'], axis=1)
+(fig, ax) = plt.subplots(figsize=(2, 2.5))
+dfSA.plot.barh(
+    x='index', stacked=False, xlim=(0, 1), ax=ax,
+    ylabel='', xlabel='',
+    title='', logx=False, color=clr
+)
+plt.legend(
+    loc='lower left', bbox_to_anchor=(1, 0.5),
+    frameon=False
+)
+ax.set_xlabel("Importance")
+plt.savefig(
+    path.join(PT_IMG, fNameOut[:-4]+'-SA.png'), 
+    facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
+)
+(fig, ax) = plt.subplots(figsize=(2.5, 2.5))
+dfSA.plot.barh(
+    x='index', stacked=False, xlim=(1e-3, 1), ax=ax,
+    ylabel='', xlabel='',
+    title='', logx=True, color=clr
+)
+plt.legend(
+    loc='lower left', bbox_to_anchor=(1, 0.5),
+    frameon=False
+)
+ax.set_xlabel("Log-Importance")
+plt.savefig(
+    path.join(PT_IMG, fNameOut[:-4]+'-SA_Log.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )

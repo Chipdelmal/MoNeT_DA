@@ -22,9 +22,9 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, THS, MOI) = ('srv', 'PGS', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
-    (USR, DRV, AOI, THS, MOI) = sys.argv[1:]
+    (USR, DRV, QNT, AOI, THS) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -52,7 +52,7 @@ monet.printExperimentHead(
 ###############################################################################
 # Read Dataframe
 ###############################################################################
-fName = 'SCA_{}_{}T_MLR.csv'.format(AOI, int(float(THS)*100))
+fName = 'SCA_{}_{}Q_{}T.csv'.format(AOI, int(QNT), int(float(THS)*100))
 df = pd.read_csv(path.join(PT_OUT, fName))
 ###############################################################################
 # Split I/O
@@ -62,7 +62,7 @@ indVarsLabel = [i[2:] for i in indVars][:-1]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
 y = (y if MOI=='CPT' else y/aux.XRAN[1])
-(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.5)
+(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.2)
 (X_train, X_test) = (X_trainR, X_testR)
 ###############################################################################
 # Select Model and Scores
@@ -76,7 +76,9 @@ scoring = [
 # Train Model
 ###############################################################################
 (rf, modID) = mth.selectML(MOD_SEL, MOI)
-fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, modID)
+fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+    AOI, int(QNT), int(float(THS)*100), MOI, modID
+)
 # Train and Score -------------------------------------------------------------
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
