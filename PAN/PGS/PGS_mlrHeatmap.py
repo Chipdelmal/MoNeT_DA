@@ -14,8 +14,6 @@ if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
-iVars = ['i_fvb', 'i_mfr']
-# iVars = ['i_ren', 'i_res', 'i_fvb']
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -26,7 +24,7 @@ CHUNKS = JOB
 TICKS_HIDE = False
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
-(HD_IND) = ([iVars[0], iVars[1]]) 
+thsStr = str(int(float(THS)*100))
 ###############################################################################
 # Paths
 ###############################################################################
@@ -172,8 +170,8 @@ ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
 ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
 # Labels ------------------------------------------------------------------
 if not TICKS_HIDE:
-    ax.set_xlabel(HD_IND[0])
-    ax.set_ylabel(HD_IND[1])
+    ax.set_xlabel(sweeps[0])
+    ax.set_ylabel(sweeps[1])
     pTitle = ' '.join(['[{}: {}]'.format(i, fltrTitle[i]) for i in fltrTitle])
     plt.title(pTitle, fontsize=7.5)
 # Axes scales and limits --------------------------------------------------
@@ -195,3 +193,28 @@ if TICKS_HIDE:
 fig.tight_layout()
 ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
 ax.set_facecolor("#00000000")
+###############################################################################
+# Export File
+###############################################################################
+# Generate filename -----------------------------------------------------------
+(allKeys, fltrKeys) = (list(aux.DATA_SCA.keys()), set(fltrTitle.keys()))
+fElements = []
+for (i, k) in enumerate(allKeys):
+    if k in fltrKeys:
+        xEl = str(int(fltr[k][0]*aux.DATA_SCA[k])).zfill(aux.DATA_PAD[k])
+    else:
+        xEl = 'X'*aux.DATA_PAD[k]
+    fElements.append(xEl)
+fName = '{}_{}_{}-E_'.format(
+        MOI, sweeps[0][2:], sweeps[1][2:]
+    )+'_'.join(fElements)
+fName = fName+'-{}Q_{}T'.format(QNT, thsStr)
+# Save file -------------------------------------------------------------------
+# print(path.join(PT_IMG, fName+'.png'))
+print(path.join(PT_IMG, fName+'.png'))
+fig.savefig(
+    path.join(PT_IMG, fName+'.png'), 
+    dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
+)
+# Clearing and closing (fig, ax) ------------------------------------------
+# plt.clf();plt.cla();plt.close(fig);plt.gcf()
