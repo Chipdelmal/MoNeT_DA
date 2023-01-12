@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import sys
 import numpy as np
 from os import path
@@ -63,14 +66,14 @@ rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [32.0],
+    'i_ren': [27.0],
     'i_res': [35.0],
     'i_rei': [7],
     'i_pct': [1.00], 
     'i_pmd': [1.00], 
-    'i_fvb': np.arange(0, .5, 0.0025), 
+    'i_fvb': np.arange(0, .5, 0.005), 
     'i_mtf': [0.5],
-    'i_mfr': np.arange(0, .5, 0.0025)
+    'i_mfr': np.arange(0, .5, 0.005)
 }
 fltrTitle = fltr.copy()
 # Assemble factorials ---------------------------------------------------------
@@ -102,7 +105,7 @@ scalers = [1, 1, 1]
 )
 rs = monet.calcResponseSurface(
     x, y, z, 
-    scalers=scalers, mthd='linear', 
+    scalers=scalers, mthd='nearest', 
     xAxis=xSca, yAxis=ySca,
     xLogMin=xLogMin, yLogMin=yLogMin,
     DXY=(ngdx, ngdy)
@@ -117,11 +120,11 @@ rs = monet.calcResponseSurface(
 if MOI == 'WOP':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
-    cntr = [.5]
+    cntr = [.75]
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
-    cntr = [.9]
+    cntr = [.75]
 elif MOI == 'POE':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
@@ -135,7 +138,7 @@ elif MOI == 'POE':
 xy = ax.plot(rsG[0], rsG[1], 'k.', ms=.1, alpha=.25, marker='.')
 cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
-    levels=cntr, colors='#14213d88', #drive['colors'][-1][:-2], 
+    levels=cntr, colors='#2b2d42', #drive['colors'][-1][:-2], 
     linewidths=3, alpha=.825, linestyles='solid'
 )
 cs = ax.contourf(

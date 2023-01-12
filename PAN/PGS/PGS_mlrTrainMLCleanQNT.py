@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import sys
 import shap
@@ -22,7 +24,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -65,7 +67,7 @@ if MOI=='WOP':
     y = y/aux.XRAN[1]
 elif MOI=='CPT':
     y = 1-y
-(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.25)
+(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.2)
 (X_train, X_test) = (X_trainR, X_testR)
 ###############################################################################
 # Select Model and Scores
@@ -93,9 +95,9 @@ scoresFinal = {
     'explained_variance': explained_variance_score(y_test, y_pred),
     'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
 }
-# scoresFinal['r2Adj'] = aux.adjRSquared(
-#     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
-# )
+scoresFinal['r2Adj'] = aux.adjRSquared(
+    scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
+)
 print(scoresFinal)
 # Cross-validate --------------------------------------------------------------
 cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
@@ -111,19 +113,18 @@ scores = cross_validate(
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_trainS, y_trainS)
 sorted_idx = perm_importance.importances_mean.argsort()
-plt.barh(indVars[:-1], perm_importance.importances_mean)
-# Importances -----------------------------------------------------------------
-# impRF = {k: v for (k, v) in zip(indVars[:-1], rf.feature_importances_)}
-# plt.barh(indVars[:-1], rf.feature_importances_)
-# Permutation RF --------------------------------------------------------------
-# featImportance = list(rf.feature_importances_)
-# impPM = rfp.permutation_importances(rf, X_train, y_train, rfp.oob_regression_r2_score)
-# impPMD = impPM.to_dict()['Importance']
-# plt.barh(list(impPMD.keys()), list(impPMD.values()))
-# SHAP ------------------------------------------------------------------------
-(X_trainS, y_trainS) = aux.unison_shuffled_copies(
-    X_train, y_train, size=int(.5e3)
+labZip = zip(perm_importance.importances_mean, indVars[:-1])
+labSort = [x for _, x in sorted(labZip)]
+plt.barh(
+    labSort, sorted(perm_importance.importances_mean),
+    color=aux.selectColor(MOI), alpha=0.8
 )
+plt.savefig(
+    path.join(PT_IMG, fNameOut+'_PERM.png'), 
+    dpi=200, bbox_inches=None, pad_inches=0, transparent=True
+)
+# SHAP ------------------------------------------------------------------------
+(X_trainS, y_trainS) = aux.unison_shuffled_copies(X_train, y_train, size=500)
 if MOD_SEL in {'mlp', }:
     explainer = shap.KernelExplainer(rf.predict, X_trainS)
 else:
@@ -134,12 +135,6 @@ shapVals = np.abs(shap_values).mean(0)
 # PDP/ICE Plots
 ###############################################################################
 SAMP_NUM = 5000
-if MOI=='CPT':
-    clr = '#3a86ff'
-elif MOI=='POE':
-    clr = '#8338EC'
-else:
-    clr = '#03045e'
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
 (fig, ax) = plt.subplots(figsize=(16, 2))
@@ -173,21 +168,6 @@ display.figure_.savefig(
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
 ###############################################################################
-# Interaction
-###############################################################################
-# display = PartialDependenceDisplay.from_estimator(
-#     rf, X, features=[[5, 7]], 
-#     subsample=500, n_jobs=aux.JOB_SRV*4,
-#     n_cols=ceil((len(indVars)-1)), 
-#     kind='average', grid_resolution=200, random_state=0,
-#     ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1},
-#     pd_line_kw={'color': '#f72585'}
-# )
-# display.figure_.savefig(
-#     path.join(PT_IMG, fNameOut+'_inter.png'), 
-#     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
-# )
-###############################################################################
 # Dump Model to Disk
 ###############################################################################
 pkl.dump(rf, path.join(PT_OUT, fNameOut+'.pkl'))
@@ -207,18 +187,3 @@ shapImp = pd.DataFrame({'names': iVars, 'mean': shapVals})
 permSci.to_csv(path.join(PT_OUT, fNameOut+'_PMI-SCI.csv'), index=False)
 # permRF.to_csv(path.join(PT_OUT,  fNameOut+'_PMI-RFI.csv'), index=False)
 shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
-###############################################################################
-# Test
-###############################################################################
-# probeX = (
-#     ('ren', 20),
-#     ('rer', 10),
-#     ('rei', 4),
-#     ('pct', 1),
-#     ('pmd', 1),
-#     ('mfr', .50),
-#     ('mtf', 1),
-#     ('fvb', .50),
-# )
-# vct = np.array([[i[1] for i in probeX]])
-# rf.predict(vct)

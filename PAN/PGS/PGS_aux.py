@@ -155,6 +155,15 @@ def selectDepVars(MOI):
         cmap = colorPaletteFromHexList(['#ffffff00', '#3b479dAA'])
     return (scalers, HD_DEP, IND_RAN, cmap)
 
+def selectColor(MOI):
+    if MOI=='CPT':
+        clr = '#3a86ff'
+    elif MOI=='POE':
+        clr = '#8338EC'
+    else:
+        clr = '#03045e'
+    return clr
+
 ###############################################################################
 # Experiments
 ###############################################################################
