@@ -6,7 +6,6 @@ import shap
 import numpy as np
 from os import path
 import pandas as pd
-from math import ceil
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -115,9 +114,10 @@ perm_importance = permutation_importance(rf, X_trainS, y_trainS)
 sorted_idx = perm_importance.importances_mean.argsort()
 labZip = zip(perm_importance.importances_mean, indVars[:-1])
 labSort = [x for _, x in sorted(labZip)]
+clr = aux.selectColor(MOI)
 plt.barh(
-    labSort, sorted(perm_importance.importances_mean),
-    color=aux.selectColor(MOI), alpha=0.8
+    labSort, sorted(perm_importance.importances_mean), 
+    color=clr, alpha=0.8
 )
 plt.savefig(
     path.join(PT_IMG, fNameOut+'_PERM.png'), 
@@ -183,7 +183,5 @@ permSci = pd.DataFrame({
     'std': perm_importance['importances_std']
 })
 shapImp = pd.DataFrame({'names': iVars, 'mean': shapVals})
-# permRF = impPM.reset_index()
 permSci.to_csv(path.join(PT_OUT, fNameOut+'_PMI-SCI.csv'), index=False)
-# permRF.to_csv(path.join(PT_OUT,  fNameOut+'_PMI-RFI.csv'), index=False)
 shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
