@@ -23,7 +23,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -88,10 +88,10 @@ rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
 scoresFinal = {
     'r2': r2_score(y_test, y_pred),
+    'explained_variance': explained_variance_score(y_test, y_pred),
     'root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
     'mean_absolute_error': mean_absolute_error(y_test, y_pred),
     'median_absolute_error ': median_absolute_error(y_test, y_pred),
-    'explained_variance': explained_variance_score(y_test, y_pred),
     'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
 }
 scoresFinal['r2Adj'] = aux.adjRSquared(
@@ -104,7 +104,7 @@ scores = cross_validate(
     rf, X_train, y_train, cv=cv, scoring=scoring, n_jobs=K_SPLITS
 )
 ###############################################################################
-# Importance
+# Permutation Importance
 ###############################################################################
 (X_trainS, y_trainS) = aux.unison_shuffled_copies(
     X_train, y_train, size=int(50e3)
@@ -112,18 +112,21 @@ scores = cross_validate(
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(rf, X_trainS, y_trainS)
 sorted_idx = perm_importance.importances_mean.argsort()
+pImp = perm_importance.importances_mean/sum(perm_importance.importances_mean)
 labZip = zip(perm_importance.importances_mean, indVars[:-1])
 labSort = [x for _, x in sorted(labZip)]
+# Perm figure -----------------------------------------------------------------
 clr = aux.selectColor(MOI)
-plt.barh(
-    labSort, sorted(perm_importance.importances_mean), 
-    color=clr, alpha=0.8
-)
+(fig, ax) = plt.subplots(figsize=(4, 6))
+plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
+ax.set_xlim(0, 1)
 plt.savefig(
     path.join(PT_IMG, fNameOut+'_PERM.png'), 
     dpi=200, bbox_inches=None, pad_inches=0, transparent=True
 )
-# SHAP ------------------------------------------------------------------------
+###############################################################################
+# SHAP Importance
+###############################################################################
 (X_trainS, y_trainS) = aux.unison_shuffled_copies(X_train, y_train, size=500)
 if MOD_SEL in {'mlp', }:
     explainer = shap.KernelExplainer(rf.predict, X_trainS)
@@ -131,6 +134,15 @@ else:
     explainer = shap.TreeExplainer(rf)
 shap_values = explainer.shap_values(X_trainS, approximate=True)
 shapVals = np.abs(shap_values).mean(0)
+# SHAP figure -----------------------------------------------------------------
+clr = aux.selectColor(MOI)
+(fig, ax) = plt.subplots(figsize=(4, 6))
+plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
+ax.set_xlim(0, 1)
+plt.savefig(
+    path.join(PT_IMG, fNameOut+'_PERM.png'), 
+    dpi=200, bbox_inches=None, pad_inches=0, transparent=True
+)
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
