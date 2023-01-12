@@ -137,7 +137,7 @@ SAMP_NUM = 5000
 if MOI=='CPT':
     clr = '#3a86ff'
 elif MOI=='POE':
-    clr = '#7b2cbf'
+    clr = '#8338EC'
 else:
     clr = '#03045e'
 X_plots = np.copy(X_train)

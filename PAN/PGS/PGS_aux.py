@@ -146,13 +146,13 @@ def selectDepVars(MOI):
         (HD_DEP, IND_RAN) = ('MNF', 1) 
     # Color Mapping -----------------------------------------------------------
     if MOI == 'WOP':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#3687ff33'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#03045eAA'])
     elif MOI == 'CPT':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#2614ed55'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#3a86ffAA'])
     elif MOI == 'POE':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#8338EC55'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#8338ECAA'])
     else:
-        cmap = colorPaletteFromHexList(['#ffffff00', '#3b479d55'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#3b479dAA'])
     return (scalers, HD_DEP, IND_RAN, cmap)
 
 ###############################################################################

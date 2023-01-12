@@ -14,6 +14,7 @@ if monet.isNotebook():
     (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
+QNT = (None if QNT == 'None' else QNT)
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -51,20 +52,25 @@ monet.printExperimentHead(
 ###############################################################################
 # Load Model
 ###############################################################################
-fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, MOD_SEL)
+if QNT:
+    fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+        AOI, int(QNT), int(float(THS)*100), MOI, MOD_SEL
+    )
+else:
+    fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, MOD_SEL)
 rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
 ###############################################################################
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [30.0],
-    'i_res': [25.0],
+    'i_ren': [32.0],
+    'i_res': [35.0],
     'i_rei': [7],
     'i_pct': [1.00], 
     'i_pmd': [1.00], 
-    'i_mfr': np.arange(0, .25, 0.01), 
-    'i_mtf': [0.75],
-    'i_fvb': np.arange(0, .25, 0.01)
+    'i_fvb': np.arange(0, .5, 0.0025), 
+    'i_mtf': [0.5],
+    'i_mfr': np.arange(0, .5, 0.0025)
 }
 fltrTitle = fltr.copy()
 # Assemble factorials ---------------------------------------------------------
@@ -96,7 +102,7 @@ scalers = [1, 1, 1]
 )
 rs = monet.calcResponseSurface(
     x, y, z, 
-    scalers=scalers, mthd='cubic', 
+    scalers=scalers, mthd='linear', 
     xAxis=xSca, yAxis=ySca,
     xLogMin=xLogMin, yLogMin=yLogMin,
     DXY=(ngdx, ngdy)
@@ -108,36 +114,28 @@ rs = monet.calcResponseSurface(
 (a, b) = ((min(x), max(x)), (min(y), max(y)))
 (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
 # Contour levels --------------------------------------------------------------
-if MOI == 'TTI':
-    (zmin, zmax) = (0, 365*5)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-    cntr = [2*365]
-if MOI == 'TT0':
-    (zmin, zmax) = (0, 365*5)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-    cntr = [2*365]
-elif MOI == 'WOP':
+if MOI == 'WOP':
     (zmin, zmax) = (0, 1)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
+    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
     cntr = [.5]
 elif MOI == 'CPT':
-    (zmin, zmax) = (-.05, 1.05)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-    cntr = [.25]
-elif MOI == 'POE':
-    (zmin, zmax) = (0.1, 1.05)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
+    (zmin, zmax) = (0, 1)
+    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
     cntr = [.9]
-    lvls = [cntr[0]-.01, cntr[0]]
+elif MOI == 'POE':
+    (zmin, zmax) = (0, 1)
+    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
+    cntr = [.9]
+    # lvls = [cntr[0]-.01, cntr[0]]
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
 ###############################################################################
 # Plot
 ###############################################################################
 (fig, ax) = plt.subplots(figsize=(10, 8))
-xy = ax.plot(rsG[0], rsG[1], 'k.', ms=1, alpha=.25, marker='.')
+xy = ax.plot(rsG[0], rsG[1], 'k.', ms=.1, alpha=.25, marker='.')
 cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
-    levels=cntr, colors=drive['colors'][-1][:-2], 
+    levels=cntr, colors='#14213d88', #drive['colors'][-1][:-2], 
     linewidths=3, alpha=.825, linestyles='solid'
 )
 cs = ax.contourf(
