@@ -134,14 +134,26 @@ else:
     explainer = shap.TreeExplainer(rf)
 shap_values = explainer.shap_values(X_trainS, approximate=True)
 shapVals = np.abs(shap_values).mean(0)
+sImp = shapVals/sum(shapVals)
 # SHAP figure -----------------------------------------------------------------
 clr = aux.selectColor(MOI)
 (fig, ax) = plt.subplots(figsize=(4, 6))
-plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
+plt.barh(indVars[:-1][::-1], sImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
 plt.savefig(
     path.join(PT_IMG, fNameOut+'_PERM.png'), 
     dpi=200, bbox_inches=None, pad_inches=0, transparent=True
+)
+shap.summary_plot(
+    shap_values, X_trainS,
+    alpha=0.25, feature_names=indVars
+)
+shap.dependence_plot(
+    indVars.index('i_ren'), 
+    shap_values, X_trainS, 
+    alpha=0.5, dot_size=10,
+    feature_names=indVars,
+    interaction_index=indVars.index('i_res')
 )
 ###############################################################################
 # PDP/ICE Plots
