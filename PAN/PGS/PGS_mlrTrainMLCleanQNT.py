@@ -141,20 +141,26 @@ clr = aux.selectColor(MOI)
 plt.barh(indVars[:-1][::-1], sImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
 plt.savefig(
-    path.join(PT_IMG, fNameOut+'_PERM.png'), 
+    path.join(PT_IMG, fNameOut+'_SHAP.png'), 
     dpi=200, bbox_inches=None, pad_inches=0, transparent=True
 )
+(fig, ax) = plt.subplots(figsize=(4, 6))
 shap.summary_plot(
     shap_values, X_trainS,
-    alpha=0.25, feature_names=indVars
+    alpha=0.25, feature_names=indVars,
+    show=False
 )
-shap.dependence_plot(
-    indVars.index('i_ren'), 
-    shap_values, X_trainS, 
-    alpha=0.5, dot_size=10,
-    feature_names=indVars,
-    interaction_index=indVars.index('i_res')
+plt.savefig(
+    path.join(PT_IMG, fNameOut+'_SMRY.png'), 
+    dpi=200, bbox_inches=None, pad_inches=0, transparent=True
 )
+# shap.dependence_plot(
+#     indVars.index('i_pmd'), 
+#     shap_values, X_trainS, 
+#     alpha=0.5, dot_size=10,
+#     feature_names=indVars,
+#     interaction_index=indVars.index('i_fvb')
+# )
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
