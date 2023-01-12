@@ -44,10 +44,10 @@ for mtr in "WOP" "CPT" "POE"
 do
     python PGS_mlrTrainMLCleanQNT.py $USR $DRV $QNT $AOI $THS $mtr
 done
-# for mtr in "WOP" "CPT"
-# do
-#     python PGS_mlrTrainMLClean.py $USR $DRV $AOI $THS $mtr
-# done
+for mtr in "WOP" "CPT"
+do
+    python PGS_mlrTrainMLClean.py $USR $DRV $AOI $THS $mtr
+done
 ###############################################################################
 # Plot
 ###############################################################################

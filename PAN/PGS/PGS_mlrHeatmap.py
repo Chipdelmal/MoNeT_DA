@@ -4,17 +4,16 @@
 import sys
 import numpy as np
 from os import path
-import pandas as pd
 import compress_pickle as pkl
+from itertools import product
 from datetime import datetime
 import matplotlib.pyplot as plt
-from itertools import product
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 QNT = (None if QNT == 'None' else QNT)
@@ -66,14 +65,14 @@ rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [27.0],
-    'i_res': [35.0],
+    'i_ren': [4*13],
+    'i_res': [25.0],
     'i_rei': [7],
-    'i_pct': [1.00], 
-    'i_pmd': [1.00], 
-    'i_fvb': np.arange(0, .5, 0.005), 
-    'i_mtf': [0.5],
-    'i_mfr': np.arange(0, .5, 0.005)
+    'i_pct': [0.90], 
+    'i_pmd': [0.90], 
+    'i_fvb': np.arange(0, .5, 0.0025), 
+    'i_mtf': [0.75],
+    'i_mfr': np.arange(0, .5, 0.0025)
 }
 fltrTitle = fltr.copy()
 # Assemble factorials ---------------------------------------------------------
@@ -100,12 +99,12 @@ z = rf.predict(probeVct)
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
 (xLogMin, yLogMin) = (
-    min([i for i in sorted(list(set(x))) if i > 0]),
-    min([i for i in sorted(list(set(y))) if i > 0])
+    min([i for i in sorted(list(set(x))) if i>0]),
+    min([i for i in sorted(list(set(y))) if i>0])
 )
 rs = monet.calcResponseSurface(
     x, y, z, 
-    scalers=scalers, mthd='nearest', 
+    scalers=scalers, mthd='cubic', 
     xAxis=xSca, yAxis=ySca,
     xLogMin=xLogMin, yLogMin=yLogMin,
     DXY=(ngdx, ngdy)
@@ -120,15 +119,15 @@ rs = monet.calcResponseSurface(
 if MOI == 'WOP':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
-    cntr = [.75]
+    cntr = [.5]
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
-    cntr = [.75]
+    cntr = [.5]
 elif MOI == 'POE':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
-    cntr = [.9]
+    cntr = [.75]
     # lvls = [cntr[0]-.01, cntr[0]]
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
 ###############################################################################
@@ -138,11 +137,12 @@ elif MOI == 'POE':
 xy = ax.plot(rsG[0], rsG[1], 'k.', ms=.1, alpha=.25, marker='.')
 cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
-    levels=cntr, colors='#2b2d42', #drive['colors'][-1][:-2], 
-    linewidths=3, alpha=.825, linestyles='solid'
+    levels=cntr, colors='#2b2d42', # drive['colors'][-1][:-2], 
+    linewidths=2.5, alpha=.9, linestyles='solid'
 )
 cs = ax.contourf(
     rsS[0], rsS[1], rsS[2], 
+    linewidths=0,
     levels=lvls, cmap=cmap, extend='max'
 )
 # cs.cmap.set_over('red')
@@ -173,7 +173,7 @@ ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
 if not TICKS_HIDE:
     ax.set_xlabel(sweeps[0])
     ax.set_ylabel(sweeps[1])
-    pTitle = ' '.join(['[{}: {}]'.format(i, fltrTitle[i]) for i in fltrTitle])
+    pTitle = ' '.join(['[{}: {}]'.format(i, fltrTitle[i][0]) for i in fltrTitle])
     plt.title(pTitle, fontsize=7.5)
 # Axes scales and limits --------------------------------------------------
 ax.set_xscale(xSca)
