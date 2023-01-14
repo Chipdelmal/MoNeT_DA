@@ -13,7 +13,7 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 QNT = (None if QNT == 'None' else QNT)
@@ -65,9 +65,9 @@ rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [4*13],
+    'i_ren': [10*4],
     'i_res': [25.0],
-    'i_rei': [7],
+    'i_rei': [15],
     'i_pct': [0.90], 
     'i_pmd': [0.90], 
     'i_fvb': np.arange(0, .5, 0.0025), 
@@ -122,7 +122,7 @@ if MOI == 'WOP':
     cntr = [.5]
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
+    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
     cntr = [.5]
 elif MOI == 'POE':
     (zmin, zmax) = (0, 1)
