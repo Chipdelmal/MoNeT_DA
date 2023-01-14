@@ -26,8 +26,8 @@ def selectML(method, MOI):
             MLPRegressor(
                 hidden_layer_sizes=(10, 15, 10),
                 learning_rate='adaptive', 
-                tol=0.00002,
-                alpha=0.025, #0.06,
+                tol=0.00001,
+                alpha=0.001, #0.06,
                 verbose=False,
                 early_stopping=True,
                 activation='tanh'
