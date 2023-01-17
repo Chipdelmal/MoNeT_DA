@@ -13,7 +13,7 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 QNT = (None if QNT == 'None' else QNT)
@@ -65,7 +65,7 @@ rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [4*10],
+    'i_ren': [52],
     'i_res': [30],
     'i_rei': [7],
     'i_pct': [0.90], 
@@ -118,7 +118,7 @@ rs = monet.calcResponseSurface(
 # Contour levels --------------------------------------------------------------
 if MOI == 'WOP':
     (zmin, zmax) = (0, 1)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
+    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
     cntr = [.5]
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1)
