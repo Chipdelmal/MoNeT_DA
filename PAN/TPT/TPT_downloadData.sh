@@ -7,7 +7,6 @@ PTH_O='/home/chipdelmal/Documents/WorkSims/TP13/2023_01'
 EXP=("gambiae_0_low" "gambiae_10_low" "gambiae_20_low" "coluzzii_0_low" "coluzzii_10_low" "coluzzii_20_low" "coluzzii_10_med")
 for idx in "${!EXP[@]}"; do
     exp="${EXP[$idx]}"
-    # echo "${PTH_I}/${exp}"
-    # echo "${PTH_O}"
-    scp -r "${PTH_I}/${exp}" "${PTH_O}"
+    printf "Downloading: \n\t${PTH_I}/TP13_figure_${exp} \n\t${PTH_O}\n"
+    scp -r "${PTH_I}/TP13_figure_${exp}" "${PTH_O}"
 done
