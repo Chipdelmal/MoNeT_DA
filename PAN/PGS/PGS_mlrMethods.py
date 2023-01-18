@@ -21,18 +21,45 @@ def selectML(method, MOI):
         )
     elif method=='mlp':
         modID = 'mlp'
-        rf = make_pipeline(
-            MinMaxScaler(),
-            MLPRegressor(
-                hidden_layer_sizes=(10, 15, 10),
-                learning_rate='adaptive', 
-                tol=0.00001,
-                alpha=0.001, #0.06,
-                verbose=False,
-                early_stopping=True,
-                activation='tanh'
+        if (MOI=='CPT'):
+            rf = make_pipeline(
+                MinMaxScaler(),
+                MLPRegressor(
+                    hidden_layer_sizes=(10, 15, 10),
+                    learning_rate='adaptive', 
+                    tol=0.0001,
+                    alpha=0.008, #0.06,
+                    verbose=False,
+                    early_stopping=True,
+                    activation='tanh'
+                )
             )
-        )
+        elif (MOI=='POE'):
+            rf = make_pipeline(
+                MinMaxScaler(),
+                MLPRegressor(
+                    hidden_layer_sizes=(10, 15, 10),
+                    learning_rate='adaptive', 
+                    tol=0.00001,
+                    alpha=0.005, #0.06,
+                    verbose=False,
+                    early_stopping=True,
+                    activation='relu'
+                )
+            )
+        elif (MOI=='WOP'):
+            rf = make_pipeline(
+                MinMaxScaler(),
+                MLPRegressor(
+                    hidden_layer_sizes=(10, 15, 10),
+                    learning_rate='adaptive', 
+                    tol=0.00001,
+                    alpha=0.001, #0.06,
+                    verbose=False,
+                    early_stopping=True,
+                    activation='relu'
+                )
+            )
     elif method=='ada':
         rf = AdaBoostRegressor(
             DecisionTreeRegressor(max_depth=50), 
