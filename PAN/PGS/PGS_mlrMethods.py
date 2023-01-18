@@ -28,7 +28,7 @@ def selectML(method, MOI):
                     hidden_layer_sizes=(10, 15, 10),
                     learning_rate='adaptive', 
                     tol=0.0001,
-                    alpha=0.008, #0.06,
+                    alpha=0.008,
                     verbose=False,
                     early_stopping=True,
                     activation='tanh'
@@ -41,7 +41,7 @@ def selectML(method, MOI):
                     hidden_layer_sizes=(10, 15, 10),
                     learning_rate='adaptive', 
                     tol=0.00001,
-                    alpha=0.005, #0.06,
+                    alpha=0.005,
                     verbose=False,
                     early_stopping=True,
                     activation='relu'
@@ -54,7 +54,7 @@ def selectML(method, MOI):
                     hidden_layer_sizes=(10, 15, 10),
                     learning_rate='adaptive', 
                     tol=0.00001,
-                    alpha=0.001, #0.06,
+                    alpha=0.0035,
                     verbose=False,
                     early_stopping=True,
                     activation='relu'
