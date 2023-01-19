@@ -51,7 +51,7 @@ def selectML(method, MOI):
             rf = make_pipeline(
                 MinMaxScaler(),
                 MLPRegressor(
-                    hidden_layer_sizes=(10, 15, 10),
+                    hidden_layer_sizes=(10, 20, 10),
                     learning_rate='adaptive', 
                     tol=0.00001,
                     alpha=0.0035,

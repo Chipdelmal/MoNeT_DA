@@ -27,7 +27,7 @@ else:
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
-    JOB = aux.JOB_SRV
+    JOB = aux.JOB_SRV/2
 CHUNKS = JOB
 ###############################################################################
 # Paths

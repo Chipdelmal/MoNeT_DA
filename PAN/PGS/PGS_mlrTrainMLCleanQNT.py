@@ -142,7 +142,7 @@ plt.barh(indVars[:-1][::-1], sImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
 plt.savefig(
     path.join(PT_IMG, fNameOut+'_SHAP.png'), 
-    dpi=200, bbox_inches='tight', pad_inches=0, transparent=True
+    dpi=200, bbox_inches='tight', pad_inches=0, transparent=False
 )
 (fig, ax) = plt.subplots(figsize=(4, 6))
 shap.summary_plot(
@@ -152,7 +152,7 @@ shap.summary_plot(
 )
 plt.savefig(
     path.join(PT_IMG, fNameOut+'_SMRY.png'), 
-    dpi=200, bbox_inches='tight', pad_inches=0, transparent=True
+    dpi=200, bbox_inches='tight', pad_inches=0, transparent=False
 )
 # shap.dependence_plot(
 #     indVars.index('i_pmd'), 
