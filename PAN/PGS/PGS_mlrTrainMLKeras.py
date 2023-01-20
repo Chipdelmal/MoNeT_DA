@@ -9,9 +9,10 @@ import pandas as pd
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from datetime import datetime
-import keras
-from keras.models import Sequential
 from keras.layers import Dense
+from keras.models import Sequential
+from keras.callbacks import EarlyStopping
+from keras.regularizers import L1L2
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -29,7 +30,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -90,10 +91,22 @@ scoring = [
 ###############################################################################
 def build_model():
     rf = Sequential()
-    rf.add(Dense(15, input_dim=X_train.shape[1], activation= "sigmoid"))
-    rf.add(Dense(15, activation= "sigmoid"))
-    rf.add(Dense(15, activation= "sigmoid"))
-    rf.add(Dense(1))
+    rf.add(Dense(
+        15, activation= "relu",
+        input_dim=X_train.shape[1],
+        # kernel_regularizer=L1L2(l1=1e-5, l2=0.008)
+    ))
+    rf.add(Dense(
+        15, activation= "relu",
+        # kernel_regularizer=L1L2(l1=1e-5, l2=0.008)
+    ))
+    rf.add(Dense(
+        15, activation= "sigmoid",
+        # kernel_regularizer=L1L2(l1=1e-5, l2=0.008)
+    ))
+    rf.add(Dense(
+        1, activation='sigmoid'
+    ))
     rf.compile(
         loss= "mean_squared_error" , 
         optimizer="adam", 
@@ -102,17 +115,28 @@ def build_model():
     return rf
 # Output name -----------------------------------------------------------------
 modID = 'krs'
-fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
-    AOI, int(QNT), int(float(THS)*100), MOI, modID
-)
+if QNT:
+    fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+        AOI, int(QNT), int(float(THS)*100), MOI, modID
+    )
+else:
+    fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, modID)
 ###############################################################################
 # Train Model
 ###############################################################################
+epochs=100
 rf = KerasRegressor(build_fn=build_model)
 rf.fit(
-    X_train, y_train, 
-    epochs=20, validation_split=0.2,
-    verbose=0
+    X_train, y_train,
+    # batch_size=250,
+    epochs=epochs, validation_split=0.2,
+    callbacks=EarlyStopping(
+        monitor='val_loss', 
+        restore_best_weights=True,
+        patience=int(epochs*.1),
+        verbose=1
+    ),
+    verbose=1
 )
 # Score -----------------------------------------------------------------------
 y_pred = rf.predict(X_test)
@@ -137,7 +161,7 @@ scores = cross_validate(
 # Permutation Importance
 ###############################################################################
 (X_trainS, y_trainS) = aux.unison_shuffled_copies(
-    X_train, y_train, size=int(1e3)
+    X_train, y_train, size=int(5e3)
 )
 # Permutation scikit ----------------------------------------------------------
 perm_importance = permutation_importance(
@@ -160,9 +184,9 @@ plt.savefig(
 ###############################################################################
 # SHAP Importance
 ###############################################################################
-(X_trainS, y_trainS) = aux.unison_shuffled_copies(X_train, y_train, size=20)
+(X_trainS, y_trainS) = aux.unison_shuffled_copies(X_train, y_train, size=200)
 explainer = shap.KernelExplainer(rf.predict, X_trainS)
-shap_values = explainer.shap_values(X_trainS, approximate=True)[0]
+shap_values = explainer.shap_values(X_trainS, approximate=True)
 shapVals = np.abs(shap_values).mean(0)
 sImp = shapVals/sum(shapVals)
 # SHAP figure -----------------------------------------------------------------
@@ -194,7 +218,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 1000
+SAMP_NUM = 5000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
