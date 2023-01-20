@@ -8,9 +8,9 @@ import GOP_gene_EPI as EPI
 ###############################################################################
 # Drive
 ###############################################################################
-def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
+def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=10000):
     ###########################################################################
-    if (TYPE == 'HUM'):
+    if (DRIVE == 'HUM'):
         (aggD, yRange, folder) = EPI.driveParameters(TYPE, popSize)
     elif (DRIVE == 'PGS'):
         (aggD, yRange, folder) = PGS.driveParameters(TYPE, popSize)
@@ -23,18 +23,17 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
             '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
         ]
     elif TYPE == 'HLT':
-        if DRIVE == 'PGS':
-            colors = ['#1888e335', '#2614ed35', '#8338EC35']
-        else:
-            colors = ['#f2008955', '#c879ff55', '#c879ff35']
+        colors = ['#f2008955', '#c879ff55', '#2614ed35']
     elif TYPE == 'TRS':
         colors = monet.COLTN
     elif TYPE == 'WLD':
         colors = monet.COLWN
     elif TYPE == 'HUM':
         colors = ['#274c7735', '#c879ff99', '#dee2ff35']
-    elif TYPE == 'INC':
+    elif TYPE == 'CSS':
         colors = ['#8CD9FF53', '#bbdefb55', '#dee2ff35']
+    elif TYPE == 'MRT':
+        colors = ['#274c7735', '#c879ff99', '#dee2ff35']
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 'colors': colors, 'folder': folder
