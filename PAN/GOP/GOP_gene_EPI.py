@@ -29,8 +29,12 @@ genotypes = (
 #
 #   eg: 2-10 age group [00_01, 01_02, 02_03, 03_04]
 ###############################################################################
-twoToTen = ['00_01', '01_02', '02_03', '03_04']
-aux.findEpiGroupsIndices(genotypes, 'clin_inc', twoToTen)
+# Cases -----------------------------------------------------------------------
+stratum = ['00_01', '01_02', '02_03', '03_04']
+statDict = {'I': ['clin_inc', ]}
+CSS = aux.humanGroupsToGeneDict(statDict, stratum, genotypes)
 
-def rateIntoFrequency(groups, popSizes):
-    return 1
+# Mortality -------------------------------------------------------------------
+stratum = ['00_01', '01_02', '02_03', '03_04']
+statDict = {'M': ['mort', ]}
+MRT = aux.humanGroupsToGeneDict(statDict, stratum, genotypes)
