@@ -6,13 +6,17 @@ import shap
 import numpy as np
 from os import path
 import pandas as pd
-import compress_pickle as pkl
+import pickle as pkl
 import matplotlib.pyplot as plt
 from datetime import datetime
+import keras
+from itertools import product
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping
 from keras.regularizers import L1L2
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -22,6 +26,7 @@ from sklearn.metrics import make_scorer
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.inspection import permutation_importance
 from scikeras.wrappers import KerasRegressor
+from tensorflow.keras.layers import Normalization
 from sklearn.inspection import PartialDependenceDisplay
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
@@ -221,7 +226,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 3000
+SAMP_NUM = 2000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
@@ -258,7 +263,9 @@ display.figure_.savefig(
 ###############################################################################
 # Dump Model to Disk
 ###############################################################################
-pkl.dump(rf, path.join(PT_OUT, fNameOut+'.pkl'))
+rf.model_.save(path.join(PT_OUT, fNameOut))
+np.save(path.join(PT_OUT, 'X_train.npy'), X_train)
+np.save(path.join(PT_OUT, 'y_train.npy'), y_train)
 if C_VAL:
     pd.DataFrame(scores).to_csv(path.join(PT_OUT, fNameOut+'_CV.csv'))
 pd.DataFrame(scoresFinal, index=[0]).to_csv(path.join(PT_OUT, fNameOut+'_VL.csv'))
@@ -274,3 +281,110 @@ permSci = pd.DataFrame({
 shapImp = pd.DataFrame({'names': iVars, 'mean': shapVals})
 permSci.to_csv(path.join(PT_OUT, fNameOut+'_PMI-SCI.csv'), index=False)
 shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
+
+
+# new_reg_model = keras.models.load_model(path.join(PT_OUT, fNameOut))
+# reg_new = KerasRegressor(new_reg_model)
+# reg_new.initialize(X_train, y_train)
+# y_pred = reg_new.predict(X_test)
+# scoresFinal = {
+#     'r2': r2_score(y_test, y_pred),
+#     'explained_variance': explained_variance_score(y_test, y_pred),
+#     'root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
+#     'mean_absolute_error': mean_absolute_error(y_test, y_pred),
+#     'median_absolute_error ': median_absolute_error(y_test, y_pred),
+#     'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
+# }
+# scoresFinal['r2Adj'] = aux.adjRSquared(
+#     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
+# )
+# print(scoresFinal)
+
+
+###############################################################################
+# Sweep-Evaluate Model
+###############################################################################
+# (xSca, ySca) = ('linear', 'linear')
+# fltr = {
+#     'i_ren': [52],
+#     'i_res': [30],
+#     'i_rei': [7],
+#     'i_pct': [0.90], 
+#     'i_pmd': [0.90], 
+#     'i_fvb': np.arange(0, .5, 0.0025), 
+#     'i_mtf': [0.75],
+#     'i_mfr': np.arange(0, .5, 0.0025)
+# }
+# fltrTitle = fltr.copy()
+# # Assemble factorials ---------------------------------------------------------
+# sweeps = [i for i in fltr.keys() if len(fltr[i])>1]
+# [fltrTitle.pop(i) for i in sweeps]
+# combos = list(zip(*product(fltr[sweeps[0]], fltr[sweeps[1]])))
+# factNum = len(combos[0])
+# for i in range(len(combos)):
+#     fltr[sweeps[i]] = combos[i]
+# for k in fltr.keys():
+#     if len(fltr[k])==1:
+#         fltr[k] = fltr[k]*factNum
+# # Generate probes -------------------------------------------------------------
+# probeVct = np.array((
+#     fltr['i_ren'], fltr['i_res'], fltr['i_rei'],
+#     fltr['i_pct'], fltr['i_pmd'],
+#     fltr['i_mfr'], fltr['i_mtf'], fltr['i_fvb']
+# )).T
+# (x, y) = [list(i) for i in combos]
+# z = rf.predict(probeVct)
+# ###############################################################################
+# # Generate response surface
+# ###############################################################################
+# (ngdx, ngdy) = (1000, 1000)
+# scalers = [1, 1, 1]
+# (xLogMin, yLogMin) = (
+#     min([i for i in sorted(list(set(x))) if i>0]),
+#     min([i for i in sorted(list(set(y))) if i>0])
+# )
+# rs = monet.calcResponseSurface(
+#     x, y, z, 
+#     scalers=scalers, mthd='cubic', 
+#     xAxis=xSca, yAxis=ySca,
+#     xLogMin=xLogMin, yLogMin=yLogMin,
+#     DXY=(ngdx, ngdy)
+# )
+# ###############################################################################
+# # Levels and Ranges
+# ###############################################################################
+# # Get ranges ------------------------------------------------------------------
+# (a, b) = ((min(x), max(x)), (min(y), max(y)))
+# (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
+# # Contour levels --------------------------------------------------------------
+# if MOI == 'WOP':
+#     (zmin, zmax) = (0, 1)
+#     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
+#     cntr = [.5]
+# elif MOI == 'CPT':
+#     (zmin, zmax) = (0, 1)
+#     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
+#     cntr = [.5]
+# elif MOI == 'POE':
+#     (zmin, zmax) = (0, 1)
+#     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
+#     cntr = [.75]
+#     # lvls = [cntr[0]-.01, cntr[0]]
+# (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
+# ###############################################################################
+# # Plot
+# ###############################################################################
+# (fig, ax) = plt.subplots(figsize=(10, 8))
+# xy = ax.plot(rsG[0], rsG[1], 'k.', ms=.1, alpha=.25, marker='.')
+# cc = ax.contour(
+#     rsS[0], rsS[1], rsS[2], 
+#     levels=cntr, colors='#2b2d42', # drive['colors'][-1][:-2], 
+#     linewidths=2.5, alpha=.9, linestyles='solid'
+# )
+# cs = ax.contourf(
+#     rsS[0], rsS[1], rsS[2], 
+#     linewidths=0,
+#     levels=lvls, cmap=cmap, extend='max'
+# )
+# # cs.cmap.set_over('red')
+# cs.cmap.set_under('white')
