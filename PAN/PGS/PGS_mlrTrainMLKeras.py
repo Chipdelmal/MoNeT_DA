@@ -38,6 +38,7 @@ JOB = aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
 CHUNKS = JOB
+C_VAL = False
 ###############################################################################
 # Paths
 ###############################################################################
@@ -94,15 +95,15 @@ def build_model():
     rf.add(Dense(
         15, activation= "relu",
         input_dim=X_train.shape[1],
-        # kernel_regularizer=L1L2(l1=1e-5, l2=0.008)
+        kernel_regularizer=L1L2(l1=1e-5, l2=5e-4)
     ))
     rf.add(Dense(
         15, activation= "relu",
-        # kernel_regularizer=L1L2(l1=1e-5, l2=0.008)
+        kernel_regularizer=L1L2(l1=1e-5, l2=5e-4)
     ))
     rf.add(Dense(
         15, activation= "sigmoid",
-        # kernel_regularizer=L1L2(l1=1e-5, l2=0.008)
+        kernel_regularizer=L1L2(l1=1e-5, l2=5e-4)
     ))
     rf.add(Dense(
         1, activation='sigmoid'
@@ -125,11 +126,12 @@ else:
 # Train Model
 ###############################################################################
 epochs=100
+batchSize = (None if QNT else 16)
 rf = KerasRegressor(build_fn=build_model)
-rf.fit(
+history = rf.fit(
     X_train, y_train,
-    # batch_size=250,
-    epochs=epochs, validation_split=0.2,
+    batch_size=batchSize,
+    epochs=epochs, validation_split=0.25,
     callbacks=EarlyStopping(
         monitor='val_loss', 
         restore_best_weights=True,
@@ -153,10 +155,11 @@ scoresFinal['r2Adj'] = aux.adjRSquared(
 )
 print(scoresFinal)
 # Cross-validate --------------------------------------------------------------
-cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
-scores = cross_validate(
-    rf, X_train, y_train, cv=cv, scoring=scoring, n_jobs=K_SPLITS
-)
+if C_VAL:
+    cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
+    scores = cross_validate(
+        rf, X_train, y_train, cv=cv, scoring=scoring, n_jobs=1
+    )
 ###############################################################################
 # Permutation Importance
 ###############################################################################
@@ -218,7 +221,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 5000
+SAMP_NUM = 3000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
@@ -256,7 +259,8 @@ display.figure_.savefig(
 # Dump Model to Disk
 ###############################################################################
 pkl.dump(rf, path.join(PT_OUT, fNameOut+'.pkl'))
-pd.DataFrame(scores).to_csv(path.join(PT_OUT, fNameOut+'_CV.csv'))
+if C_VAL:
+    pd.DataFrame(scores).to_csv(path.join(PT_OUT, fNameOut+'_CV.csv'))
 pd.DataFrame(scoresFinal, index=[0]).to_csv(path.join(PT_OUT, fNameOut+'_VL.csv'))
 ###############################################################################
 # Dump Importances to Disk
