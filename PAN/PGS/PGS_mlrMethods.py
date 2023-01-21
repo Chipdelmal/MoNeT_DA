@@ -1,6 +1,11 @@
 
 from sklearn.pipeline import make_pipeline
 from xgboost import XGBRFRegressor
+from keras.layers import Dense
+from keras.models import Sequential
+from keras.callbacks import EarlyStopping
+from keras.regularizers import L1L2
+from scikeras.wrappers import KerasRegressor
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neural_network import MLPRegressor
@@ -10,7 +15,7 @@ from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegr
 import PGS_aux as aux
 
 
-def selectML(method, MOI):
+def selectML(method, MOI, inDims=8):
     if method=='rf':
         modID = 'rdf'
         rf = RandomForestRegressor(
@@ -19,6 +24,84 @@ def selectML(method, MOI):
             n_jobs=aux.JOB_DSK*2, 
             verbose=True
         )
+    elif method=='krs':
+        modID = 'krs'
+        if (MOI=='CPT'):
+            def build_model():
+                rf = Sequential()
+                rf.add(Dense(
+                    15, activation= "tanh", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                ))
+                rf.add(Dense(
+                    15, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                ))
+                rf.add(Dense(
+                    15, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                ))
+                rf.add(Dense(
+                    1, activation='sigmoid'
+                ))
+                rf.compile(
+                    loss= "mean_squared_error" , 
+                    optimizer="adam", 
+                    metrics=["mean_squared_error"]
+                )
+                return rf
+            rf = KerasRegressor(build_fn=build_model)
+            return rf
+        elif (MOI=='POE'):
+            def build_model():
+                rf = Sequential()
+                rf.add(Dense(
+                    15, activation= "tanh", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                ))
+                rf.add(Dense(
+                    15, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                ))
+                rf.add(Dense(
+                    15, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                ))
+                rf.add(Dense(
+                    1, activation='sigmoid'
+                ))
+                rf.compile(
+                    loss= "mean_squared_error" , 
+                    optimizer="adam", 
+                    metrics=["mean_squared_error"]
+                )
+            rf = KerasRegressor(build_fn=build_model)
+            return rf
+        elif (MOI=='WOP'):
+            def build_model():
+                rf = Sequential()
+                rf.add(Dense(
+                    15, activation= "tanh", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                ))
+                rf.add(Dense(
+                    15, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                ))
+                rf.add(Dense(
+                    15, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                ))
+                rf.add(Dense(
+                    1, activation='sigmoid'
+                ))
+                rf.compile(
+                    loss= "mean_squared_error" , 
+                    optimizer="adam", 
+                    metrics=["mean_squared_error"]
+                )
+            rf = KerasRegressor(build_fn=build_model)
+            return rf
     elif method=='mlp':
         modID = 'mlp'
         if (MOI=='CPT'):

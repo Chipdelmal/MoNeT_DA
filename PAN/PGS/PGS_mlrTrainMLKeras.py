@@ -15,8 +15,6 @@ from keras.layers import Dense
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping
 from keras.regularizers import L1L2
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -26,7 +24,6 @@ from sklearn.metrics import make_scorer
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.inspection import permutation_importance
 from scikeras.wrappers import KerasRegressor
-from tensorflow.keras.layers import Normalization
 from sklearn.inspection import PartialDependenceDisplay
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
@@ -95,30 +92,32 @@ scoring = [
 ###############################################################################
 # Define Model
 ###############################################################################
-def build_model():
-    rf = Sequential()
-    rf.add(Dense(
-        15, activation= "relu",
-        input_dim=X_train.shape[1],
-        kernel_regularizer=L1L2(l1=1e-5, l2=5e-4)
-    ))
-    rf.add(Dense(
-        15, activation= "relu",
-        kernel_regularizer=L1L2(l1=1e-5, l2=5e-4)
-    ))
-    rf.add(Dense(
-        15, activation= "sigmoid",
-        kernel_regularizer=L1L2(l1=1e-5, l2=5e-4)
-    ))
-    rf.add(Dense(
-        1, activation='sigmoid'
-    ))
-    rf.compile(
-        loss= "mean_squared_error" , 
-        optimizer="adam", 
-        metrics=["mean_squared_error"]
-    )
-    return rf
+# def build_model():
+#     rf = Sequential()
+#     rf.add(Dense(
+#         15, activation= "tanh",
+#         input_dim=X_train.shape[1],
+#         kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+#     ))
+#     rf.add(Dense(
+#         15, activation= "tanh",
+#         kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+#     ))
+#     rf.add(Dense(
+#         15, activation= "tanh",
+#         kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+#     ))
+#     rf.add(Dense(
+#         1, activation='sigmoid'
+#     ))
+#     rf.compile(
+#         loss= "mean_squared_error" , 
+#         optimizer="adam", 
+#         metrics=["mean_squared_error"]
+#     )
+#     return rf
+# rf = KerasRegressor(build_fn=build_model)
+rf = mth.selectML('krs', MOI, inDims=X_train.shape[1])
 # Output name -----------------------------------------------------------------
 modID = 'krs'
 if QNT:
@@ -130,9 +129,8 @@ else:
 ###############################################################################
 # Train Model
 ###############################################################################
-epochs=100
+epochs=250
 batchSize = (None if QNT else 16)
-rf = KerasRegressor(build_fn=build_model)
 history = rf.fit(
     X_train, y_train,
     batch_size=batchSize,
@@ -140,7 +138,7 @@ history = rf.fit(
     callbacks=EarlyStopping(
         monitor='val_loss', 
         restore_best_weights=True,
-        patience=int(epochs*.1),
+        patience=int(epochs*.05),
         verbose=1
     ),
     verbose=1
@@ -226,7 +224,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 2000
+SAMP_NUM = 3000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
@@ -300,13 +298,12 @@ shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
 # )
 # print(scoresFinal)
 
-
 ###############################################################################
 # Sweep-Evaluate Model
 ###############################################################################
 # (xSca, ySca) = ('linear', 'linear')
 # fltr = {
-#     'i_ren': [52],
+#     'i_ren': [25],
 #     'i_res': [30],
 #     'i_rei': [7],
 #     'i_pct': [0.90], 
