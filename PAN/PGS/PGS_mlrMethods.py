@@ -31,15 +31,15 @@ def selectML(method, MOI, inDims=8):
                 rf = Sequential()
                 rf.add(Dense(
                     15, activation= "tanh", input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
                     15, activation= "tanh",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
                     15, activation= "tanh",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'

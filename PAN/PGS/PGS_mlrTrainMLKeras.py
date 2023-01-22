@@ -32,7 +32,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -41,6 +41,7 @@ if USR == 'srv':
     JOB = aux.JOB_SRV
 CHUNKS = JOB
 C_VAL = False
+DEV = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -92,32 +93,34 @@ scoring = [
 ###############################################################################
 # Define Model
 ###############################################################################
-# def build_model():
-#     rf = Sequential()
-#     rf.add(Dense(
-#         15, activation= "tanh",
-#         input_dim=X_train.shape[1],
-#         kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
-#     ))
-#     rf.add(Dense(
-#         15, activation= "tanh",
-#         kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
-#     ))
-#     rf.add(Dense(
-#         15, activation= "tanh",
-#         kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
-#     ))
-#     rf.add(Dense(
-#         1, activation='sigmoid'
-#     ))
-#     rf.compile(
-#         loss= "mean_squared_error" , 
-#         optimizer="adam", 
-#         metrics=["mean_squared_error"]
-#     )
-#     return rf
-# rf = KerasRegressor(build_fn=build_model)
-rf = mth.selectML('krs', MOI, inDims=X_train.shape[1])
+if DEV:
+    def build_model():
+        rf = Sequential()
+        rf.add(Dense(
+            15, activation= "sigmoid",
+            input_dim=X_train.shape[1],
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+        ))
+        rf.add(Dense(
+            15, activation= "LeakyReLU",
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+        ))
+        rf.add(Dense(
+            15, activation= "LeakyReLU",
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+        ))
+        rf.add(Dense(
+            1, activation='sigmoid'
+        ))
+        rf.compile(
+            loss= "mean_squared_error" , 
+            optimizer="adam", 
+            metrics=["mean_squared_error"]
+        )
+        return rf
+    rf = KerasRegressor(build_fn=build_model)
+else:
+    rf = mth.selectML('krs', MOI, inDims=X_train.shape[1])
 # Output name -----------------------------------------------------------------
 modID = 'krs'
 if QNT:
@@ -129,7 +132,7 @@ else:
 ###############################################################################
 # Train Model
 ###############################################################################
-epochs=250
+epochs=500
 batchSize = (None if QNT else 16)
 history = rf.fit(
     X_train, y_train,
