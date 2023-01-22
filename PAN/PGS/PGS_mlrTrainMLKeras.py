@@ -103,11 +103,11 @@ if DEV:
         ))
         rf.add(Dense(
             15, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
         ))
         rf.add(Dense(
             15, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
@@ -132,7 +132,7 @@ else:
 ###############################################################################
 # Train Model
 ###############################################################################
-epochs=500
+epochs=100
 batchSize = (None if QNT else 16)
 history = rf.fit(
     X_train, y_train,
