@@ -14,7 +14,7 @@ import TPT_gene as drv
 import TPT_functions as fun
 
 if monet.isNotebook():
-    (USR, AOI, DRV, SPE) = ('srv2', 'HUM', 'LDR', 'coluzzii')
+    (USR, AOI, DRV, SPE) = ('srv', 'HUM', 'LDR', 'coluzzii_10_low')
 else:
     (USR, AOI, DRV, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -94,9 +94,9 @@ for exp in EXPS:
 ###############################################################################
 # Explore
 ###############################################################################
-pth = '/RAID5/marshallShare/TP13_figure_gambiae_low/X2500/PREPROCESS'
-exp = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_0000000-INC_00_rto.npy'
-exp = "E_15_00500_00400000000_000100000000_0017500_0011700_0000000_0089000_0089000-INC_00_sum.bz"
-raw = pkl.load(path.join(pth, exp))
-max(raw['population'].T[1])
+# pth = '/RAID5/marshallShare/TP13_figure_gambiae_low/X2500/PREPROCESS'
+# exp = 'E_00_00000_00000000000_000000000000_0000000_0000000_0000000_0000000_0000000-INC_00_rto.npy'
+# exp = "E_15_00500_00400000000_000100000000_0017500_0011700_0000000_0089000_0089000-INC_00_sum.bz"
+# raw = pkl.load(path.join(pth, exp))
+# max(raw['population'].T[1])
 

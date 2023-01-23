@@ -17,9 +17,9 @@ import GOP_gene as drv
 
 
 if monet.isNotebook():
-    (USR, AOI, LND, DRV, SPE) = ('srv', 'INC', 'Brikama', 'None', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('srv', 'Brikama', 'HUM', 'CSS', 'None')
 else:
-    (USR, AOI,LND, DRV, SPE) = sys.argv[1:]
+    (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
@@ -27,9 +27,10 @@ if USR == 'srv':
 ###############################################################################
 # Processing loop
 ###############################################################################
+(NH, NM) = aux.getPops(LND)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE, humSize=aux.HUM_SIZE),
-    aux.landSelector(USR=USR)
+    drv.driveSelector(DRV, AOI, popSize=NM, humSize=NH),
+    aux.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
@@ -39,7 +40,7 @@ if USR == 'srv':
 tS = datetime.now()
 monet.printExperimentHead(
     PT_DTA, PT_DTA, tS, 
-    '{} EpiPre [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
+    '{} PreprocessEpi [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
 )
 # Select sexes and ids --------------------------------------------------------
 sexID = {"male": "", "female": "incidence_"}

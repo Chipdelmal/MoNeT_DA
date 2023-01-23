@@ -5,7 +5,8 @@ from glob import glob
 import MoNeT_MGDrivE as monet
 import GOP_aux as aux
 
-NH = aux.HUM_SIZE
+NH = 182000 # Upper River
+NH = 77000  # Brikama
 genotypes = (
     "S00_01", "S01_02", "S02_03", "S03_04", "S04_05", "S05_06", "S06_07", "S07_08", "S08_09",
     "T00_01", "T01_02", "T02_03", "T03_04", "T04_05", "T05_06", "T06_07", "T07_08", "T08_09",
@@ -29,8 +30,40 @@ genotypes = (
 #
 #   eg: 2-10 age group [00_01, 01_02, 02_03, 03_04]
 ###############################################################################
-twoToTen = ['00_01', '01_02', '02_03', '03_04']
-aux.findEpiGroupsIndices(genotypes, 'clin_inc', twoToTen)
+# Cases -----------------------------------------------------------------------
+stratum = ['00_01', '01_02', '02_03', '03_04']
+statDict = {
+    'I': ['clin_inc', ], 
+    'O': ['S', 'T', 'D', 'A', 'U', 'P'],
+    'T': ['S', 'T', 'D', 'A', 'U', 'P']
+}
+EPI_CSS = aux.humanGroupsToGeneDict(statDict, stratum, genotypes)
+EPI_CSS = {
+    'genotypes': list(EPI_CSS.keys()), 
+    'indices': list(EPI_CSS.values())
+}
 
-def rateIntoFrequency(groups, popSizes):
-    return 1
+# Mortality -------------------------------------------------------------------
+stratum = ['00_01', '01_02', '02_03', '03_04']
+statDict = {
+    'M': ['mort', ], 
+    'O': ['S', 'T', 'D', 'A', 'U', 'P'],
+    'T': ['S', 'T', 'D', 'A', 'U', 'P']
+}
+EPI_MRT = aux.humanGroupsToGeneDict(statDict, stratum, genotypes)
+EPI_MRT = {
+    'genotypes': list(EPI_MRT.keys()),
+    'indices': list(EPI_MRT.values())
+}
+
+###############################################################################
+# Drive Selector
+###############################################################################
+def driveParameters(TYPE, popSize):
+    if TYPE == 'CSS':
+        aggD = EPI_CSS
+        yRange = popSize
+    elif TYPE == 'MRT':
+        aggD = EPI_MRT
+        yRange = popSize
+    return (aggD, yRange, 'pgSIT')

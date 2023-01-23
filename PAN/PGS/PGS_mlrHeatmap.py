@@ -9,14 +9,17 @@ from itertools import product
 from datetime import datetime
 import matplotlib.pyplot as plt
 import MoNeT_MGDrivE as monet
+import keras
+from scikeras.wrappers import KerasRegressor
 import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 QNT = (None if QNT == 'None' else QNT)
+MOD_SEL = 'krs'
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -48,10 +51,6 @@ monet.printExperimentHead(
     '{} mlrHeatmap [{}:{}:{}]'.format(DRV, AOI, THS, MOI)
 )
 ###############################################################################
-# Select Model and Scores
-###############################################################################
-(MOD_SEL, K_SPLITS, T_SIZE) = ('mlp', 10, .1)
-###############################################################################
 # Load Model
 ###############################################################################
 if QNT:
@@ -60,12 +59,21 @@ if QNT:
     )
 else:
     fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, MOD_SEL)
-rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
+# Check for Keras model -------------------------------------------------------
+if not (MOD_SEL == 'krs'):
+    rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
+else:
+    reg = keras.models.load_model(path.join(PT_OUT, fNameOut))
+    rf = KerasRegressor(reg)
+    rf.initialize(
+        np.load(path.join(PT_OUT, 'X_train.npy')), 
+        np.load(path.join(PT_OUT, 'y_train.npy'))
+    )
 ###############################################################################
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [52],
+    'i_ren': [20],
     'i_res': [30],
     'i_rei': [7],
     'i_pct': [0.90], 

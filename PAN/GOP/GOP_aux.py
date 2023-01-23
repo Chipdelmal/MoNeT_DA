@@ -171,6 +171,15 @@ def selectDepVars(MOI):
 def getExps():
     return ('A', 'B')
 
+def getPops(LND):
+    if LND=='Brikama':
+        NH =  77000
+        NM = 100000*2
+    else:
+        NH = 182000
+        NM = 200000*2
+    return (NH, NM)
+
 ###############################################################################
 # Names and patterns
 ###############################################################################
@@ -243,3 +252,15 @@ def findEpiGroupsIndices(genotypes, classID, groupsList):
         fMatches.extend(matches)
     ixMatches = [genotypes.index(m) for m in fMatches]
     return ixMatches
+
+def humanGroupsToGeneDict(statDict, stratum, genotypes):
+    hDict = {}
+    for k in statDict:
+        elms = statDict[k]
+        # Get the indices from all the elements in the group
+        grp = []
+        for e in elms:
+            grp.extend(findEpiGroupsIndices(genotypes, e, stratum))
+        # Add to the dictionary with group ID
+        hDict[k] = grp
+    return hDict
