@@ -15,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 SA_NAMES = ['Delta', 'PAWN', 'HDMR', 'FAST']
@@ -50,7 +50,12 @@ for name in SA_NAMES:
 ###############################################################################
 # Reading ML Exported files
 ###############################################################################
-fNameOut = '{}_{}T_{}-mlp-MLR.png'.format(AOI, int(float(THS)*100), MOI)
+if QNT:
+    fNameOut = '{}_{}Q_{}T_{}-{}-MLR.png'.format(
+        AOI, int(QNT), int(float(THS)*100), MOI, 'mlp'
+    )
+else:
+    fNameOut = '{}_{}T_{}-mlp-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 impSci = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'))
 # impRfi = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'))
 shpImp = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_SHP-SHP.csv'))
@@ -75,9 +80,9 @@ df = pd.DataFrame([
         # ['PAWN',  *aux.getSASortedDF(pawn, 'mean', validFeat)], 
         ['FAST',  *aux.getSASortedDF(fast, 'S1', validFeat)], 
         ['HDMR',  *aux.getSASortedDF(hdmr, 'S1', validFeat)], 
-        ['ISCI',  *aux.getSASortedDF(isci, 'mean', validFeat)], 
+        ['ISCI*',  *aux.getSASortedDF(isci, 'mean', validFeat)], 
         # ['IRFI',  *aux.getSASortedDF(irfi, 'Importance', validFeat)], 
-        ['SHAP',  *aux.getSASortedDF(shp, 'mean', validFeat)], 
+        ['SHAP*',  *aux.getSASortedDF(shp, 'mean', validFeat)], 
     ],
     columns=['name']+validFeat
 )
@@ -91,8 +96,8 @@ dfT.sort_values('Delta', ascending=True, inplace=True)
 # Plotting
 ###############################################################################
 clr = [
-    '#FF1A4BAA', '#8338ecAA', '#3a86ffAA', '#00f5d4AA', 
-    '#8d99aeAA', '#cdb4dbAA', '#03045eAA'    
+    '#FF1A4BAA', '#8338ecAA', '#03045eAA', 
+    '#3a86ffAA', '#cdb4dbAA', '#00f5d4AA', '#8d99aeAA',     
 ]
 (fig, ax) = plt.subplots(figsize=(2.5, 2.5))
 dfT.plot.barh(
@@ -125,7 +130,7 @@ clr = [
     '#FF1A4BAA', '#3a86ffAA', '#03045eAA', '#00f5d4AA', 
     '#8338ecAA','#8d99aeAA', '#cdb4dbAA'
 ]
-dfSA = dfT.drop(['ISCI', 'SHAP'], axis=1)
+dfSA = dfT.drop(['ISCI*', 'SHAP*'], axis=1)
 (fig, ax) = plt.subplots(figsize=(2, 2.5))
 dfSA.plot.barh(
     x='index', stacked=False, xlim=(0, 1), ax=ax,
