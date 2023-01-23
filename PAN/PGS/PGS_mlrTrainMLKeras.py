@@ -9,8 +9,6 @@ import pandas as pd
 import pickle as pkl
 import matplotlib.pyplot as plt
 from datetime import datetime
-import keras
-from itertools import product
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping
@@ -21,7 +19,6 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import make_scorer
-from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.inspection import permutation_importance
 from scikeras.wrappers import KerasRegressor
 from sklearn.inspection import PartialDependenceDisplay
@@ -32,7 +29,7 @@ import PGS_mlrMethods as mth
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -41,7 +38,7 @@ if USR == 'srv':
     JOB = aux.JOB_SRV
 CHUNKS = JOB
 C_VAL = False
-DEV = True
+DEV = False
 ###############################################################################
 # Paths
 ###############################################################################
@@ -94,20 +91,21 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
+    epochs = 200
     def build_model():
         rf = Sequential()
         rf.add(Dense(
-            15, activation= "sigmoid",
+            16, activation= "sigmoid",
             input_dim=X_train.shape[1],
             kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
         ))
         rf.add(Dense(
-            15, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+            16, activation= "LeakyReLU",
+            kernel_regularizer=L1L2(l1=1e-5, l2=4e-4)
         ))
         rf.add(Dense(
-            15, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+            16, activation= "LeakyReLU",
+            kernel_regularizer=L1L2(l1=1e-5, l2=4e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
@@ -120,7 +118,7 @@ if DEV:
         return rf
     rf = KerasRegressor(build_fn=build_model)
 else:
-    rf = mth.selectML('krs', MOI, inDims=X_train.shape[1])
+    (epochs, batchSize, rf) = mth.selectMLKeras(MOI, inDims=X_train.shape[1])
 # Output name -----------------------------------------------------------------
 modID = 'krs'
 if QNT:
@@ -132,14 +130,14 @@ else:
 ###############################################################################
 # Train Model
 ###############################################################################
-epochs=100
-batchSize = (None if QNT else 16)
+# batchSize = (None if QNT else 16)
 history = rf.fit(
     X_train, y_train,
-    batch_size=batchSize,
+    batch_size=128,
     epochs=epochs, validation_split=0.25,
     callbacks=EarlyStopping(
-        monitor='val_loss', 
+        monitor='val_mean_squared_error',
+        min_delta=0.001,
         restore_best_weights=True,
         patience=int(epochs*.05),
         verbose=1
@@ -152,6 +150,7 @@ scoresFinal = {
     'r2': r2_score(y_test, y_pred),
     'explained_variance': explained_variance_score(y_test, y_pred),
     'root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
+    'mean_squared_error': mean_squared_error(y_test, y_pred, squared=True),
     'mean_absolute_error': mean_absolute_error(y_test, y_pred),
     'median_absolute_error ': median_absolute_error(y_test, y_pred),
     'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
@@ -227,7 +226,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 3000
+SAMP_NUM = 3500
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)

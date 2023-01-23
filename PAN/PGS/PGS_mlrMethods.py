@@ -15,6 +15,89 @@ from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegr
 import PGS_aux as aux
 
 
+
+def selectMLKeras(MOI, inDims=8):
+    if (MOI=='CPT'):
+        (batchSize, epochs) = (None, 300)
+        def build_model():
+            rf = Sequential()
+            rf.add(Dense(
+                16, activation= "tanh", input_dim=inDims,
+                kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+            ))
+            rf.add(Dense(
+                16, activation= "tanh",
+                kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+            ))
+            rf.add(Dense(
+                16, activation= "tanh",
+                kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+            ))
+            rf.add(Dense(
+                1, activation='sigmoid'
+            ))
+            rf.compile(
+                loss= "mean_squared_error" , 
+                optimizer="adam", 
+                metrics=["mean_squared_error"]
+            )
+            return rf
+        print("* CPT Optimizer")
+        rf = KerasRegressor(build_fn=build_model)
+    elif (MOI=='POE'):
+        (batchSize, epochs) = (None, 250)
+        def build_model():
+            rf = Sequential()
+            rf.add(Dense(
+                16, activation= "sigmoid", input_dim=inDims,
+                kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+            ))
+            rf.add(Dense(
+                16, activation= "LeakyReLU",
+                kernel_regularizer=L1L2(l1=1e-5, l2=3.125e-4)
+            ))
+            rf.add(Dense(
+                16, activation= "LeakyReLU",
+                kernel_regularizer=L1L2(l1=1e-5, l2=3.125e-4)
+            ))
+            rf.add(Dense(
+                1, activation='sigmoid'
+            ))
+            rf.compile(
+                loss= "mean_squared_error" , 
+                optimizer="adam", 
+                metrics=["mean_squared_error"]
+            )
+            return rf
+        rf = KerasRegressor(build_fn=build_model)
+    elif (MOI=='WOP'):
+        (batchSize, epochs) = (None, 250)
+        def build_model():
+            rf = Sequential()
+            rf.add(Dense(
+                15, activation= "tanh", input_dim=inDims,
+                kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+            ))
+            rf.add(Dense(
+                15, activation= "tanh",
+                kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+            ))
+            rf.add(Dense(
+                15, activation= "tanh",
+                kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+            ))
+            rf.add(Dense(
+                1, activation='sigmoid'
+            ))
+            rf.compile(
+                loss= "mean_squared_error" , 
+                optimizer="adam", 
+                metrics=["mean_squared_error"]
+            )
+        rf = KerasRegressor(build_fn=build_model)
+    return (epochs, batchSize, rf)
+        
+
 def selectML(method, MOI, inDims=8):
     if method=='rf':
         modID = 'rdf'
@@ -30,15 +113,15 @@ def selectML(method, MOI, inDims=8):
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
-                    15, activation= "tanh", input_dim=inDims,
+                    16, activation= "tanh", input_dim=inDims,
                     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
-                    15, activation= "tanh",
+                    16, activation= "tanh",
                     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
-                    15, activation= "tanh",
+                    16, activation= "tanh",
                     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
@@ -50,22 +133,23 @@ def selectML(method, MOI, inDims=8):
                     metrics=["mean_squared_error"]
                 )
                 return rf
+            print("* CPT Optimizer")
             rf = KerasRegressor(build_fn=build_model)
             return rf
         elif (MOI=='POE'):
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
-                    15, activation= "tanh", input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                    16, activation= "sigmoid", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
                 ))
                 rf.add(Dense(
-                    15, activation= "tanh",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                    16, activation= "LeakyReLU",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3.125e-4)
                 ))
                 rf.add(Dense(
-                    15, activation= "tanh",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                    16, activation= "LeakyReLU",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=3.125e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'
@@ -75,6 +159,7 @@ def selectML(method, MOI, inDims=8):
                     optimizer="adam", 
                     metrics=["mean_squared_error"]
                 )
+                return rf
             rf = KerasRegressor(build_fn=build_model)
             return rf
         elif (MOI=='WOP'):
