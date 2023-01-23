@@ -18,7 +18,7 @@ import PGS_aux as aux
 
 def selectMLKeras(MOI, inDims=8):
     if (MOI=='CPT'):
-        (batchSize, epochs) = (None, 300)
+        (batchSize, epochs) = (128, 300)
         def build_model():
             rf = Sequential()
             rf.add(Dense(
@@ -45,7 +45,7 @@ def selectMLKeras(MOI, inDims=8):
         print("* CPT Optimizer")
         rf = KerasRegressor(build_fn=build_model)
     elif (MOI=='POE'):
-        (batchSize, epochs) = (None, 250)
+        (batchSize, epochs) = (128, 250)
         def build_model():
             rf = Sequential()
             rf.add(Dense(

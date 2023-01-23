@@ -24,17 +24,17 @@ python PGS_clsUnify.py $USR $DRV $QNT $AOI $THS
 ###############################################################################
 # Launch Scripts (SA)
 ###############################################################################
-# for mtr in "WOP" "CPT" "POE"
-# do
-#     python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
-# done
+for mtr in "WOP" "CPT" "POE"
+do
+    python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
+done
 ###############################################################################
 # Train ML
 ###############################################################################
-for mtr in "WOP" "CPT" "POE"
-do
-    python PGS_mlrTrainMLCleanQNT.py $USR $DRV $QNT $AOI $THS $mtr
-done
+# for mtr in "WOP" "CPT" "POE"
+# do
+#     python PGS_mlrTrainMLCleanQNT.py $USR $DRV $QNT $AOI $THS $mtr
+# done
 ###############################################################################
 # Launch Scripts (ML Complex)
 ###############################################################################
@@ -44,10 +44,10 @@ do
     python PGS_clsCompileML.py $USR $DRV $AOI $mtr
 done
 python PGS_clsUnifyML.py $USR $DRV $AOI $THS
-for mtr in "WOP" "CPT"
-do
-    python PGS_mlrTrainMLClean.py $USR $DRV $AOI $THS $mtr
-done
+# for mtr in "WOP" "CPT"
+# do
+#     python PGS_mlrTrainMLClean.py $USR $DRV $AOI $THS $mtr
+# done
 ###############################################################################
 # Plot
 ###############################################################################

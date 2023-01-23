@@ -26,10 +26,11 @@ import MoNeT_MGDrivE as monet
 import PGS_aux as aux
 import PGS_gene as drv
 import PGS_mlrMethods as mth
+# https://coderzcolumn.com/tutorials/artificial-intelligence/scikeras-give-scikit-learn-like-api-to-your-keras-networks
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
