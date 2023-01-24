@@ -1,13 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
 import sys
-import itertools
-from os import path
-from matplotlib.pyplot import axis
-import numpy as np
-from glob import glob
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
@@ -40,7 +34,47 @@ if USR == 'srv':
 tS = datetime.now()
 monet.printExperimentHead(
     PT_DTA, PT_DTA, tS, 
-    '{} PreprocessEpi [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
+    '{} PreProcessEpi [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
 )
 # Select sexes and ids --------------------------------------------------------
-sexID = {"male": "", "female": "incidence_"}
+sexID = {"male": "", "female": "H_"}
+###########################################################################
+# Load folders
+###########################################################################
+fmtStr = '{}* Create files list...{}'
+print(fmtStr.format(monet.CBBL, monet.CEND), end='\r')
+(expDirsMean, expDirsTrac) = monet.getExpPaths(
+    PT_DTA, mean='ANALYZED/', reps='TRACE/'
+)
+(expNum, nodeDigits) = (len(expDirsMean), 2)
+expIter = list(zip(list(range(expNum)), expDirsMean, expDirsTrac))
+# Check for potential miss-matches in experiments folders -----------------
+(meanFNum, tracFNum) = (len(expDirsMean), len(expDirsTrac))
+if (meanFNum != tracFNum):
+    errorString = 'Unequal experiments folders lengths ({}/{})'
+    sys.exit(errorString.format(meanFNum, tracFNum)) 
+# Check for pre-existing files and skip if needed -------------------------
+if aux.OVW == False:
+    expIDPreDone = set(monet.splitExpNames(PT_PRE))
+    expIDForProcessing = [i.split('/')[-1] for i in expDirsMean]
+    expsIxList = list(locate(
+        [(i in expIDPreDone) for i in expIDForProcessing],
+        lambda x: x!=True
+    ))
+    expIter = [expIter[i] for i in expsIxList]
+sys.stdout.write("\033[K")
+###########################################################################
+# Process data
+###########################################################################
+Parallel(n_jobs=JOB)(
+    delayed(monet.preProcessParallel)(
+        exIx, expNum, gene,
+        analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
+        fNameFmt='{}/{}-{}_', MF=(False, True),
+        cmpr='bz2', nodeDigits=2,
+        SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
+        REP=aux.REP, SRP=aux.SRP,
+        sexFilenameIdentifiers=sexID
+    ) for exIx in expIter
+)
+

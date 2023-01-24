@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from glob import glob
-import MoNeT_MGDrivE as monet
 import GOP_aux as aux
 
 NH = 182000 # Upper River
@@ -31,7 +29,7 @@ genotypes = (
 #   eg: 2-10 age group [00_01, 01_02, 02_03, 03_04]
 ###############################################################################
 # Cases -----------------------------------------------------------------------
-stratum = ['00_01', '01_02', '02_03', '03_04']
+stratum = ['00_01', ]
 statDict = {
     'I': ['clin_inc', ], 
     'O': ['S', 'T', 'D', 'A', 'U', 'P'],
@@ -42,6 +40,7 @@ EPI_CSS = {
     'genotypes': list(EPI_CSS.keys()), 
     'indices': list(EPI_CSS.values())
 }
+EPI_CSS
 
 # Mortality -------------------------------------------------------------------
 stratum = ['00_01', '01_02', '02_03', '03_04']
