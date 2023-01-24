@@ -8,6 +8,7 @@ from os import path
 import pandas as pd
 import pickle as pkl
 import matplotlib.pyplot as plt
+from itertools import product
 from datetime import datetime
 from keras.layers import Dense
 from keras.models import Sequential
@@ -21,16 +22,17 @@ from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import make_scorer
 from sklearn.inspection import permutation_importance
 from scikeras.wrappers import KerasRegressor
+from tensorflow.keras.layers import BatchNormalization
 from sklearn.inspection import PartialDependenceDisplay
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
 import PGS_gene as drv
 import PGS_mlrMethods as mth
 # https://coderzcolumn.com/tutorials/artificial-intelligence/scikeras-give-scikit-learn-like-api-to-your-keras-networks
-
+# https://stackoverflow.com/questions/55924789/normalization-of-input-data-in-keras
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -39,7 +41,7 @@ if USR == 'srv':
     JOB = aux.JOB_SRV
 CHUNKS = JOB
 C_VAL = False
-DEV = False
+DEV = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -92,7 +94,7 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
-    epochs = 200
+    epochs = 250
     def build_model():
         rf = Sequential()
         rf.add(Dense(
@@ -100,13 +102,16 @@ if DEV:
             input_dim=X_train.shape[1],
             kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
         ))
+        rf.add(
+            BatchNormalization(center=True, scale=True)
+        )
         rf.add(Dense(
             16, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=4e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=3.75e-4)
         ))
         rf.add(Dense(
             16, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=4e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=3.75e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
@@ -306,14 +311,14 @@ shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
 ###############################################################################
 # (xSca, ySca) = ('linear', 'linear')
 # fltr = {
-#     'i_ren': [25],
+#     'i_ren': [30],
 #     'i_res': [30],
 #     'i_rei': [7],
 #     'i_pct': [0.90], 
 #     'i_pmd': [0.90], 
-#     'i_fvb': np.arange(0, .5, 0.0025), 
-#     'i_mtf': [0.75],
-#     'i_mfr': np.arange(0, .5, 0.0025)
+#     'i_fvb': np.arange(0, .5, 0.005), 
+#     'i_mtf': [1],
+#     'i_mfr': np.arange(0, .5, 0.005)
 # }
 # fltrTitle = fltr.copy()
 # # Assemble factorials ---------------------------------------------------------

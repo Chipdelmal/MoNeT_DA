@@ -15,7 +15,7 @@ import PGS_aux as aux
 import PGS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 QNT = (None if QNT == 'None' else QNT)
@@ -63,24 +63,24 @@ else:
 if not (MOD_SEL == 'krs'):
     rf = pkl.load(path.join(PT_OUT, fNameOut+'.pkl'))
 else:
-    reg = keras.models.load_model(path.join(PT_OUT, fNameOut))
-    rf = KerasRegressor(reg)
-    rf.initialize(
-        np.load(path.join(PT_OUT, 'X_train.npy')), 
-        np.load(path.join(PT_OUT, 'y_train.npy'))
-    )
+    rf = keras.models.load_model(path.join(PT_OUT, fNameOut))
+    # rf = KerasRegressor(reg)
+    # rf.initialize(
+    #     np.load(path.join(PT_OUT, 'X_train.npy')), 
+    #     np.load(path.join(PT_OUT, 'y_train.npy'))
+    # )
 ###############################################################################
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [20],
+    'i_ren': [30],
     'i_res': [30],
     'i_rei': [7],
     'i_pct': [0.90], 
     'i_pmd': [0.90], 
-    'i_fvb': np.arange(0, .5, 0.0025), 
+    'i_fvb': np.arange(0, .5, 0.005), 
     'i_mtf': [0.75],
-    'i_mfr': np.arange(0, .5, 0.0025)
+    'i_mfr': np.arange(0, .5, 0.005)
 }
 fltrTitle = fltr.copy()
 # Assemble factorials ---------------------------------------------------------

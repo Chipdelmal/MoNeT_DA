@@ -6,6 +6,7 @@ from keras.models import Sequential
 from keras.callbacks import EarlyStopping
 from keras.regularizers import L1L2
 from scikeras.wrappers import KerasRegressor
+from tensorflow.keras.layers import BatchNormalization
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neural_network import MLPRegressor
@@ -18,6 +19,7 @@ import PGS_aux as aux
 
 def selectMLKeras(MOI, inDims=8):
     if (MOI=='CPT'):
+        print("* CPT Optimizer")
         (batchSize, epochs) = (128, 300)
         def build_model():
             rf = Sequential()
@@ -41,10 +43,9 @@ def selectMLKeras(MOI, inDims=8):
                 optimizer="adam", 
                 metrics=["mean_squared_error"]
             )
-            return rf
-        print("* CPT Optimizer")
         rf = KerasRegressor(build_fn=build_model)
     elif (MOI=='POE'):
+        print("* POE Optimizer")
         (batchSize, epochs) = (128, 250)
         def build_model():
             rf = Sequential()
@@ -68,9 +69,9 @@ def selectMLKeras(MOI, inDims=8):
                 optimizer="adam", 
                 metrics=["mean_squared_error"]
             )
-            return rf
         rf = KerasRegressor(build_fn=build_model)
     elif (MOI=='WOP'):
+        print("* WOP Optimizer")
         (batchSize, epochs) = (None, 250)
         def build_model():
             rf = Sequential()

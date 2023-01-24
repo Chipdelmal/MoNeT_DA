@@ -14,20 +14,20 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-for mtr in "WOP" "CPT" "POE" "TTI" "TTO" "MNX"
-do
-    python PGS_clsCompile.py $USR $DRV $QNT $AOI $mtr
-done
-python PGS_clsUnify.py $USR $DRV $QNT $AOI $THS 
+# for mtr in "WOP" "CPT" "POE" "TTI" "TTO" "MNX"
+# do
+#     python PGS_clsCompile.py $USR $DRV $QNT $AOI $mtr
+# done
+# python PGS_clsUnify.py $USR $DRV $QNT $AOI $THS 
 # python PGS_dtaExplore.py $USR $DRV $QNT $AOI $THS $AOI
 # python PGS_dtaTraces.py $USR $DRV $QNT $AOI
 ###############################################################################
 # Launch Scripts (SA)
 ###############################################################################
-for mtr in "WOP" "CPT" "POE"
-do
-    python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
-done
+# for mtr in "WOP" "CPT" "POE"
+# do
+#     python PGS_saAnalyzer.py $USR $DRV $QNT $AOI $THS $mtr
+# done
 ###############################################################################
 # Train ML
 ###############################################################################
