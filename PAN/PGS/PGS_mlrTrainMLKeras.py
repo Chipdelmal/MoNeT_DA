@@ -94,7 +94,7 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
-    epochs = 250
+    epochs = 300
     def build_model():
         rf = Sequential()
         rf.add(Dense(
@@ -107,11 +107,11 @@ if DEV:
         )
         rf.add(Dense(
             16, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=3.75e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=3.8e-4)
         ))
         rf.add(Dense(
             16, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=3.75e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=3.8e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
