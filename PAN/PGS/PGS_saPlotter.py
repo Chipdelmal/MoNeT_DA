@@ -52,10 +52,10 @@ for name in SA_NAMES:
 ###############################################################################
 if QNT:
     fNameOut = '{}_{}Q_{}T_{}-{}-MLR.png'.format(
-        AOI, int(QNT), int(float(THS)*100), MOI, 'mlp'
+        AOI, int(QNT), int(float(THS)*100), MOI, 'krs'
     )
 else:
-    fNameOut = '{}_{}T_{}-mlp-MLR.png'.format(AOI, int(float(THS)*100), MOI)
+    fNameOut = '{}_{}T_{}-krs-MLR.png'.format(AOI, int(float(THS)*100), MOI)
 impSci = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-SCI.csv'))
 # impRfi = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_PMI-RFI.csv'))
 shpImp = pd.read_csv(path.join(PT_OUT, fNameOut[:-4]+'_SHP-SHP.csv'))

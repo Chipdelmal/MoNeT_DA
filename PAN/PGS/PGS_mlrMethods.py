@@ -72,7 +72,7 @@ def selectMLKeras(MOI, inDims=8):
         rf = KerasRegressor(build_fn=build_model)
     elif (MOI=='WOP'):
         print("* WOP Optimizer")
-        (batchSize, epochs) = (128, 200)
+        (batchSize, epochs) = (128, 175)
         def build_model():
             rf = Sequential()
             rf.add(Dense(
