@@ -32,7 +32,7 @@ import PGS_mlrMethods as mth
 # https://stackoverflow.com/questions/55924789/normalization-of-input-data-in-keras
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', None, 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -94,7 +94,7 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
-    epochs = 50
+    epochs = 200
     def build_model():
         rf = Sequential()
         rf.add(Dense(
@@ -106,11 +106,11 @@ if DEV:
             BatchNormalization(center=True, scale=True)
         )
         rf.add(Dense(
-            16, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=3.5e-4)
+            32, activation= "LeakyReLU",
+            kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
         ))
         rf.add(Dense(
-            16, activation= "LeakyReLU",
+            32, activation= "LeakyReLU",
             kernel_regularizer=L1L2(l1=1e-5, l2=4.5e-4)
         ))
         rf.add(Dense(
@@ -123,7 +123,7 @@ if DEV:
         )
         return rf
     rf = KerasRegressor(build_fn=build_model)
-    batchSize = 512
+    batchSize = 128
 else:
     (epochs, batchSize, rf) = mth.selectMLKeras(MOI, inDims=X_train.shape[1])
 # Output name -----------------------------------------------------------------
@@ -232,7 +232,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 3000
+SAMP_NUM = 3500
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)

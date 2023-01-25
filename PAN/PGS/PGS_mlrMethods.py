@@ -72,20 +72,24 @@ def selectMLKeras(MOI, inDims=8):
         rf = KerasRegressor(build_fn=build_model)
     elif (MOI=='WOP'):
         print("* WOP Optimizer")
-        (batchSize, epochs) = (None, 250)
+        (batchSize, epochs) = (128, 200)
         def build_model():
             rf = Sequential()
             rf.add(Dense(
-                15, activation= "tanh", input_dim=inDims,
-                kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                16, activation= "sigmoid",
+                input_dim=inDims,
+                kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+            ))
+            rf.add(
+                BatchNormalization(center=True, scale=True)
+            )
+            rf.add(Dense(
+                32, activation= "LeakyReLU",
+                kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
             ))
             rf.add(Dense(
-                15, activation= "tanh",
-                kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
-            ))
-            rf.add(Dense(
-                15, activation= "tanh",
-                kernel_regularizer=L1L2(l1=1e-5, l2=3e-4)
+                32, activation= "LeakyReLU",
+                kernel_regularizer=L1L2(l1=1e-5, l2=4.5e-4)
             ))
             rf.add(Dense(
                 1, activation='sigmoid'
@@ -95,6 +99,7 @@ def selectMLKeras(MOI, inDims=8):
                 optimizer="adam", 
                 metrics=["mean_squared_error"]
             )
+            return rf
         rf = KerasRegressor(build_fn=build_model)
     return (epochs, batchSize, rf)
         
