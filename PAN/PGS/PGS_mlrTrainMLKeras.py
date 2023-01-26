@@ -6,7 +6,6 @@ import shap
 import numpy as np
 from os import path
 import pandas as pd
-import pickle as pkl
 import matplotlib.pyplot as plt
 from itertools import product
 from datetime import datetime
@@ -22,7 +21,6 @@ from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import make_scorer
 from sklearn.inspection import permutation_importance
 from scikeras.wrappers import KerasRegressor
-from tensorflow.keras.layers import BatchNormalization
 from sklearn.inspection import PartialDependenceDisplay
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
@@ -32,7 +30,7 @@ import PGS_mlrMethods as mth
 # https://stackoverflow.com/questions/55924789/normalization-of-input-data-in-keras
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', None, 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -40,8 +38,8 @@ JOB = aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
 CHUNKS = JOB
-C_VAL = False
-DEV = True
+C_VAL = True
+DEV = False
 ###############################################################################
 # Paths
 ###############################################################################
@@ -82,6 +80,7 @@ elif MOI=='CPT':
     y = 1-y
 (X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.25)
 (X_train, X_test) = (X_trainR, X_testR)
+inDims = X_train.shape[1]
 ###############################################################################
 # Select Model and Scores
 ###############################################################################
@@ -94,24 +93,20 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
-    epochs = 200
+    (batchSize, epochs) = (128, 300)
     def build_model():
         rf = Sequential()
         rf.add(Dense(
-            16, activation= "sigmoid",
-            input_dim=X_train.shape[1],
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
-        ))
-        rf.add(
-            BatchNormalization(center=True, scale=True)
-        )
-        rf.add(Dense(
-            32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
+            16, activation= "tanh", input_dim=inDims,
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         ))
         rf.add(Dense(
-            32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=4.5e-4)
+            16, activation= "tanh",
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+        ))
+        rf.add(Dense(
+            16, activation= "tanh",
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
@@ -123,7 +118,6 @@ if DEV:
         )
         return rf
     rf = KerasRegressor(build_fn=build_model)
-    batchSize = 128
 else:
     (epochs, batchSize, rf) = mth.selectMLKeras(MOI, inDims=X_train.shape[1])
 # Output name -----------------------------------------------------------------
@@ -139,7 +133,7 @@ else:
 ###############################################################################
 history = rf.fit(
     X_train, y_train,
-    batch_size=128,
+    batch_size=batchSize,
     epochs=epochs, validation_split=0.25,
     callbacks=EarlyStopping(
         monitor='val_mean_squared_error',

@@ -43,6 +43,7 @@ def selectMLKeras(MOI, inDims=8):
                 optimizer="adam", 
                 metrics=["mean_squared_error"]
             )
+            return rf
         rf = KerasRegressor(build_fn=build_model)
     elif (MOI=='POE'):
         print("* POE Optimizer")
@@ -69,10 +70,11 @@ def selectMLKeras(MOI, inDims=8):
                 optimizer="adam", 
                 metrics=["mean_squared_error"]
             )
+            return rf
         rf = KerasRegressor(build_fn=build_model)
     elif (MOI=='WOP'):
         print("* WOP Optimizer")
-        (batchSize, epochs) = (128, 175)
+        (batchSize, epochs) = (128, 150)
         def build_model():
             rf = Sequential()
             rf.add(Dense(
