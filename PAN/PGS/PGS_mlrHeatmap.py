@@ -73,14 +73,14 @@ else:
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [30],
-    'i_res': [30],
+    'i_ren': [36],
+    'i_res': [25],
     'i_rei': [7],
     'i_pct': [0.90], 
     'i_pmd': [0.90], 
-    'i_fvb': np.arange(0, .5, 0.005), 
+    'i_fvb': np.arange(0, .5, 0.01), 
     'i_mtf': [0.75],
-    'i_mfr': np.arange(0, .5, 0.005)
+    'i_mfr': np.arange(0, .5, 0.01)
 }
 fltrTitle = fltr.copy()
 # Assemble factorials ---------------------------------------------------------
@@ -131,18 +131,18 @@ if MOI == 'WOP':
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-    cntr = [.5]
+    cntr = [.9]
 elif MOI == 'POE':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
-    cntr = [.75]
+    cntr = [.9]
     # lvls = [cntr[0]-.01, cntr[0]]
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
 ###############################################################################
 # Plot
 ###############################################################################
 (fig, ax) = plt.subplots(figsize=(10, 8))
-xy = ax.plot(rsG[0], rsG[1], 'k.', ms=.1, alpha=.25, marker='.')
+xy = ax.plot(rsG[0], rsG[1], 'k.', ms=1, alpha=.25, marker='.')
 cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
     levels=cntr, colors='#2b2d42', # drive['colors'][-1][:-2], 
