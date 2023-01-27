@@ -27,7 +27,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = False
+TICKS_HIDE = True
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
 thsStr = str(int(float(THS)*100))
@@ -73,14 +73,14 @@ else:
 # Sweep-Evaluate Model
 ###############################################################################
 fltr = {
-    'i_ren': [36],
+    'i_ren': [52],
     'i_res': [25],
     'i_rei': [7],
     'i_pct': [0.90], 
     'i_pmd': [0.90], 
-    'i_fvb': np.arange(0, .5, 0.01), 
+    'i_fvb': np.arange(0, .5, 0.005), 
     'i_mtf': [0.75],
-    'i_mfr': np.arange(0, .5, 0.01)
+    'i_mfr': np.arange(0, .5, 0.005)
 }
 fltrTitle = fltr.copy()
 # Assemble factorials ---------------------------------------------------------
@@ -136,17 +136,17 @@ elif MOI == 'POE':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
     cntr = [.9]
-    # lvls = [cntr[0]-.01, cntr[0]]
+    lvls = [cntr[0]-.00001, cntr[0]]
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
 ###############################################################################
 # Plot
 ###############################################################################
-(fig, ax) = plt.subplots(figsize=(10, 8))
-xy = ax.plot(rsG[0], rsG[1], 'k.', ms=1, alpha=.25, marker='.')
+(fig, ax) = plt.subplots(figsize=(10, 10))
+xy = ax.plot(rsG[0], rsG[1], 'k.', ms=1, alpha=0.25, marker='1')
 cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
     levels=cntr, colors='#2b2d42', # drive['colors'][-1][:-2], 
-    linewidths=2.5, alpha=.9, linestyles='solid'
+    linewidths=2, alpha=.9, linestyles='solid'
 )
 cs = ax.contourf(
     rsS[0], rsS[1], rsS[2], 
