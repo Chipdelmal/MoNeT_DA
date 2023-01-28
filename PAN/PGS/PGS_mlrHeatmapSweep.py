@@ -73,16 +73,18 @@ else:
 # Sweep-Evaluate Model
 ###############################################################################
 (fig, ax) = plt.subplots(figsize=(10, 10))
-for ren in list(np.arange(52, 20, -4)):
+aren = list(np.arange(52, 20, -4))
+alphas = np.geomspace(0.01, .75, len(aren))
+for (ix, ren) in enumerate(aren):
     fltr = {
         'i_ren': [ren],
         'i_res': [25],
         'i_rei': [7],
         'i_pct': [0.90], 
         'i_pmd': [0.90], 
-        'i_fvb': np.arange(0, .5, 0.005), 
+        'i_fvb': np.arange(0, .5, 0.0025), 
         'i_mtf': [0.75],
-        'i_mfr': np.arange(0, .5, 0.005)
+        'i_mfr': np.arange(0, .5, 0.0025)
     }
     fltrTitle = fltr.copy()
     # Assemble factorials ---------------------------------------------------------
@@ -114,7 +116,7 @@ for ren in list(np.arange(52, 20, -4)):
     )
     rs = monet.calcResponseSurface(
         x, y, z, 
-        scalers=scalers, mthd='linear', 
+        scalers=scalers, mthd='cubic', 
         xAxis=xSca, yAxis=ySca,
         xLogMin=xLogMin, yLogMin=yLogMin,
         DXY=(ngdx, ngdy)
@@ -143,16 +145,16 @@ for ren in list(np.arange(52, 20, -4)):
     ###############################################################################
     # Plot
     ###############################################################################
-    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=0.5, alpha=0.25, marker='1')
+    xy = ax.plot(rsG[0], rsG[1], 'k.', ms=0.25, alpha=0.1, marker='.')
+    cs = ax.contourf(
+        rsS[0], rsS[1], rsS[2], 
+        linewidths=0, alpha=alphas[ix],
+        levels=lvls, colors=['#ffffff', '#8338EC'], extend='max'
+    )
     cc = ax.contour(
         rsS[0], rsS[1], rsS[2], 
         levels=cntr, colors='#000000', # drive['colors'][-1][:-2], 
-        linewidths=0.25, alpha=1, linestyles='solid'
-    )
-    cs = ax.contourf(
-        rsS[0], rsS[1], rsS[2], 
-        linewidths=0, alpha=0.1,
-        levels=lvls, colors=['#ffffff00', '#8338EC'], extend='max'
+        linewidths=0.75, alpha=0.75, linestyles='solid'
     )
     # cs.cmap.set_over('red')
     cs.cmap.set_under('white')
