@@ -53,7 +53,7 @@ ix = 1
 pkl.load(preFiles[ix])
 
 
-import pandas as pd
-df = pd.read_csv('/RAID5/marshallShare/GambiaOP/Brikama/ANALYZED/E_00_00000_0000000/H_Mean_0001.csv')
-pix = list(df.columns).index('clin_inc08_09')
-df.iloc[:,90:pix+1].sum(axis=1)
+# import pandas as pd
+# df = pd.read_csv(PT_DTA+'/ANALYZED/E_00_00000_0000000/H_Mean_0001.csv')
+# (pixO, pixF) = [list(df.columns).index(i) for i in ('clin_inc00_01', 'clin_inc08_09')]
+# df.iloc[:,pixO:pixF+1].sum(axis=1)

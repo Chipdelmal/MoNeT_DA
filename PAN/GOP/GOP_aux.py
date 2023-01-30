@@ -248,7 +248,7 @@ def chunks(l, n):
 def findEpiGroupsIndices(genotypes, classID, groupsList):
     fMatches = []
     for grp in groupsList:
-        matches = [s for s in genotypes if classID+grp in s]
+        matches = [s for s in genotypes if (classID+grp)==s]
         fMatches.extend(matches)
     ixMatches = [genotypes.index(m) for m in fMatches]
     return ixMatches
