@@ -46,34 +46,34 @@ monet.printExperimentHead(
 SCALER = 1000
 # Average Response ------------------------------------------------------------
 preFiles = glob(path.join(PT_PRE, '*{}*sum.bz'.format(AOI)))
-
-ix = 0
-pre = pkl.load(preFiles[ix])
-
-# Incidence per 1000 instead of per capita ------------------------------------
-preSca = pre['population']*NH
-(totalPop, incPop) = (preSca[:,-1], preSca[:,0])
-preSca[:,1] = totalPop-incPop*SCALER
-preFix = {'genotypes': pre['genotypes'], 'population': preSca}
-preFix
-
-
-# Traces ----------------------------------------------------------------------
+for (ix, fName) in enumerate(preFiles):
+    pre = pkl.load(fName)
+    # Incidence per 1000 instead of per capita --------------------------------
+    preSca = pre['population']*NH
+    (totalPop, incPop) = (preSca[:,-1], preSca[:,0])
+    preSca[:,1] = totalPop-incPop*SCALER
+    # Re-assemble and export --------------------------------------------------
+    preFix = {'genotypes': pre['genotypes'], 'population': preSca}
+    pkl.dump(preFix, fName)
+    # print(fName)
+# pkl.load(fName)
+# Traces Response -------------------------------------------------------------
 preFiles = glob(path.join(PT_PRE, '*{}*srp.bz'.format(AOI)))
+for (ix, fName) in enumerate(preFiles):
+    pre = pkl.load(fName)
+    # Incidence per 1000 instead of per capita ------------------------------------
+    preSca = pre['landscapes']
+    for (ix, pop) in enumerate(preSca):
+        pop = pop*NH
+        (totalPop, incPop) = (pop[:,-1], pop[:,0])
+        pop[:,1] = totalPop-incPop*SCALER
+        preSca[ix] = pop
+    # Re-assemble and export --------------------------------------------------
+    preFix = {'genotypes': pre['genotypes'], 'landscapes': preSca}
+    pkl.dump(preFix, fName)
+#     print(fName)
+# pkl.load(fName)
 
-ix = 1
-pre = pkl.load(preFiles[ix])
-
-SCALER = 1000
-# Incidence per 1000 instead of per capita ------------------------------------
-preSca = pre['landscapes']
-pop = preSca[0]
-for (ix, pop) in enumerate(preSca):
-    pop = pop*NH
-    (totalPop, incPop) = (pop[:,-1], pop[:,0])
-    pop[:,1] = totalPop-incPop*SCALER
-    preSca[ix] = pop
-preFix = {'genotypes': pre['genotypes'], 'landscapes': preSca}
 
 # import pandas as pd
 # df = pd.read_csv(PT_DTA+'/ANALYZED/E_00_00000_0000000/H_Mean_0001.csv')
