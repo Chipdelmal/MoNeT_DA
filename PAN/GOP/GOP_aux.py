@@ -212,7 +212,7 @@ def selectPath(USR, LND, DRV, SPE):
     if USR == 'srv':
         PATH_ROOT = '/RAID5/marshallShare/GambiaOP/{}/'.format(LND)
     elif USR == 'dsk':
-        PATH_ROOT = '/RAID5/marshallShare/GambiaOP/{}/'.format(LND)
+        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/GambiaOP/{}/'.format(LND)
     (PATH_IMG, PATH_DATA) = (
         '{}img/'.format(PATH_ROOT), 
         '{}'.format(PATH_ROOT)
