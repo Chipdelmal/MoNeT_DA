@@ -43,15 +43,37 @@ monet.printExperimentHead(
 ###############################################################################
 # Processing loop
 ###############################################################################
+SCALER = 1000
 # Average Response ------------------------------------------------------------
 preFiles = glob(path.join(PT_PRE, '*{}*sum.bz'.format(AOI)))
+
 ix = 0
-pkl.load(preFiles[ix])
+pre = pkl.load(preFiles[ix])
+
+# Incidence per 1000 instead of per capita ------------------------------------
+preSca = pre['population']*NH
+(totalPop, incPop) = (preSca[:,-1], preSca[:,0])
+preSca[:,1] = totalPop-incPop*SCALER
+preFix = {'genotypes': pre['genotypes'], 'population': preSca}
+preFix
+
+
 # Traces ----------------------------------------------------------------------
 preFiles = glob(path.join(PT_PRE, '*{}*srp.bz'.format(AOI)))
-ix = 1
-pkl.load(preFiles[ix])
 
+ix = 1
+pre = pkl.load(preFiles[ix])
+
+SCALER = 1000
+# Incidence per 1000 instead of per capita ------------------------------------
+preSca = pre['landscapes']
+pop = preSca[0]
+for (ix, pop) in enumerate(preSca):
+    pop = pop*NH
+    (totalPop, incPop) = (pop[:,-1], pop[:,0])
+    pop[:,1] = totalPop-incPop*SCALER
+    preSca[ix] = pop
+preFix = {'genotypes': pre['genotypes'], 'landscapes': preSca}
 
 # import pandas as pd
 # df = pd.read_csv(PT_DTA+'/ANALYZED/E_00_00000_0000000/H_Mean_0001.csv')

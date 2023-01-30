@@ -253,14 +253,14 @@ def findEpiGroupsIndices(genotypes, classID, groupsList):
     ixMatches = [genotypes.index(m) for m in fMatches]
     return ixMatches
 
-def humanGroupsToGeneDict(statDict, stratum, genotypes):
+def humanGroupsToGeneDict(statDict, strata, genotypes):
     hDict = {}
     for k in statDict:
         elms = statDict[k]
         # Get the indices from all the elements in the group
         grp = []
         for e in elms:
-            grp.extend(findEpiGroupsIndices(genotypes, e, stratum))
+            grp.extend(findEpiGroupsIndices(genotypes, e, strata))
         # Add to the dictionary with group ID
         hDict[k] = grp
     return hDict
