@@ -15,7 +15,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'PGS', 'HLT', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'PGS', 'ECO', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -46,13 +46,13 @@ monet.printExperimentHead(
 # Style 
 ###############################################################################
 if DRV != 'HUM':
-    (CLR, YRAN) = (drive.get('colors'), (0, NM*2))
+    (CLR, YRAN) = (drive.get('colors'), (0, NM*drive.get('yRange')))
 else:
     (CLR, YRAN) = (drive.get('colors'), (0, NH))
 STYLE = {
     "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
-    "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.25)
+    "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }
 ###############################################################################
 # Load preprocessed files lists
@@ -96,7 +96,7 @@ Parallel(n_jobs=JOB)(
         #         int(exIx[1][0].split('/')[-1].split('_')[1])
         #     )
         # ],
-        hLines=np.arange(0, YRAN[1], YRAN[1]/4)
+        # hLines=np.arange(0, YRAN[1], YRAN[1]/4)
     ) for exIx in expIter
 )
 # Export gene legend ----------------------------------------------------------

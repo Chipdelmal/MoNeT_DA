@@ -36,7 +36,8 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=10000):
         colors = ['#45d40c55', '#c879ff22', '#1d355799']
     ###########################################################################
     geneDict = {
-        'gDict': aggD, 'yRange': yRange, 'colors': colors, 'folder': folder
+        'gDict': aggD, 'yRange': yRange, 
+        'colors': colors, 'folder': folder
     }
     return geneDict
 
