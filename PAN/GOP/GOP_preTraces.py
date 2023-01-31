@@ -15,7 +15,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'HUM', 'CSS', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'PGS', 'HLT', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -40,13 +40,13 @@ monet.makeFolder(PT_IMG)
 tS = datetime.now()
 monet.printExperimentHead(
     PT_DTA, PT_DTA, tS, 
-    '{} IntProcessEpi [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
+    '{} PreTraces [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
 )
 ###############################################################################
 # Style 
 ###############################################################################
 if DRV != 'HUM':
-    (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
+    (CLR, YRAN) = (drive.get('colors'), (0, NM*2))
 else:
     (CLR, YRAN) = (drive.get('colors'), (0, NH))
 STYLE = {

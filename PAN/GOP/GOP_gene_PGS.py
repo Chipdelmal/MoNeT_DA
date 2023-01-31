@@ -14,31 +14,14 @@ import MoNeT_MGDrivE as monet
 #   ...
 #   X/x: male fertility target site
 ###############################################################################
-genotypes = (
-    "AABBCCDD", "aABBCCDD", "AAbBCCDD", "aAbBCCDD", "AABBcCDD", "aABBcCDD", 
-    "AAbBcCDD", "aAbBcCDD", "AABBCCdD", "aABBCCdD", "AAbBCCdD", "aAbBCCdD", 
-    "AABBcCdD", "aABBcCdD", "AAbBcCdD", "aAbBcCdD", "aaBBCCDD", "aabBCCDD", 
-    "aaBBcCDD", "aabBcCDD", "aaBBCCdD", "aabBCCdD", "aaBBcCdD", "aabBcCdD", 
-    "AAbbCCDD", "aAbbCCDD", "AAbbcCDD", "aAbbcCDD", "AAbbCCdD", "aAbbCCdD", 
-    "AAbbcCdD", "aAbbcCdD", "aabbCCDD", "aabbcCDD", "aabbCCdD", "aabbcCdD",
-    "AABBccDD", "aABBccDD", "AAbBccDD", "aAbBccDD", "AABBccdD", "aABBccdD", 
-    "AAbBccdD", "aAbBccdD", "aaBBccDD", "aabBccDD", "aaBBccdD", "aabBccdD", 
-    "AAbbccDD", "aAbbccDD", "AAbbccdD", "aAbbccdD", "aabbccDD", "aabbccdD", 
-    "AABBCCdd", "aABBCCdd", "AAbBCCdd", "aAbBCCdd", "AABBcCdd", "aABBcCdd", 
-    "AAbBcCdd", "aAbBcCdd", "aaBBCCdd", "aabBCCdd", "aaBBcCdd", "aabBcCdd", 
-    "AAbbCCdd", "aAbbCCdd", "AAbbcCdd", "aAbbcCdd", "aabbCCdd", "aabbcCdd", 
-    "AABBccdd", "aABBccdd", "AAbBccdd", "aAbBccdd", "aaBBccdd", "aabBccdd", 
-    "AAbbccdd", "aAbbccdd", "aabbccdd"
-)
+genotypes = ("WW", "WR", "RR")
 (locA, locB, locC, locD) = ((0, 1), (2, 3), (4, 5), (6, 7))
 ###############################################################################
 # Ecology genotype counts
 ###############################################################################
 ECO_DICT = OrderedDict((
-    ('A', (('A', locA), )), ('a', (('a', locA), )),
-    ('B', (('B', locB), )), ('b', (('b', locB), )),
-    ('C', (('C', locC), )), ('c', (('c', locC), )),
-    ('D', (('D', locD), )), ('d', (('d', locD), ))
+    ('T*',   (('W', locA), ('R', locA))),
+    ('O-',   (('W', locA), ('R', locA)))
 ))
 PGS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 
@@ -46,8 +29,8 @@ PGS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 # Health genotype counts (gRNA)
 ###############################################################################
 HLT_DICT = OrderedDict((
-    ('T*',   (('A', locA), ('B', locB), ('C', locC), ('D', locD))),
-    ('O-',   (('a', locA), ('b', locB), ('c', locC), ('d', locD)))
+    ('T*',   (('W', locA), ('R', locA))),
+    ('O-',   (('W', locA), ('R', locA)))
 ))
 PGS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 PGS_HLT = [PGS_HLT[0], [PGS_HLT[1][0], PGS_HLT[1][-1], PGS_HLT[1][-1]]]
@@ -56,8 +39,8 @@ PGS_HLT = [PGS_HLT[0], [PGS_HLT[1][0], PGS_HLT[1][-1], PGS_HLT[1][-1]]]
 # Trash genotype counts (Cas9)
 ###############################################################################
 TRS_DICT = OrderedDict((
-    ('Cas9*',   (('A', locA), )),
-    ('O-',      (('a', locA), ))
+    ('T*',   (('W', locA), ('R', locA))),
+    ('O-',   (('W', locA), ('R', locA)))
 ))
 PGS_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 
@@ -65,8 +48,8 @@ PGS_TRS = monet.carrierFrequencies(TRS_DICT, genotypes)
 # Wild genotype counts
 ###############################################################################
 WLD_DICT = OrderedDict((
-    ('O*', (('A', locA), ('B', locB), ('C', locC), ('D', locD))),
-    ('W-', (('a', locA), ('b', locB), ('c', locC), ('d', locD)))
+    ('T*',   (('W', locA), ('R', locA))),
+    ('O-',   (('W', locA), ('R', locA)))
 ))
 PGS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
 

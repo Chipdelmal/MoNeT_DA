@@ -1,17 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 from datetime import datetime
-import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 from more_itertools import locate
+import MoNeT_MGDrivE as monet
 import GOP_aux as aux
 import GOP_gene as drv
 
-
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'HUM', 'MRT', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'PGS', 'HLT', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -21,23 +21,21 @@ if USR == 'srv':
 ###############################################################################
 # Processing loop
 ###############################################################################
-(NH, NM) = aux.getPops(LND)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=NM, humSize=NH),
+    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     aux.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
     USR, LND, DRV, SPE
 )
-# Time and head ---------------------------------------------------------------
+# Time and head -----------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_DTA, tS, 
-    '{} PreProcessEpi [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
+    PT_DTA, PT_PRE, tS, 'PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
-# Select sexes and ids --------------------------------------------------------
-sexID = {"male": "", "female": "H_"}
+# Select sexes and ids ----------------------------------------------------
+sexID = {"male": "M_", "female": "F_"}
 ###########################################################################
 # Load folders
 ###########################################################################
@@ -62,14 +60,15 @@ if aux.OVW == False:
         lambda x: x!=True
     ))
     expIter = [expIter[i] for i in expsIxList]
+# sys.stdout.write("\033[K")
 ###########################################################################
 # Process data
 ###########################################################################
 Parallel(n_jobs=JOB)(
     delayed(monet.preProcessParallel)(
         exIx, expNum, gene,
-        analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
-        fNameFmt='{}/{}-{}_', MF=(False, True),
+        analysisOI=AOI, prePath=PT_PRE, nodesAggLst=list(land),
+        fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
         cmpr='bz2', nodeDigits=2,
         SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
         REP=aux.REP, SRP=aux.SRP,
