@@ -31,9 +31,9 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=10000):
     elif TYPE == 'HUM':
         colors = ['#274c7735', '#c879ff99', '#dee2ff35']
     elif TYPE == 'CSS':
-        colors = ['#8CD9FF53', '#bbdefb55', '#dee2ff35']
+        colors = ['#FF006E55', '#540d6e55', '#1d355799']
     elif TYPE == 'MRT':
-        colors = ['#274c7735', '#c879ff99', '#dee2ff35']
+        colors = ['#45d40c55', '#c879ff55', '#1d355799']
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 'colors': colors, 'folder': folder

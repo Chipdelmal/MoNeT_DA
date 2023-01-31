@@ -52,6 +52,7 @@ for (ix, fName) in enumerate(preFiles):
     preSca = pre['population']*NH
     (totalPop, incPop) = (preSca[:,-1], preSca[:,0])
     preSca[:,1] = totalPop-incPop*SCALER
+    preSca[:,0] = incPop*SCALER
     # Re-assemble and export --------------------------------------------------
     preFix = {'genotypes': pre['genotypes'], 'population': preSca}
     pkl.dump(preFix, fName)
@@ -67,6 +68,7 @@ for (ix, fName) in enumerate(preFiles):
         pop = pop*NH
         (totalPop, incPop) = (pop[:,-1], pop[:,0])
         pop[:,1] = totalPop-incPop*SCALER
+        pop[:,0] = incPop*SCALER
         preSca[ix] = pop
     # Re-assemble and export --------------------------------------------------
     preFix = {'genotypes': pre['genotypes'], 'landscapes': preSca}
