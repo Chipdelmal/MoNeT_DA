@@ -27,7 +27,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = True
+TICKS_HIDE = False
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
 thsStr = str(int(float(THS)*100))

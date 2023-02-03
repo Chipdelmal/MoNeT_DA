@@ -30,7 +30,7 @@ import PGS_mlrMethods as mth
 # https://stackoverflow.com/questions/55924789/normalization-of-input-data-in-keras
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', None, 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', None, 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -39,7 +39,7 @@ if USR == 'srv':
     JOB = aux.JOB_SRV
 CHUNKS = JOB
 C_VAL = True
-DEV = False
+DEV = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -93,7 +93,7 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
-    (batchSize, epochs) = (128, 300)
+    (batchSize, epochs) = (128*2, 150)
     def build_model():
         rf = Sequential()
         rf.add(Dense(
@@ -119,7 +119,9 @@ if DEV:
         return rf
     rf = KerasRegressor(build_fn=build_model)
 else:
-    (epochs, batchSize, rf) = mth.selectMLKeras(MOI, inDims=X_train.shape[1])
+    (epochs, batchSize, rf) = mth.selectMLKeras(
+        MOI, QNT, inDims=X_train.shape[1]
+    )
 # Output name -----------------------------------------------------------------
 modID = 'krs'
 if QNT:
