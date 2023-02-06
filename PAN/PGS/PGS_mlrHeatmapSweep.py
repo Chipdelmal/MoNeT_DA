@@ -27,7 +27,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = True
+TICKS_HIDE = False
 MAX_TIME = 365*2
 CLABEL_FONTSIZE = 0
 thsStr = str(int(float(THS)*100))
@@ -72,9 +72,9 @@ else:
 ###############################################################################
 # Sweep-Evaluate Model
 ###############################################################################
-(fig, ax) = plt.subplots(figsize=(10, 10))
 aren = list(np.arange(52, 20, -4))
 alphas = np.geomspace(0.01, .75, len(aren))
+(fig, ax) = plt.subplots(figsize=(10, 10))
 for (ix, ren) in enumerate(aren):
     fltr = {
         'i_ren': [ren],
