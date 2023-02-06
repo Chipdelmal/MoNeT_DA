@@ -189,7 +189,8 @@ def exportPstTracesPlotWrapper(
         transparent=False, 
         ticksHide=True, sampRate=1,
         fontsize=5, labelspacing=.1, 
-        vlines=[], hlines=[]
+        vlines=[], hlines=[],
+        wopColor='#3687ff'
     ):
     padi = str(exIx+1).zfill(digs)
     fmtStr = '{}+ File: {}/{}'
@@ -212,7 +213,9 @@ def exportPstTracesPlotWrapper(
     pop = repDta['landscapes'][0][STABLE_T][-1]
     # STYLE['yRange'] = (0,  pop*popScaler)
     exportTracesPlot(
-        repDta, repFile.split('/')[-1][:-6]+str(QNT), STYLE, PT_IMG,
+        repDta, 
+        repFile.split('/')[-1][:-6]+str(QNT)+'-'+str(int(float(THS)*100)), 
+        STYLE, PT_IMG,
         vLines=[tti, tto, 0]+vlines, hLines=[0]+hlines, labelPos=labelPos, 
         border=border, borderColor=borderColor, borderWidth=borderWidth,
         autoAspect=autoAspect, popScaler=popScaler,
@@ -220,6 +223,7 @@ def exportPstTracesPlotWrapper(
         cpt=cpt, cptPrint=cptPrint,
         poe=poe, poePrint=poePrint,
         mnf=mnf, mnfPrint=mnfPrint,
+        wopColor=wopColor,
         transparent=transparent, ticksHide=ticksHide, sampRate=sampRate,
         fontsize=fontsize, labelspacing=labelspacing
     )
@@ -234,6 +238,7 @@ def exportTracesPlot(
     cpt=0, cptPrint=False, 
     poe=0, poePrint=False,
     mnf=0, mnfPrint=False,
+    wopColor='#3687ff',
     transparent=False, ticksHide=True, sampRate=1,
     fontsize=5, labelspacing=.1
 ):
@@ -264,14 +269,14 @@ def exportTracesPlot(
         axTemp.set_axis_off()
     axTemp.xaxis.set_ticks(np.arange(STYLE['xRange'][0], STYLE['xRange'][1], 365))
     axTemp.yaxis.set_ticks(np.arange(STYLE['yRange'][0], STYLE['yRange'][1], STYLE['yRange'][1]/4))
-    axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
-    axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.0, color=(0, 0, 0))
+    axTemp.grid(which='major', axis='y', lw=.5, ls='-', alpha=0.2, color=(0, 0, 0))
+    axTemp.grid(which='major', axis='x', lw=.5, ls='-', alpha=0.2, color=(0, 0, 0))
 
     days = tS['landscapes'][0].shape[0]*sampRate
     if (vLines[0] > 0) and (vLines[1] <= days) and (wop > 0) and (vLines[0] < vLines[1]):
-        axTemp.axvspan(vLines[0], vLines[1], alpha=0.25, facecolor='#3687ff', zorder=-10)
-        axTemp.axvline(vLines[0], alpha=0.75, ls='-', lw=.1, color='#3687ff', zorder=-10)
-        axTemp.axvline(vLines[1], alpha=0.75, ls='-', lw=.1, color='#3687ff', zorder=-10)
+        axTemp.axvspan(vLines[0], vLines[1], facecolor=wopColor, zorder=-10)
+        axTemp.axvline(vLines[0], ls='--', lw=.75, alpha=.8, color=wopColor, zorder=-5)
+        axTemp.axvline(vLines[1], ls='--', lw=.75, alpha=.8, color=wopColor, zorder=-5)
 
     if (vLines[0] > 0) and (vLines[1] <= days) and (wop > 0) and (vLines[0] > vLines[1]):
         axTemp.axvspan(vLines[0], vLines[1], alpha=0.15, facecolor='#FF5277', zorder=0)

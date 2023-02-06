@@ -82,6 +82,7 @@ for exp in EXPS:
     ###########################################################################
     # Iterate through experiments
     ###########################################################################
+    wopC = ('#072ac825' if THS=='0.1' else '#3687ff22')
     (fNum, digs) = monet.lenAndDigits(repFiles)
     Parallel(n_jobs=JOB)(
         delayed(fun.exportPstTracesPlotWrapper)(
@@ -93,7 +94,8 @@ for exp in EXPS:
             labelPos=(.91, .875), fontsize=5, labelspacing=.08,
             transparent=True, vlines=aux.RELEASES, 
             poePrint=False,
-            wopPrint=False, cptPrint=False, mnfPrint=False
+            wopPrint=False, cptPrint=False, mnfPrint=False,
+            wopColor=wopC
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------
