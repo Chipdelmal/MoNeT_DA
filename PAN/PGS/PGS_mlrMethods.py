@@ -134,24 +134,20 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
             rf = KerasRegressor(build_fn=build_model)
         elif (MOI=='WOP'):
             print("* WOP Optimizer")
-            (batchSize, epochs) = (128, 150)
+            (batchSize, epochs) = (128*2, 150)
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
-                    16, activation= "sigmoid",
-                    input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                    16, activation= "tanh", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
-                rf.add(
-                    BatchNormalization(center=True, scale=True)
-                )
                 rf.add(Dense(
                     32, activation= "LeakyReLU",
                     kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
                 ))
                 rf.add(Dense(
                     32, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=4.5e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'
@@ -162,7 +158,7 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
                     metrics=["mean_squared_error"]
                 )
                 return rf
-            rf = KerasRegressor(build_fn=build_model)    
+            rf = KerasRegressor(build_fn=build_model)   
     return (epochs, batchSize, rf)
         
 

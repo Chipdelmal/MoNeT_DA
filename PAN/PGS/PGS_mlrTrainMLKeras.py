@@ -101,12 +101,12 @@ if DEV:
             kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         ))
         rf.add(Dense(
-            16, activation= "tanh",
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+            32, activation= "LeakyReLU",
+            kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
         ))
         rf.add(Dense(
-            16, activation= "tanh",
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+            32, activation= "LeakyReLU",
+            kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
