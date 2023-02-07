@@ -48,7 +48,7 @@ monet.printExperimentHead(
 if DRV != 'HUM':
     (CLR, YRAN) = (drive.get('colors'), (0, NM*drive.get('yRange')))
 else:
-    (CLR, YRAN) = (drive.get('colors'), (0, NH))
+    (CLR, YRAN) = (drive.get('colors'), (0, NH*drive.get('yRange')))
 STYLE = {
     "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,

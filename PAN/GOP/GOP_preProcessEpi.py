@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from os import path
+import compress_pickle as pkl
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
@@ -77,3 +79,6 @@ Parallel(n_jobs=JOB)(
     ) for exIx in expIter
 )
 
+
+# dta = pkl.load(path.join(PT_PRE, 'E_00_00000_0000000-MRT_00_srp.bz'))
+# print(dta)

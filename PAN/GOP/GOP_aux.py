@@ -25,10 +25,10 @@ XP_ID = 'GOP'
 ###############################################################################
 # Releases and Populations
 ###############################################################################
-(REL_START, RELEASES) = (5, [365+(7*i) for i in range(10)])
+(REL_START, RELEASES) = (365, [365+(7*i) for i in range(10)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
-    (REL_START, 2*int(365)), 
+    (REL_START, 2555+1), 
     False
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)
@@ -174,10 +174,10 @@ def getExps():
 def getPops(LND):
     if LND=='Brikama':
         NH = 77000
-        NM = 12000 # 2140998*2
+        NM = 31760*2 # 2140998*2
     else:
         NH = 182000
-        NM = 12000 # 8509527*2
+        NM = 52239*2 # 8509527*2
     return (NH, NM)
 
 ###############################################################################
