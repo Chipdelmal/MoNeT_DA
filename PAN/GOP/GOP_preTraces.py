@@ -48,7 +48,11 @@ monet.printExperimentHead(
 if DRV != 'HUM':
     (CLR, YRAN) = (drive.get('colors'), (0, NM*drive.get('yRange')))
 else:
-    (CLR, YRAN) = (drive.get('colors'), (0, NH*drive.get('yRange')))
+    if AOI == 'MRT':
+        (CLR, YRAN) = (drive.get('colors'), (0, 1))
+        print(YRAN)
+    else:
+        (CLR, YRAN) = (drive.get('colors'), (0, NH/10))
 STYLE = {
     "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
@@ -105,4 +109,3 @@ monet.exportGeneLegend(
     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
     PT_IMG+'/legend_{}.png'.format(AOI), 500
 )
-# dbg = pkl.load('/RAID5/marshallShare/fem_pgSIT/ifegenia_5/PREPROCESS/'+'E_0004_000160-ECO_00_sum.bz')

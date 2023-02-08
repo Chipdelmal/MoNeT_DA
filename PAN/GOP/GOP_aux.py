@@ -28,7 +28,7 @@ XP_ID = 'GOP'
 (REL_START, RELEASES) = (365, [365+(7*i) for i in range(10)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
-    (REL_START, 2555+1), 
+    (REL_START, 5475+1), 
     False
 )
 (STABLE_T, MLR, SAMP_RATE) = (0, False, 1)

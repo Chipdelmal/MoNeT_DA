@@ -79,6 +79,6 @@ Parallel(n_jobs=JOB)(
     ) for exIx in expIter
 )
 
-
-# dta = pkl.load(path.join(PT_PRE, 'E_00_00000_0000000-MRT_00_srp.bz'))
+# fName = 'E_26_07000_0075000-MRT_00_sum'
+# dta = pkl.load(path.join(PT_PRE, fName+'.bz'))
 # print(dta)

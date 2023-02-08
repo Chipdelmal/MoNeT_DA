@@ -58,8 +58,8 @@ EPI_MRT = {
 def driveParameters(TYPE, popSize):
     if TYPE == 'CSS':
         aggD = EPI_CSS
-        yRange = 2
+        yRange = 1
     elif TYPE == 'MRT':
         aggD = EPI_MRT
-        yRange = .75
+        yRange = 1
     return (aggD, yRange, 'pgSIT')

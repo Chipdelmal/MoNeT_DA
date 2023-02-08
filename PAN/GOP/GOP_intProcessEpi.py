@@ -43,7 +43,7 @@ monet.printExperimentHead(
 ###############################################################################
 # Processing loop
 ###############################################################################
-SCALER = 1000
+SCALER = 1
 # Average Response ------------------------------------------------------------
 preFiles = glob(path.join(PT_PRE, '*{}*sum.bz'.format(AOI)))
 for (ix, fName) in enumerate(preFiles):
