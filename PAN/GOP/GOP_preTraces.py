@@ -48,9 +48,8 @@ monet.printExperimentHead(
 if DRV != 'HUM':
     (CLR, YRAN) = (drive.get('colors'), (0, NM*drive.get('yRange')))
 else:
-    if AOI == 'MRT':
+    if AOI[:3] == 'MRT':
         (CLR, YRAN) = (drive.get('colors'), (0, 1))
-        print(YRAN)
     else:
         (CLR, YRAN) = (drive.get('colors'), (0, NH/10))
 STYLE = {

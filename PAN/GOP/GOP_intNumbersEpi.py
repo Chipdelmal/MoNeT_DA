@@ -3,6 +3,7 @@
 
 import sys
 from os import path
+import matplotlib.pyplot as plt
 from matplotlib.pyplot import axis
 from glob import glob
 from datetime import datetime
@@ -15,7 +16,7 @@ import GOP_gene as drv
 
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'HUM', 'CSS', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'HUM', 'MRT', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -51,48 +52,51 @@ ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[1]
 (xpNum, digs) = monet.lenAndDigits(ren)
 (i, rnIt) = (1, '26')
 
-# Get base experiments pattern --------------------------------------------
+# Get base experiments pattern -------------------------------------------
 monet.printProgress(i+1, xpNum, digs)
-# Repetitions data (Garbage) ------------------------------------------
+# Repetitions data (Garbage) ---------------------------------------------
 tracePat = aux.patternForReleases(rnIt, AOI, 'srp', pad=aux.DATA_PAD['i_ren'])
 traceFiles = sorted(glob(PT_PRE+tracePat))
-# Mean data (Analyzed) ------------------------------------------------
+# Mean data (Analyzed) ---------------------------------------------------
 meanPat = aux.patternForReleases(rnIt, AOI, 'sum', pad=aux.DATA_PAD['i_ren'])
 meanFiles = sorted(glob(PT_PRE+meanPat))
 expNum = len(meanFiles)
-# Patch for static reference file -------------------------------------
+# Patch for static reference file ----------------------------------------
 baseFiles = [aux.replaceExpBase(f, aux.REF_FILE) for f in meanFiles]
 baseFNum = len(baseFiles)
-###############################################################################
-# Processing loop
-###############################################################################
-SCALER = 1
-# Average Response ------------------------------------------------------------
-preFiles = glob(path.join(PT_PRE, '*{}*sum.bz'.format(AOI)))
-for (ix, fName) in enumerate(preFiles):
-    pre = pkl.load(fName)
-    # Incidence per 1000 instead of per capita --------------------------------
-    preSca = pre['population']*NH
-    (totalPop, incPop) = (preSca[:,-1], preSca[:,0])
-    preSca[:,1] = totalPop-incPop*SCALER
-    preSca[:,0] = incPop*SCALER
-    # Re-assemble and export --------------------------------------------------
-    preFix = {'genotypes': pre['genotypes'], 'population': preSca}
-    pkl.dump(preFix, fName)
-    # print(fName)
-# pkl.load(fName)
-# Traces Response -------------------------------------------------------------
-preFiles = glob(path.join(PT_PRE, '*{}*srp.bz'.format(AOI)))
-for (ix, fName) in enumerate(preFiles):
-    pre = pkl.load(fName)
-    # Incidence per 1000 instead of per capita ------------------------------------
-    preSca = pre['landscapes']
-    for (ix, pop) in enumerate(preSca):
-        pop = pop*NH
-        (totalPop, incPop) = (pop[:,-1], pop[:,0])
-        pop[:,1] = totalPop-incPop*SCALER
-        pop[:,0] = incPop*SCALER
-        preSca[ix] = pop
-    # Re-assemble and export --------------------------------------------------
-    preFix = {'genotypes': pre['genotypes'], 'landscapes': preSca}
-    pkl.dump(preFix, fName)
+# Get Baseline -----------------------------------------------------------
+baseFiles = [aux.replaceExpBase(f, aux.REF_FILE) for f in meanFiles]
+baseFNum = len(baseFiles)
+# Check for potential miss-matches in experiments folders ----------------
+(meanFNum, tracFNum) = (len(meanFiles), len(traceFiles))
+if (meanFNum!=tracFNum) or (baseFNum!=meanFNum) or (baseFNum!=tracFNum):
+    errorString = 'Unequal experiments folders lengths ({}/{}/{})'
+    sys.exit(errorString.format(baseFNum, meanFNum, tracFNum))
+# Create experiments iterator list ------------------------------------
+expIter = list(zip(
+    list(range(expNum)), baseFiles, meanFiles, traceFiles
+))
+# Filter existing if needed ----------------------------------------------
+if aux.OVW == False:
+    expIDPreDone = set(monet.splitExpNames(PT_OUT, ext='npy'))
+    expIDForProcessing = [i.split('/')[-1][:-14] for i in meanFiles]
+    expsIxList = list(locate(
+        [(i in expIDPreDone) for i in expIDForProcessing], 
+        lambda x: x!=True
+    ))
+    expIter = [expIter[i] for i in expsIxList]
+###########################################################################
+# Process data
+###########################################################################
+ix = 0
+exp = expIter[ix]
+
+(base, mean, trace) = [pkl.load(i) for i in exp[1:]]
+traceDiff = [(base['population']-tr)[aux.REL_START:,0] for tr in trace['landscapes']]
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+for i in traceDiff:
+    plt.plot(base['population'])
+ax.set_ylim(0, 1)

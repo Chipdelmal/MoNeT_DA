@@ -25,7 +25,7 @@ XP_ID = 'GOP'
 ###############################################################################
 # Releases and Populations
 ###############################################################################
-(REL_START, RELEASES) = (365, [365+(7*i) for i in range(10)])
+(REL_START, RELEASES) = (3650, [3650+(7*i) for i in range(10)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
     (REL_START, 5475+1), 
@@ -63,7 +63,7 @@ SA_MONOTONIC_CPT = {
 #   1e0, 1e8, 1e0, 1e10, 1e10, 1e10, 1e10, 1e10
 #   4, 14, 4, 12, 12, 12, 12, 12
 ###############################################################################
-(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}.{}', '00')
+(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}-{}_{}_{}.{}', '00')
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
