@@ -26,31 +26,36 @@ genotypes = (
 ###############################################################################
 #
 ###############################################################################
-# Cases -----------------------------------------------------------------------
-strata = ['00_01', '01_02', '02_03', '03_04', '04_05', '05_06']
 statDict = {
     'I': ['clin_inc', ], 
     'O': ['S', 'T', 'D', 'A', 'U', 'P'],
     'T': ['S', 'T', 'D', 'A', 'U', 'P']
 }
-EPI_CSS = aux.humanGroupsToGeneDict(statDict, strata, genotypes)
-EPI_CSS = {
-    'genotypes': list(EPI_CSS.keys()), 
-    'indices': list(EPI_CSS.values())
-}
-
+# Cases -----------------------------------------------------------------------
+strata = [['00_01', ], ['01_02', ], ['02_03', ], ['03_04', ], ['04_05', ], ['05_06', ]]
+EPI_CSS_FULL = []
+for st in strata:
+    EPI_CSS = aux.humanGroupsToGeneDict(statDict, st, genotypes)
+    EPI_CSS = {
+        'genotypes': list(EPI_CSS.keys()),
+        'indices': list(EPI_CSS.values())
+    }
+    EPI_CSS_FULL.append(EPI_CSS)
 # Mortality -------------------------------------------------------------------
-strata = ['00_01', '01_02', '02_03', '03_04', '04_05', '05_06']
 statDict = {
     'M': ['mort', ], 
     'O': ['S', 'T', 'D', 'A', 'U', 'P'],
     'T': ['S', 'T', 'D', 'A', 'U', 'P']
 }
-EPI_MRT = aux.humanGroupsToGeneDict(statDict, strata, genotypes)
-EPI_MRT = {
-    'genotypes': list(EPI_MRT.keys()),
-    'indices': list(EPI_MRT.values())
-}
+strata = [['00_01', ], ['01_02', ], ['02_03', ], ['03_04', ], ['04_05', ], ['05_06', ]]
+EPI_MRT_FULL = []
+for st in strata:
+    EPI_MRT = aux.humanGroupsToGeneDict(statDict, st, genotypes)
+    EPI_MRT = {
+        'genotypes': list(EPI_MRT.keys()),
+        'indices': list(EPI_MRT.values())
+    }
+    EPI_MRT_FULL.append(EPI_MRT)
 
 ###############################################################################
 # Drive Selector
@@ -62,4 +67,16 @@ def driveParameters(TYPE, popSize):
     elif TYPE == 'MRT':
         aggD = EPI_MRT
         yRange = 1
+    elif TYPE == 'MRT0': (yRange, aggD) = (1, EPI_MRT_FULL[0])
+    elif TYPE == 'MRT1': (yRange, aggD) = (1, EPI_MRT_FULL[1])
+    elif TYPE == 'MRT2': (yRange, aggD) = (1, EPI_MRT_FULL[2])
+    elif TYPE == 'MRT3': (yRange, aggD) = (1, EPI_MRT_FULL[3])
+    elif TYPE == 'MRT4': (yRange, aggD) = (1, EPI_MRT_FULL[4])
+    elif TYPE == 'MRT5': (yRange, aggD) = (1, EPI_MRT_FULL[5])
+    elif TYPE == 'CSS0': (yRange, aggD) = (1, EPI_CSS_FULL[0])
+    elif TYPE == 'CSS1': (yRange, aggD) = (1, EPI_CSS_FULL[1])
+    elif TYPE == 'CSS2': (yRange, aggD) = (1, EPI_CSS_FULL[2])
+    elif TYPE == 'CSS3': (yRange, aggD) = (1, EPI_CSS_FULL[3])
+    elif TYPE == 'CSS4': (yRange, aggD) = (1, EPI_CSS_FULL[4])
+    elif TYPE == 'CSS5': (yRange, aggD) = (1, EPI_CSS_FULL[5])
     return (aggD, yRange, 'pgSIT')

@@ -6,6 +6,7 @@ from os import path
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import axis
 from glob import glob
+import numpy as np
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
@@ -16,9 +17,9 @@ import GOP_gene as drv
 
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'HUM', 'MRT', 'None')
+    (USR, LND, DRV, AOI, SPE, QNT) = ('dsk', 'Brikama', 'HUM', 'MRT1', 'None', '50')
 else:
-    (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
+    (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
 if USR == 'srv':
@@ -93,10 +94,13 @@ exp = expIter[ix]
 
 (base, mean, trace) = [pkl.load(i) for i in exp[1:]]
 traceDiff = [(base['population']-tr)[aux.REL_START:,0] for tr in trace['landscapes']]
-
-
-fig = plt.figure()
-ax = fig.add_subplot(111)
-for i in traceDiff:
-    plt.plot(base['population'])
-ax.set_ylim(0, 1)
+humanScaler = (NH*aux.AGE_DISTR_N[int(AOI[-1])])
+traceDiffHuman = [i*humanScaler for i in traceDiff]
+# Plot ----------------------------------------------------------------
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# for i in traceDiffHuman:
+#     plt.plot(i)
+# ax.set_ylim(0, .1)
+qnt = np.quantile([sum(i) for i in traceDiffHuman], int(QNT)/100)
+np.array(traceDiffHuman)

@@ -163,6 +163,8 @@ def selectDepVars(MOI):
 def getExps():
     return ('A', 'B')
 
+AGE_DISTR = np.array([192, 294, 269, 120, 82, 44])
+AGE_DISTR_N = AGE_DISTR/np.sum(AGE_DISTR)
 def getPops(LND):
     if LND=='Brikama':
         NH = 77000

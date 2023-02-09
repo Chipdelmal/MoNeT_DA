@@ -49,11 +49,11 @@ if DRV != 'HUM':
     (CLR, YRAN) = (drive.get('colors'), (0, NM*drive.get('yRange')))
 else:
     if AOI[:3] == 'MRT':
-        (CLR, YRAN) = (drive.get('colors'), (0, 1))
+        (CLR, YRAN) = (drive.get('colors'), (0, 0.5e-5))
     else:
-        (CLR, YRAN) = (drive.get('colors'), (0, NH/10))
+        (CLR, YRAN) = (drive.get('colors'), (0, 1e-2))
 STYLE = {
-    "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/6, 
+    "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/2, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }

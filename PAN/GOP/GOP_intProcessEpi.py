@@ -49,7 +49,7 @@ preFiles = glob(path.join(PT_PRE, '*{}*sum.bz'.format(AOI)))
 for (ix, fName) in enumerate(preFiles):
     pre = pkl.load(fName)
     # Incidence per 1000 instead of per capita --------------------------------
-    preSca = pre['population']*NH
+    preSca = pre['population']*1# NH
     (totalPop, incPop) = (preSca[:,-1], preSca[:,0])
     preSca[:,1] = totalPop-incPop*SCALER
     preSca[:,0] = incPop*SCALER
@@ -65,7 +65,7 @@ for (ix, fName) in enumerate(preFiles):
     # Incidence per 1000 instead of per capita ------------------------------------
     preSca = pre['landscapes']
     for (ix, pop) in enumerate(preSca):
-        pop = pop*NH
+        pop = pop*1# NH
         (totalPop, incPop) = (pop[:,-1], pop[:,0])
         pop[:,1] = totalPop-incPop*SCALER
         pop[:,0] = incPop*SCALER
