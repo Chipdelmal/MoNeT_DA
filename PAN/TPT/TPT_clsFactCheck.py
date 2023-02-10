@@ -15,7 +15,7 @@ import TPT_gene as drv
 import TPT_functions as fun
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT, THS, SPE) = ('dsk', 'HUM', 'LDR', 50, 0.1, 'coluzzii_10_med')
+    (USR, AOI, DRV, QNT, THS, SPE) = ('dsk', 'HUM', 'INC', 50, 0.1, 'gambiae_0_low')
 else:
     (USR, AOI, DRV, QNT, THS, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -47,11 +47,11 @@ for exp in EXPS:
     PT_IMG = PT_IMG + 'pstTraces/'
     monet.makeFolder(PT_IMG)
     # Time and head -----------------------------------------------------------
-    tS = datetime.now()
-    monet.printExperimentHead(
-        PT_OUT, PT_IMG, tS, 
-        aux.XP_ID+' PstTraces [{}:{}:{}]'.format(DRV, exp, AOI)
-    )
+    # tS = datetime.now()
+    # monet.printExperimentHead(
+    #     PT_OUT, PT_IMG, tS, 
+    #     aux.XP_ID+' PstTraces [{}:{}:{}]'.format(DRV, exp, AOI)
+    # )
     ###########################################################################
     # Style 
     ###########################################################################
@@ -70,37 +70,7 @@ for exp in EXPS:
     (dfTTI, dfTTO, dfWOP, dfRAP, dfMNX, dfPOE, dfCPT) = [
         pd.read_csv(i) for i in pstFiles
     ]
-    ###########################################################################
-    # Load preprocessed files lists
-    ###########################################################################
-    (fltrPattern, globPattern) = ('dummy', PT_PRE+'*'+AOI+'*'+'{}'+'*')
-    if aux.FZ:
-        fltrPattern = aux.patternForReleases('00', AOI, 'srp')
-    repFiles = monet.getFilteredFiles(
-        PT_PRE+fltrPattern, globPattern.format('srp')
-    )
-    ###########################################################################
-    # Iterate through experiments
-    ###########################################################################
-    wopC = ('#072ac825' if THS=='0.1' else '#3687ff22')
-    (fNum, digs) = monet.lenAndDigits(repFiles)
-    Parallel(n_jobs=JOB)(
-        delayed(fun.exportPstTracesPlotWrapper)(
-            exIx, repFiles, xpidIx,
-            dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
-            aux.STABLE_T, str(THS), QNT, STYLE, PT_IMG,
-            digs=digs, popScaler=1, autoAspect=1,
-            border=True, borderColor='#000000AA', borderWidth=1,
-            labelPos=(.91, .875), fontsize=5, labelspacing=.08,
-            transparent=True, vlines=aux.RELEASES, 
-            poePrint=False,
-            wopPrint=False, cptPrint=False, mnfPrint=False,
-            wopColor=wopC
-        ) for exIx in range(0, len(repFiles))
-    )
-    # Export gene legend ------------------------------------------------------
-    # repDta = pkl.load(repFiles[-1])
-    # monet.exportGeneLegend(
-    #     repDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
-    #     PT_IMG+'/legend_{}.png'.format(AOI), 500
-    # )
+    # Check TTI
+    ttis = [round((dfTTI.iloc[-1][i]-aux.RELEASES[-1])/30, 2) for i in ('0.9', '0.5', '0.1')]
+    print(SPE, exp, ttis)
+    
