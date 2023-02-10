@@ -12,4 +12,4 @@ cd "$parent_path"
 # Launch Scripts
 ###############################################################################
 python CEF_preProcess.py $USR $DRV $AOI
-python CEF_preTraces.py $USR $DRV $AOI
+# python CEF_preTraces.py $USR $DRV $AOI
