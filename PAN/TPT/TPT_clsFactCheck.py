@@ -15,7 +15,7 @@ import TPT_gene as drv
 import TPT_functions as fun
 
 if monet.isNotebook():
-    (USR, AOI, DRV, QNT, THS, SPE) = ('dsk', 'HUM', 'INC', 50, 0.1, 'gambiae_0_low')
+    (USR, AOI, DRV, QNT, THS, SPE) = ('srv', 'INC', 'LDR', 50, 0.1, 'coluzzii_20_med')
 else:
     (USR, AOI, DRV, QNT, THS, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -31,7 +31,7 @@ CHUNKS = JOB
 # Processing loop
 ###############################################################################
 exp = EXPS[2]
-for exp in EXPS:
+for exp in EXPS[1:]:
     (header, xpidIx) = list(zip(*aux.DATA_HEAD))
     ###########################################################################
     # Load landscape and drive
@@ -45,7 +45,7 @@ for exp in EXPS:
         USR, exp, DRV, SPE
     )
     PT_IMG = PT_IMG + 'pstTraces/'
-    monet.makeFolder(PT_IMG)
+    # monet.makeFolder(PT_IMG)
     # Time and head -----------------------------------------------------------
     # tS = datetime.now()
     # monet.printExperimentHead(
@@ -71,6 +71,12 @@ for exp in EXPS:
         pd.read_csv(i) for i in pstFiles
     ]
     # Check TTI
-    ttis = [round((dfTTI.iloc[-1][i]-aux.RELEASES[-1])/30, 2) for i in ('0.9', '0.5', '0.1')]
-    print(SPE, exp, ttis)
+    ths = ('0.5', '0.1')
+    ttis = [
+        round((dfTTI.iloc[-1][i]-aux.RELEASES[-1])/30, 2) for i in ths
+    ]
+    ttos = [
+        round((dfTTO.iloc[-1][i]-aux.RELEASES[-1])/30, 2) for i in ths
+    ]
+    print(SPE, exp, ttis+ttos[::-1])
     

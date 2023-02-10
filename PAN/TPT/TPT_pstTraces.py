@@ -92,7 +92,7 @@ for exp in EXPS:
             digs=digs, popScaler=1, autoAspect=1,
             border=True, borderColor='#000000AA', borderWidth=1,
             labelPos=(.91, .875), fontsize=5, labelspacing=.08,
-            transparent=True, vlines=aux.RELEASES, 
+            transparent=True, vlines=aux.RELEASES, # +list(range(0, aux.XRAN[-1], 60)), 
             poePrint=False,
             wopPrint=False, cptPrint=False, mnfPrint=False,
             wopColor=wopC
