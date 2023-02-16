@@ -4,6 +4,7 @@
 import re
 import pandas as pd
 import numpy as np
+import math
 from numpy import random
 from glob import glob
 from more_itertools import locate
@@ -421,3 +422,17 @@ def exportPstTracesParallel(
         sampRate=sampRate, labelspacing=labelspacing
     )
     return None
+
+###############################################################################
+# Epi Numbers
+###############################################################################
+def windowAggregate(dynsArray, window=30, aggFun=sum):
+    (delta, dayTotal) = (window, dynsArray.shape[0])
+    steps = math.floor(dayTotal/delta)
+    # Iterate through array
+    (day0, dayF, wCases) = (0, delta, [])
+    for _ in range(steps):
+        aggCases = aggFun(dynsArray[day0:dayF])
+        wCases.append(aggCases)
+        (day0, dayF) = (day0+delta, dayF+delta)
+    return wCases
