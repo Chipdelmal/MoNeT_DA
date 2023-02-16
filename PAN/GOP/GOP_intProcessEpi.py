@@ -37,7 +37,7 @@ if USR == 'srv':
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_DTA, PT_DTA, tS, 
+    PT_PRE, PT_PRE, tS, 
     '{} IntProcessEpi [{}:{}:{}]'.format(aux.XP_ID, fldr, LND, AOI)
 )
 ###############################################################################

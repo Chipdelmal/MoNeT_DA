@@ -43,7 +43,7 @@ for ix in range(6):
     if ix==0:
         tS = datetime.now()
         monet.printExperimentHead(
-            PT_DTA, PT_PRE, tS, 'EpiNumbers [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
+            PT_PRE, PT_MTR, tS, 'EpiNumbers [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI[:3])
         )
     ###########################################################################
     # Base experiments
