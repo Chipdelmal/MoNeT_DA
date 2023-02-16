@@ -1,8 +1,8 @@
 #!/bin/bash
 
-USR=$1 # dsk
-LND=$2 # Brikama
-DRV=$3 # HUM/PGS
+USR=$1      # dsk
+LND=$2      # Brikama
+DRV="HUM"   # HUM/PGS
 SPE='None'
 
 ###############################################################################
@@ -19,3 +19,5 @@ do
     python GOP_intProcessEpi.py $USR $LND $DRV $aoi $SPE
     python GOP_preTraces.py $USR $LND $DRV $aoi $SPE
 done
+python GOP_intNumbersEpi.py $USR $LND $DRV "MRT0" $SPE '50'
+python GOP_intNumbersEpi.py $USR $LND $DRV "CSS0" $SPE '50'

@@ -5,6 +5,8 @@ import sys
 import pandas as pd
 from glob import glob
 import numpy as np
+from os import path
+from datetime import datetime
 import MoNeT_MGDrivE as monet
 from matplotlib.pyplot import axis
 from more_itertools import locate
@@ -15,7 +17,7 @@ import GOP_gene_EPI as epi
 
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'CSS0', 'None', '50')
+    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'MRT0', 'None', '50')
 else:
     (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -25,7 +27,7 @@ if USR == 'srv':
 ###############################################################################
 # Processing loop
 ###############################################################################
-tSeries = []
+(bSeries, tSeries) = ([], [])
 for ix in range(6):
     AOI = AOI[:3]+str(ix)
     (NH, NM) = aux.getPops(LND)
@@ -37,6 +39,12 @@ for ix in range(6):
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, LND, DRV, SPE
     )
+    # Time and head -----------------------------------------------------------
+    if ix==0:
+        tS = datetime.now()
+        monet.printExperimentHead(
+            PT_DTA, PT_PRE, tS, 'EpiNumbers [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
+        )
     ###########################################################################
     # Base experiments
     #   These are the experiments without any releases (for fractions)
@@ -86,23 +94,31 @@ for ix in range(6):
     exp = expIter[ix]
     (base, mean, trace) = [pkl.load(i) for i in exp[1:]]
     humanScaler = (NH*aux.AGE_DISTR_N[int(AOI[-1])])
-    # Calculate cases difference ----------------------------------------------
-    traceDiff = [(base['population']-tr)[aux.REL_START:,0] for tr in trace['landscapes']]
+    # Calculate base case -----------------------------------------------------
+    baseCase = base['population'][aux.REL_START:,0]
+    baseCaseHuman = baseCase*humanScaler
+    aggBases = aux.windowAggregate(baseCaseHuman, window=30, aggFun=sum)
+    # Calculate cases difference  ---------------------------------------------
+    traceDiff = [(base['population']-tr)[aux.REL_START:, 0] for tr in trace['landscapes']]
     traceDiffHuman = np.array([i*humanScaler for i in traceDiff])
     traceDiffHumanQNT = np.quantile(traceDiffHuman, int(QNT)/100, axis=0)
     # Quantiles ---------------------------------------------------------------
     qnt = np.quantile([sum(i) for i in traceDiffHuman], int(QNT)/100)
     aggCases = aux.windowAggregate(traceDiffHumanQNT, window=30, aggFun=sum)
     # Appends and Prints  -----------------------------------------------------
+    bSeries.append(aggBases)
     tSeries.append(aggCases)
-    print(AOI+': '+str(qnt))
-print('\n')
-
+    # print(AOI+': '+str(qnt))
+###############################################################################
+# Export Files to Disk
+###############################################################################
+expName = '{}-{}'.format(exp[1].split('/')[-1].split('-')[0], AOI[:3])
+# Base case -------------------------------------------------------------------
+dfNoTreatment = pd.DataFrame(np.asarray(bSeries).T, columns=epi.AGE_GROUP_LABEL)
+dfNoTreatment.to_excel(path.join(PT_MTR, expName+'-base.xls'))
+dfNoTreatment.to_csv(path.join(PT_MTR, expName+'-base.csv'))
+# Treatment case --------------------------------------------------------------
 dfTreatment = pd.DataFrame(np.asarray(tSeries).T, columns=epi.AGE_GROUP_LABEL)
+dfTreatment.to_excel(path.join(PT_MTR, expName+'-trtm.xls'))
+dfTreatment.to_csv(path.join(PT_MTR, expName+'-trtm.csv'))
 
-
-# fig = plt.figure()
-# ax = fig.add_subplot(111)
-# for i in traceDiffHuman:
-#     plt.plot(i)
-# ax.set_ylim(0, .1)
