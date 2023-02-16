@@ -17,7 +17,7 @@ import GOP_gene as drv
 
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'Brikama', 'HUM', 'MRT1', 'None', '50')
+    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'Brikama', 'HUM', 'CSS0', 'None', '50')
 else:
     (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -25,7 +25,8 @@ JOB=aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
 
-for AOI in ["MRT0", "MRT1", "MRT2", "MRT3", "MRT4", "MRT5"]:
+for ix in range(6):
+    AOI = AOI[:3]+str(ix)
     ###############################################################################
     # Processing loop
     ###############################################################################
