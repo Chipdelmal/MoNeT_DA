@@ -8,7 +8,7 @@ import numpy as np
 from os import path
 from datetime import datetime
 import MoNeT_MGDrivE as monet
-from matplotlib.pyplot import axis
+import matplotlib.pyplot as plt
 from more_itertools import locate
 import compress_pickle as pkl
 import GOP_aux as aux
@@ -17,7 +17,7 @@ import GOP_gene_EPI as epi
 
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'MRT0', 'None', '50')
+    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'Brikama', 'HUM', 'MRT0', 'None', '50')
 else:
     (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -121,4 +121,27 @@ dfNoTreatment.to_csv(path.join(PT_MTR, expName+'-base.csv'))
 dfTreatment = pd.DataFrame(np.asarray(tSeries).T, columns=epi.AGE_GROUP_LABEL)
 dfTreatment.to_excel(path.join(PT_MTR, expName+'-trtm.xls'))
 dfTreatment.to_csv(path.join(PT_MTR, expName+'-trtm.csv'))
-
+###############################################################################
+# Plot
+###############################################################################
+label = ('cases' if AOI[:3]=='CSS' else 'deaths')
+yran = (4000 if AOI[:3]=='CSS' else 3)
+tDelta = (500 if AOI[:3]=='CSS' else 1)
+colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
+# Generate figure -------------------------------------------------------------
+(fig, ax) = plt.subplots(figsize=(8, 4))
+for ix in range(dfTreatment.shape[1]):
+    plt.plot(dfTreatment.iloc[:,ix], color=colors[ix], lw=2.5)
+plt.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
+ax.set_xticks(np.arange(0, dfTreatment.shape[0], 5))
+ax.set_yticks(np.arange(0, yran, tDelta))
+ax.set_title(LND)
+ax.grid(color='#00000055', linestyle='-', linewidth=.1)
+ax.set_xlabel("30-day intervals")
+ax.set_ylabel("Aggregate difference in number of {}".format(label))
+ax.set_xlim(0, dfTreatment.shape[0]-1)
+ax.set_ylim(0, yran)
+fig.savefig(
+    path.join(PT_MTR, expName+'.png'), 
+    dpi=300, pad_inches=0.25, bbox_inches="tight"
+)
