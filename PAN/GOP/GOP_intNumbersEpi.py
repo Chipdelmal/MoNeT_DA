@@ -27,7 +27,7 @@ if USR == 'srv':
 ###############################################################################
 # Processing loop
 ###############################################################################
-(bSeries, tSeries) = ([], [])
+(bSeries, tSeries, xSeries) = ([], [], [])
 for ix in range(6):
     AOI = AOI[:3]+str(ix)
     (NH, NM) = aux.getPops(LND)
@@ -98,29 +98,40 @@ for ix in range(6):
     baseCase = base['population'][aux.REL_START:,0]
     baseCaseHuman = baseCase*humanScaler
     aggBases = aux.windowAggregate(baseCaseHuman, window=30, aggFun=sum)
+    # Calculate treatment case ------------------------------------------------
+    traceT = [tr[aux.REL_START:, 0] for tr in trace['landscapes']]
+    traceHuman = np.array([i*humanScaler for i in traceT])
+    traceHumanQNT = np.quantile(traceHuman, int(QNT)/100, axis=0)
     # Calculate cases difference  ---------------------------------------------
     traceDiff = [(base['population']-tr)[aux.REL_START:, 0] for tr in trace['landscapes']]
     traceDiffHuman = np.array([i*humanScaler for i in traceDiff])
     traceDiffHumanQNT = np.quantile(traceDiffHuman, int(QNT)/100, axis=0)
     # Quantiles ---------------------------------------------------------------
+    qnt = np.quantile([sum(i) for i in traceHuman], int(QNT)/100)
+    aggTraceCases = aux.windowAggregate(traceHumanQNT, window=30, aggFun=sum)
     qnt = np.quantile([sum(i) for i in traceDiffHuman], int(QNT)/100)
     aggCases = aux.windowAggregate(traceDiffHumanQNT, window=30, aggFun=sum)
     # Appends and Prints  -----------------------------------------------------
     bSeries.append(aggBases)
     tSeries.append(aggCases)
+    xSeries.append(aggTraceCases)
     # print(AOI+': '+str(qnt))
 ###############################################################################
 # Export Files to Disk
 ###############################################################################
-expName = '{}-{}'.format(exp[1].split('/')[-1].split('-')[0], AOI[:3])
+expName = '{}-{}'.format(exp[2].split('/')[-1].split('-')[0], AOI[:3])
 # Base case -------------------------------------------------------------------
 dfNoTreatment = pd.DataFrame(np.asarray(bSeries).T, columns=epi.AGE_GROUP_LABEL)
 dfNoTreatment.to_excel(path.join(PT_MTR, expName+'-base.xls'))
 dfNoTreatment.to_csv(path.join(PT_MTR, expName+'-base.csv'))
 # Treatment case --------------------------------------------------------------
+dfXTreatment = pd.DataFrame(np.asarray(xSeries).T, columns=epi.AGE_GROUP_LABEL)
+dfXTreatment.to_excel(path.join(PT_MTR, expName+'-treat.xls'))
+dfXTreatment.to_csv(path.join(PT_MTR, expName+'-treat.csv'))
+# Treatment difference --------------------------------------------------------
 dfTreatment = pd.DataFrame(np.asarray(tSeries).T, columns=epi.AGE_GROUP_LABEL)
-dfTreatment.to_excel(path.join(PT_MTR, expName+'-trtm.xls'))
-dfTreatment.to_csv(path.join(PT_MTR, expName+'-trtm.csv'))
+dfTreatment.to_excel(path.join(PT_MTR, expName+'-diff.xls'))
+dfTreatment.to_csv(path.join(PT_MTR, expName+'-diff.csv'))
 ###############################################################################
 # Plot
 ###############################################################################
@@ -128,7 +139,7 @@ label = ('cases' if AOI[:3]=='CSS' else 'deaths')
 yran = (4000 if AOI[:3]=='CSS' else 3)
 tDelta = (500 if AOI[:3]=='CSS' else 1)
 colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
-# Generate figure -------------------------------------------------------------
+# Generate difference figure --------------------------------------------------
 (fig, ax) = plt.subplots(figsize=(8, 4))
 for ix in range(dfTreatment.shape[1]):
     plt.plot(dfTreatment.iloc[:,ix], color=colors[ix], lw=2.5)
@@ -142,6 +153,40 @@ ax.set_ylabel("Aggregate difference in number of {}".format(label))
 ax.set_xlim(0, dfTreatment.shape[0]-1)
 ax.set_ylim(0, yran)
 fig.savefig(
-    path.join(PT_MTR, expName+'.png'), 
+    path.join(PT_MTR, expName+'-diff.png'), 
+    dpi=300, pad_inches=0.25, bbox_inches="tight"
+)
+# Generate base figure --------------------------------------------------------
+(fig, ax) = plt.subplots(figsize=(8, 4))
+for ix in range(dfNoTreatment.shape[1]):
+    plt.plot(dfNoTreatment.iloc[:,ix], color=colors[ix], lw=2.5)
+plt.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
+ax.set_xticks(np.arange(0, dfNoTreatment.shape[0], 5))
+ax.set_yticks(np.arange(0, yran, tDelta))
+ax.set_title(LND)
+ax.grid(color='#00000055', linestyle='-', linewidth=.1)
+ax.set_xlabel("30-day intervals")
+ax.set_ylabel("Aggregate {} in baseline case".format(label))
+ax.set_xlim(0, dfNoTreatment.shape[0]-1)
+ax.set_ylim(0, yran)
+fig.savefig(
+    path.join(PT_MTR, expName+'-base.png'), 
+    dpi=300, pad_inches=0.25, bbox_inches="tight"
+)
+# Generate treat figure -------------------------------------------------------
+(fig, ax) = plt.subplots(figsize=(8, 4))
+for ix in range(dfXTreatment.shape[1]):
+    plt.plot(dfXTreatment.iloc[:,ix], color=colors[ix], lw=2.5)
+plt.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
+ax.set_xticks(np.arange(0, dfXTreatment.shape[0], 5))
+ax.set_yticks(np.arange(0, yran, tDelta))
+ax.set_title(LND)
+ax.grid(color='#00000055', linestyle='-', linewidth=.1)
+ax.set_xlabel("30-day intervals")
+ax.set_ylabel("Aggregate {} in treatment case".format(label))
+ax.set_xlim(0, dfXTreatment.shape[0]-1)
+ax.set_ylim(0, yran)
+fig.savefig(
+    path.join(PT_MTR, expName+'-treat.png'), 
     dpi=300, pad_inches=0.25, bbox_inches="tight"
 )
