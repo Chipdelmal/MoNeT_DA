@@ -10,7 +10,7 @@ import FMS_aux as aux
 import FMS_gene as drv
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'FMS5', '50', 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 iVars = ['i_ren', 'i_res', 'i_pct']
@@ -117,8 +117,8 @@ for sw in [0.9]: # sweep:
     fltr[kSweep] = sw
     ks = [all(i) for i in zip(*[np.isclose(DATA[k], fltr[k]) for k in list(fltr.keys())])]
     dfSrf = DATA[ks]
-    if dfSrf.shape[0] < 4:
-        continue
+    # if dfSrf.shape[0] < 4:
+    #     continue
     ###########################################################################
     # Generate Surface
     ###########################################################################
@@ -141,7 +141,7 @@ for sw in [0.9]: # sweep:
     ###########################################################################
     # Plot
     ###########################################################################
-    (fig, ax) = plt.subplots(figsize=(10, 8))
+    (fig, ax) = plt.subplots(figsize=(10, 10))
     # Experiment points, contour lines, response surface ----------------------
     xy = ax.plot(rsG[0], rsG[1], 'k.', ms=2.5, alpha=.25, marker='.')
     cc = ax.contour(
@@ -173,7 +173,9 @@ for sw in [0.9]: # sweep:
         ax.set_yticks([i/scalers[1] for i in gZeroY])
         ax.axes.yaxis.set_ticklabels(gZeroY)
     else:
-        ax.set_yticks([i/scalers[1] for i in list(sorted(y.unique()))])
+        (xvals, yvals) = [list(sorted(a.unique())) for a in (x, y)] 
+        ax.set_xticks(list(range(0, int(max(xvals))+1, 6)))
+        ax.set_yticks([i/scalers[1] for i in range(0, int(max(yvals)), 5)])
         ax.axes.yaxis.set_ticklabels(sorted(y.unique()))
     ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
     ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
@@ -205,8 +207,8 @@ for sw in [0.9]: # sweep:
     if renB and resB:
         ax.xaxis.set_ticks(np.arange(0, max(DATA['i_ren']), 4))
         ax.yaxis.set_ticks(np.arange(0, max(DATA['i_res']), 4))
-    plt.xlim(ran[0][0], ran[0][1])
-    plt.ylim(ran[1][0], ran[1][1])
+    plt.xlim(0, max(xvals))
+    plt.ylim(0, max(yvals))
     if TICKS_HIDE:
         ax.axes.xaxis.set_ticklabels([])
         ax.axes.yaxis.set_ticklabels([])
