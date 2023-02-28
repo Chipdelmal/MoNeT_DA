@@ -75,9 +75,9 @@ df = pd.DataFrame([
         # ['PAWN',  *aux.getSASortedDF(pawn, 'mean', validFeat)], 
         ['FAST',  *aux.getSASortedDF(fast, 'S1', validFeat)], 
         ['HDMR',  *aux.getSASortedDF(hdmr, 'S1', validFeat)], 
-        ['ISCI',  *aux.getSASortedDF(isci, 'mean', validFeat)], 
-        ['IRFI',  *aux.getSASortedDF(irfi, 'Importance', validFeat)], 
-        ['SHAP',  *aux.getSASortedDF(shp, 'mean', validFeat)], 
+        # ['ISCI',  *aux.getSASortedDF(isci, 'mean', validFeat)], 
+        # ['IRFI',  *aux.getSASortedDF(irfi, 'Importance', validFeat)], 
+        # ['SHAP',  *aux.getSASortedDF(shp, 'mean', validFeat)], 
     ],
     columns=['name']+validFeat
 )
@@ -86,7 +86,7 @@ new_header = dfT.iloc[0]
 dfT = dfT[1:]
 dfT.columns = new_header
 dfT = dfT.reset_index()
-dfT.sort_values('SHAP', ascending=True, inplace=True)
+dfT.sort_values('Delta', ascending=True, inplace=True)
 ###############################################################################
 # Plotting
 ###############################################################################
