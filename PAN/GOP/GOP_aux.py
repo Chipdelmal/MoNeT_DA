@@ -26,7 +26,7 @@ XP_ID = 'GOP'
 ###############################################################################
 # Releases and Populations
 ###############################################################################
-(REL_START, RELEASES) = (3650, [3650+(7*i) for i in range(10)])
+(REL_START, RELEASES) = (365*2, [365*2+(7*i) for i in range(20)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
     (REL_START, 5475+1), 
@@ -64,27 +64,28 @@ SA_MONOTONIC_CPT = {
 #   1e0, 1e8, 1e0, 1e10, 1e10, 1e10, 1e10, 1e10
 #   4, 14, 4, 12, 12, 12, 12, 12
 ###############################################################################
-(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}-{}_{}_{}.{}', '00')
+(XP_PTRN, NO_REL_PAT) = ('E_{}_{}_{}_{}-{}_{}_{}.{}', '00')
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD')
 )
 # Data Analysis ---------------------------------------------------------------
+# E_26_07000_0075000_50
 (DATA_HEAD, DATA_SCA, DATA_PAD, DATA_TYPE) = (
     (
-        ('i_ren', 1), ('i_rei', 2), ('i_mtf', 3),
+        ('i_ren', 1), ('i_rei', 2), ('i_mtf', 3), ('i_res', 4),
         ('i_grp', 10)
     ),
     {
-        'i_ren': 1e0, 'i_rei': 1e3, 'i_mtf': 1e5,
+        'i_ren': 1e0, 'i_rei': 1e3, 'i_mtf': 1e5, 'i_res': 1e0,
         'i_grp': 1e0
     },
     {
-        'i_ren': 2,  'i_rei': 5, 'i_mtf': 7,
+        'i_ren': 2,  'i_rei': 5, 'i_mtf': 7, 'i_res': 2,
         'i_grp': 2
     },
     {
-        'i_ren': np.int8, 'i_rei': np.int8, 'i_rei': np.double,
+        'i_ren': np.int8, 'i_rei': np.int8, 'i_rei': np.double, 'i_ren': np.int8,
         'i_grp': np.int8
     }
 )
@@ -181,7 +182,7 @@ def getPops(LND):
 def patternForReleases(ren, AOI, ftype, ext='bz', pad=0):
     renP = str(ren).rjust(pad, '0')
     strPat = XP_PTRN.format(
-        renP, '*', '*', 
+        renP, '*', '*', '*',
         AOI, '*', ftype, ext
     )
     return strPat
