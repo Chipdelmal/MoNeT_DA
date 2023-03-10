@@ -17,7 +17,7 @@ import GOP_gene_EPI as epi
 
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'MRT0', 'None', '50')
+    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'CSS0', 'None', '50')
 else:
     (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -31,8 +31,10 @@ if USR == 'srv':
     USR, LND, DRV, SPE
 )
 ren = aux.getExperimentsIDSets(PT_PRE, skip=-1)[1]
+(i, rnIt) = (1, 20)
 for (i, rnIt) in enumerate(ren):
     (bSeries, tSeries, xSeries) = ([], [], [])
+    ix = 1
     for ix in range(6):
         AOI = AOI[:3]+str(ix)
         (NH, NM) = aux.getPops(LND)
@@ -94,7 +96,10 @@ for (i, rnIt) in enumerate(ren):
         # Process data
         ###########################################################################
         # Load base, mean and trace -----------------------------------------------
-        ix = 0
+        if len(expIter)>1:
+            ix = 0
+        else:
+            ix = 0
         exp = expIter[ix]
         (base, mean, trace) = [pkl.load(i) for i in exp[1:]]
         humanScaler = (NH*aux.AGE_DISTR_N[int(AOI[-1])])
@@ -119,7 +124,7 @@ for (i, rnIt) in enumerate(ren):
         bSeries.append(aggBases)
         tSeries.append(aggCases)
         xSeries.append(aggTraceCases)
-        # print(AOI+': '+str(qnt))
+            # print(AOI+': '+str(qnt))
     ###############################################################################
     # Export Files to Disk
     ###############################################################################
