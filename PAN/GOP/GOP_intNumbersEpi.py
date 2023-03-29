@@ -34,9 +34,10 @@ CLASSES_NUM = 6
 (ren, res) = (
     aux.getExperimentsIDSets(PT_PRE, skip=-1)[1],
     aux.getExperimentsIDSets(PT_PRE, skip=-1)[4]
-)      
+)
+rsIx = 0
 for rsIx in range(len(res)-1):
-    (i, rnIt) = (1, 20)
+    (i, rnIt) = (5, 10)
     for (i, rnIt) in enumerate(ren):
         (bSeries, tSeries, xSeries) = ([], [], [])
         strat = 1
@@ -150,7 +151,7 @@ for rsIx in range(len(res)-1):
         ###############################################################################
         label = ('cases' if AOI[:3]=='CSS' else 'deaths')
         yran = (500 if AOI[:3]=='CSS' else 500)
-        tDelta = (500 if AOI[:3]=='CSS' else 100)
+        tDelta = (100 if AOI[:3]=='CSS' else 100)
         colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
         # Generate difference figure --------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
