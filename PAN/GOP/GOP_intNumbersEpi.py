@@ -15,6 +15,11 @@ import GOP_aux as aux
 import GOP_gene as drv
 import GOP_gene_EPI as epi
 
+plt.rcParams.update({
+    "figure.facecolor":  (0.0, 0.0, 0.0, 0.0),
+    "axes.facecolor":    (0.0, 0.0, 0.0, 0.0),
+    "savefig.facecolor": (0.0, 0.0, 0.0, 0.0),
+})
 
 if monet.isNotebook():
     (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'CSS0', 'None', '50')
@@ -25,6 +30,10 @@ JOB=aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
 CLASSES_NUM = 6
+WSIZE = 1
+ASPECT = 1/10
+LABELS = False
+TO = 0 # aux.REL_START
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -37,7 +46,7 @@ CLASSES_NUM = 6
 )
 rsIx = 0
 for rsIx in range(len(res)-1):
-    (i, rnIt) = (5, 10)
+    (i, rnIt) = (0, 10)
     for (i, rnIt) in enumerate(ren):
         (bSeries, tSeries, xSeries) = ([], [], [])
         strat = 1
@@ -109,22 +118,22 @@ for rsIx in range(len(res)-1):
             (base, mean, trace) = [pkl.load(i) for i in exp[1:]]
             humanScaler = (NH*aux.AGE_DISTR_N[int(AOI[-1])])
             # Calculate base case -----------------------------------------------------
-            baseCase = base['population'][aux.REL_START:,0]
+            baseCase = base['population'][TO:,0]
             baseCaseHuman = baseCase*humanScaler
-            aggBases = aux.windowAggregate(baseCaseHuman, window=30, aggFun=sum)
+            aggBases = aux.windowAggregate(baseCaseHuman, window=WSIZE, aggFun=sum)
             # Calculate treatment case ------------------------------------------------
-            traceT = [tr[aux.REL_START:, 0] for tr in trace['landscapes']]
+            traceT = [tr[TO:, 0] for tr in trace['landscapes']]
             traceHuman = np.array([i*humanScaler for i in traceT])
             traceHumanQNT = np.quantile(traceHuman, int(QNT)/100, axis=0)
             # Calculate cases difference  ---------------------------------------------
-            traceDiff = [(base['population']-tr)[aux.REL_START:, 0] for tr in trace['landscapes']]
+            traceDiff = [(base['population']-tr)[TO:, 0] for tr in trace['landscapes']]
             traceDiffHuman = np.array([i*humanScaler for i in traceDiff])
             traceDiffHumanQNT = np.quantile(traceDiffHuman, int(QNT)/100, axis=0)
             # Quantiles ---------------------------------------------------------------
             qnt = np.quantile([sum(i) for i in traceHuman], int(QNT)/100)
-            aggTraceCases = aux.windowAggregate(traceHumanQNT, window=30, aggFun=sum)
+            aggTraceCases = aux.windowAggregate(traceHumanQNT, window=WSIZE, aggFun=sum)
             qnt = np.quantile([sum(i) for i in traceDiffHuman], int(QNT)/100)
-            aggCases = aux.windowAggregate(traceDiffHumanQNT, window=30, aggFun=sum)
+            aggCases = aux.windowAggregate(traceDiffHumanQNT, window=WSIZE, aggFun=sum)
             # Appends and Prints  -----------------------------------------------------
             bSeries.append(aggBases)
             tSeries.append(aggCases)
@@ -150,60 +159,79 @@ for rsIx in range(len(res)-1):
         # Plot
         ###############################################################################
         label = ('cases' if AOI[:3]=='CSS' else 'deaths')
-        yran = (500 if AOI[:3]=='CSS' else 500)
-        tDelta = (100 if AOI[:3]=='CSS' else 100)
+        yran = (10*WSIZE if AOI[:3]=='CSS' else 10*WSIZE)
+        tDelta = (100/WSIZE if AOI[:3]=='CSS' else 100/WSIZE)
         colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
         # Generate difference figure --------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
         for ix in range(dfTreatment.shape[1]):
-            plt.plot(dfTreatment.iloc[:,ix], color=colors[ix], lw=2.5)
-        plt.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
-        ax.set_xticks(np.arange(0, dfTreatment.shape[0], 5))
-        ax.set_yticks(np.arange(0, yran, tDelta))
-        ax.set_title(LND)
-        ax.grid(color='#00000055', linestyle='-', linewidth=.1)
-        ax.set_xlabel("30-day intervals")
-        ax.set_ylabel("Aggregate difference in number of {}".format(label))
+            ax.plot(dfTreatment.iloc[:,ix], color=colors[ix], lw=1)
+        if LABELS:
+            ax.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
+            ax.set_xticks(np.arange(0, dfTreatment.shape[0], (30*5)/WSIZE))
+            ax.set_yticks(np.arange(0, yran, tDelta))
+            ax.set_title(LND)
+            ax.grid(color='#00000055', linestyle='-', linewidth=.1)
+            ax.set_xlabel("{}-day intervals".format(WSIZE))
+            ax.set_ylabel("Aggregate difference in number of {}".format(label))
+        else:
+            ax.set_xticks([])
+            ax.set_yticks([])
+        ax.patch.set_facecolor('#00000000')
+        ax.set_aspect(ASPECT * ((dfTreatment.shape[0]-1)/yran))
         ax.set_xlim(0, dfTreatment.shape[0]-1)
         ax.set_ylim(0, yran)
         fig.savefig(
             path.join(PT_MTR, expName+'-diff.png'), 
-            dpi=300, pad_inches=0.25, bbox_inches="tight"
+            dpi=300, pad_inches=0.025, bbox_inches="tight",
+            transparent=True
         )
         plt.close(fig)
         # Generate base figure --------------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
         for ix in range(dfNoTreatment.shape[1]):
-            plt.plot(dfNoTreatment.iloc[:,ix], color=colors[ix], lw=2.5)
-        plt.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
-        ax.set_xticks(np.arange(0, dfNoTreatment.shape[0], 5))
-        ax.set_yticks(np.arange(0, yran, tDelta))
-        ax.set_title(LND)
-        ax.grid(color='#00000055', linestyle='-', linewidth=.1)
-        ax.set_xlabel("30-day intervals")
-        ax.set_ylabel("Aggregate {} in baseline case".format(label))
-        ax.set_xlim(0, dfNoTreatment.shape[0]-1)
+            ax.plot(dfNoTreatment.iloc[:,ix], color=colors[ix], lw=1)
+        if LABELS:
+            ax.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
+            ax.set_xticks(np.arange(0, dfTreatment.shape[0], (30*5)/WSIZE))
+            ax.set_yticks(np.arange(0, yran, tDelta))
+            ax.set_title(LND)
+            ax.grid(color='#00000055', linestyle='-', linewidth=.1)
+            ax.set_xlabel("{}-day intervals".format(WSIZE))
+            ax.set_ylabel("Aggregate difference in number of {}".format(label))
+        else:
+            ax.set_xticks([])
+            ax.set_yticks([])
+        ax.set_aspect(ASPECT * ((dfTreatment.shape[0]-1)/yran))
+        ax.set_xlim(0, dfTreatment.shape[0]-1)
         ax.set_ylim(0, yran)
         fig.savefig(
             path.join(PT_MTR, expName+'-base.png'), 
-            dpi=300, pad_inches=0.25, bbox_inches="tight"
+            dpi=300, pad_inches=0.025, bbox_inches="tight",
+            transparent=True, facecolor=None
         )
         plt.close(fig)
         # Generate treat figure -------------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
         for ix in range(dfXTreatment.shape[1]):
-            plt.plot(dfXTreatment.iloc[:,ix], color=colors[ix], lw=2.5)
-        plt.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
-        ax.set_xticks(np.arange(0, dfXTreatment.shape[0], 5))
-        ax.set_yticks(np.arange(0, yran, tDelta))
-        ax.set_title(LND)
-        ax.grid(color='#00000055', linestyle='-', linewidth=.1)
-        ax.set_xlabel("30-day intervals")
-        ax.set_ylabel("Aggregate {} in treatment case".format(label))
-        ax.set_xlim(0, dfXTreatment.shape[0]-1)
+            ax.plot(dfXTreatment.iloc[:,ix], color=colors[ix], lw=1)
+        if LABELS:
+            ax.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
+            ax.set_xticks(np.arange(0, dfTreatment.shape[0], (30*5)/WSIZE))
+            ax.set_yticks(np.arange(0, yran, tDelta))
+            ax.set_title(LND)
+            ax.grid(color='#00000055', linestyle='-', linewidth=.1)
+            ax.set_xlabel("{}-day intervals".format(WSIZE))
+            ax.set_ylabel("Aggregate difference in number of {}".format(label))
+        else:
+            ax.set_xticks([])
+            ax.set_yticks([])
+        ax.set_aspect(ASPECT * ((dfTreatment.shape[0]-1)/yran))
+        ax.set_xlim(0, dfTreatment.shape[0]-1)
         ax.set_ylim(0, yran)
         fig.savefig(
             path.join(PT_MTR, expName+'-treat.png'), 
-            dpi=300, pad_inches=0.25, bbox_inches="tight"
+            dpi=300, pad_inches=0.025, bbox_inches="tight",
+            transparent=True, facecolor=None
         )
-        plt.close(fig)
+        # plt.close(fig)
