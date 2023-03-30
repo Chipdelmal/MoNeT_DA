@@ -15,7 +15,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'PGS', 'ECO', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'UpperRiver', 'PGS', 'ECO', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -53,7 +53,7 @@ else:
     else:
         (CLR, YRAN) = (drive.get('colors'), (0, 1e-2))
 STYLE = {
-    "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/2, 
+    "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }
