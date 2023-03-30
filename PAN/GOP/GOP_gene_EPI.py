@@ -64,20 +64,20 @@ for st in strata:
 def driveParameters(TYPE, popSize):
     if TYPE == 'CSS':
         aggD = EPI_CSS
-        yRange = 1
+        yRange = 500
     elif TYPE == 'MRT':
         aggD = EPI_MRT
-        yRange = 1
-    elif TYPE == 'MRT0': (yRange, aggD) = (1, EPI_MRT_FULL[0])
-    elif TYPE == 'MRT1': (yRange, aggD) = (1, EPI_MRT_FULL[1])
-    elif TYPE == 'MRT2': (yRange, aggD) = (1, EPI_MRT_FULL[2])
-    elif TYPE == 'MRT3': (yRange, aggD) = (1, EPI_MRT_FULL[3])
-    elif TYPE == 'MRT4': (yRange, aggD) = (1, EPI_MRT_FULL[4])
-    elif TYPE == 'MRT5': (yRange, aggD) = (1, EPI_MRT_FULL[5])
-    elif TYPE == 'CSS0': (yRange, aggD) = (1, EPI_CSS_FULL[0])
-    elif TYPE == 'CSS1': (yRange, aggD) = (1, EPI_CSS_FULL[1])
-    elif TYPE == 'CSS2': (yRange, aggD) = (1, EPI_CSS_FULL[2])
-    elif TYPE == 'CSS3': (yRange, aggD) = (1, EPI_CSS_FULL[3])
-    elif TYPE == 'CSS4': (yRange, aggD) = (1, EPI_CSS_FULL[4])
-    elif TYPE == 'CSS5': (yRange, aggD) = (1, EPI_CSS_FULL[5])
+        yRange = 500
+    elif TYPE == 'MRT0': (yRange, aggD) = (500, EPI_MRT_FULL[0])
+    elif TYPE == 'MRT1': (yRange, aggD) = (500, EPI_MRT_FULL[1])
+    elif TYPE == 'MRT2': (yRange, aggD) = (500, EPI_MRT_FULL[2])
+    elif TYPE == 'MRT3': (yRange, aggD) = (500, EPI_MRT_FULL[3])
+    elif TYPE == 'MRT4': (yRange, aggD) = (500, EPI_MRT_FULL[4])
+    elif TYPE == 'MRT5': (yRange, aggD) = (500, EPI_MRT_FULL[5])
+    elif TYPE == 'CSS0': (yRange, aggD) = (500, EPI_CSS_FULL[0])
+    elif TYPE == 'CSS1': (yRange, aggD) = (500, EPI_CSS_FULL[1])
+    elif TYPE == 'CSS2': (yRange, aggD) = (500, EPI_CSS_FULL[2])
+    elif TYPE == 'CSS3': (yRange, aggD) = (500, EPI_CSS_FULL[3])
+    elif TYPE == 'CSS4': (yRange, aggD) = (500, EPI_CSS_FULL[4])
+    elif TYPE == 'CSS5': (yRange, aggD) = (500, EPI_CSS_FULL[5])
     return (aggD, yRange, 'pgSIT')

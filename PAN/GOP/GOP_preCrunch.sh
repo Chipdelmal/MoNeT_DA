@@ -10,7 +10,7 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-for lnd in "Brikama" "UpperRiver"
+for lnd in "UpperRiver"
 do
     bash GOP_preProcess.sh $USR $lnd "PGS"
     bash GOP_preProcessEpi.sh $USR $lnd "HUM"

@@ -13,7 +13,7 @@ import GOP_gene as drv
 
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'HUM', 'MRT', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'UpperRiver', 'HUM', 'CSS', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------

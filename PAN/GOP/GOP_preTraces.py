@@ -15,7 +15,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'UpperRiver', 'PGS', 'ECO', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'UpperRiver', 'PGS', 'HLT', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -55,7 +55,7 @@ else:
 STYLE = {
     "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/5, 
     "colors": CLR, "legend": True,
-    "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
+    "xRange": aux.XRAN, "yRange": (0, YRAN[1]*10)
 }
 ###############################################################################
 # Load preprocessed files lists
