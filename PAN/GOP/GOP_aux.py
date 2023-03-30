@@ -26,7 +26,7 @@ XP_ID = 'GOP'
 ###############################################################################
 # Releases and Populations
 ###############################################################################
-(REL_START, RELEASES) = (365*2, [365*2+(7*i) for i in range(20)])
+(REL_START, RELEASES) = (365*2-6*30, [365*2+(7*i) for i in range(20)])
 (POP_SIZE, HUM_SIZE, INC_SIZE, XRAN, FZ) = (
     5e3, 1e3, 1000*1.25,
     (REL_START, 5475+1), 
@@ -304,8 +304,6 @@ def exportTracesPlot(
     figArr = monet.plotNodeTraces(tS, STYLE, sampRate=sampRate)
     axTemp = figArr[0].get_axes()[0]
     STYLE['yRange'] = (STYLE['yRange'][0], STYLE['yRange'][1]*popScaler)
-    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
-    axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
     if autoAspect:
         axTemp.set_aspect(aspect=monet.scaleAspect(STYLE["aspect"], STYLE))
     else:
@@ -379,6 +377,8 @@ def exportTracesPlot(
             axTemp.spines[axis].set_linewidth(borderWidth)
     else:
         pad = 0
+    axTemp.set_xlim(STYLE['xRange'][0], STYLE['xRange'][1])
+    axTemp.set_ylim(STYLE['yRange'][0], STYLE['yRange'][1])
     figArr[0].savefig(
             "{}/{}.png".format(PATH_IMG, nS),
             dpi=STYLE['dpi'], facecolor=None,
