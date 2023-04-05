@@ -15,7 +15,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'UpperRiver', 'PGS', 'HLT', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('srv', 'UpperRiver', 'PGS', 'HLT', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------

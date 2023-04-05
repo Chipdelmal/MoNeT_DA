@@ -30,10 +30,10 @@ JOB=aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
 CLASSES_NUM = 6
-WSIZE = 1
+WSIZE = 30
 ASPECT = 1/10
 LABELS = False
-TO = 0 # aux.REL_START
+TO = aux.REL_START
 ###############################################################################
 # Processing loop
 ###############################################################################
