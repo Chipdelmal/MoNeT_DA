@@ -29,10 +29,10 @@ else:
 JOB=aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
-CLASSES_NUM = 6
+CLASSES_NUM = 5
 WSIZE = 30
 ASPECT = 1/10
-LABELS = False
+LABELS = True
 TO = aux.REL_START
 ###############################################################################
 # Processing loop
@@ -159,8 +159,8 @@ for rsIx in range(len(res)-1):
         # Plot
         ###############################################################################
         label = ('cases' if AOI[:3]=='CSS' else 'deaths')
-        yran = (10*WSIZE if AOI[:3]=='CSS' else 10*WSIZE)
-        tDelta = (100/WSIZE if AOI[:3]=='CSS' else 100/WSIZE)
+        yran = (10*WSIZE if AOI[:3]=='CSS' else 0.75*WSIZE)
+        tDelta = (10*WSIZE/5 if AOI[:3]=='CSS' else 0.75*WSIZE/5)
         colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
         # Generate difference figure --------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
