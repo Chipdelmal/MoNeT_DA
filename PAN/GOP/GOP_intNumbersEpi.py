@@ -22,7 +22,7 @@ plt.rcParams.update({
 })
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'CSS0', 'None', '50')
+    (USR, LND, DRV, AOI, SPE, QNT) = ('dsk', 'UpperRiver', 'HUM', 'CSS0', 'None', '50')
 else:
     (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -33,7 +33,7 @@ CLASSES_NUM = 5
 WSIZE = 1
 ASPECT = 1/10
 LABELS = False
-TO = aux.REL_START
+TO = 0 # aux.REL_START
 ###############################################################################
 # Processing loop
 ###############################################################################
@@ -159,8 +159,8 @@ for rsIx in range(len(res)-1):
         # Plot
         ###############################################################################
         label = ('cases' if AOI[:3]=='CSS' else 'deaths')
-        yran = (50*WSIZE if AOI[:3]=='CSS' else 20*WSIZE)
-        tDelta = (50*WSIZE/5 if AOI[:3]=='CSS' else 20*WSIZE/5)
+        yran = (50*WSIZE if AOI[:3]=='CSS' else 1*WSIZE)
+        tDelta = (50*WSIZE/5 if AOI[:3]=='CSS' else 1*WSIZE/5)
         colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
         # Generate difference figure --------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
@@ -183,7 +183,7 @@ for rsIx in range(len(res)-1):
         ax.set_ylim(0, yran)
         fig.savefig(
             path.join(PT_MTR, expName+'-diff.png'), 
-            dpi=300, pad_inches=0.025, bbox_inches="tight",
+            dpi=500, pad_inches=0.025, bbox_inches="tight",
             transparent=True
         )
         plt.close(fig)
@@ -207,7 +207,7 @@ for rsIx in range(len(res)-1):
         ax.set_ylim(0, yran)
         fig.savefig(
             path.join(PT_MTR, expName+'-base.png'), 
-            dpi=300, pad_inches=0.025, bbox_inches="tight",
+            dpi=500, pad_inches=0.025, bbox_inches="tight",
             transparent=True, facecolor=None
         )
         plt.close(fig)
@@ -231,7 +231,7 @@ for rsIx in range(len(res)-1):
         ax.set_ylim(0, yran)
         fig.savefig(
             path.join(PT_MTR, expName+'-treat.png'), 
-            dpi=300, pad_inches=0.025, bbox_inches="tight",
+            dpi=500, pad_inches=0.025, bbox_inches="tight",
             transparent=True, facecolor=None
         )
         # plt.close(fig)

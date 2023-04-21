@@ -15,7 +15,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('srv', 'UpperRiver', 'PGS', 'HLT', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('dsk', 'UpperRiver', 'PGS', 'HLT', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -46,7 +46,7 @@ monet.printExperimentHead(
 # Style 
 ###############################################################################
 if DRV != 'HUM':
-    (CLR, YRAN) = (drive.get('colors'), (0, NM*drive.get('yRange')))
+    (CLR, YRAN) = (drive.get('colors'), (0, 0.4e6)) # NM*drive.get('yRange')))
 else:
     if AOI[:3] == 'MRT':
         (CLR, YRAN) = (drive.get('colors'), (0, 0.5e-5))
