@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from itertools import product
 from datetime import datetime
 from keras.layers import Dense
+from keras.models import load_model
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping
 from keras.regularizers import L1L2
@@ -30,7 +31,7 @@ import PGS_mlrMethods as mth
 # https://stackoverflow.com/questions/55924789/normalization-of-input-data-in-keras
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', None, 'HLT', '0.1', 'WOP')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -228,7 +229,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 3500
+SAMP_NUM = 4000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
@@ -256,6 +257,11 @@ for r in range(len(display.axes_)):
             display.axes_[r][c].set_xlabel(indVarsLabel[ix])
             display.axes_[r][c].set_ylabel("")
             display.axes_[r][c].get_legend().remove()
+            xlim = display.axes_[r][c].get_xlim()
+            display.axes_[r][c].set_xlim(
+                aux.SA_RANGES[c][1][0], 
+                min(aux.SA_RANGES[c][1][1], xlim[1])
+            )
         except:
             continue
 display.figure_.savefig(

@@ -192,6 +192,11 @@ for r in range(len(display.axes_)):
             display.axes_[r][c].set_xlabel(indVarsLabel[ix])
             display.axes_[r][c].set_ylabel("")
             display.axes_[r][c].get_legend().remove()
+            xlim = display.axes_[r][c].get_xlim()
+            display.axes_[r][c].set_xlim(
+                aux.SA_RANGES[c][1][0], 
+                min(aux.SA_RANGES[c][1][1], xlim[1])
+            )
         except:
             continue
 display.figure_.savefig(
