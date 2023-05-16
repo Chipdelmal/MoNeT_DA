@@ -12,9 +12,11 @@ from joblib import Parallel, delayed
 ###############################################################################
 # Drives: LinkedDrive, splitDrive, tGD
 ###############################################################################
-(USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, DRV, AOI) = ('srv', 'linkedDrive', 'HLT')
-(FMT, OVW, JOB) = ('bz2', True, 40)
+if monet.isNotebook():
+    (USR, DRV, AOI) = ('srv3', 'linkedDrive', 'HLT')
+else:
+    (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
+(FMT, OVW, JOB) = ('bz2', True, 25)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 EXP = aux.EXPS
 NOI = [[0], ]
