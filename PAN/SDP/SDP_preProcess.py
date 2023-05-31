@@ -9,7 +9,7 @@ import SDP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('lab', 'CRS', 'HLT')
+    (USR, DRV, AOI) = ('sami', 'PGS', 'HLT')
     (OVW, JOB) = (True, aux.JOB_DSK)
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])

@@ -1,7 +1,5 @@
 
 import re
-import matplotlib
-import pandas as pd
 from glob import glob
 import MoNeT_MGDrivE as monet
 
@@ -9,17 +7,16 @@ import MoNeT_MGDrivE as monet
 # Constants
 # #############################################################################
 (XP_ID, XP_PTRN, EXPS) = (
-    'SDP', 'E_{}_{}_{}_{}_{}-{}_{}_{}.{}',
-    ('000', '001') #, '010')
+    'SDP', 'E_{}_{}-{}_{}_{}.{}',
+    ('001', '003')
 )
-(POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*2.5), True, 0)
+(POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*10), True, 0)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST, DATA_HEAD, MLR) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD'),
-    (
-        ('i_par', 1), ('i_csa', 2), ('i_csb', 3), 
-        ('i_ren', 4), ('i_res', 5), ('i_grp', 7)
+    ( 
+        ('i_ren', 1), ('i_res', 2), ('i_grp', 7)
     ),
     False
 )
@@ -60,31 +57,11 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def selectPath(USR, DRV, EXP):
     if USR == 'srv':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/{}/{}/'.format(
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20230525/{}/{}/'.format(
             DRV, EXP
         )
-    elif USR == 'srv2':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/theoretical/{}/{}/'.format(
-            DRV, EXP
-        )
-    elif USR == 'srvA':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized1/{}/{}/'.format(
-            DRV, EXP
-        )
-    elif USR == 'srvB':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized3/{}/{}/'.format(
-            DRV, EXP
-        )
-    elif USR == 'srvC':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/realized7/{}/{}/'.format(
-            DRV, EXP
-        )
-    elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/SDP/{}/{}/'.format(
-            DRV, EXP
-        )
-    elif USR == 'lab':
-         PATH_ROOT = '/Volumes/marshallShare/SplitDrive_Suppression/theoretical/{}/{}/'.format(
+    elif USR == 'sami':
+        PATH_ROOT = '/Users/sanchez.hmsc/Documents/WorkSims/SDP/20230525/{}/{}/'.format(
             DRV, EXP
         )
     (PATH_IMG, PATH_DATA) = (
