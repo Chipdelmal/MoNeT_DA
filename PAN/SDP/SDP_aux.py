@@ -16,7 +16,7 @@ import MoNeT_MGDrivE as monet
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
     ('ECO', 'HLT', 'TRS', 'WLD'), ('HLT', 'TRS', 'WLD'),
     ( 
-        ('i_ren', 1), ('i_res', 2), ('i_grp', 7)
+        ('i_ren', 1), ('i_res', 2), ('i_grp', 4)
     ),
     False
 )
@@ -37,7 +37,7 @@ def splitExpNames(PATH_OUT, ext='bz'):
 
 
 def patternForReleases(ren, AOI, ftype, ext='bz'):
-    strPat = XP_PTRN.format('*', '*', '*', ren, '*', AOI, '*', ftype, ext)
+    strPat = XP_PTRN.format(ren, '*', AOI, '*', ftype, ext)
     return strPat
 
 

@@ -13,7 +13,7 @@ import SDP_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('dsk', 'CRS', 'HLT')
+    (USR, DRV, AOI) = ('srv', 'PGS', 'HLT')
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 ###############################################################################
@@ -23,6 +23,7 @@ else:
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 ###############################################################################
 EXPS = aux.EXPS
+exp = EXPS[0]
 for exp in EXPS:
     (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
         USR, fldr, exp
@@ -36,7 +37,7 @@ for exp in EXPS:
     # Setting up paths and style
     ###############################################################################
     uids = aux.getExperimentsIDSets(PT_PRE, skip=-1, ext='.bz')
-    (par, csa, csb, ren, res, aoi, grp) = uids[1:]
+    (ren, res, aoi, grp) = uids[1:]
     # #########################################################################
     # Base experiments
     #   These are the experiments without any releases (for fractions)

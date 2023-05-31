@@ -14,7 +14,7 @@ import SDP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT) = ('dsk', 'CRS', 'HLT', '50')
+    (USR, DRV, AOI, QNT) = ('srv', 'PGS', 'HLT', '50')
 else:
     (USR, DRV, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 ###############################################################################
@@ -29,6 +29,7 @@ else:
 # Iterate through experiments
 ###############################################################################
 EXPS = aux.EXPS
+exp = EXPS[0]
 for exp in EXPS:
     ###########################################################################
     # Setting up paths
@@ -65,7 +66,7 @@ for exp in EXPS:
     # Iterate through experiments
     ###########################################################################
     fmtStr = '{}+ File: {}/{}'
-    # (i, fPath) = (0, fPaths[0])
+    (i, fPath) = (0, fPaths[0])
     for (i, fPath) in enumerate(fPaths):
         repRto = np.load(fPath)
         (reps, days) = repRto.shape
