@@ -21,7 +21,8 @@ if AOI == 'HLT':
 ###############################################################################
 # Multifix
 ###############################################################################
-multi = {'CRS', 'CRX', 'CRY', 'SDR', 'SDX', 'SDY'}
+# multi = {'CRS', 'CRX', 'CRY', 'SDR', 'SDX', 'SDY'}
+multi = {'None', }
 if DRV in multi:
     append = (
         '_Adult_Het', '_Adult_Hom', 
