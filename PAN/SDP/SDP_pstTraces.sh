@@ -5,7 +5,7 @@
 # argv3: TRH
 
 
-QNT="75"
+QNT="50"
 python SDP_pstTraces.py $1 $2 HLT $QNT $3
 python SDP_pstTraces.py $1 $2 WLD $QNT $3
 python SDP_pstTraces.py $1 $2 TRS $QNT $3
