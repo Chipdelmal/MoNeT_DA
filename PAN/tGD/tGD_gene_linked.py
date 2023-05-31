@@ -45,7 +45,8 @@ LDR_CAP = monet.geneFrequencies(CAP_DICT, genotypes)
 ###############################################################################
 HLT_DICT = OrderedDict((
     ('H*', (('H', locus), )),
-    ('O-', (('W', locus), ('R', locus), ('B', locus)))
+    ('O-', (('W', locus), ('R', locus), ('B', locus))),
+    ('T',  (('H', locus), ('W', locus), ('R', locus), ('B', locus)))
 ))
 LDR_HLT = monet.geneFrequencies(HLT_DICT, genotypes)
 

@@ -51,9 +51,9 @@ def driveSelector(DRIVE, TYPE, popSize=(11000)):
         (aggD, yRange, folder) = TGD.driveParameters(TYPE, popSize)
     ###########################################################################
     if TYPE == 'ECO':
-        colors = monet.COLEN
+        colors = ['#ff595e1A', '#8d99ae1A', '#6a4c931A', '#1982c41A', '#ffca3a1A']
     if TYPE == 'CAP':
-        colors = ['#ff595e1A', '#8ac9261A', '#1982c41A', '#6a4c931A', '#ffca3a1A']
+        colors = ['#ff595e1A', '#8ac9261A', '#6a4c931A', '#1982c41A', '#ffca3a1A']
     elif TYPE == 'HLT':
         colors = COLHN
     elif TYPE == 'TRS':

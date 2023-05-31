@@ -13,9 +13,10 @@ import compress_pickle as pkl
 # import warnings
 # warnings.filterwarnings("ignore")
 
-
-(USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
-# (USR, DRV, AOI) = ('srv', 'tGD', 'ECO')
+if monet.isNotebook():
+    (USR, DRV, AOI) = ('srv3', 'linkedDrive', 'HLT')
+else:
+    (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 (FMT, SKP, MF, FZ) = ('bz2', False, (True, True), False)
 EXP = aux.EXPS
 ##############################################################################
@@ -63,6 +64,7 @@ for exp in EXP:
     ###########################################################################
     (xpNum, digs) = monet.lenAndDigits(fLists)
     msg = '* Analyzing ({}/{})'
+    i = 0
     for i in range(0, xpNum):
         print(msg.format(str(i+1).zfill(digs), str(xpNum).zfill(digs)), end='\r')
         (sumDta, repDta) = [pkl.load(file) for file in (fLists[i])]
