@@ -11,9 +11,9 @@ import MoNeT_MGDrivE as monet
 import compress_pickle as pkl
 import matplotlib.pyplot as plt
 from more_itertools import locate
-import GOP_aux as aux
-import GOP_gene as drv
-import GOP_gene_EPI as epi
+import PGG_aux as aux
+import PGG_gene as drv
+import PGG_gene_EPI as epi
 
 plt.rcParams.update({
     "figure.facecolor":  (0.0, 0.0, 0.0, 0.0),

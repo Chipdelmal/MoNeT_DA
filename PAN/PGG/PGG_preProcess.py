@@ -7,8 +7,8 @@ from datetime import datetime
 from joblib import Parallel, delayed
 from more_itertools import locate
 import MoNeT_MGDrivE as monet
-import GOP_aux as aux
-import GOP_gene as drv
+import PGG_aux as aux
+import PGG_gene as drv
 
 if monet.isNotebook():
     (USR, LND, DRV, AOI, SPE) = ('dsk', 'Brikama', 'PGS', 'ECO', 'None')

@@ -10,8 +10,5 @@ cd "$parent_path"
 ###############################################################################
 # Launch Scripts
 ###############################################################################
-for lnd in "UpperRiver"
-do
-    bash GOP_preProcess.sh $USR $lnd "PGS"
-    bash GOP_preProcessEpi.sh $USR $lnd "HUM"
-done
+bash PGG_preProcess.sh $USR "PGS"
+bash PGG_preProcessEpi.sh $USR "HUM"

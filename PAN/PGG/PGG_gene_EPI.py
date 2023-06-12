@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import GOP_aux as aux
+import PGG_aux as aux
 
 NH = 182000 # Upper River
 NH = 77000  # Brikama

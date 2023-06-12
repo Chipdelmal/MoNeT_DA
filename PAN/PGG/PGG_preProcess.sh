@@ -1,8 +1,8 @@
 #!/bin/bash
 
 USR=$1 # dsk
-LND=$2 # Brikama
-DRV=$3 # PGS
+DRV=$2 # PGG
+LND="Dummy" # Brikama
 SPE='None'
 
 ###############################################################################
@@ -15,6 +15,6 @@ cd "$parent_path"
 ###############################################################################
 for aoi in "ECO" "HLT"
 do
-    python GOP_preProcess.py $USR $LND $DRV $aoi $SPE
-    python GOP_preTraces.py $USR $LND $DRV $aoi $SPE
+    python PGG_preProcess.py $USR $LND $DRV $aoi $SPE
+    python PGG_preTraces.py $USR $LND $DRV $aoi $SPE
 done

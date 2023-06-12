@@ -8,8 +8,8 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 from more_itertools import locate
-import GOP_aux as aux
-import GOP_gene as drv
+import PGG_aux as aux
+import PGG_gene as drv
 
 
 if monet.isNotebook():

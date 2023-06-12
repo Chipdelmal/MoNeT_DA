@@ -10,8 +10,8 @@ import MoNeT_MGDrivE as monet
 from joblib import Parallel, delayed
 from more_itertools import locate
 import compress_pickle as pkl
-import GOP_aux as aux
-import GOP_gene as drv
+import PGG_aux as aux
+import PGG_gene as drv
 
 
 if monet.isNotebook():

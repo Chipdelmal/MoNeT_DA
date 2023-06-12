@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import MoNeT_MGDrivE as monet
-import GOP_gene_PGS as PGS
-import GOP_gene_EPI as EPI
+import PGG_gene_PGS as PGS
+import PGG_gene_EPI as EPI
 
 ###############################################################################
 # Drive
