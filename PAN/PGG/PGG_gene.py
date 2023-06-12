@@ -22,8 +22,10 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000), humSize=10000):
             '#2614ed55', '#FF006E55', '#45d40c55', '#8338EC55', '#1888e355', 
             '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
         ]
+        yRange =  0.4e6*4
     elif TYPE == 'HLT':
         colors = ['#f2008955', '#c879ff55', '#2614ed35']
+        yRange = 0.4e6
     elif TYPE == 'TRS':
         colors = monet.COLTN
     elif TYPE == 'WLD':
