@@ -33,9 +33,13 @@ CRS_ECO = monet.geneFrequencies(ECO_DICT, genotypes)
 ###############################################################################
 # Health genotype counts
 ###############################################################################
+# HLT_DICT = OrderedDict((
+#     ('H*', (('G', locusB), )),
+#     ('O-', (('W', locusB), ('B', locusB), ('R', locusB)))
+# ))
 HLT_DICT = OrderedDict((
-    ('H*', (('G', locusB), )),
-    ('O-', (('W', locusB), ('B', locusB), ('R', locusB)))
+    ('H*', (('G', locusB), ('W', locusB), ('B', locusB), ('R', locusB))),
+    ('O-', (('G', locusB), ('W', locusB), ('B', locusB), ('R', locusB)))
 ))
 CRS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 

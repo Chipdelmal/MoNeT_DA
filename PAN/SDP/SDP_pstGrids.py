@@ -1,4 +1,5 @@
 
+import cv2
 import sys
 from glob import glob
 from datetime import datetime

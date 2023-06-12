@@ -15,7 +15,7 @@ import SDP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS) = ('dsk', 'CRS', 'HLT', '50', '0.5')
+    (USR, DRV, AOI, QNT, THS) = ('srv', 'PGS', 'HLT', '50', '0.1')
     JOB = 1# aux.JOB_DSK
 else:
     (USR, DRV, AOI, QNT, THS) = (
@@ -52,7 +52,7 @@ for exp in EXPS:
             "width": .75, "alpha": .75, "dpi": 300, "legend": True,
             "aspect": .25, "colors": CLR, "xRange": aux.XRAN, "yRange": YRAN
         }
-    STYLE['aspect'] = monet.scaleAspect(1, STYLE)
+    STYLE['aspect'] = monet.scaleAspect(.25, STYLE)
     ###########################################################################
     # Load postprocessed files
     ###########################################################################
@@ -80,7 +80,7 @@ for exp in EXPS:
         exIx, repFiles, xpidIx,
         dfTTI, dfTTO, dfWOP, dfMNX, dfPOE, dfCPT,
         aux.STABLE_T, THS, QNT, STYLE, PT_IMG,
-        digs=digs, popScaler=1.5, aspect=1, border=True
+        digs=digs, popScaler=1.5, border=True
         ) for exIx in range(0, len(repFiles))
     )
     # Export gene legend ------------------------------------------------------

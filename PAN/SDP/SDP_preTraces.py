@@ -64,7 +64,7 @@ for exp in EXPS:
                 "width": .05, "alpha": .05, "dpi": 500, "legend": True,
                 "aspect": .25, "colors": CLR, "xRange": aux.XRAN, 'yRange': YRAN
             }
-        STYLE['aspect'] = monet.scaleAspect(.2, STYLE)
+        STYLE['aspect'] = monet.scaleAspect(.25, STYLE)
         #######################################################################
         # Load preprocessed files lists
         #######################################################################

@@ -10,7 +10,7 @@ import MoNeT_MGDrivE as monet
     'SDP', 'E_{}_{}-{}_{}_{}.{}',
     ('001', '003')
 )
-(POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*10), True, 0)
+(POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*3), True, 0)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST, DATA_HEAD, MLR) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
@@ -26,7 +26,7 @@ import MoNeT_MGDrivE as monet
         [.05, .10, .25, .50, .75, .90, .95],
         [int((i+1)*365-1) for i in range(5)]
     )
-(JOB_DSK, JOB_SRV) = (4, 40)
+(JOB_DSK, JOB_SRV) = (4, 20)
 
 # #############################################################################
 # Names and patterns
