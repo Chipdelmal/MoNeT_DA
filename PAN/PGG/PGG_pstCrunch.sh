@@ -5,6 +5,7 @@ DRV=$2 # PGG
 LND="Dummy" # Brikama
 SPE='None'
 AOI='HLT'
+QNT='50'
 
 ###############################################################################
 # Setup Path
@@ -15,4 +16,4 @@ cd "$parent_path"
 # Launch Scripts
 ###############################################################################
 python PGG_pstFraction.py $USR $LND $DRV $AOI $SPE
-python PGG_pstProcess.py $USR $LND $DRV $AOI $SPE '50'
+python PGG_pstProcess.py $USR $LND $DRV $AOI $SPE $QNT

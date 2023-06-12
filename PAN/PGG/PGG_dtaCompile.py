@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import sys
 from os import path
@@ -13,6 +15,7 @@ if monet.isNotebook():
         'zelda', 'Dummy', 'PGS', 'HLT', 'None', '50', 'CPT'
     )
 else:
+    # print(sys.argv[1:])
     (USR, LND, DRV, AOI, SPE, QNT, MTR) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
