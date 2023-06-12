@@ -57,7 +57,7 @@ MAX_REPS = 100
         'i_grp': 2
     },
     {
-        'i_ren': np.int8, 'i_rei': np.int8, 'i_rei': np.double, 'i_ren': np.int8,
+        'i_ren': np.int8, 'i_rei': np.int8, 'i_mtf': np.double, 'i_res': np.int8,
         'i_grp': np.int8
     }
 )
