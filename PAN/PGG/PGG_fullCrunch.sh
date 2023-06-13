@@ -2,6 +2,7 @@
 
 USR=$1
 DRV='PGS'
+QNT='90'
 
 ###############################################################################
 # Setup Path
@@ -11,6 +12,6 @@ cd "$parent_path"
 ###############################################################################
 # Run Scripts
 ###############################################################################
-bash PGG_preCrunch.sh $USR
-bash PGG_pstCrunch.sh $USR $DRV
-bash PGG_dtaCrunch.sh $USR $DRV
+# bash PGG_preCrunch.sh $USR
+bash PGG_pstCrunch.sh $USR $DRV $QNT
+bash PGG_dtaCrunch.sh $USR $DRV $QNT

@@ -11,7 +11,7 @@ warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
     (USR, LND, DRV, AOI, SPE, QNT) = (
-        'zelda', 'Dummy', 'PGS', 'HLT', 'None', '50'
+        'zelda', 'Dummy', 'PGS', 'HLT', 'None', '90'
     )
 else:
     (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
@@ -63,7 +63,7 @@ else:
     else:
         (CLR, YRAN) = (drive.get('colors'), (0, 1e-2))
 STYLE = {
-    "width": 0.05, "alpha": .075, "dpi": 750, "aspect": 1/5, 
+    "width": 0.25, "alpha": .025, "dpi": 750, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*10)
 }

@@ -24,7 +24,7 @@ if USR == 'srv':
 CHUNKS = JOB
 # Params Scaling --------------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
-TICKS_HIDE = False
+TICKS_HIDE = True
 MAX_TIME = 365*10
 CLABEL_FONTSIZE = 0
 (HD_IND, kSweep) = ([iVars[0], iVars[1]], iVars[2]) 
@@ -83,10 +83,10 @@ elif MOI == 'CPT':
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
     cntr = [.5]
 elif MOI == 'POE':
-    (zmin, zmax) = (0.1, 1.05)
-    (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/20), 'linear')
+    (zmin, zmax) = (0, 1)
+    (lvls, mthd) = (list(np.arange(zmin*1, zmax*1, (zmax-zmin)/10))+[1], 'linear')
     cntr = [.9]
-    # lvls = [cntr[0]-.01, cntr[0]]
+    lvls = [0, 0.25, 0.5, 0.75, cntr[0]]
 else:
     (zmin, zmax) = (min(DATA[MOI]), max(DATA[MOI]))
     (lvls, mthd) = (np.arange(zmin*1, zmax*1, (zmax-zmin)/2), 'nearest')
@@ -147,7 +147,7 @@ cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
     levels=cntr, colors='#2b2d42',
     # colors=drive['colors'][-1][:-2], 
-    linewidths=0.75, alpha=.75, linestyles=':'
+    linewidths=2, alpha=.5, linestyles='solid'
 )
 cs = ax.contourf(
     rsS[0], rsS[1], rsS[2], 
@@ -221,6 +221,8 @@ if TICKS_HIDE:
 fig.tight_layout()
 ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
 ax.set_facecolor("#00000000")
+ax.set_xlim(0, ax.get_xlim()[1])
+ax.set_ylim(0, ax.get_ylim()[1])
 ###########################################################################
 # Export File
 ###########################################################################

@@ -105,13 +105,13 @@ def selectDepVars(MOI):
         (HD_DEP, IND_RAN) = ('MNF', 1) 
     # Color Mapping -----------------------------------------------------------
     if MOI == 'WOP':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#3687ff33'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#7fc8f8DD'])
     elif MOI == 'CPT':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#2614ed55'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#2614ed33'])
     elif MOI == 'POE':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#8338EC55'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#7d7abc88'])
     else:
-        cmap = colorPaletteFromHexList(['#ffffff00', '#3b479d55'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#3b479dCC'])
     return (scalers, HD_DEP, IND_RAN, cmap)
 
 ###############################################################################
@@ -278,14 +278,14 @@ def exportTracesPlot(
 
     days = tS['landscapes'][0].shape[0]*sampRate
     if (vLines[0] > 0) and (vLines[1] <= days) and (wop > 0) and (vLines[0] < vLines[1]):
-        axTemp.axvspan(vLines[0], vLines[1], alpha=0.15, facecolor='#3687ff', zorder=0)
-        axTemp.axvline(vLines[0], alpha=0.75, ls='-', lw=.1, color='#3687ff', zorder=0)
-        axTemp.axvline(vLines[1], alpha=0.75, ls='-', lw=.1, color='#3687ff', zorder=0)
+        axTemp.axvspan(vLines[0], vLines[1], alpha=0.10, facecolor='#3687ff', zorder=0)
+        axTemp.axvline(vLines[0], alpha=0.2, ls='-', lw=.1, color='#3687ff', zorder=0)
+        axTemp.axvline(vLines[1], alpha=0.2, ls='-', lw=.1, color='#3687ff', zorder=0)
 
     if (vLines[0] > 0) and (vLines[1] <= days) and (wop > 0) and (vLines[0] > vLines[1]):
         axTemp.axvspan(vLines[0], vLines[1], alpha=0.15, facecolor='#FF5277', zorder=0)
-        axTemp.axvline(vLines[0], alpha=0.75, ls='-', lw=.1, color='#FF1A4B', zorder=0)
-        axTemp.axvline(vLines[1], alpha=0.75, ls='-', lw=.1, color='#FF1A4B', zorder=0)
+        axTemp.axvline(vLines[0], alpha=0.5, ls='-', lw=.1, color='#FF1A4B', zorder=0)
+        axTemp.axvline(vLines[1], alpha=0.5, ls='-', lw=.1, color='#FF1A4B', zorder=0)
 
     for hline in hLines:
         axTemp.axhline(hline, alpha=.2, zorder=10, ls='-', lw=.15, color='#000000')

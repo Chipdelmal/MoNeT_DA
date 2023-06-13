@@ -11,4 +11,4 @@ cd "$parent_path"
 # Launch Scripts
 ###############################################################################
 bash PGG_preProcess.sh $USR "PGS"
-bash PGG_preProcessEpi.sh $USR "HUM"
+# bash PGG_preProcessEpi.sh $USR "HUM"

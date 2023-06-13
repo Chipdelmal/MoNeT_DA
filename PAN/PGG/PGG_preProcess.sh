@@ -16,5 +16,5 @@ cd "$parent_path"
 for aoi in "ECO" "HLT"
 do
     python PGG_preProcess.py $USR $LND $DRV $aoi $SPE
-    python PGG_preTraces.py $USR $LND $DRV $aoi $SPE
+    # python PGG_preTraces.py $USR $LND $DRV $aoi $SPE
 done
