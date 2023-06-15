@@ -22,3 +22,5 @@ do
     python SDP_dtaCompile.py $USR $DRV $AOI $QNT $mtr
 done
 python SDP_dtaUnify.py $USR $DRV $AOI $QNT $THS
+python SDP_dtaExplore.py $USR $DRV $AOI $QNT $THS $AOI
+python SDP_dtaTraces.py $USR $DRV $AOI $QNT $THS $AOI
