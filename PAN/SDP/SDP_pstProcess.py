@@ -14,7 +14,7 @@ import SDP_land as lnd
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT) = ('srv', 'PGS', 'HLT', '50')
+    (USR, DRV, AOI, QNT) = ('zelda', 'PGS', 'HLT', '50')
 else:
     (USR, DRV, AOI, QNT) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 ###############################################################################

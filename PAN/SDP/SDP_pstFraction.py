@@ -13,7 +13,7 @@ import SDP_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, AOI) = ('srv', 'PGS', 'HLT')
+    (USR, DRV, AOI) = ('zelda', 'PGS', 'HLT')
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
 ###############################################################################
@@ -37,7 +37,7 @@ for exp in EXPS:
     # Setting up paths and style
     ###############################################################################
     uids = aux.getExperimentsIDSets(PT_PRE, skip=-1, ext='.bz')
-    (ren, res, aoi, grp) = uids[1:]
+    (clv, ren, res, aoi, grp) = uids[1:]
     # #########################################################################
     # Base experiments
     #   These are the experiments without any releases (for fractions)
