@@ -12,10 +12,10 @@ import SDP_gene as drv
 import SDP_land as lnd
 
 if monet.isNotebook():
-    (USR, DRV, AOI, QNT, MTR) = ('srv', 'PGS', 'HLT', '50', 'CPT')
+    (USR, DRV, AOI, QNT, MTR) = ('zelda', 'PGS', 'HLT', '50', 'CPT')
 else:
     # print(sys.argv[1:])
-    (USR, LND, DRV, AOI, SPE, QNT, MTR) = sys.argv[1:]
+    (USR, DRV, AOI, QNT, MTR) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
