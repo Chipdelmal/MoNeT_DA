@@ -110,7 +110,7 @@ for exp in EXPS:
         row = constrainedFiles.iloc[ix]
         i=0
         ins = [str(int(row[i])).zfill(zipper[i][1]) for i in zipper]
-        fname = aux.XP_PTRN.format(*ins[:-1], TRC, '00', 'srp', 'bz') 
+        fname = aux.XP_PTRN.format(*ins[:-1], TRC, ins[-1], 'srp', 'bz') 
         prePath = PT_PRE.split('/')
         fpath = path.join('/'.join(prePath), fname)
         fpath.split('/')[-1]

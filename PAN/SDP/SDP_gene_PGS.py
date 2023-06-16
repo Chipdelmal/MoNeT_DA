@@ -50,14 +50,14 @@ PGS_WLD = monet.carrierFrequencies(WLD_DICT, genotypes, invert=False)
 def driveParameters(TYPE, popSize):
     if TYPE == 'ECO':
         aggD = monet.generateAggregationDictionary(*PGS_ECO)
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'HLT':
         aggD = monet.generateAggregationDictionary(*PGS_HLT)
         yRange = popSize/4
     elif TYPE == 'TRS':
         aggD = monet.generateAggregationDictionary(*PGS_TRS)
-        yRange = popSize
+        yRange = popSize/2
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*PGS_WLD)
-        yRange = popSize
+        yRange = popSize/2
     return (aggD, yRange, 'pgSIT')

@@ -74,7 +74,7 @@ for exp in EXPS:
     STYLE = {
         "width": 0.25, "alpha": .0005, "dpi": 750, "aspect": 1/5, 
         "colors": CLR, "legend": True,
-        "xRange": aux.XRAN, "yRange": (0, YRAN[1]*10)
+        "xRange": aux.XRAN, "yRange": (0, YRAN[1])
     }
     ###############################################################################
     # Plot
@@ -92,6 +92,6 @@ for exp in EXPS:
                 aux.REL_START+i*7 for i in 
                 range(int(exIx[1].split('/')[-1].split('_')[1]))
             ],
-            hLines=[aux.POP_SIZE, aux.POP_SIZE/2]
+            hLines=[i*1.25e3 for i in range(0, 10)]
         ) for exIx in subset
-    )
+    ) 
