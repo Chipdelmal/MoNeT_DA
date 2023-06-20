@@ -109,7 +109,7 @@ def selectDepVars(MOI):
     elif MOI == 'CPT':
         cmap = colorPaletteFromHexList(['#ffffff00', '#2614ed33'])
     elif MOI == 'POE':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#7d7abcCC'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#2614ed66'])
     else:
         cmap = colorPaletteFromHexList(['#ffffff00', '#3b479dCC'])
     return (scalers, HD_DEP, IND_RAN, cmap)
