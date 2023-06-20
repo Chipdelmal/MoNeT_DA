@@ -12,6 +12,6 @@ cd "$parent_path"
 ###############################################################################
 # Run Scripts
 ###############################################################################
-# bash PGG_preCrunch.sh $USR
+bash PGG_preCrunch.sh $USR
 bash PGG_pstCrunch.sh $USR $DRV $QNT
 bash PGG_dtaCrunch.sh $USR $DRV $QNT

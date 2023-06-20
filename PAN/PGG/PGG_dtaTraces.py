@@ -63,7 +63,7 @@ else:
     else:
         (CLR, YRAN) = (drive.get('colors'), (0, 1e-2))
 STYLE = {
-    "width": 0.5, "alpha": .0005, "dpi": 750, "aspect": 1/5, 
+    "width": 1, "alpha": .0005, "dpi": 750, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*10)
 }

@@ -109,7 +109,7 @@ def selectDepVars(MOI):
     elif MOI == 'CPT':
         cmap = colorPaletteFromHexList(['#ffffff00', '#2614ed33'])
     elif MOI == 'POE':
-        cmap = colorPaletteFromHexList(['#ffffff00', '#7d7abc88'])
+        cmap = colorPaletteFromHexList(['#ffffff00', '#7d7abcCC'])
     else:
         cmap = colorPaletteFromHexList(['#ffffff00', '#3b479dCC'])
     return (scalers, HD_DEP, IND_RAN, cmap)
@@ -161,7 +161,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 ###############################################################################
 def selectPath(USR, LND, DRV, SPE):
     if USR == 'zelda':
-        PATH_ROOT = '/RAID5/marshallShare/pgSIT_gFLE/'
+        PATH_ROOT = '/RAID5/marshallShare/pgSIT_gFLE_100R/'
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/GambiaOP/{}/'.format(LND)
     (PATH_IMG, PATH_DATA) = (
