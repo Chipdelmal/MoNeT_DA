@@ -22,7 +22,7 @@ plt.rcParams.update({
 })
 
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE, QNT) = ('dsk', 'UpperRiver', 'HUM', 'CSS0', 'None', '50')
+    (USR, LND, DRV, AOI, SPE, QNT) = ('srv', 'UpperRiver', 'HUM', 'CSS0', 'None', '50')
 else:
     (USR, LND, DRV, AOI, SPE, QNT) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
