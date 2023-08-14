@@ -146,6 +146,7 @@ dmypy.json
 *.html
 *.tiff
 *.ai
+*.svg
 
 # Geo-data
 *.cst

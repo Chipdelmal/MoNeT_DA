@@ -13,6 +13,7 @@ sns.set_style('ticks')
 
 # read in human states data
 df = pd.read_csv('H_Mean_0001.csv')
+days = df.shape[0]
 
 # extract labels for prevalence states
 labels = "^clin_inc"
@@ -45,15 +46,35 @@ clininc_df.iloc[0] = None
 
 clininc_df_melt = clininc_df.melt('Time', var_name='cols', value_name='vals')
 clininc_df_melt.rename(columns={'cols': 'Age Group (yrs)'}, inplace=True)
+
 fig, ax = plt.subplots(figsize=(20,6))
-g = sns.lineplot(x="Time", y="vals", hue='Age Group (yrs)', data=clininc_df_melt)
-g.set_title('Epidemiological Dynamics - Clinical Incidence of Malaria')
-g.set(xlabel='Time (day)', ylabel='Cases/1000')
+g = sns.lineplot(
+    x="Time", y="vals", hue='Age Group (yrs)', data=clininc_df_melt, lw=2,
+    palette=[
+        '#0d3b66', 
+        '#bbd0ff', '#b8c0ff', '#c8b6ff', 
+        '#e7c6ff', '#ffd6ff', '#d8d8d8', 
+    ][::-1],
+    alpha=0.85
+)
+# g.set_title('Epidemiological Dynamics - Clinical Incidence of Malaria')
+# g.set(xlabel='Time (day)', ylabel='Cases/1000')
 rel_times = [730, 737, 744, 751, 758, 765, 772, 779]
 for i in rel_times:
-    x = g.axvline(i, alpha=0.2)
-    x.set_zorder(0)
+    x = ax.axvline(i, alpha=0.5, lw=1)
+    x.set_zorder(5)
+ax.set_aspect(0.15*days/(0.012+0.012*0.25))
+ax.set_xlim(0, days)
+ax.set_ylim(0, 0.012+0.012*0.25)
+ax.set_xticks([])
+ax.set_yticks([])
+ax.set_xlabel("")
+ax.set_ylabel("")
+ax.set_title("")
+ax.get_legend().remove()
 
-g.figure.savefig('clin_inc.tiff', dpi=300)
-
-
+g.figure.savefig(
+    'clin_inc.tiff', dpi=300,
+    transparent=True, bbox_inches='tight', 
+    pad_inches=0.1
+)

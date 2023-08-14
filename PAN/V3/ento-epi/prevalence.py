@@ -4,6 +4,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 palette = sns.color_palette("icefire")
 sns.set(font='Arial', font_scale=0.80)
 sns.set_palette(palette)
@@ -11,6 +12,7 @@ sns.set_style('ticks')
 
 # read in human states data
 df = pd.read_csv('H_Mean_0001.csv')
+days = df.shape[0]
 # df = pd.read_csv('/Users/agastyamondal/H_Mean_0001.csv')
 # extract labels for prevalence states
 labels = "^A|^U|^T|^D"
@@ -36,15 +38,37 @@ prev_df['Time'] = df['Time']
 rel_times = [730, 737, 744, 751, 758, 765, 772, 779]
 prev_df_melt = prev_df.melt('Time', var_name='cols', value_name='vals')
 prev_df_melt.rename(columns={'cols': 'Age Group (yrs)'}, inplace=True)
+
 fig, ax = plt.subplots(figsize=(20,6))
-g = sns.lineplot(x="Time", y="vals", hue='Age Group (yrs)', data=prev_df_melt)
-g.set_title('Epidemiological Dynamics - Human Infection Prevalence')
-g.set(xlabel='Time (day)', ylabel='P. falciparum Prevalence')
+g = sns.lineplot(
+    x="Time", y="vals", hue='Age Group (yrs)', data=prev_df_melt, lw=2.5,
+    palette=[
+        '#0d3b66', 
+        '#bbd0ff', '#b8c0ff', '#c8b6ff', 
+        '#e7c6ff', '#ffd6ff', '#d8d8d8', 
+    ][::-1],
+    alpha=0.85
+)
+# g.set_title('Epidemiological Dynamics - Human Infection Prevalence')
+# g.set(xlabel='Time (day)', ylabel='P. falciparum Prevalence')
 for i in rel_times:
-    x = g.axvline(i, alpha=0.2)
-    x.set_zorder(0)
+    x = ax.axvline(i, alpha=0.5, lw=1)
+    x.set_zorder(5)
+ax.set_aspect(0.15*days/(0.02+0.02*0.25))
+ax.set_xlim(0, days)
+ax.set_ylim(0, 0.02+0.02*0.25)
+ax.set_xticks([])
+ax.set_yticks([])
+ax.set_xlabel("")
+ax.set_ylabel("")
+ax.set_title("")
+ax.get_legend().remove()
 
 
 # %%
-g.figure.savefig('prevalence.tiff', dpi=300)
+g.figure.savefig(
+    'prevalence.tiff', dpi=300,
+    transparent=True, bbox_inches='tight', 
+    pad_inches=0.1
+)
 # %%
