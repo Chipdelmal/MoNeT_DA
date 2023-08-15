@@ -44,8 +44,8 @@ g = sns.lineplot(
     x="Time", y="vals", hue='Age Group (yrs)', data=prev_df_melt, lw=2.5,
     palette=[
         '#0d3b66', 
-        '#bbd0ff', '#b8c0ff', '#c8b6ff', 
-        '#e7c6ff', '#ffd6ff', '#d8d8d8', 
+        '#e7c6ff', '#c8b6ff', '#caffbf', 
+        '#bbd0ff', '#FFE699', '#d8d8d8', 
     ][::-1],
     alpha=0.85
 )
