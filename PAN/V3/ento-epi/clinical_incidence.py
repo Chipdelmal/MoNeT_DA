@@ -13,7 +13,7 @@ sns.set_style('ticks')
 
 # read in human states data
 df = pd.read_csv('H_Mean_0001.csv')
-days = df.shape[0]
+days = df.shape[0]-365
 
 # extract labels for prevalence states
 labels = "^clin_inc"
@@ -42,6 +42,10 @@ clininc_df['Time'] = time
 # Remove weird dynamics at t=0
 clininc_df.iloc[0] = None
 
+clininc_df['60+'] = clininc_df['60-99']+clininc_df['99+']
+clininc_df.drop('60-99', axis=1, inplace=True)
+clininc_df.drop('99+', axis=1, inplace=True)
+
 # scale by population/1000
 
 clininc_df_melt = clininc_df.melt('Time', var_name='cols', value_name='vals')
@@ -51,8 +55,7 @@ fig, ax = plt.subplots(figsize=(20,6))
 g = sns.lineplot(
     x="Time", y="vals", hue='Age Group (yrs)', data=clininc_df_melt, lw=2,
     palette=[
-        '#0d3b66', 
-        '#e7c6ff', '#c8b6ff', '#caffbf', 
+        '#e7c6ff', '#c8b6ff', '#0d3b66', '#caffbf', 
         '#bbd0ff', '#FFE699', '#d8d8d8', 
     ][::-1],
     alpha=0.85
@@ -61,7 +64,7 @@ g = sns.lineplot(
 # g.set(xlabel='Time (day)', ylabel='Cases/1000')
 rel_times = [730, 737, 744, 751, 758, 765, 772, 779]
 for i in rel_times:
-    x = ax.axvline(i, alpha=0.5, lw=1)
+    x = ax.axvline(i, alpha=0.5, lw=0.5)
     x.set_zorder(5)
 ax.set_aspect(0.15*days/(0.012+0.012*0.25))
 ax.set_xlim(0, days)

@@ -12,7 +12,7 @@ sns.set_style('ticks')
 
 # read in data
 df_female = pd.read_csv("F_Mean_0001.csv")
-days = df_female.shape[0]
+days = df_female.shape[0]-365
 
 # Convert genotypes to alleles
 
@@ -22,9 +22,13 @@ time = df_female['Time']
 df_female = df_female.drop('Time', axis=1)
 
 df_female_allele = pd.DataFrame()
-df_female_allele['H*'] = df_female['BH'] + df_female['HH'] + df_female['HR'] + df_female['HW']
-df_female_allele['Other'] = df_female['BB'] + df_female['BR'] + df_female['BW'] + df_female['RR'] + df_female['RW'] + df_female['WW']
+# df_female_allele['H*'] = df_female['BH'] + df_female['HH'] + df_female['HR'] + df_female['HW']
+# df_female_allele['Other'] = df_female['BB'] + df_female['BR'] + df_female['BW'] + df_female['RR'] + df_female['RW'] + df_female['WW']
 
+df_female_allele['H'] = df_female['BH'] + df_female['HH'] + df_female['HH'] + df_female['HR'] + df_female['HW']
+df_female_allele['R'] = df_female['BR'] + df_female['HR'] + df_female['RR'] + df_female['RR'] + df_female['RW'] + df_female['BR'] + df_female['BB'] + df_female['BB'] + df_female['BH'] + df_female['BW']
+# df_female_allele['B'] = 
+df_female_allele['W'] = df_female['WW'] + df_female['BW'] + df_female['HW'] + df_female['RW'] + df_female['WW']
 
 
 df_female_allele = df_female_allele.div(df_female_allele.sum(axis=1), axis=0)
@@ -41,10 +45,11 @@ rel_times = [730, 737, 744, 751, 758, 765, 772, 779]
 g = sns.lineplot(
     ax=axes, x="Time", y="vals", 
     hue='Allele Frequency', data=df_female_allele,
-    lw=2.5, alpha=0.75
+    lw=2.5, alpha=0.75,
+    palette=['#ff70a6', '#caffbf', '#274c77']
 )
 for i in rel_times:
-    x = axes.axvline(i, alpha=0.5, lw=1)
+    x = axes.axvline(i, alpha=0.5, lw=0.5)
     x.set_zorder(0)
 # fig.suptitle('Entomological Dynamics - Allele Frequency')
 # axes.set_title('Female Mosquitoes')

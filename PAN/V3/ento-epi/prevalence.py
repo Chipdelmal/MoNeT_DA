@@ -12,7 +12,7 @@ sns.set_style('ticks')
 
 # read in human states data
 df = pd.read_csv('H_Mean_0001.csv')
-days = df.shape[0]
+days = df.shape[0]-365
 # df = pd.read_csv('/Users/agastyamondal/H_Mean_0001.csv')
 # extract labels for prevalence states
 labels = "^A|^U|^T|^D"
@@ -35,6 +35,12 @@ for idx in age_idx.keys():
 prev_df['All-ages'] = prev_df.sum(axis=1)
 prev_df['Time'] = df['Time']
 
+
+prev_df['60+'] = prev_df['60-99']+prev_df['99+']
+prev_df.drop('60-99', axis=1, inplace=True)
+prev_df.drop('99+', axis=1, inplace=True)
+
+
 rel_times = [730, 737, 744, 751, 758, 765, 772, 779]
 prev_df_melt = prev_df.melt('Time', var_name='cols', value_name='vals')
 prev_df_melt.rename(columns={'cols': 'Age Group (yrs)'}, inplace=True)
@@ -43,8 +49,7 @@ fig, ax = plt.subplots(figsize=(20,6))
 g = sns.lineplot(
     x="Time", y="vals", hue='Age Group (yrs)', data=prev_df_melt, lw=2.5,
     palette=[
-        '#0d3b66', 
-        '#e7c6ff', '#c8b6ff', '#caffbf', 
+        '#e7c6ff', '#c8b6ff', '#0d3b66', '#caffbf', 
         '#bbd0ff', '#FFE699', '#d8d8d8', 
     ][::-1],
     alpha=0.85
@@ -52,7 +57,7 @@ g = sns.lineplot(
 # g.set_title('Epidemiological Dynamics - Human Infection Prevalence')
 # g.set(xlabel='Time (day)', ylabel='P. falciparum Prevalence')
 for i in rel_times:
-    x = ax.axvline(i, alpha=0.5, lw=1)
+    x = ax.axvline(i, alpha=0.5, lw=0.5)
     x.set_zorder(5)
 ax.set_aspect(0.15*days/(0.02+0.02*0.25))
 ax.set_xlim(0, days)
