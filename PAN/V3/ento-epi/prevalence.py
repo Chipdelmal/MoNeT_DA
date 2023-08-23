@@ -13,13 +13,8 @@ sns.set_style('ticks')
 # read in human states data
 df = pd.read_csv('H_Mean_0001.csv')
 days = df.shape[0]-365
-# df = pd.read_csv('/Users/agastyamondal/H_Mean_0001.csv')
+#df = pd.read_csv('/Users/agastyamondal/H_Mean_0001.csv')
 # extract labels for prevalence states
-labels = "^A|^U|^T|^D"
-df = df.filter(regex=labels)
-
-# calculate all-ages prevalence
-age_idx = ["00_01", "01_02", "02_03", "03_04", "04_05", "05_06"]
 age_idx = {
     '00_01': '0-5',
     '01_02': '5-17',
@@ -28,15 +23,27 @@ age_idx = {
     '04_05': '60-99',
     '05_06': '99+'
 }
+
+age_proportions = {}
+for idx in age_idx.keys():
+    df_age = df.filter(regex=idx)
+    # Get disease states
+    df_age = df_age.filter(regex="^S|^T|^D|^A|^U|^P").sum(axis=1)
+    age_proportions[idx] = df_age.iloc[0]
+
+labels = "^A|^U|^T|^D"
+df = df.filter(regex=labels)
 prev_df = pd.DataFrame()
 for idx in age_idx.keys():
-    prev_df[age_idx[idx]] = df.filter(regex=idx).sum(axis=1)
+    prev_df[age_idx[idx]] = df.filter(regex=idx).sum(axis=1) * (1/age_proportions[idx])
 
-prev_df['All-ages'] = prev_df.sum(axis=1)
-prev_df['Time'] = df['Time']
+time = df['Time']
+df.drop('Time', inplace=True, axis=1)
+prev_df['All-ages'] = df.sum(axis=1)
+prev_df['Time'] = time
 
 
-prev_df['60+'] = prev_df['60-99']+prev_df['99+']
+prev_df['60+'] = (prev_df['60-99']+prev_df['99+']) * (1/2)
 prev_df.drop('60-99', axis=1, inplace=True)
 prev_df.drop('99+', axis=1, inplace=True)
 
@@ -69,6 +76,7 @@ ax.set_ylabel("")
 ax.set_title("")
 ax.get_legend().remove()
 
+plt.show()
 
 # %%
 g.figure.savefig(
