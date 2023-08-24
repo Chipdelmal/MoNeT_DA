@@ -73,9 +73,9 @@ rel_times = [730, 737, 744, 751, 758, 765, 772, 779]
 for i in rel_times:
     x = ax.axvline(i, alpha=0.5, lw=0.5)
     x.set_zorder(5)
-ax.set_aspect(0.15*days/(0.012+0.012*0.25))
+ax.set_aspect(0.15*days/(10))
 ax.set_xlim(0, days)
-ax.set_ylim(0, 0.012+0.012*0.25)
+ax.set_ylim(0, 10)
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_xlabel("")
