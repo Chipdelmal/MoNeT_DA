@@ -62,9 +62,9 @@ fig, ax = plt.subplots(figsize=(20,6))
 g = sns.lineplot(
     x="Time", y="vals", hue='Age Group (yrs)', data=clininc_df_melt, lw=2,
     palette=[
-        '#e7c6ff', '#c8b6ff', '#0d3b66', '#caffbf', 
-        '#bbd0ff', '#FFE699', '#d8d8d8', 
-    ][::-1],
+        '#d8d8d8', '#e7c6ff', '#c8b6ff', '#caffbf', 
+        '#0d3b66', '#bbd0ff', 
+    ],
     alpha=0.85
 )
 # g.set_title('Epidemiological Dynamics - Clinical Incidence of Malaria')

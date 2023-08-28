@@ -56,9 +56,9 @@ fig, ax = plt.subplots(figsize=(20,6))
 g = sns.lineplot(
     x="Time", y="vals", hue='Age Group (yrs)', data=prev_df_melt, lw=2.5,
     palette=[
-        '#e7c6ff', '#c8b6ff', '#0d3b66', '#caffbf', 
-        '#bbd0ff', '#FFE699', '#d8d8d8', 
-    ][::-1],
+        '#d8d8d8', '#e7c6ff', '#c8b6ff', '#caffbf', 
+        '#0d3b66', '#bbd0ff', 
+    ],
     alpha=0.85
 )
 # g.set_title('Epidemiological Dynamics - Human Infection Prevalence')
@@ -66,9 +66,9 @@ g = sns.lineplot(
 for i in rel_times:
     x = ax.axvline(i, alpha=0.5, lw=0.5)
     x.set_zorder(5)
-ax.set_aspect(0.15*days/(0.02+0.02*0.25))
+ax.set_aspect(0.15*days/(0.04))
 ax.set_xlim(0, days)
-ax.set_ylim(0, 0.02+0.02*0.25)
+ax.set_ylim(0, 0.04)
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_xlabel("")
