@@ -13,7 +13,7 @@ sns.set_style('ticks')
 
 # read in human states data
 df = pd.read_csv('H_Mean_0001.csv')
-days = df.shape[0]-365
+days = df.shape[0]-2*365
 
 age_idx = {
     '00_01': '0-5',
@@ -62,7 +62,7 @@ fig, ax = plt.subplots(figsize=(20,6))
 g = sns.lineplot(
     x="Time", y="vals", hue='Age Group (yrs)', data=clininc_df_melt, lw=2,
     palette=[
-        '#d8d8d8', '#e7c6ff', '#c8b6ff', '#caffbf', 
+        '#d8d8d8', '#FDC4DC', '#c8b6ff', '#caffbf', 
         '#0d3b66', '#bbd0ff', 
     ],
     alpha=0.85

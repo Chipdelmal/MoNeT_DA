@@ -23,11 +23,17 @@ for idx, _ in enumerate(fem_files):
     df = df.drop('Time', axis=1)
     days = df.shape[0]-365
 
-    df['H'] = df['HH'] + df['HH'] + df['HR'] + df['HW']
-    df['R'] = df['HR'] + df['RR'] + df['RR'] + df['WR']
-    df['W'] = df['WW'] + df['HW'] + df['WR'] + df['WW']
+    # df['H'] = df['HH'] + df['HH'] + df['HR'] + df['HW']
+    # df['R'] = df['HR'] + df['RR'] + df['RR'] + df['WR']
+    # df['W'] = df['WW'] + df['HW'] + df['WR'] + df['WW']
+    
+    df['HH/HR'] = df['HH'] + df['HR']
+    df['HW'] = df['HW']
+    df['WW/WR'] = df['WW'] + df['WR']
+    df['RR'] = df['RR']
 
-    lbsNot = ('HH', 'HR', 'HW', 'RR', 'WR', 'WW')
+    # lbsNot = ('HH', 'HR', 'HW', 'RR', 'WR', 'WW')
+    lbsNot = ('HH', 'HR', 'WR', 'WW')
     [df.drop(i, axis=1, inplace=True) for i in lbsNot]
 
     # simulate weekly trap emptying
@@ -41,7 +47,7 @@ for idx, _ in enumerate(fem_files):
         df = df.apply(
             lambda x: x - row if x.name in rows_to_subtract else x, axis=1)
     trap_df = pd.concat(trap_rows)
-    trap_df = trap_df.div(trap_df.sum(axis=1), axis=0)
+    # trap_df = trap_df.div(trap_df.sum(axis=1), axis=0)
     trap_df['Time'] = time
 
     df_freq_melt = trap_df.melt('Time', var_name='cols', value_name='vals')
@@ -51,12 +57,13 @@ for idx, _ in enumerate(fem_files):
         ax=ax,
         x="Time", y="vals", hue="Genotype", data=df_freq_melt,
         lw=5, alpha=0.95,
-        palette=['#ff70a6', '#caffbf', '#274c77']
+        palette=['#b388eb66', '#caffbf99', '#ff477e66', '#03045e66']
     )
     g.set(xlabel='Time (day)', ylabel='Genotype Frequency')
-    ax.set_aspect(days/1.25)
-    ax.set_xlim(0, days)
-    ax.set_ylim(0, 1.25)
+    yRan = 7.5e3
+    ax.set_aspect(days/yRan)
+    ax.set_xlim(15, days)
+    ax.set_ylim(0, yRan)
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_xlabel("")
@@ -64,7 +71,7 @@ for idx, _ in enumerate(fem_files):
     ax.get_legend().remove()
     [x.set_linewidth(5) for x in ax.spines.values()]
     [x.set_edgecolor("#274c77BB") for x in ax.spines.values()]
-    first_detection = trap_df[trap_df.H > 0].iloc[0].Time
+    first_detection = trap_df[trap_df['HH/HR'] > 0].iloc[0].Time
     x = g.axvline(first_detection, color="#274c77BB", linewidth=2, zorder=-5)
     x.set_zorder(0)
     # Deal with 0-indexing in python compared to R...

@@ -12,7 +12,7 @@ sns.set_style('ticks')
 
 # read in human states data
 df = pd.read_csv('H_Mean_0001.csv')
-days = df.shape[0]-365
+days = df.shape[0]-2*365
 #df = pd.read_csv('/Users/agastyamondal/H_Mean_0001.csv')
 # extract labels for prevalence states
 age_idx = {
@@ -56,7 +56,7 @@ fig, ax = plt.subplots(figsize=(20,6))
 g = sns.lineplot(
     x="Time", y="vals", hue='Age Group (yrs)', data=prev_df_melt, lw=2.5,
     palette=[
-        '#d8d8d8', '#e7c6ff', '#c8b6ff', '#caffbf', 
+        '#d8d8d8', '#FDC4DC', '#c8b6ff', '#caffbf', 
         '#0d3b66', '#bbd0ff', 
     ],
     alpha=0.85
@@ -66,9 +66,9 @@ g = sns.lineplot(
 for i in rel_times:
     x = ax.axvline(i, alpha=0.5, lw=0.5)
     x.set_zorder(5)
-ax.set_aspect(0.15*days/(0.04))
+ax.set_aspect(0.15*days/(0.05))
 ax.set_xlim(0, days)
-ax.set_ylim(0, 0.04)
+ax.set_ylim(0, 0.05)
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_xlabel("")

@@ -12,7 +12,7 @@ sns.set_style('ticks')
 
 # read in data
 df_female = pd.read_csv("F_Mean_0001.csv")
-days = df_female.shape[0]-365
+days = df_female.shape[0]-2*365
 
 # Convert genotypes to alleles
 
