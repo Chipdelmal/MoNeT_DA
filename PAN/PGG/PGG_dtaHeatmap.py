@@ -107,7 +107,7 @@ fltr = {
     'i_ren': 12.0,
     'i_res': 1.0,
     'i_rei': 7,
-    'i_mtf': 0.75,
+    'i_mtf': 0.5,
     'i_grp': 0.0
 }
 [fltr.pop(i) for i in HD_IND]
@@ -247,8 +247,8 @@ fig.savefig(
     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
 )
 # Clearing and closing (fig, ax) ------------------------------------------
-plt.clf()
-plt.cla() 
-plt.close(fig)
-plt.gcf()
+# plt.clf()
+# plt.cla() 
+# plt.close(fig)
+# plt.gcf()
 

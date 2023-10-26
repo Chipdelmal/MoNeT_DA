@@ -161,7 +161,8 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 ###############################################################################
 def selectPath(USR, LND, DRV, SPE):
     if USR == 'zelda':
-        PATH_ROOT = '/RAID5/marshallShare/pgSIT_gFLE_100R/'
+        # PATH_ROOT = '/RAID5/marshallShare/pgSIT_gFLE_100R/'
+        PATH_ROOT = '/RAID5/marshallShare/pgSIT_gFLE_PNAS/'
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/GambiaOP/{}/'.format(LND)
     (PATH_IMG, PATH_DATA) = (
