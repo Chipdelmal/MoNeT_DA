@@ -53,7 +53,7 @@ monet.printExperimentHead(
 ###############################################################################
 (CLR, YRAN) = (drive.get('colors'), (0, drive.get('yRange')))
 STYLE = {
-    "width": .1, "alpha": .075, "dpi": 750, "aspect": 1/6, 
+    "width": .2, "alpha": .2, "dpi": 750, "aspect": 1/6, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*1.5)
 }

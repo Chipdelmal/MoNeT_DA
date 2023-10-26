@@ -45,7 +45,7 @@ def driveSelector(DRIVE, TYPE, popSize=(100*12000)):
         elif DRIVE == 'FMS5':
             colors = ['#1888e300', '#2614ed00', '#45d40c35']
         elif DRIVE == 'PGS':
-            colors = ['#1888e335', '#2614ed35', '#8338EC35']
+            colors = ['#3b479d55', '#FF006E55', '#38b00000']
         elif DRIVE == 'IIT':
             colors = ['#f2008900', '#c879ff00', '#540d6e35']
         elif DRIVE == 'RDL':

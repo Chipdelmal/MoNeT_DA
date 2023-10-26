@@ -15,7 +15,7 @@ import PGS_gene as drv
 
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 ###############################################################################
@@ -96,6 +96,10 @@ for ix in range(expNum):
 if len(set(matchesSizes))>1:
     print("Error in the output vector!")
     # matchesSizes.index(0)
+# Export intermediate results to disk -----------------------------------------
+fName = path.join(PT_MTR, f'SA-{AOI}_{MOI}-{QNT}_int')
+interDict = {'problem': PROBLEM, 'sampler': SAMPLER, 'out': outVector}
+pkl.dump(interDict, fName+'.pkl')
 ###############################################################################
 # Run SA
 ###############################################################################
