@@ -11,7 +11,7 @@ import PGG_gene as drv
 
 if monet.isNotebook():
     (USR, LND, DRV, QNT, AOI, SPE, THS, MOI) = (
-        'zelda', 'Dummy', 'PGS', '90', 'HLT', 'None', '0.1', 'POE'
+        'zelda', 'Dummy', 'PGS', '50', 'HLT', 'None', '0.1', 'POE'
     )
 else:
     (USR, LND, DRV, QNT, AOI, SPE, THS, MOI) = sys.argv[1:]

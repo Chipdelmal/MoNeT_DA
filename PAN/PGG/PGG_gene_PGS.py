@@ -34,6 +34,7 @@ HLT_DICT = OrderedDict((
 ))
 PGS_HLT = monet.carrierFrequencies(HLT_DICT, genotypes)
 PGS_HLT = [PGS_HLT[0], [PGS_HLT[1][0], PGS_HLT[1][-1], PGS_HLT[1][-1]]]
+# PGS_HLT = PGS_ECO
 
 ###############################################################################
 # Trash genotype counts (Cas9)
