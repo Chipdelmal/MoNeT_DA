@@ -13,8 +13,17 @@ from mlens.ensemble import SuperLearner
 from mlens.metrics.metrics import rmse
 from mlens.visualization import pca_comp_plot, pca_plot
 from sklearn.decomposition import PCA
-from sklearn.linear_model import Lasso
+from sklearn.linear_model import Lasso, LinearRegression
+from sklearn.kernel_ridge import KernelRidge
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import BayesianRidge
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.linear_model import SGDRegressor
+from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
+from sklearn. preprocessing import MinMaxScaler, StandardScaler
+from sklearn.neural_network import MLPRegressor
+from xgboost.sklearn import XGBRegressor
+from lightgbm import LGBMRegressor
 from sklearn.svm import SVR
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
@@ -34,10 +43,8 @@ if monet.isNotebook():
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-JOB = aux.JOB_DSK
-if USR == 'srv':
-    JOB = aux.JOB_SRV
-REDUCE_DATASET = .15
+(VERBOSE, JOB) = (2, 4)
+REDUCE_DATASET = .2
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -85,48 +92,49 @@ inDims = X_train.shape[1]
 ###############################################################################
 # Setup Model
 ###############################################################################
-ensemble = SuperLearner(scorer=r2_score, verbose=2)
-ensemble.add([SVR(), Lasso(), RandomForestRegressor()], folds=10)
-ensemble.add_meta(SVR())
+preprocess = {
+    'mm': [MinMaxScaler()],
+    'sc': [StandardScaler()]
+}
+estimators = {
+    'mm': [
+        SGDRegressor(), 
+        BayesianRidge(),
+    ],
+    'sc': [
+        SVR(),
+        MLPRegressor(hidden_layer_sizes=[10, 20, 10]),
+        LGBMRegressor(verbose=0),
+        XGBRegressor(),
+    ]
+}
+ensemble = SuperLearner(
+    scorer=r2_score, sample_size=100, 
+    verbose=VERBOSE, n_jobs=JOB
+)
+ensemble.add(estimators, preprocess)
+ensemble.add_meta(MLPRegressor(hidden_layer_sizes=[5, ]))
+# Unscaled --------------------------------------------------------------------
+# ensemble = SuperLearner(
+#     scorer=r2_score, sample_size=100, 
+#     verbose=VERBOSE, n_jobs=JOB
+# )
+# ensemble.add([
+#     SVR(),
+#     SGDRegressor(),
+#     # KernelRidge(),
+#     # GaussianProcessRegressor(kernel=kernel),
+#     # RandomForestRegressor(), 
+#     BayesianRidge(),
+#     MLPRegressor(hidden_layer_sizes=[10, 20, 10])
+# ], folds=10)
+# ensemble.add_meta(MLPRegressor(hidden_layer_sizes=[5, 5]))
 ###############################################################################
 # Train
 ###############################################################################
-ensemble.fit(X_train, y_train, verbose=2)
+ensemble.fit(X_train, y_train, verbose=VERBOSE, n_jobs=JOB)
 y_val = ensemble.predict(X_test)
-print('Super Learner: %.3f' % (r2_score(y_val, y_test)))
+print(ensemble.data)
+print('Super Learner: %.3f'%(r2_score(y_val, y_test)))
 # pca_plot(X, PCA(n_components=2), y=y, cmap='Blues')
 
-# import numpy as np
-# from pandas import DataFrame
-# from sklearn.metrics import accuracy_score
-# from sklearn.datasets import load_iris
-
-# seed = 2017
-# np.random.seed(seed)
-
-# data = load_iris()
-# idx = np.random.permutation(150)
-# X = data.data[idx]
-# y = data.target[idx]
-
-# from mlens.ensemble import SuperLearner
-# from sklearn.linear_model import LogisticRegression
-# from sklearn.ensemble import RandomForestClassifier
-# from sklearn.svm import SVC
-
-# # --- Build ---
-# # Passing a scoring function will create cv scores during fitting
-# # the scorer should be a simple function accepting to vectors and returning a scalar
-# ensemble = SuperLearner(scorer=accuracy_score, random_state=seed)
-
-# # Build the first layer
-# ensemble.add([RandomForestClassifier(random_state=seed), LogisticRegression()])
-
-# # Build the second layer
-# ensemble.add([LogisticRegression(), SVC()])
-
-# # Attach the final meta estimator
-# ensemble.add_meta(SVC())
-# ensemble.fit(X[:75], y[:75])
-# preds = ensemble.predict(X[75:])
-# print("Fit data:\n%r" % ensemble.data)
