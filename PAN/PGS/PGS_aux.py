@@ -214,6 +214,8 @@ def selectPath(USR, DRV=None):
         PATH_ROOT = '/RAID5/marshallShare/pgSIT2/{}/'.format(DRV)
     elif USR == 'dsk':
         PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/pgSIT2/{}/'.format(DRV)
+    elif USR == 'sami':
+        PATH_ROOT = '/Users/sanchez.hmsc/Documents/WorkSims/pgSIT2/{}/'.format(DRV)
     (PATH_IMG, PATH_DATA) = (
         '{}img/'.format(PATH_ROOT), 
         '{}'.format(PATH_ROOT)

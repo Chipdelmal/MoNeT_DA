@@ -27,13 +27,14 @@ import PGS_gene as drv
 # import PGS_mlrMethods as mth
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('sami', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
+REDUCE_DATASET = .25
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -63,7 +64,7 @@ if QNT:
     fName = 'SCA_{}_{}Q_{}T.csv'.format(AOI, int(QNT), int(float(THS)*100))
 else:
     fName = 'SCA_{}_{}T_MLR.csv'.format(AOI, int(float(THS)*100))
-df = pd.read_csv(path.join(PT_OUT, fName))
+df = pd.read_csv(path.join(PT_OUT, fName)).sample(frac=REDUCE_DATASET)
 ###############################################################################
 # Split I/O
 ###############################################################################
@@ -81,10 +82,47 @@ inDims = X_train.shape[1]
 ###############################################################################
 # Setup Model
 ###############################################################################
-ensemble = SuperLearner()
+ensemble = SuperLearner(scorer=r2_score, verbose=2)
 ensemble.add([SVR(), Lasso()])
 ensemble.add_meta(SVR())
 ###############################################################################
 # Train
 ###############################################################################
-ensemble.fit(X_train, y_train)
+ensemble.fit(X_train, y_train, verbose=2)
+y_val = ensemble.predict(X_test)
+print('Super Learner: %.3f' % (r2_score(y_val, y_test)))
+
+# import numpy as np
+# from pandas import DataFrame
+# from sklearn.metrics import accuracy_score
+# from sklearn.datasets import load_iris
+
+# seed = 2017
+# np.random.seed(seed)
+
+# data = load_iris()
+# idx = np.random.permutation(150)
+# X = data.data[idx]
+# y = data.target[idx]
+
+# from mlens.ensemble import SuperLearner
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.ensemble import RandomForestClassifier
+# from sklearn.svm import SVC
+
+# # --- Build ---
+# # Passing a scoring function will create cv scores during fitting
+# # the scorer should be a simple function accepting to vectors and returning a scalar
+# ensemble = SuperLearner(scorer=accuracy_score, random_state=seed)
+
+# # Build the first layer
+# ensemble.add([RandomForestClassifier(random_state=seed), LogisticRegression()])
+
+# # Build the second layer
+# ensemble.add([LogisticRegression(), SVC()])
+
+# # Attach the final meta estimator
+# ensemble.add_meta(SVC())
+# ensemble.fit(X[:75], y[:75])
+# preds = ensemble.predict(X[75:])
+# print("Fit data:\n%r" % ensemble.data)
