@@ -11,7 +11,10 @@ from itertools import product
 from datetime import datetime
 from mlens.ensemble import SuperLearner
 from mlens.metrics.metrics import rmse
+from mlens.visualization import pca_comp_plot, pca_plot
+from sklearn.decomposition import PCA
 from sklearn.linear_model import Lasso
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics import d2_absolute_error_score, median_absolute_error
@@ -34,7 +37,7 @@ else:
 JOB = aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
-REDUCE_DATASET = .25
+REDUCE_DATASET = .15
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -83,7 +86,7 @@ inDims = X_train.shape[1]
 # Setup Model
 ###############################################################################
 ensemble = SuperLearner(scorer=r2_score, verbose=2)
-ensemble.add([SVR(), Lasso()])
+ensemble.add([SVR(), Lasso(), RandomForestRegressor()], folds=10)
 ensemble.add_meta(SVR())
 ###############################################################################
 # Train
@@ -91,6 +94,7 @@ ensemble.add_meta(SVR())
 ensemble.fit(X_train, y_train, verbose=2)
 y_val = ensemble.predict(X_test)
 print('Super Learner: %.3f' % (r2_score(y_val, y_test)))
+# pca_plot(X, PCA(n_components=2), y=y, cmap='Blues')
 
 # import numpy as np
 # from pandas import DataFrame
