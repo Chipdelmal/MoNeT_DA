@@ -141,49 +141,22 @@ ax.set_xlim(0, 1)
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-IVAR_IX = 2
-IVAR_DELTA = .1
-IVAR_STEP = 1
-AUTO_RANGE = True
-TRACES = 1000
-MODEL = rg
+MODEL_PREDICT = rg.predict
+IVAR_IX = 0
+(IVAR_DELTA, IVAR_STEP) = (.01, 1)
+TRACES = 2000
 YLIM = (0, 1)
 TITLE = df.columns[IVAR_IX]
 # Get sampling ranges for variables -------------------------------------------
-if (AUTO_RANGE==True):
-    minMax = [np.min(X_train, axis=0), np.max(X_train, axis=0)]
-    varRanges = list(zip(*minMax))
-# Get original sampling scheme (no X sweep yet) -------------------------------
-samples = np.zeros((len(varRanges), TRACES))
-for (ix, ran) in enumerate(varRanges):
-    samples[ix] = uniform(low=ran[0], high=ran[1], size=(TRACES,))
-samples = samples.T
-# Get independent variable steps (x sweep) ------------------------------------
-(rMin, rMax) = (varRanges[IVAR_IX][0], varRanges[IVAR_IX][1])
-step = IVAR_STEP if IVAR_STEP else (rMax-rMin)*IVAR_DELTA
-ivarSteps = np.arange(rMin, rMax+step, step)
-# Evaluate model on steps -----------------------------------------------------
-traces = np.zeros((samples.shape[0], ivarSteps.shape[0]))
-for six in range(samples.shape[0]):
-    smpSubset = np.tile(samples[six], [ivarSteps.shape[0], 1])
-    for (r, ivar) in enumerate(ivarSteps):
-        smpSubset[r][IVAR_IX] = ivar
-    yOut = rg.predict(smpSubset, verbose=False)
-    traces[six] = yOut
+pdpice = monet.getSamples_PDPICE(
+    MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
+    X=X_train, varRanges=None, indVarStep=IVAR_STEP
+)
+(x, pdp, ice) = (pdpice['x'], pdpice['pdp'], pdpice['ice'])
 # Plot ------------------------------------------------------------------------
 (fig, ax) = plt.subplots(figsize=(5, 5))
-ax.plot(
-    ivarSteps, traces.T, 
-    color='#03045e33', lw=0.2
+(fig, ax) = monet.plotPDPICE(
+    pdpice, (fig, ax), YLIM=(0, 1), TITLE=TITLE,
+    pdpKwargs={'color': '#a3cef155', 'ls': '-', 'lw': 0.15},
+    iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
 )
-ax.plot(
-    ivarSteps, np.mean(traces, axis=0),
-    color='#ef476fff', ls=':', lw=3
-)
-# Axis and frame 
-ylim = YLIM if YLIM else (np.min(traces), np.max(traces))
-ax.set_xlim(ivarSteps[0], ivarSteps[-1])
-ax.set_ylim(*YLIM)
-if TITLE:
-    ax.set_title(TITLE)
-
