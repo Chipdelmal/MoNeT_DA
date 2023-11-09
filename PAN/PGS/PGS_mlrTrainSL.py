@@ -7,19 +7,10 @@ from os import path
 import pandas as pd
 from numpy.random import uniform
 import matplotlib.pyplot as plt
-from itertools import product
 from datetime import datetime
 from mlens.ensemble import SuperLearner
-from mlens.metrics.metrics import rmse
-from mlens.visualization import pca_comp_plot, pca_plot
-from sklearn.decomposition import PCA
-from sklearn.linear_model import Lasso, LinearRegression
-from sklearn.kernel_ridge import KernelRidge
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import BayesianRidge
-from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.linear_model import SGDRegressor
-from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
 from sklearn. preprocessing import MinMaxScaler, StandardScaler
 from sklearn.neural_network import MLPRegressor
 from xgboost.sklearn import XGBRegressor
@@ -43,7 +34,7 @@ if monet.isNotebook():
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (0.1, 0, 4, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (0.15, 0, 4, 5, 200)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -96,12 +87,23 @@ estimators = {
     'mm': [
         SGDRegressor(), 
         BayesianRidge(),
+        MLPRegressor(
+            activation='tanh',
+            hidden_layer_sizes=[10, 10, 10, 10]
+        ),
     ],
     'sc': [
         SVR(),
-        MLPRegressor(hidden_layer_sizes=[10, 20, 10]),
         LGBMRegressor(verbose=0),
         XGBRegressor(),
+        MLPRegressor(
+            activation='tanh',
+            hidden_layer_sizes=[10, 20, 10]
+        ),
+        MLPRegressor(
+            activation='relu',
+            hidden_layer_sizes=[10, 20, 10]
+        ),
     ]
 }
 rg = SuperLearner(
@@ -117,7 +119,6 @@ rg.fit(X_train, y_train, verbose=VERBOSE, n_jobs=JOB)
 y_val = rg.predict(X_test)
 print(rg.data)
 print('Super Learner: %.3f'%(r2_score(y_val, y_test)))
-# pca_plot(X, PCA(n_components=2), y=y, cmap='Blues')
 ###############################################################################
 # Permutation Importance
 ###############################################################################
@@ -141,22 +142,19 @@ ax.set_xlim(0, 1)
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-MODEL_PREDICT = rg.predict
-IVAR_IX = 0
+(MODEL_PREDICT, IVAR_IX) = (rg.predict, 0)
 (IVAR_DELTA, IVAR_STEP) = (.01, 1)
-TRACES = 2000
-YLIM = (0, 1)
+(TRACES, YLIM) = (1500, (0, 1))
 TITLE = df.columns[IVAR_IX]
 # Get sampling ranges for variables -------------------------------------------
 pdpice = monet.getSamples_PDPICE(
     MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
     X=X_train, varRanges=None, indVarStep=IVAR_STEP
 )
-(x, pdp, ice) = (pdpice['x'], pdpice['pdp'], pdpice['ice'])
 # Plot ------------------------------------------------------------------------
 (fig, ax) = plt.subplots(figsize=(5, 5))
 (fig, ax) = monet.plotPDPICE(
     pdpice, (fig, ax), YLIM=(0, 1), TITLE=TITLE,
-    pdpKwargs={'color': '#a3cef155', 'ls': '-', 'lw': 0.15},
+    pdpKwargs={'color': '#a0c4ff55', 'ls': '-', 'lw': 0.15},
     iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
 )
