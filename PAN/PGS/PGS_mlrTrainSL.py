@@ -43,11 +43,7 @@ if monet.isNotebook():
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (
-    0.10, 0, 
-    4,
-    5, 250
-)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (0.1, 0, 4, 5, 200)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -145,12 +141,14 @@ ax.set_xlim(0, 1)
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-IVAR_IX = 1
+IVAR_IX = 2
 IVAR_DELTA = .1
-IVAR_STEP = 5
+IVAR_STEP = 1
 AUTO_RANGE = True
 TRACES = 1000
 MODEL = rg
+YLIM = (0, 1)
+TITLE = df.columns[IVAR_IX]
 # Get sampling ranges for variables -------------------------------------------
 if (AUTO_RANGE==True):
     minMax = [np.min(X_train, axis=0), np.max(X_train, axis=0)]
@@ -170,7 +168,22 @@ for six in range(samples.shape[0]):
     smpSubset = np.tile(samples[six], [ivarSteps.shape[0], 1])
     for (r, ivar) in enumerate(ivarSteps):
         smpSubset[r][IVAR_IX] = ivar
-    yOut = rg.predict(smpSubset)
+    yOut = rg.predict(smpSubset, verbose=False)
     traces[six] = yOut
 # Plot ------------------------------------------------------------------------
-plt.plot(traces.T)
+(fig, ax) = plt.subplots(figsize=(5, 5))
+ax.plot(
+    ivarSteps, traces.T, 
+    color='#03045e33', lw=0.2
+)
+ax.plot(
+    ivarSteps, np.mean(traces, axis=0),
+    color='#ef476fff', ls=':', lw=3
+)
+# Axis and frame 
+ylim = YLIM if YLIM else (np.min(traces), np.max(traces))
+ax.set_xlim(ivarSteps[0], ivarSteps[-1])
+ax.set_ylim(*YLIM)
+if TITLE:
+    ax.set_title(TITLE)
+
