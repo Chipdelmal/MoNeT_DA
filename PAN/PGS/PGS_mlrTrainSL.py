@@ -34,7 +34,7 @@ if monet.isNotebook():
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (0.15, 0, 4, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 4, 5, 200)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -142,7 +142,7 @@ ax.set_xlim(0, 1)
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-(MODEL_PREDICT, IVAR_IX) = (rg.predict, 0)
+(MODEL_PREDICT, IVAR_IX) = (rg.predict, 1)
 (IVAR_DELTA, IVAR_STEP) = (.01, 1)
 (TRACES, YLIM) = (1500, (0, 1))
 TITLE = df.columns[IVAR_IX]
@@ -158,3 +158,4 @@ pdpice = monet.getSamples_PDPICE(
     pdpKwargs={'color': '#a0c4ff55', 'ls': '-', 'lw': 0.15},
     iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
 )
+ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
