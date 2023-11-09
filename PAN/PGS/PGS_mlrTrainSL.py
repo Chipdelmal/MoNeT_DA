@@ -44,8 +44,8 @@ else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (
-    0.10, 
-    2, 4,
+    0.10, 0, 
+    4,
     5, 250
 )
 CHUNKS = JOB
@@ -145,10 +145,12 @@ ax.set_xlim(0, 1)
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-ix = 0
+IVAR_IX = 1
+IVAR_DELTA = .1
+IVAR_STEP = 5
 AUTO_RANGE = True
 TRACES = 1000
-DELTA = 0.1
+MODEL = rg
 # Get sampling ranges for variables -------------------------------------------
 if (AUTO_RANGE==True):
     minMax = [np.min(X_train, axis=0), np.max(X_train, axis=0)]
@@ -158,4 +160,17 @@ samples = np.zeros((len(varRanges), TRACES))
 for (ix, ran) in enumerate(varRanges):
     samples[ix] = uniform(low=ran[0], high=ran[1], size=(TRACES,))
 samples = samples.T
-# 
+# Get independent variable steps (x sweep) ------------------------------------
+(rMin, rMax) = (varRanges[IVAR_IX][0], varRanges[IVAR_IX][1])
+step = IVAR_STEP if IVAR_STEP else (rMax-rMin)*IVAR_DELTA
+ivarSteps = np.arange(rMin, rMax+step, step)
+# Evaluate model on steps -----------------------------------------------------
+traces = np.zeros((samples.shape[0], ivarSteps.shape[0]))
+for six in range(samples.shape[0]):
+    smpSubset = np.tile(samples[six], [ivarSteps.shape[0], 1])
+    for (r, ivar) in enumerate(ivarSteps):
+        smpSubset[r][IVAR_IX] = ivar
+    yOut = rg.predict(smpSubset)
+    traces[six] = yOut
+# Plot ------------------------------------------------------------------------
+plt.plot(traces.T)
