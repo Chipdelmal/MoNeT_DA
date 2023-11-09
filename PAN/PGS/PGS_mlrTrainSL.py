@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import sys
-# import shap
 import numpy as np
 from os import path
 import pandas as pd
-# import matplotlib.pyplot as plt
+from numpy.random import uniform
+import matplotlib.pyplot as plt
 from itertools import product
 from datetime import datetime
 from mlens.ensemble import SuperLearner
@@ -43,8 +43,11 @@ if monet.isNotebook():
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-(VERBOSE, JOB) = (2, 4)
-REDUCE_DATASET = .2
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (
+    0.10, 
+    2, 4,
+    5, 250
+)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -74,7 +77,7 @@ if QNT:
     fName = 'SCA_{}_{}Q_{}T.csv'.format(AOI, int(QNT), int(float(THS)*100))
 else:
     fName = 'SCA_{}_{}T_MLR.csv'.format(AOI, int(float(THS)*100))
-df = pd.read_csv(path.join(PT_OUT, fName)).sample(frac=REDUCE_DATASET)
+df = pd.read_csv(path.join(PT_OUT, fName)).sample(frac=DATASET_SAMPLE)
 ###############################################################################
 # Split I/O
 ###############################################################################
@@ -92,10 +95,7 @@ inDims = X_train.shape[1]
 ###############################################################################
 # Setup Model
 ###############################################################################
-preprocess = {
-    'mm': [MinMaxScaler()],
-    'sc': [StandardScaler()]
-}
+preprocess = {'mm': [MinMaxScaler()], 'sc': [StandardScaler()]}
 estimators = {
     'mm': [
         SGDRegressor(), 
@@ -108,33 +108,54 @@ estimators = {
         XGBRegressor(),
     ]
 }
-ensemble = SuperLearner(
-    scorer=r2_score, sample_size=100, 
+rg = SuperLearner(
+    scorer=r2_score, sample_size=SAMPLES, 
     verbose=VERBOSE, n_jobs=JOB
 )
-ensemble.add(estimators, preprocess)
-ensemble.add_meta(MLPRegressor(hidden_layer_sizes=[5, ]))
-# Unscaled --------------------------------------------------------------------
-# ensemble = SuperLearner(
-#     scorer=r2_score, sample_size=100, 
-#     verbose=VERBOSE, n_jobs=JOB
-# )
-# ensemble.add([
-#     SVR(),
-#     SGDRegressor(),
-#     # KernelRidge(),
-#     # GaussianProcessRegressor(kernel=kernel),
-#     # RandomForestRegressor(), 
-#     BayesianRidge(),
-#     MLPRegressor(hidden_layer_sizes=[10, 20, 10])
-# ], folds=10)
-# ensemble.add_meta(MLPRegressor(hidden_layer_sizes=[5, 5]))
+rg.add(estimators, preprocess, folds=FOLDS)
+rg.add_meta(MLPRegressor(hidden_layer_sizes=[5, ]))
 ###############################################################################
 # Train
 ###############################################################################
-ensemble.fit(X_train, y_train, verbose=VERBOSE, n_jobs=JOB)
-y_val = ensemble.predict(X_test)
-print(ensemble.data)
+rg.fit(X_train, y_train, verbose=VERBOSE, n_jobs=JOB)
+y_val = rg.predict(X_test)
+print(rg.data)
 print('Super Learner: %.3f'%(r2_score(y_val, y_test)))
 # pca_plot(X, PCA(n_components=2), y=y, cmap='Blues')
-
+###############################################################################
+# Permutation Importance
+###############################################################################
+(X_trainS, y_trainS) = aux.unison_shuffled_copies(
+    X_train, y_train, size=int(5e3)
+)
+# Permutation scikit ----------------------------------------------------------
+perm_importance = permutation_importance(
+    rg, X_trainS, y_trainS, 
+    scoring=make_scorer(mean_squared_error)
+)
+sorted_idx = perm_importance.importances_mean.argsort()
+pImp = perm_importance.importances_mean/sum(perm_importance.importances_mean)
+labZip = zip(perm_importance.importances_mean, indVars[:-1])
+labSort = [x for _, x in sorted(labZip)]
+# Perm figure -----------------------------------------------------------------
+clr = aux.selectColor(MOI)
+(fig, ax) = plt.subplots(figsize=(4, 6))
+plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
+ax.set_xlim(0, 1)
+###############################################################################
+# PDP/ICE Dev
+###############################################################################
+ix = 0
+AUTO_RANGE = True
+TRACES = 1000
+DELTA = 0.1
+# Get sampling ranges for variables -------------------------------------------
+if (AUTO_RANGE==True):
+    minMax = [np.min(X_train, axis=0), np.max(X_train, axis=0)]
+    varRanges = list(zip(*minMax))
+# Get original sampling scheme (no X sweep yet) -------------------------------
+samples = np.zeros((len(varRanges), TRACES))
+for (ix, ran) in enumerate(varRanges):
+    samples[ix] = uniform(low=ran[0], high=ran[1], size=(TRACES,))
+samples = samples.T
+# 
