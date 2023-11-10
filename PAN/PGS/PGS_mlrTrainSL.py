@@ -111,7 +111,7 @@ rg = SuperLearner(
     verbose=VERBOSE, n_jobs=JOB
 )
 rg.add(estimators, preprocess, folds=FOLDS)
-rg.add_meta(MLPRegressor(hidden_layer_sizes=[5, ]))
+rg.add_meta(MLPRegressor(hidden_layer_sizes=[5, ], activation='tanh'))
 ###############################################################################
 # Train
 ###############################################################################
@@ -144,7 +144,7 @@ ax.set_xlim(0, 1)
 ###############################################################################
 (MODEL_PREDICT, IVAR_IX) = (rg.predict, 1)
 (IVAR_DELTA, IVAR_STEP) = (.01, 1)
-(TRACES, YLIM) = (1500, (0, 1))
+(TRACES, YLIM) = (3000, (0, 1))
 TITLE = df.columns[IVAR_IX]
 # Get sampling ranges for variables -------------------------------------------
 pdpice = monet.getSamples_PDPICE(
@@ -154,8 +154,8 @@ pdpice = monet.getSamples_PDPICE(
 # Plot ------------------------------------------------------------------------
 (fig, ax) = plt.subplots(figsize=(5, 5))
 (fig, ax) = monet.plotPDPICE(
-    pdpice, (fig, ax), YLIM=(0, 1), TITLE=TITLE,
-    pdpKwargs={'color': '#a0c4ff55', 'ls': '-', 'lw': 0.15},
+    pdpice, (fig, ax), YLIM=YLIM, TITLE=TITLE,
+    pdpKwargs={'color': '#023e8a33', 'ls': '-', 'lw': 0.125},
     iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
 )
 ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
