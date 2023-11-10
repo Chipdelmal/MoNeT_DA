@@ -8,7 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 import mlens
-from mlens.ensemble import SuperLearner
+from mlens.ensemble import SuperLearner, Subsemble
 from sklearn.linear_model import BayesianRidge
 from sklearn.linear_model import SGDRegressor
 from sklearn. preprocessing import MinMaxScaler, StandardScaler
@@ -34,7 +34,7 @@ if monet.isNotebook():
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (.5, 0, 20, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (.1, 0, 20, 5, 200)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
