@@ -5,9 +5,9 @@ import sys
 import numpy as np
 from os import path
 import pandas as pd
-from numpy.random import uniform
 import matplotlib.pyplot as plt
 from datetime import datetime
+import mlens
 from mlens.ensemble import SuperLearner
 from sklearn.linear_model import BayesianRidge
 from sklearn.linear_model import SGDRegressor
@@ -23,18 +23,18 @@ from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import make_scorer
 from sklearn.inspection import permutation_importance
-from sklearn.inspection import PartialDependenceDisplay
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
 import PGS_gene as drv
-# import PGS_mlrMethods as mth
+import PGS_mlrMethods as mth
+mlens.config.set_backend('multiprocessing')
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('sami', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 4, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (.5, 0, 20, 5, 200)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -76,7 +76,7 @@ if MOI=='WOP':
     y = y/aux.XRAN[1]
 elif MOI=='CPT':
     y = 1-y
-(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.25)
+(X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.5)
 (X_train, X_test) = (X_trainR, X_testR)
 inDims = X_train.shape[1]
 ###############################################################################
@@ -85,14 +85,15 @@ inDims = X_train.shape[1]
 preprocess = {'mm': [MinMaxScaler()], 'sc': [StandardScaler()]}
 estimators = {
     'mm': [
-        SGDRegressor(), 
-        BayesianRidge(),
+        # SGDRegressor(), 
+        # BayesianRidge(),
         MLPRegressor(
             activation='tanh',
             hidden_layer_sizes=[10, 10, 10, 10]
         ),
     ],
     'sc': [
+        # mth.selectMLKeras(MOI, QNT, inDims=X_train.shape[1])[-1],
         SVR(),
         LGBMRegressor(verbose=0),
         XGBRegressor(),
@@ -111,7 +112,7 @@ rg = SuperLearner(
     verbose=VERBOSE, n_jobs=JOB
 )
 rg.add(estimators, preprocess, folds=FOLDS)
-rg.add_meta(MLPRegressor(hidden_layer_sizes=[5, ], activation='tanh'))
+rg.add_meta(MLPRegressor(hidden_layer_sizes=[3, 3]))
 ###############################################################################
 # Train
 ###############################################################################
@@ -139,17 +140,18 @@ clr = aux.selectColor(MOI)
 (fig, ax) = plt.subplots(figsize=(4, 6))
 plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
+plt.close()
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-(MODEL_PREDICT, IVAR_IX) = (rg.predict, 1)
+(MODEL_PREDICT, IVAR_IX) = (rg.predict, 0)
 (IVAR_DELTA, IVAR_STEP) = (.01, 1)
 (TRACES, YLIM) = (3000, (0, 1))
 TITLE = df.columns[IVAR_IX]
 # Get sampling ranges for variables -------------------------------------------
 pdpice = monet.getSamples_PDPICE(
     MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
-    X=X_train, varRanges=None, indVarStep=IVAR_STEP
+    X=X, varRanges=None, indVarStep=IVAR_STEP
 )
 # Plot ------------------------------------------------------------------------
 (fig, ax) = plt.subplots(figsize=(5, 5))
