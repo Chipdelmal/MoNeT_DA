@@ -2,6 +2,7 @@
 mailAlerts.py
 out/
 in/
+tmp/
 *.zip
 *.csv
 

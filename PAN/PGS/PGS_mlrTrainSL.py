@@ -7,6 +7,8 @@ from os import path
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+import dill
+from dill import dumps, loads
 import mlens
 from mlens.ensemble import SuperLearner, Subsemble
 from sklearn.linear_model import BayesianRidge
@@ -34,7 +36,7 @@ if monet.isNotebook():
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (.1, 0, 20, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 5, 200)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -57,6 +59,14 @@ monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
     '{} mlrTrainMLQNT [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
 )
+# Output name -----------------------------------------------------------------
+modID = 'slr'
+if QNT:
+    fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+        AOI, int(QNT), int(float(THS)*100), MOI, modID
+    )
+else:
+    fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, modID)
 ###############################################################################
 # Read Dataframe
 ###############################################################################
@@ -85,11 +95,12 @@ inDims = X_train.shape[1]
 preprocess = {'mm': [MinMaxScaler()], 'sc': [StandardScaler()]}
 estimators = {
     'mm': [
-        # SGDRegressor(), 
-        # BayesianRidge(),
+        SGDRegressor(), 
+        BayesianRidge(),
         MLPRegressor(
             activation='tanh',
-            hidden_layer_sizes=[10, 10, 10, 10]
+            hidden_layer_sizes=[10, 10, 10, 10],
+            alpha=2.75e-4
         ),
     ],
     'sc': [
@@ -99,11 +110,13 @@ estimators = {
         XGBRegressor(),
         MLPRegressor(
             activation='tanh',
-            hidden_layer_sizes=[10, 20, 10]
+            hidden_layer_sizes=[10, 20, 10],
+            alpha=2.75e-4
         ),
         MLPRegressor(
             activation='relu',
-            hidden_layer_sizes=[10, 20, 10]
+            hidden_layer_sizes=[10, 20, 10],
+            alpha=2.75e-4
         ),
     ]
 }
@@ -112,7 +125,7 @@ rg = SuperLearner(
     verbose=VERBOSE, n_jobs=JOB
 )
 rg.add(estimators, preprocess, folds=FOLDS)
-rg.add_meta(MLPRegressor(hidden_layer_sizes=[3, 3]))
+rg.add_meta(MLPRegressor(hidden_layer_sizes=[3, 3], activation='relu'))
 ###############################################################################
 # Train
 ###############################################################################
@@ -144,20 +157,38 @@ plt.close()
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-(MODEL_PREDICT, IVAR_IX) = (rg.predict, 0)
-(IVAR_DELTA, IVAR_STEP) = (.01, 1)
-(TRACES, YLIM) = (3000, (0, 1))
-TITLE = df.columns[IVAR_IX]
-# Get sampling ranges for variables -------------------------------------------
-pdpice = monet.getSamples_PDPICE(
-    MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
-    X=X, varRanges=None, indVarStep=IVAR_STEP
-)
-# Plot ------------------------------------------------------------------------
-(fig, ax) = plt.subplots(figsize=(5, 5))
-(fig, ax) = monet.plotPDPICE(
-    pdpice, (fig, ax), YLIM=YLIM, TITLE=TITLE,
-    pdpKwargs={'color': '#023e8a33', 'ls': '-', 'lw': 0.125},
-    iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
-)
-ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
+(IVAR_DELTA, IVAR_STEP) = (.025, None)
+(TRACES, YLIM) = (2000, (0, 1))
+for ix in list(range(X_train.shape[-1])):
+    (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
+    TITLE = df.columns[IVAR_IX]
+    IVAR_STEP = 1 if (np.max(X.T[IVAR_IX]) > 1) else 0.1
+    # Get sampling ranges for variables ---------------------------------------
+    pdpice = monet.getSamples_PDPICE(
+        MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
+        X=X, varRanges=None, 
+        indVarDelta=IVAR_DELTA, indVarStep=IVAR_STEP
+    )
+    # Plot --------------------------------------------------------------------
+    (fig, ax) = plt.subplots(figsize=(5, 5))
+    (fig, ax) = monet.plotPDPICE(
+        pdpice, (fig, ax), YLIM=YLIM, TITLE=TITLE,
+        pdpKwargs={'color': '#023e8a33', 'ls': '-', 'lw': 0.125},
+        iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
+    )
+    ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
+    fPath = path.join(PT_OUT, fNameOut)+f'_{TITLE[2:]}'
+    fPath = './tmp/'+fNameOut+f'_{TITLE[2:]}.png'
+    plt.savefig(
+        fPath, 
+        dpi=200, bbox_inches='tight', pad_inches=0.1, transparent=False
+    )
+    plt.close()
+###############################################################################
+# Dump Model to Disk
+###############################################################################
+fPath = path.join(PT_OUT, fNameOut)+'.pkl'
+with open(fPath, "wb") as dill_file:
+    dill.dump(rg, dill_file)
+with open(fPath, 'rb') as dill_file:
+    model = dill.load(dill_file)
