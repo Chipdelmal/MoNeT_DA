@@ -32,9 +32,10 @@ import PGS_mlrMethods as mth
 mlens.config.set_backend('multiprocessing')
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'WOP')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
+    QNT = None if (QNT == 'None') else QNT
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 5, 200)
 CHUNKS = JOB
@@ -134,6 +135,13 @@ y_val = rg.predict(X_test)
 print(rg.data)
 print('Super Learner: %.3f'%(r2_score(y_val, y_test)))
 ###############################################################################
+# Load if Exists
+###############################################################################
+fPath = path.join(PT_OUT, fNameOut)+'.pkl'
+if path.isfile(fPath):
+    with open(fPath, 'rb') as dill_file:
+        rg = dill.load(dill_file)
+###############################################################################
 # Permutation Importance
 ###############################################################################
 (X_trainS, y_trainS) = aux.unison_shuffled_copies(
@@ -149,16 +157,21 @@ pImp = perm_importance.importances_mean/sum(perm_importance.importances_mean)
 labZip = zip(perm_importance.importances_mean, indVars[:-1])
 labSort = [x for _, x in sorted(labZip)]
 # Perm figure -----------------------------------------------------------------
+fPath = './tmp/'+fNameOut+f'_PERM.png'
 clr = aux.selectColor(MOI)
 (fig, ax) = plt.subplots(figsize=(4, 6))
 plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
+plt.savefig(
+    path.join(PT_IMG, fNameOut+'_PERM.png'), 
+    dpi=200, bbox_inches='tight', pad_inches=0, transparent=True
+)
 plt.close()
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
 (IVAR_DELTA, IVAR_STEP) = (.025, None)
-(TRACES, YLIM) = (2000, (0, 1))
+(TRACES, YLIM) = (3000, (0, 1))
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]
@@ -173,7 +186,7 @@ for ix in list(range(X_train.shape[-1])):
     (fig, ax) = plt.subplots(figsize=(5, 5))
     (fig, ax) = monet.plotPDPICE(
         pdpice, (fig, ax), YLIM=YLIM, TITLE=TITLE,
-        pdpKwargs={'color': '#023e8a33', 'ls': '-', 'lw': 0.125},
+        pdpKwargs={'color': '#5465ff22', 'ls': '-', 'lw': 0.1},
         iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
     )
     ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
@@ -181,7 +194,7 @@ for ix in list(range(X_train.shape[-1])):
     fPath = './tmp/'+fNameOut+f'_{TITLE[2:]}.png'
     plt.savefig(
         fPath, 
-        dpi=200, bbox_inches='tight', pad_inches=0.1, transparent=False
+        dpi=500, bbox_inches='tight', pad_inches=0.1, transparent=False
     )
     plt.close()
 ###############################################################################
