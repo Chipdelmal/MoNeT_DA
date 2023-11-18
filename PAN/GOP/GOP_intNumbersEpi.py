@@ -159,8 +159,8 @@ for rsIx in range(len(res)-1):
         # Plot
         ###############################################################################
         label = ('cases' if AOI[:3]=='CSS' else 'deaths')
-        yran = (50*WSIZE if AOI[:3]=='CSS' else 1*WSIZE)
-        tDelta = (50*WSIZE/5 if AOI[:3]=='CSS' else 1*WSIZE/5)
+        yran = (75*WSIZE if AOI[:3]=='CSS' else 1.5*WSIZE)
+        tDelta = (75*WSIZE/5 if AOI[:3]=='CSS' else 1.5*WSIZE/5)
         colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
         # Generate difference figure --------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
