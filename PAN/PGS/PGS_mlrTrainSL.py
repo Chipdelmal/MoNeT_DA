@@ -171,7 +171,7 @@ plt.close()
 # PDP/ICE Dev
 ###############################################################################
 (IVAR_DELTA, IVAR_STEP) = (.025, None)
-(TRACES, YLIM) = (3000, (0, 1))
+(TRACES, YLIM) = (5000, (0, 1))
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]
