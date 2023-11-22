@@ -2,30 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import dill
+import mlens
 import numpy as np
 from os import path
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
-import dill
-import compress_pickle as pkl
-import mlens
-from mlens.ensemble import SuperLearner, Subsemble
-from mlens.model_selection import Evaluator
-from mlens.metrics import make_scorer
-from sklearn.linear_model import BayesianRidge
-from sklearn.linear_model import SGDRegressor
-from sklearn. preprocessing import MinMaxScaler, StandardScaler
-from sklearn.neural_network import MLPRegressor
-from xgboost.sklearn import XGBRegressor
-from lightgbm import LGBMRegressor
-from sklearn.svm import SVR
-from sklearn.metrics import r2_score, explained_variance_score
-from sklearn.metrics import d2_absolute_error_score, median_absolute_error
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-from sklearn.model_selection import train_test_split, cross_validate
-from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import make_scorer
+from sklearn.metrics import mean_squared_error
 from sklearn.inspection import permutation_importance
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
@@ -41,8 +26,6 @@ else:
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 5, 200)
 CHUNKS = JOB
-C_VAL = True
-DEV = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -125,7 +108,7 @@ plt.close()
 # PDP/ICE Dev
 ###############################################################################
 (IVAR_DELTA, IVAR_STEP) = (.025, None)
-(TRACES, YLIM) = (100, (0, 1))
+(TRACES, YLIM) = (5000, (0, 1))
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]

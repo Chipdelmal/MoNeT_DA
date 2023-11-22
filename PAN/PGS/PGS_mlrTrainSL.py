@@ -2,16 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import dill
+import mlens
 import numpy as np
 from os import path
 import pandas as pd
-import matplotlib.pyplot as plt
 from datetime import datetime
-import dill
-import mlens
-import compress_pickle as pkl
-from mlens.ensemble import SuperLearner, Subsemble
-from mlens.metrics import make_scorer
+from mlens.ensemble import SuperLearner
 from sklearn.linear_model import BayesianRidge
 from sklearn.linear_model import SGDRegressor
 from sklearn. preprocessing import MinMaxScaler, StandardScaler
@@ -19,11 +16,8 @@ from sklearn.neural_network import MLPRegressor
 from xgboost.sklearn import XGBRegressor
 from lightgbm import LGBMRegressor
 from sklearn.svm import SVR
-from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split, cross_validate
-from sklearn.model_selection import ShuffleSplit
-from sklearn.metrics import make_scorer
-from sklearn.inspection import permutation_importance
 import MoNeT_MGDrivE as monet
 import PGS_aux as aux
 import PGS_gene as drv
@@ -36,10 +30,8 @@ else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
     QNT = None if (QNT == 'None') else QNT
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (.25, 0, 20, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 5, 250)
 CHUNKS = JOB
-C_VAL = True
-DEV = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -146,78 +138,3 @@ samples = {
 fPath = path.join(PT_OUT, fNameOut+'_SMP')+'.pkl'
 with open(fPath, 'wb') as file:
     dill.dump(samples, file)
-
-
-
-
-###############################################################################
-# Load if Exists
-###############################################################################
-fPath = path.join(PT_OUT, fNameOut)+'.pkl'
-if path.isfile(fPath):
-    with open(fPath, 'rb') as dill_file:
-        rg = dill.load(dill_file)
-###############################################################################
-# Permutation Importance
-###############################################################################
-(X_trainS, y_trainS) = aux.unison_shuffled_copies(
-    X_train, y_train, size=int(5e3)
-)
-# Permutation scikit ----------------------------------------------------------
-perm_importance = permutation_importance(
-    rg, X_trainS, y_trainS, 
-    scoring=make_scorer(mean_squared_error)
-)
-sorted_idx = perm_importance.importances_mean.argsort()
-pImp = perm_importance.importances_mean/sum(perm_importance.importances_mean)
-labZip = zip(perm_importance.importances_mean, indVars[:-1])
-labSort = [x for _, x in sorted(labZip)]
-# Perm figure -----------------------------------------------------------------
-fPath = './tmp/'+fNameOut+f'_PERM.png'
-clr = aux.selectColor(MOI)
-(fig, ax) = plt.subplots(figsize=(4, 6))
-plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
-ax.set_xlim(0, 1)
-plt.savefig(
-    path.join(PT_IMG, fNameOut+'_PERM.png'), 
-    dpi=200, bbox_inches='tight', pad_inches=0, transparent=True
-)
-plt.close()
-###############################################################################
-# PDP/ICE Dev
-###############################################################################
-(IVAR_DELTA, IVAR_STEP) = (.025, None)
-(TRACES, YLIM) = (5000, (0, 1))
-for ix in list(range(X_train.shape[-1])):
-    (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
-    TITLE = df.columns[IVAR_IX]
-    IVAR_STEP = 1 if (np.max(X.T[IVAR_IX]) > 1) else 0.1
-    # Get sampling ranges for variables ---------------------------------------
-    pdpice = monet.getSamples_PDPICE(
-        MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
-        X=X, varRanges=None, 
-        indVarDelta=IVAR_DELTA, indVarStep=IVAR_STEP
-    )
-    # Plot --------------------------------------------------------------------
-    (fig, ax) = plt.subplots(figsize=(5, 5))
-    (fig, ax) = monet.plotPDPICE(
-        pdpice, (fig, ax), YLIM=YLIM, TITLE=TITLE,
-        pdpKwargs={'color': '#5465ff20', 'ls': '-', 'lw': 0.075},
-        iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
-    )
-    ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
-    fPath = path.join(PT_OUT, fNameOut)+f'_{TITLE[2:]}'
-    fPath = './tmp/'+fNameOut+f'_{TITLE[2:]}.png'
-    plt.savefig(
-        fPath, 
-        dpi=500, bbox_inches='tight', pad_inches=0.1, transparent=False
-    )
-    plt.close()
-###############################################################################
-# Dump Model to Disk
-###############################################################################
-fPath = path.join(PT_OUT, fNameOut)+'.pkl'
-with open(fPath, "wb") as dill_file:
-    dill.dump(rg, dill_file)
-with open(fPath, 'rb') as dill_file:
-    model = dill.load(dill_file)
