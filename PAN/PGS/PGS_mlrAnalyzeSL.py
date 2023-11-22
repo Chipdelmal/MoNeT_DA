@@ -71,6 +71,15 @@ if QNT:
 else:
     fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, modID)
 ###############################################################################
+# Read Dataframe
+###############################################################################
+if QNT:
+    fName = 'SCA_{}_{}Q_{}T.csv'.format(AOI, int(QNT), int(float(THS)*100))
+else:
+    fName = 'SCA_{}_{}T_MLR.csv'.format(AOI, int(float(THS)*100))
+df = pd.read_csv(path.join(PT_OUT, fName)).sample(frac=DATASET_SAMPLE)
+(X, y) = [np.array(i) for i in (df, df[MOI])]
+###############################################################################
 # Load Files
 ###############################################################################
 fPath = path.join(PT_OUT, fNameOut)+'.pkl'
@@ -116,7 +125,7 @@ plt.close()
 # PDP/ICE Dev
 ###############################################################################
 (IVAR_DELTA, IVAR_STEP) = (.025, None)
-(TRACES, YLIM) = (1000, (0, 1))
+(TRACES, YLIM) = (100, (0, 1))
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]
@@ -124,7 +133,7 @@ for ix in list(range(X_train.shape[-1])):
     # Get sampling ranges for variables ---------------------------------------
     pdpice = monet.getSamples_PDPICE(
         MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
-        X=X, varRanges=None, 
+        X=X_train, varRanges=None, 
         indVarDelta=IVAR_DELTA, indVarStep=IVAR_STEP
     )
     # Plot --------------------------------------------------------------------
