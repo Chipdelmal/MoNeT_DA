@@ -8,9 +8,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 import dill
-import mlens
 import compress_pickle as pkl
+import mlens
 from mlens.ensemble import SuperLearner, Subsemble
+from mlens.model_selection import Evaluator
 from mlens.metrics import make_scorer
 from sklearn.linear_model import BayesianRidge
 from sklearn.linear_model import SGDRegressor
@@ -19,7 +20,9 @@ from sklearn.neural_network import MLPRegressor
 from xgboost.sklearn import XGBRegressor
 from lightgbm import LGBMRegressor
 from sklearn.svm import SVR
-from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.metrics import r2_score, explained_variance_score
+from sklearn.metrics import d2_absolute_error_score, median_absolute_error
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import make_scorer
@@ -36,7 +39,7 @@ else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
     QNT = None if (QNT == 'None') else QNT
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (.25, 0, 20, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 5, 200)
 CHUNKS = JOB
 C_VAL = True
 DEV = True
@@ -68,95 +71,21 @@ if QNT:
 else:
     fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, modID)
 ###############################################################################
-# Read Dataframe
+# Load Files
 ###############################################################################
-if QNT:
-    fName = 'SCA_{}_{}Q_{}T.csv'.format(AOI, int(QNT), int(float(THS)*100))
-else:
-    fName = 'SCA_{}_{}T_MLR.csv'.format(AOI, int(float(THS)*100))
-df = pd.read_csv(path.join(PT_OUT, fName)).sample(frac=DATASET_SAMPLE)
-###############################################################################
-# Split I/O
-###############################################################################
+fPath = path.join(PT_OUT, fNameOut)+'.pkl'
+with open(fPath, 'rb') as dill_file:
+    rg = dill.load(dill_file)
+# Exporting samples -----------------------------------------------------------
+fPath = path.join(PT_OUT, fNameOut+'_SMP')+'.pkl'
+with open(fPath, 'rb') as dill_file:
+    samples = dill.load(dill_file)
+(X_train, X_test, y_train, y_test) = (
+    samples['X_train'], samples['x_test'],
+    samples['Y_train'], samples['y_test']
+)
 indVars = [i[0] for i in aux.DATA_HEAD]
 indVarsLabel = [i[2:] for i in indVars][:-1]
-dfIn = df[indVars].drop('i_grp', axis=1)
-(X, y) = [np.array(i) for i in (dfIn, df[MOI])]
-if MOI=='WOP':
-    y = y/aux.XRAN[1]
-elif MOI=='CPT':
-    y = 1-y
-(X_train, X_test, y_train, y_test) = train_test_split(X, y, test_size=0.5)
-inDims = X_train.shape[1]
-###############################################################################
-# Setup Model
-###############################################################################
-preprocess = {'mm': [MinMaxScaler()], 'sc': [StandardScaler()]}
-estimators = {
-    'mm': [
-        SGDRegressor(), 
-        BayesianRidge(),
-        MLPRegressor(
-            activation='tanh',
-            hidden_layer_sizes=[10, 10, 10, 10],
-            alpha=2.75e-3
-        ),
-    ],
-    'sc': [
-        # mth.selectMLKeras(MOI, QNT, inDims=X_train.shape[1])[-1],
-        SVR(),
-        LGBMRegressor(verbose=0),
-        XGBRegressor(),
-        MLPRegressor(
-            activation='tanh',
-            hidden_layer_sizes=[10, 20, 10],
-            alpha=2.75e-3
-        ),
-        # MLPRegressor(
-        #     activation='relu',
-        #     hidden_layer_sizes=[10, 20, 10],
-        #     alpha=2.75e-3
-        # ),
-    ]
-}
-rg = SuperLearner(
-    scorer=r2_score, sample_size=SAMPLES, 
-    verbose=VERBOSE, n_jobs=JOB
-)
-rg.add(estimators, preprocess, folds=FOLDS)
-rg.add_meta(MLPRegressor(hidden_layer_sizes=[3, 3], activation='relu'))
-###############################################################################
-# Train
-###############################################################################
-rg.fit(X_train, y_train, verbose=VERBOSE, n_jobs=JOB)
-y_val = rg.predict(X_test)
-print(rg.data)
-print('Super Learner: %.3f'%(r2_score(y_val, y_test)))
-###############################################################################
-# Dump to Disk
-###############################################################################
-fPath = path.join(PT_OUT, fNameOut)+'.pkl'
-with open(fPath, "wb") as file:
-    dill.dump(rg, file)
-# Exporting samples -----------------------------------------------------------
-samples = {
-    'X_train': X_train, 'x_test': X_test, 
-    'Y_train': y_train, 'y_test': y_test
-}
-fPath = path.join(PT_OUT, fNameOut+'_SMP')+'.pkl'
-with open(fPath, 'wb') as file:
-    dill.dump(samples, file)
-
-
-
-
-###############################################################################
-# Load if Exists
-###############################################################################
-fPath = path.join(PT_OUT, fNameOut)+'.pkl'
-if path.isfile(fPath):
-    with open(fPath, 'rb') as dill_file:
-        rg = dill.load(dill_file)
 ###############################################################################
 # Permutation Importance
 ###############################################################################
@@ -187,7 +116,7 @@ plt.close()
 # PDP/ICE Dev
 ###############################################################################
 (IVAR_DELTA, IVAR_STEP) = (.025, None)
-(TRACES, YLIM) = (5000, (0, 1))
+(TRACES, YLIM) = (1000, (0, 1))
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]
@@ -213,11 +142,3 @@ for ix in list(range(X_train.shape[-1])):
         dpi=500, bbox_inches='tight', pad_inches=0.1, transparent=False
     )
     plt.close()
-###############################################################################
-# Dump Model to Disk
-###############################################################################
-fPath = path.join(PT_OUT, fNameOut)+'.pkl'
-with open(fPath, "wb") as dill_file:
-    dill.dump(rg, dill_file)
-with open(fPath, 'rb') as dill_file:
-    model = dill.load(dill_file)
