@@ -186,7 +186,7 @@ for ix in list(range(X_train.shape[-1])):
     (fig, ax) = plt.subplots(figsize=(5, 5))
     (fig, ax) = monet.plotPDPICE(
         pdpice, (fig, ax), YLIM=YLIM, TITLE=TITLE,
-        pdpKwargs={'color': '#5465ff22', 'ls': '-', 'lw': 0.1},
+        pdpKwargs={'color': '#5465ff20', 'ls': '-', 'lw': 0.075},
         iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
     )
     ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
