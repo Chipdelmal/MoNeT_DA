@@ -116,7 +116,13 @@ rg = SuperLearner(
     verbose=VERBOSE, n_jobs=JOB
 )
 rg.add(estimators, preprocess, folds=FOLDS)
-rg.add_meta(MLPRegressor(hidden_layer_sizes=[3, 3], activation='relu'))
+rg.add_meta(
+    MLPRegressor(
+        hidden_layer_sizes=[3, 3], 
+        activation='tanh',
+        alpha=2e-2
+    )
+)
 ###############################################################################
 # Train
 ###############################################################################
