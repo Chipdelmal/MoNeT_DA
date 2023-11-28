@@ -161,17 +161,17 @@ for rsIx in range(len(res)-1):
         label = ('cases' if AOI[:3]=='CSS' else 'deaths')
         yran = (75*WSIZE if AOI[:3]=='CSS' else 1.5*WSIZE)
         tDelta = (75*WSIZE/5 if AOI[:3]=='CSS' else 1.5*WSIZE/5)
-        colors = ['#ff006e', '#8338ec', '#3a86ff', '#f15bb5', '#04e762', '#3d348b']
+        colors = ['#ff006e11', '#8338ec11', '#3a86ff11', '#f15bb511', '#04e76211', '#3d348b11']
         # Generate difference figure --------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
         for ix in range(dfTreatment.shape[1]):
-            ax.plot(dfTreatment.iloc[:,ix], color=colors[ix], lw=1)
+            ax.plot(dfTreatment.iloc[:,ix], color=colors[ix], lw=0.25)
         if LABELS:
             ax.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
             ax.set_xticks(np.arange(0, dfTreatment.shape[0], (30*5)/WSIZE))
             ax.set_yticks(np.arange(0, yran, tDelta))
             ax.set_title(LND)
-            ax.grid(color='#00000055', linestyle='-', linewidth=.1)
+            ax.grid(color='#00000055', linestyle='-', linewidth=.5)
             ax.set_xlabel("{}-day intervals".format(WSIZE))
             ax.set_ylabel("Aggregate difference in number of {}".format(label))
         else:
@@ -190,7 +190,7 @@ for rsIx in range(len(res)-1):
         # Generate base figure --------------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
         for ix in range(dfNoTreatment.shape[1]):
-            ax.plot(dfNoTreatment.iloc[:,ix], color=colors[ix], lw=1)
+            ax.plot(dfNoTreatment.iloc[:,ix], color=colors[ix], lw=0.25)
         if LABELS:
             ax.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
             ax.set_xticks(np.arange(0, dfTreatment.shape[0], (30*5)/WSIZE))
@@ -214,7 +214,7 @@ for rsIx in range(len(res)-1):
         # Generate treat figure -------------------------------------------------------
         (fig, ax) = plt.subplots(figsize=(8, 4))
         for ix in range(dfXTreatment.shape[1]):
-            ax.plot(dfXTreatment.iloc[:,ix], color=colors[ix], lw=1)
+            ax.plot(dfXTreatment.iloc[:,ix], color=colors[ix], lw=0.25)
         if LABELS:
             ax.legend(epi.AGE_GROUP_LABEL, bbox_to_anchor=(1, 1), frameon=False, loc="upper left")
             ax.set_xticks(np.arange(0, dfTreatment.shape[0], (30*5)/WSIZE))

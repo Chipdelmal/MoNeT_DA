@@ -15,7 +15,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
-    (USR, LND, DRV, AOI, SPE) = ('dsk', 'UpperRiver', 'PGS', 'HLT', 'None')
+    (USR, LND, DRV, AOI, SPE) = ('zelda', 'UpperRiver', 'PGS', 'HLT', 'None')
 else:
     (USR, LND, DRV, AOI, SPE) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
@@ -53,7 +53,7 @@ else:
     else:
         (CLR, YRAN) = (drive.get('colors'), (0, 1e-2))
 STYLE = {
-    "width": 1, "alpha": .1, "dpi": 750, "aspect": 1/5, 
+    "width": 0.5, "alpha": .005, "dpi": 750, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN[1]*10)
 }
@@ -84,6 +84,7 @@ for i in range(len(fLists)):
 # Process files
 ###############################################################################
 (xpNum, digs) = monet.lenAndDigits(fLists)
+print(YRAN)
 # exIx = expIter[100]
 Parallel(n_jobs=JOB)(
     delayed(aux.exportPreTracesParallel)(
@@ -108,3 +109,11 @@ monet.exportGeneLegend(
     sumDta['genotypes'], [i[:-2]+'cc' for i in CLR], 
     PT_IMG+'/legend_{}.png'.format(AOI), 500
 )
+
+
+# import matplotlib.pyplot as plt
+# lnd = pkl.load(fLists[-1][-1])['landscapes']
+# for i in range(len(lnd)):
+#     plt.plot(lnd[i])
+    
+# np.max(pkl.load(fLists[-1][0])['population'], axis=0)
