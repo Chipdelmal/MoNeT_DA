@@ -10,7 +10,7 @@ CLEAR='\033[0m'
 RED='\033[0;31m'
 WHITE='\033[0;37m'
 LANDS=("Kenya") # "BurkinaFaso")
-EXPERIMENTS=("highEIR" "lowEIR" "medEIR")
+EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
 ###############################################################################
 # Setup Path
 ###############################################################################
@@ -21,7 +21,7 @@ cd "$parent_path"
 ###############################################################################
 for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
-        printf "\n${GREEN}[------------PreProcess------------]${CLEAR}\n"
+        printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
         python TPP_preProcess.py $USR $lnd $exp 'LDR' 'ECO'
         python TPP_preProcess.py $USR $lnd $exp 'LDR' 'HLT'
     done
@@ -31,7 +31,7 @@ done
 ###############################################################################
 for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
-        printf "\n${GREEN}[------------PreTraces------------]${CLEAR}\n"
+        printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
         python TPP_preTraces.py $USR $lnd $exp 'LDR' 'ECO'
         python TPP_preTraces.py $USR $lnd $exp 'LDR' 'HLT'
     done
