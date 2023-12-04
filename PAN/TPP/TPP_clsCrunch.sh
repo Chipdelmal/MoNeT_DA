@@ -2,6 +2,7 @@
 
 USR=$1
 QNT='50'
+THS='0.1'
 ###############################################################################
 # Constants
 ###############################################################################
@@ -13,7 +14,8 @@ WHITE='\033[0;37m'
 # -----------------------------------------------------------------------------
 LANDS=("BurkinaFaso" "Kenya")
 EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
-METRICS=("WOP" "CPT" "TTI" "TTO" "MNX")
+METRICS=("WOP" "CPT" "POE" "TTI" "TTO" "MNX")
+METRICS_SUM=("WOP" "CPT" "TTI" "TTO" "MNX")
 ###############################################################################
 # Setup Path
 ###############################################################################
@@ -24,11 +26,14 @@ cd "$parent_path"
 ###############################################################################
 for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
+        printf "${GREEN}[------------ClsProcess------------]${CLEAR}\n"
         for mtr in ${METRICS[*]}; do
             python TPP_clsCompile.py $USR $lnd $exp "LDR" "HLT" $QNT $mtr
         done
+        python TPP_clsUnify.py $USR $lnd $exp "LDR" "HLT" $QNT $THS
+        python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS $AOI
     done
 done
-# python PGS_clsUnify.py $USR $DRV $QNT $AOI $THS 
-# python PGS_dtaExplore.py $USR $DRV $QNT $AOI $THS $AOI
+# 
+# 
 # python PGS_dtaTraces.py $USR $DRV $QNT $AOI

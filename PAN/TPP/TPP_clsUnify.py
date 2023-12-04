@@ -6,8 +6,8 @@ import pandas as pd
 from functools import reduce
 from datetime import datetime
 import MoNeT_MGDrivE as monet
-import PGS_aux as aux
-import PGS_gene as drv
+import TPP_aux as aux
+import TPP_gene as drv
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS) = (
@@ -23,12 +23,13 @@ CHUNKS = JOB
 ###########################################################################
 # Paths
 ###########################################################################
+(NH, NM) = aux.getPops(LND)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
+    drv.driveSelector(DRV, AOI, popSize=NM, humSize=0),
     aux.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, fldr)
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, EXP)
 PT_OUT = path.join(PT_ROT, 'ML')
 PT_IMG = path.join(PT_OUT, 'img')
 [monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
@@ -70,21 +71,21 @@ for fid in ('SCA', 'REG'):
     ###########################################################################
     # Add zero-release control values
     ###########################################################################
-    fltr = [fullDataframe['i_ren']==0, fullDataframe['i_res']==0]
-    zeroEntry = fullDataframe[list(map(all, zip(*fltr)))].iloc[0].copy()
-    (ren, res) = [list(fullDataframe[i].unique()) for i in ('i_ren', 'i_res')]
-    for renT in ren:
-        tmp = zeroEntry.copy()
-        tmp['i_ren']=renT
-        tmp['i_res']=0
-        fullDataframe.loc[-1]=tmp
-        fullDataframe = fullDataframe.reset_index(drop=True)
-    for resT in res:
-        tmp = zeroEntry.copy()
-        tmp['i_ren']=0
-        tmp['i_res']=resT
-        fullDataframe.loc[-1]=tmp
-        fullDataframe = fullDataframe.reset_index(drop=True)
+    # fltr = [fullDataframe['i_ren']==0, fullDataframe['i_res']==0]
+    # zeroEntry = fullDataframe[list(map(all, zip(*fltr)))].iloc[0].copy()
+    # (ren, res) = [list(fullDataframe[i].unique()) for i in ('i_ren', 'i_res')]
+    # for renT in ren:
+    #     tmp = zeroEntry.copy()
+    #     tmp['i_ren']=renT
+    #     tmp['i_res']=0
+    #     fullDataframe.loc[-1]=tmp
+    #     fullDataframe = fullDataframe.reset_index(drop=True)
+    # for resT in res:
+    #     tmp = zeroEntry.copy()
+    #     tmp['i_ren']=0
+    #     tmp['i_res']=resT
+    #     fullDataframe.loc[-1]=tmp
+    #     fullDataframe = fullDataframe.reset_index(drop=True)
     ###########################################################################
     # Export
     ###########################################################################
