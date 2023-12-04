@@ -18,7 +18,7 @@ XP_ID = 'TPP'
 ###############################################################################
 # System Constants
 ###############################################################################
-(OVW, JOB_DSK, JOB_SRV) = (True, 4, 20)
+(OVW, JOB_DSK, JOB_SRV) = (True, 4, 40)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Releases and Populations
@@ -163,12 +163,11 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 ###############################################################################
 # Paths
 ###############################################################################
-def selectPath(USR, LND, DRV, SPE):
+def selectPath(USR, LND, EXP):
     if USR == 'zelda':
-        # PATH_ROOT = '/RAID5/marshallShare/pgSIT_gFLE_100R/'
-        PATH_ROOT = '/RAID5/marshallShare/pgSIT_gFLE_PNAS/'
+        PATH_ROOT = f'/RAID5/marshallShare/ReplacementTPP/{LND}/{EXP}/'
     elif USR == 'dsk':
-        PATH_ROOT = '/home/chipdelmal/Documents/WorkSims/GambiaOP/{}/'.format(LND)
+        PATH_ROOT = f'/RAID5/marshallShare/ReplacementTPP/{LND}/{EXP}/'
     (PATH_IMG, PATH_DATA) = (
         '{}img/'.format(PATH_ROOT), 
         '{}'.format(PATH_ROOT)

@@ -25,12 +25,12 @@ import PGS_mlrMethods as mth
 mlens.config.set_backend('multiprocessing')
 
 if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'CPT')
+    (USR, DRV, QNT, AOI, THS, MOI) = ('srv', 'PGS', '50', 'HLT', '0.1', 'POE')
 else:
     (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
     QNT = None if (QNT == 'None') else QNT
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 5, 250)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (.1, 0, 20, 5, 250)
 CHUNKS = JOB
 ###############################################################################
 # Paths
