@@ -16,7 +16,7 @@ import warnings
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI) = (
-        'zelda', 'Kenya', 'highEIR', 'LDR', 'ECO'
+        'zelda', 'BurkinaFaso', 'highEIR', 'LDR', 'ECO'
     )
 else:
     (USR, LND, EXP, DRV, AOI) = sys.argv[1:]
@@ -27,9 +27,9 @@ if USR == 'zelda':
 ###############################################################################
 # Processing loop
 ###############################################################################
-# (NH, NM) = aux.getPops(LND)
+(NH, NM) = aux.getPops(LND)
 (drive, land) = (
-    drv.driveSelector(DRV, AOI, popSize=int(50e6*2.5), humSize=0),
+    drv.driveSelector(DRV, AOI, popSize=NM, humSize=0),
     aux.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))

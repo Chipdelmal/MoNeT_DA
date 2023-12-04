@@ -9,7 +9,7 @@ GREEN='\033[0;32m'
 CLEAR='\033[0m'
 RED='\033[0;31m'
 WHITE='\033[0;37m'
-LANDS=("Kenya") # "BurkinaFaso")
+LANDS=("BurkinaFaso" "Kenya")
 EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
 ###############################################################################
 # Setup Path

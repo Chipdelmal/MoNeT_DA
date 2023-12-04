@@ -127,12 +127,12 @@ def getExps():
 AGE_DISTR = np.array([192, 294, 269, 120, 82, 44])
 AGE_DISTR_N = AGE_DISTR/np.sum(AGE_DISTR)
 def getPops(LND):
-    if LND=='Brikama':
-        NH = 77000
-        NM = 31760*2 # 2140998*2
+    if LND=='Kenya':
+        NH = 1000
+        NM = int(50e6*2.5)
     else:
-        NH = 182000
-        NM = 52239*2 # 8509527*2
+        NH = 1000
+        NM = int(125e6*2.5)
     return (NH, NM)
 
 ###############################################################################
