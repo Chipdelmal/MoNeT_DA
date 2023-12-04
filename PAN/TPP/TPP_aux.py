@@ -18,7 +18,7 @@ XP_ID = 'TPP'
 ###############################################################################
 # System Constants
 ###############################################################################
-(OVW, JOB_DSK, JOB_SRV) = (True, 20, 40)
+(OVW, JOB_DSK, JOB_SRV) = (True, 20, 60)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Releases and Populations
@@ -60,8 +60,10 @@ MAX_REPS = 100
         'i_grp': 2
     },
     {
-        'i_ren': np.int8, 'i_rei': np.int8, 'i_mtf': np.double, 'i_res': np.int8,
-        'i_grp': np.int8
+        'i_shc': np.double, 'i_sbc': np.double, 
+        'i_hdr': np.double, 'i_rgr': np.double,
+        'i_inf': np.double,
+        'i_grp': np.double
     }
 )
 (THI, THO, THW, TAP) = (
@@ -141,7 +143,7 @@ def getPops(LND):
 def patternForReleases(ren, AOI, ftype, ext='bz', pad=0):
     renP = str(ren).rjust(pad, '0')
     strPat = XP_PTRN.format(
-        renP, '*', '*', '*',
+        '*', '*', '*', '*', '*',
         AOI, '*', ftype, ext
     )
     return strPat

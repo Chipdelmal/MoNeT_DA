@@ -1,6 +1,7 @@
 #!/bin/bash
 
 USR=$1
+QNT='50'
 ###############################################################################
 # Constants
 ###############################################################################
@@ -22,18 +23,8 @@ cd "$parent_path"
 ###############################################################################
 for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
-        python TPP_preProcess.py $USR $lnd $exp 'LDR' 'ECO'
-        python TPP_preProcess.py $USR $lnd $exp 'LDR' 'HLT'
-    done
-done
-###############################################################################
-# PreTraces
-###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
-        python TPP_preTraces.py $USR $lnd $exp 'LDR' 'ECO'
-        python TPP_preTraces.py $USR $lnd $exp 'LDR' 'HLT'
+        printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
+        python TPP_pstFraction.py $USR $lnd $exp 'LDR' 'HLT'
+        python TPP_pstProcess.py $USR $lnd $exp 'LDR' 'HLT' $QNT
     done
 done
