@@ -18,7 +18,7 @@ else:
     (USR, LND, EXP, DRV, AOI) = sys.argv[1:]
 # Setup number of threads -----------------------------------------------------
 JOB=aux.JOB_DSK
-if USR == 'srv':
+if USR == 'zelda':
     JOB = aux.JOB_SRV
 ###############################################################################
 # Processing loop
@@ -28,9 +28,7 @@ if USR == 'srv':
     aux.landSelector()
 )
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
-(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(
-    USR, LND, EXP
-)
+(PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, EXP)
 # Time and head -----------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(

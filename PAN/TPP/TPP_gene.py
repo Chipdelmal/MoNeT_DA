@@ -8,7 +8,7 @@ import TPP_gene_EPI as EPI
 ###############################################################################
 # Drive
 ###############################################################################
-def driveSelector(DRIVE, TYPE, popSize=(50450403*2.5), humSize=10000):
+def driveSelector(DRIVE, TYPE, popSize=(int(50e6*2.5)), humSize=10000):
     ###########################################################################
     if (DRIVE == 'HUM'):
         (aggD, yRange, folder) = EPI.driveParameters(TYPE, popSize)
@@ -19,11 +19,10 @@ def driveSelector(DRIVE, TYPE, popSize=(50450403*2.5), humSize=10000):
     ###########################################################################
     if TYPE == 'ECO':
         colors = [
-            '#2614ed55', '#FF006E55', '#45d40c55', '#8338EC55', '#1888e355', 
-            '#BC109755', '#FFE93E55', '#3b479d55', '#540d6e55', '#7bdff255'
+            '#4E425355', '#D96B7255', '#89C07455', '#4F70A955', '#F7E2B955' 
         ]
     elif TYPE == 'HLT':
-        colors = ['#43486922', '#EAD6BA22', '#B75B5922']
+        colors = ['#B75B5944', '#43486944', '#EAD6BA00']
     elif TYPE == 'TRS':
         colors = monet.COLTN
     elif TYPE == 'WLD':
