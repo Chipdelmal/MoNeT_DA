@@ -61,7 +61,7 @@ STYLE = {
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN)
 }
-STYLE['aspect'] = monet.scaleAspect(0.5, STYLE)
+STYLE['aspect'] = monet.scaleAspect(0.3, STYLE)
 ###############################################################################
 # Plot
 ###############################################################################
@@ -70,10 +70,10 @@ Parallel(n_jobs=JOB)(
     delayed(aux.exportPstTracesParallel)(
         exIx, fNum,
         aux.STABLE_T, 0, QNT, STYLE, pt_img,
-        digs=digs, border=True, autoAspect=False, labelPos=(.05, .95),
-        wopPrint=True, poePrint=True, mnfPrint=True, cptPrint=True,
-        labelspacing=.025,
-        ticksHide=True,
+        digs=digs, border=True, autoAspect=False, labelPos=(.02, .92),
+        wopPrint=True, mnfPrint=True, cptPrint=True, poePrint=False, 
+        labelspacing=.05,
+        ticksHide=False,
         transparent=True, sampRate=aux.SAMP_RATE,
         releases=[
             aux.REL_START+1
