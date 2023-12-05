@@ -70,11 +70,14 @@ Parallel(n_jobs=JOB)(
     delayed(aux.exportPstTracesParallel)(
         exIx, fNum,
         aux.STABLE_T, 0, QNT, STYLE, pt_img,
-        digs=digs, border=True, autoAspect=False, labelPos=(.8, .15),
-        wopPrint=False, poePrint=False, mnfPrint=False, cptPrint=False,
+        digs=digs, border=True, autoAspect=False, labelPos=(.5, .5),
+        wopPrint=True, poePrint=True, mnfPrint=True, cptPrint=True,
+        labelspacing=.025,
         ticksHide=True,
         transparent=True, sampRate=aux.SAMP_RATE,
-        releases=[0],
+        releases=[
+            aux.REL_START+1
+        ],
         hLines=[aux.POP_SIZE, aux.POP_SIZE/2]
     ) for exIx in subset
 )
