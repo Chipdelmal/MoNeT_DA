@@ -31,9 +31,8 @@ for lnd in ${LANDS[*]}; do
             python TPP_clsCompile.py $USR $lnd $exp "LDR" "HLT" $QNT $mtr
         done
         python TPP_clsUnify.py $USR $lnd $exp "LDR" "HLT" $QNT $THS
-        python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS $AOI
+        printf "${GREEN}[------------DtaProcess------------]${CLEAR}\n"
+        python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
+        python TPP_dtaTraces.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
     done
 done
-# 
-# 
-# python PGS_dtaTraces.py $USR $DRV $QNT $AOI
