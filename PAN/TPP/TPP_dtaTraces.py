@@ -70,8 +70,9 @@ Parallel(n_jobs=JOB)(
     delayed(aux.exportPstTracesParallel)(
         exIx, fNum,
         aux.STABLE_T, 0, QNT, STYLE, pt_img,
-        digs=digs, border=True, autoAspect=False, labelPos=(.02, .92),
+        digs=digs, border=True, autoAspect=False, labelPos=(.01, .925),
         wopPrint=True, mnfPrint=True, cptPrint=True, poePrint=False, 
+        ttiPrint=True, ttoPrint=True,
         labelspacing=.05,
         ticksHide=False,
         transparent=True, sampRate=aux.SAMP_RATE,

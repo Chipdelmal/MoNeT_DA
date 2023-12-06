@@ -253,6 +253,8 @@ def exportTracesPlot(
     cpt=0, cptPrint=False, 
     poe=0, poePrint=False,
     mnf=0, mnfPrint=False,
+    tti=0, ttiPrint=False,
+    tto=0, ttoPrint=False,
     transparent=False, ticksHide=True, sampRate=1,
     fontsize=5, labelspacing=.1
 ):
@@ -305,23 +307,37 @@ def exportTracesPlot(
             transform=axTemp.transAxes,
             color='#00000055', fontsize=fontsize
         )
+    if ttiPrint:
+        axTemp.text(
+            labelPos[0], labelPos[1]-labelspacing*1, 'TTI: {:d}'.format(int(tti)),
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=axTemp.transAxes,
+            color='#00000055', fontsize=fontsize
+        ) 
+    if ttoPrint:
+        axTemp.text(
+            labelPos[0], labelPos[1]-labelspacing*2, 'TTO: {:d}'.format(int(tto)),
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=axTemp.transAxes,
+            color='#00000055', fontsize=fontsize
+        ) 
     if cptPrint:
         axTemp.text(
-            labelPos[0], labelPos[1]-labelspacing*1, 'CPT: {:.3f}'.format(cpt),
+            labelPos[0], labelPos[1]-labelspacing*3, 'CPT: {:.2f}'.format(cpt),
             verticalalignment='bottom', horizontalalignment='left',
             transform=axTemp.transAxes,
             color='#00000055', fontsize=fontsize
         )         
     if mnfPrint:
         axTemp.text(
-            labelPos[0], labelPos[1]-labelspacing*2, 'MIN: {:.3f}'.format(mnf),
+            labelPos[0], labelPos[1]-labelspacing*4, 'MIN: {:.2f}'.format(mnf),
             verticalalignment='bottom', horizontalalignment='left',
             transform=axTemp.transAxes,
             color='#00000055', fontsize=fontsize
         )     
     if poePrint:
         axTemp.text(
-            labelPos[0], labelPos[1]-labelspacing*3, 'POE: {:.3f}'.format(poe),
+            labelPos[0], labelPos[1]-labelspacing*5, 'POE: {:.2f}'.format(poe),
             verticalalignment='bottom', horizontalalignment='left',
             transform=axTemp.transAxes,
             color='#00000055', fontsize=fontsize
@@ -359,6 +375,7 @@ def exportPstTracesParallel(
         labelPos=(.7, .9), xpsNum=0, digs=3, 
         autoAspect=False, popScaler=1,
         wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True, 
+        ttiPrint=True, ttoPrint=True,
         ticksHide=True, transparent=True, sampRate=1, labelspacing=.1,
         releases=[], hLines=[0]
     ):
@@ -380,6 +397,8 @@ def exportPstTracesParallel(
         cpt=cpt, cptPrint=cptPrint,
         poe=poe, poePrint=poePrint,
         mnf=mnf, mnfPrint=mnfPrint,
+        tti=tti, ttiPrint=ttiPrint,
+        tto=tto, ttoPrint=ttoPrint,
         ticksHide=ticksHide, transparent=True, 
         sampRate=sampRate, labelspacing=labelspacing
     )
