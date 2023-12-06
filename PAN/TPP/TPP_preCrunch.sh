@@ -43,8 +43,8 @@ cd "$parent_path"
 for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
         printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
+        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'PRV'
         python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'CSS'
         python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'MRT'
-        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'PRE'
     done
 done

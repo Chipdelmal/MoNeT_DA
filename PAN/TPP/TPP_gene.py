@@ -34,6 +34,8 @@ def driveSelector(DRIVE, TYPE, popSize=(int(50e6*2.5)), humSize=10000):
         colors = ['#FF006E55', '#540d6e22', '#1d355799']
     elif TYPE[:3] == 'MRT':
         colors = ['#45d40c55', '#c879ff22', '#1d355799']
+    elif TYPE[:3] == 'PRV':
+        colors = ['#45d40c55', '#c879ff22', '#1d355799']
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 

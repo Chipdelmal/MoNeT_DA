@@ -78,5 +78,5 @@ for st in strata:
 def driveParameters(TYPE, popSize):
     if TYPE == 'CSS': (yRange, aggD) = (1250, EPI_MRT_FULL[0])
     elif TYPE == 'MRT': (yRange, aggD) = (1250, EPI_CSS_FULL[0])
-    elif TYPE == 'PRV': (yRange, aggD) = (1250, EPI_CSS_FULL[0])
+    elif TYPE == 'PRV': (yRange, aggD) = (1250, EPI_PRV_FULL[0])
     return (aggD, yRange, 'pgSIT')
