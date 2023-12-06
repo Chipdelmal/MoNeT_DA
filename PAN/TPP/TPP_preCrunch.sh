@@ -17,23 +17,34 @@ EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
 ###############################################################################
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
+# ###############################################################################
+# # PreProcess Mosquito
+# ###############################################################################
+# for lnd in ${LANDS[*]}; do
+#     for exp in ${EXPERIMENTS[*]}; do
+#         printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
+#         python TPP_preProcess.py $USR $lnd $exp 'LDR' 'ECO'
+#         python TPP_preProcess.py $USR $lnd $exp 'LDR' 'HLT'
+#     done
+# done
+# ###############################################################################
+# # PreTraces Mosquito
+# ###############################################################################
+# for lnd in ${LANDS[*]}; do
+#     for exp in ${EXPERIMENTS[*]}; do
+#         printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
+#         python TPP_preTraces.py $USR $lnd $exp 'LDR' 'ECO'
+#         python TPP_preTraces.py $USR $lnd $exp 'LDR' 'HLT'
+#     done
+# done
 ###############################################################################
-# PreProcess
+# PreProcess Human
 ###############################################################################
 for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
         printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
-        python TPP_preProcess.py $USR $lnd $exp 'LDR' 'ECO'
-        python TPP_preProcess.py $USR $lnd $exp 'LDR' 'HLT'
-    done
-done
-###############################################################################
-# PreTraces
-###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
-        python TPP_preTraces.py $USR $lnd $exp 'LDR' 'ECO'
-        python TPP_preTraces.py $USR $lnd $exp 'LDR' 'HLT'
+        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'CSS'
+        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'MRT'
+        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'PRE'
     done
 done

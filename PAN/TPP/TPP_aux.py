@@ -18,7 +18,7 @@ XP_ID = 'TPP'
 ###############################################################################
 # System Constants
 ###############################################################################
-(OVW, JOB_DSK, JOB_SRV) = (True, 20, 60)
+(OVW, JOB_DSK, JOB_SRV) = (True, 30, 60)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 ###############################################################################
 # Releases and Populations
@@ -130,10 +130,10 @@ AGE_DISTR = np.array([192, 294, 269, 120, 82, 44])
 AGE_DISTR_N = AGE_DISTR/np.sum(AGE_DISTR)
 def getPops(LND):
     if LND=='Kenya':
-        NH = 1000
+        NH = 1000 # 55573110
         NM = int(50e6*2.5)
     else:
-        NH = 1000
+        NH = 1000 # 23497691 
         NM = int(125e6*2.5)
     return (NH, NM)
 

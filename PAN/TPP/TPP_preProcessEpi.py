@@ -12,7 +12,7 @@ import TPP_gene as drv
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI) = (
-        'zelda', 'Kenya', 'highEIR', 'LDR', 'ECO'
+        'zelda', 'BurkinaFaso', 'highEIR', 'HUM', 'MRT'
     )
 else:
     (USR, LND, EXP, DRV, AOI) = sys.argv[1:]
@@ -23,6 +23,7 @@ if USR == 'zelda':
 ###############################################################################
 # Processing loop
 ###############################################################################
+(NH, NM) = aux.getPops(LND)
 (drive, land) = (
     drv.driveSelector(DRV, AOI, popSize=aux.POP_SIZE),
     aux.landSelector()
@@ -34,8 +35,8 @@ tS = datetime.now()
 monet.printExperimentHead(
     PT_DTA, PT_PRE, tS, 'PreProcess [{}:{}:{}]'.format(aux.XP_ID, fldr, AOI)
 )
-# Select sexes and ids ----------------------------------------------------
-sexID = {"male": "M_", "female": "F_"}
+# Select sexes and ids --------------------------------------------------------
+sexID = {"male": "", "female": "H_"}
 ###########################################################################
 # Load folders
 ###########################################################################
@@ -58,15 +59,14 @@ if aux.OVW == False:
         lambda x: x!=True
     ))
     expIter = [expIter[i] for i in expsIxList]
-# sys.stdout.write("\033[K")
 ###########################################################################
 # Process data
 ###########################################################################
 Parallel(n_jobs=JOB)(
     delayed(monet.preProcessParallel)(
         exIx, expNum, gene,
-        analysisOI=AOI, prePath=PT_PRE, nodesAggLst=list(land),
-        fNameFmt='{}/{}-{}_', MF=drv.maleFemaleSelector(AOI),
+        analysisOI=AOI, prePath=PT_PRE, nodesAggLst=land,
+        fNameFmt='{}/{}-{}_', MF=(False, True),
         cmpr='bz2', nodeDigits=2,
         SUM=aux.SUM, AGG=aux.AGG, SPA=aux.SPA,
         REP=aux.REP, SRP=aux.SRP,
@@ -74,3 +74,6 @@ Parallel(n_jobs=JOB)(
     ) for exIx in expIter
 )
 
+# fName = 'E_26_07000_0075000-MRT_00_sum'
+# dta = pkl.load(path.join(PT_PRE, fName+'.bz'))
+# print(dta)
