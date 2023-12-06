@@ -16,7 +16,7 @@ import warnings
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI) = (
-        'zelda', 'BurkinaFaso', 'highEIR', 'LDR', 'ECO'
+        'zelda', 'BurkinaFaso', 'highEIR', 'HUM', 'PRV'
     )
 else:
     (USR, LND, EXP, DRV, AOI) = sys.argv[1:]
@@ -45,15 +45,11 @@ monet.printExperimentHead(
 ###############################################################################
 # Style 
 ###############################################################################
-# if DRV != 'HUM':
-#     (CLR, YRAN) = (drive.get('colors'), (NM*drive.get('yRange')))
-# else:
-#     if AOI[:3] == 'MRT':
-#         (CLR, YRAN) = (drive.get('colors'), (0, 0.5e-5))
-#     else:
-#         (CLR, YRAN) = (drive.get('colors'), (0, 1e-2))
+if DRV != 'HUM':
+    YRAN = drive.get('yRange')
+else:
+    YRAN = 1
 CLR = drive.get('colors')
-YRAN = drive.get('yRange')
 STYLE = {
     "width": 0.5, "alpha": .005, "dpi": 750, "aspect": 1/5, 
     "colors": CLR, "legend": True,
@@ -93,14 +89,7 @@ Parallel(n_jobs=JOB)(
         xpNum=xpNum, digs=digs, autoAspect=True,
         border=True, borderColor='#000000AA', borderWidth=1,
         sampRate=1, 
-        # vLines=[0, 0, 50+8, 50+8, 50+8] + [
-        #     aux.REL_START + 8 + i*int(exIx[1][0].split('/')[-1].split('_')[3]) + 
-        #     int(exIx[1][0].split('/')[-1].split('_')[3]) 
-        #     for i in 
-        #     range(
-        #         int(exIx[1][0].split('/')[-1].split('_')[1])
-        #     )
-        # ],
+        # vLines=[ ],
         # hLines=np.arange(0, YRAN[1], YRAN[1]/4)
     ) for exIx in expIter
 )
@@ -112,9 +101,9 @@ monet.exportGeneLegend(
 )
 
 
-# import matplotlib.pyplot as plt
-# lnd = pkl.load(fLists[-1][-1])['landscapes']
-# for i in range(len(lnd)):
-#     plt.plot(lnd[i])
+import matplotlib.pyplot as plt
+lnd = pkl.load(fLists[1000][-1])['landscapes']
+for i in range(len(lnd)):
+    plt.plot(lnd[i])
     
-# np.max(pkl.load(fLists[-1][0])['population'], axis=0)
+np.max(pkl.load(fLists[-1][0])['population'], axis=0)

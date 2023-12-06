@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
 import sys
+from os import path
+import compress_pickle as pkl
 from datetime import datetime
 from joblib import Parallel, delayed
 from more_itertools import locate
@@ -74,6 +75,6 @@ Parallel(n_jobs=JOB)(
     ) for exIx in expIter
 )
 
-# fName = 'E_26_07000_0075000-MRT_00_sum'
-# dta = pkl.load(path.join(PT_PRE, fName+'.bz'))
-# print(dta)
+fName = 'E_00800_00807_00969_0000079_0004463-PRV_00_sum'
+dta = pkl.load(path.join(PT_PRE, fName+'.bz'))
+print(dta)
