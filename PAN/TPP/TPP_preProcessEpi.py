@@ -75,6 +75,6 @@ Parallel(n_jobs=JOB)(
     ) for exIx in expIter
 )
 
-fName = 'E_00800_00807_00969_0000079_0004463-PRV_00_sum'
-dta = pkl.load(path.join(PT_PRE, fName+'.bz'))
-print(dta)
+# fName = 'E_00800_00807_00969_0000079_0004463-PRV_00_sum'
+# dta = pkl.load(path.join(PT_PRE, fName+'.bz'))
+# print(dta)

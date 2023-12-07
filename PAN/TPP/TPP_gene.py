@@ -28,14 +28,12 @@ def driveSelector(DRIVE, TYPE, popSize=(int(50e6*2.5)), humSize=10000):
         colors = monet.COLTN
     elif TYPE == 'WLD':
         colors = monet.COLWN
-    elif TYPE == 'HUM':
-        colors = ['#274c7735', '#c879ff99', '#dee2ff35']
-    elif TYPE[:3] == 'CSS':
-        colors = ['#D1C87A55', '#8691AC55', '#DBC3A822']
-    elif TYPE[:3] == 'MRT':
-        colors = ['#C8C4E455', '#FCC17622', '#DBC3A822']
-    elif TYPE[:3] == 'PRV':
-        colors = ['#DBC3A822', '#A1BE7C22', '#9FC4E555']
+    elif TYPE == 'CSS':
+        colors = ['#CA5E5022', '#D1C87A22', '#DBC3A800']
+    elif TYPE == 'MRT':
+        colors = ['#56799322', '#6E855C22', '#DBC3A800']
+    elif TYPE == 'PRV':
+        colors = ['#80A08E22', '#F1B15222', '#9FC4E501']
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 

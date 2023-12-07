@@ -11,12 +11,13 @@ from more_itertools import locate
 import MoNeT_MGDrivE as monet
 import TPP_aux as aux
 import TPP_gene as drv
+import matplotlib.pyplot as plt
 import warnings
 
 warnings.filterwarnings("ignore")
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI) = (
-        'zelda', 'BurkinaFaso', 'highEIR', 'HUM', 'PRV'
+        'zelda', 'BurkinaFaso', 'highEIR', 'HUM', 'CSS'
     )
 else:
     (USR, LND, EXP, DRV, AOI) = sys.argv[1:]
@@ -48,7 +49,7 @@ monet.printExperimentHead(
 if DRV != 'HUM':
     YRAN = drive.get('yRange')
 else:
-    YRAN = 1
+    YRAN = aux.getHumanRange(AOI)
 CLR = drive.get('colors')
 STYLE = {
     "width": 0.5, "alpha": .005, "dpi": 750, "aspect": 1/5, 
@@ -88,7 +89,7 @@ Parallel(n_jobs=JOB)(
         exIx, STYLE, PT_IMG, 
         xpNum=xpNum, digs=digs, autoAspect=True,
         border=True, borderColor='#000000AA', borderWidth=1,
-        sampRate=1, 
+        sampRate=1, ticksHide=False
         # vLines=[ ],
         # hLines=np.arange(0, YRAN[1], YRAN[1]/4)
     ) for exIx in expIter
@@ -101,9 +102,11 @@ monet.exportGeneLegend(
 )
 
 
-import matplotlib.pyplot as plt
-lnd = pkl.load(fLists[1000][-1])['landscapes']
-for i in range(len(lnd)):
-    plt.plot(lnd[i])
-    
-np.max(pkl.load(fLists[-1][0])['population'], axis=0)
+# STYLE
+# lnd = pkl.load(fLists[1000][-1])['landscapes']
+# for i in range(len(lnd)):
+#     plt.plot(lnd[i])
+# plt.ylim(0, YRAN)
+# plt.close()
+
+# np.max(pkl.load(fLists[-1][0])['population'], axis=0)

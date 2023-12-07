@@ -187,6 +187,17 @@ def landSelector():
     return PAN
 
 
+def getHumanRange(AOI):
+    if AOI == 'MRT':
+        YRAN = 1e-2
+    elif AOI == 'CSS':
+        YRAN = 1e-3
+    else:
+        YRAN = 1
+    return YRAN
+        
+
+
 def replaceExpBase(tracePath, refFile):
     head = '/'.join(tracePath.split('/')[:-1])
     tail = tracePath.split('-')[-1]
@@ -230,7 +241,7 @@ def exportPreTracesParallel(
             exIx, STYLE, PT_IMG,
             border=True, borderColor='#322E2D', borderWidth=1, autoAspect=False,
             xpNum=0, digs=3, vLines=[0, 0], hLines=[0], popScaler=1,
-            transparent=True, sampRate=1
+            transparent=True, sampRate=1, ticksHide=True
         ):
     monet.printProgress(exIx[0], xpNum, digs)
     repFilePath = exIx[1][1]
@@ -240,7 +251,7 @@ def exportPreTracesParallel(
         repDta, name, STYLE, PT_IMG, wopPrint=False, autoAspect=autoAspect,
         border=border, borderColor=borderColor, borderWidth=borderWidth,
         vLines=vLines, transparent=transparent, sampRate=sampRate,
-        hLines=hLines
+        hLines=hLines, ticksHide=ticksHide
     )
     return None
 
