@@ -19,12 +19,31 @@ EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
 ###############################################################################
-# PreProcess
+# PstProcess Mosquito
+###############################################################################
+# for lnd in ${LANDS[*]}; do
+#     for exp in ${EXPERIMENTS[*]}; do
+#         printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
+#         python TPP_pstFraction.py $USR $lnd $exp 'LDR' 'HLT'
+#         python TPP_pstProcess.py $USR $lnd $exp 'LDR' 'HLT' $QNT
+#     done
+# done
+###############################################################################
+# PstProcess Human
 ###############################################################################
 for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
         printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
-        python TPP_pstFraction.py $USR $lnd $exp 'LDR' 'HLT'
-        python TPP_pstProcess.py $USR $lnd $exp 'LDR' 'HLT' $QNT
+        python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'PRV'
+        python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'CSS'
+        python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'MRT'
+    done
+done
+for lnd in ${LANDS[*]}; do
+    for exp in ${EXPERIMENTS[*]}; do
+        printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
+        python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'PRV' $QNT
+        python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'CSS' $QNT
+        python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'MRT' $QNT
     done
 done

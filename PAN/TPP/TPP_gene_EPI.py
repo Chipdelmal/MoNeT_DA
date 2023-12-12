@@ -29,7 +29,7 @@ strata = [['00_01', '01_02', '02_03', '03_04', '04_05', '05_06', '06_07', '07_08
 statDict = {
     'I': ['clin_inc', ], 
     'O': ['S', 'T', 'D', 'A', 'U', 'P'],
-    'T': ['S', 'T', 'D', 'A', 'U', 'P']
+    'T': ['clin_inc', ] # ['S', 'T', 'D', 'A', 'U', 'P']
 }
 EPI_CSS_FULL = []
 for st in strata:
@@ -43,7 +43,7 @@ for st in strata:
 statDict = {
     'M': ['mort', ], 
     'O': ['S', 'T', 'D', 'A', 'U', 'P'],
-    'T': ['S', 'T', 'D', 'A', 'U', 'P']
+    'T': ['mort', ] # ['S', 'T', 'D', 'A', 'U', 'P']
 }
 EPI_MRT_FULL = []
 for st in strata:

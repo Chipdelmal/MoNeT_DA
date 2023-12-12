@@ -1,6 +1,8 @@
 #!/bin/bash
 
 USR=$1
+MOS=$2
+HUM=$3
 ###############################################################################
 # Constants
 ###############################################################################
@@ -20,23 +22,27 @@ cd "$parent_path"
 ###############################################################################
 # PreProcess Mosquito
 ###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
-        python TPP_preProcess.py $USR $lnd $exp 'LDR' 'ECO'
-        python TPP_preProcess.py $USR $lnd $exp 'LDR' 'HLT'
+if [ "$MOS" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
+            python TPP_preProcess.py $USR $lnd $exp 'LDR' 'ECO'
+            python TPP_preProcess.py $USR $lnd $exp 'LDR' 'HLT'
+        done
     done
-done
+fi
 ###############################################################################
 # PreTraces Mosquito
 ###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
-        python TPP_preTraces.py $USR $lnd $exp 'LDR' 'ECO'
-        python TPP_preTraces.py $USR $lnd $exp 'LDR' 'HLT'
+if [ "$MOS" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
+            python TPP_preTraces.py $USR $lnd $exp 'LDR' 'ECO'
+            python TPP_preTraces.py $USR $lnd $exp 'LDR' 'HLT'
+        done
     done
-done
+fi
 ###############################################################################
 # PreProcess Human
 ###############################################################################

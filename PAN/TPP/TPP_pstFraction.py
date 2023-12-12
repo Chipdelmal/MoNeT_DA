@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI) = (
-        'zelda', 'Kenya', 'highEIR', 'LDR', 'HLT'
+        'zelda', 'Kenya', 'highEIR', 'HUM', 'CSS'
     )
 else:
     (USR, LND, EXP, DRV, AOI) = sys.argv[1:]
@@ -86,3 +86,9 @@ Parallel(n_jobs=JOB)(
         exIx, PT_OUT
     ) for exIx in expIter
 )
+
+
+# dta = np.load(
+#     path.join(PT_OUT, 'E_00920_00811_00965_0000620_0008532-CSS_00_rto.npy')
+# )
+# np.min(dta[0])
