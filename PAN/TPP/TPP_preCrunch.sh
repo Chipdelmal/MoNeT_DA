@@ -46,22 +46,26 @@ fi
 ###############################################################################
 # PreProcess Human
 ###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
-        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'PRV'
-        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'CSS'
-        python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'MRT'
+if [ "$HUM" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------PreProcess------------]${CLEAR}\n"
+            python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'PRV'
+            python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'CSS'
+            python TPP_preProcessEpi.py $USR $lnd $exp 'HUM' 'MRT'
+        done
     done
-done
+fi
 ###############################################################################
 # PreTraces Human
 ###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
-        python TPP_preTraces.py $USR $lnd $exp 'HUM' 'CSS'
-        python TPP_preTraces.py $USR $lnd $exp 'HUM' 'MRT'
-        python TPP_preTraces.py $USR $lnd $exp 'HUM' 'PRV'
+if [ "$HUM" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------PreTraces------------]${CLEAR}\n"
+            python TPP_preTraces.py $USR $lnd $exp 'HUM' 'CSS'
+            python TPP_preTraces.py $USR $lnd $exp 'HUM' 'MRT'
+            python TPP_preTraces.py $USR $lnd $exp 'HUM' 'PRV'
+        done
     done
-done
+fi

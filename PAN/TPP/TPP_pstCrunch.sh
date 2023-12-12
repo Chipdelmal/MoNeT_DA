@@ -1,6 +1,8 @@
 #!/bin/bash
 
 USR=$1
+MOS=$2
+HUM=$3
 QNT='50'
 ###############################################################################
 # Constants
@@ -21,29 +23,33 @@ cd "$parent_path"
 ###############################################################################
 # PstProcess Mosquito
 ###############################################################################
-# for lnd in ${LANDS[*]}; do
-#     for exp in ${EXPERIMENTS[*]}; do
-#         printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
-#         python TPP_pstFraction.py $USR $lnd $exp 'LDR' 'HLT'
-#         python TPP_pstProcess.py $USR $lnd $exp 'LDR' 'HLT' $QNT
-#     done
-# done
+if [ "$MOS" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
+            python TPP_pstFraction.py $USR $lnd $exp 'LDR' 'HLT'
+            python TPP_pstProcess.py $USR $lnd $exp 'LDR' 'HLT' $QNT
+        done
+    done
+fi
 ###############################################################################
 # PstProcess Human
 ###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
-        python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'PRV'
-        python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'CSS'
-        python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'MRT'
+if [ "$HUM" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
+            python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'PRV'
+            python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'CSS'
+            python TPP_pstFraction.py $USR $lnd $exp 'HUM' 'MRT'
+        done
     done
-done
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
-        python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'PRV' $QNT
-        python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'CSS' $QNT
-        python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'MRT' $QNT
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------PstFraction------------]${CLEAR}\n"
+            python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'PRV' $QNT
+            python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'CSS' $QNT
+            python TPP_pstProcess.py $USR $lnd $exp 'HUM' 'MRT' $QNT
+        done
     done
-done
+fi

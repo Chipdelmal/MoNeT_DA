@@ -1,6 +1,8 @@
 #!/bin/bash
 
 USR=$1
+MOS=$2
+HUM=$3
 QNT='50'
 THS='0.1'
 ###############################################################################
@@ -24,39 +26,43 @@ cd "$parent_path"
 ###############################################################################
 # Mosquito Scripts
 ###############################################################################
-# for lnd in ${LANDS[*]}; do
-#     for exp in ${EXPERIMENTS[*]}; do
-#         printf "${GREEN}[------------ClsProcess------------]${CLEAR}\n"
-#         for mtr in ${METRICS[*]}; do
-#             python TPP_clsCompile.py $USR $lnd $exp "LDR" "HLT" $QNT $mtr
-#         done
-#         python TPP_clsUnify.py $USR $lnd $exp "LDR" "HLT" $QNT $THS
-#         printf "${GREEN}[------------DtaProcess------------]${CLEAR}\n"
-#         python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
-#         python TPP_dtaTraces.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
-#     done
-# done
+if [ "$MOS" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------ClsProcess------------]${CLEAR}\n"
+            for mtr in ${METRICS[*]}; do
+                python TPP_clsCompile.py $USR $lnd $exp "LDR" "HLT" $QNT $mtr
+            done
+            python TPP_clsUnify.py $USR $lnd $exp "LDR" "HLT" $QNT $THS
+            printf "${GREEN}[------------DtaProcess------------]${CLEAR}\n"
+            python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
+            python TPP_dtaTraces.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
+        done
+    done
+fi
 ###############################################################################
 # Human Scripts
 ###############################################################################
-for lnd in ${LANDS[*]}; do
-    for exp in ${EXPERIMENTS[*]}; do
-        printf "${GREEN}[------------ClsProcess------------]${CLEAR}\n"
-        for mtr in ${METRICS[*]}; do
-            python TPP_clsCompile.py $USR $lnd $exp "HUM" "PRV" $QNT $mtr
-            python TPP_clsCompile.py $USR $lnd $exp "HUM" "CSS" $QNT $mtr
-            python TPP_clsCompile.py $USR $lnd $exp "HUM" "MRT" $QNT $mtr
+if [ "$HUM" == "True" ]; then
+    for lnd in ${LANDS[*]}; do
+        for exp in ${EXPERIMENTS[*]}; do
+            printf "${GREEN}[------------ClsProcess------------]${CLEAR}\n"
+            for mtr in ${METRICS[*]}; do
+                python TPP_clsCompile.py $USR $lnd $exp "HUM" "PRV" $QNT $mtr
+                python TPP_clsCompile.py $USR $lnd $exp "HUM" "CSS" $QNT $mtr
+                python TPP_clsCompile.py $USR $lnd $exp "HUM" "MRT" $QNT $mtr
+            done
+            python TPP_clsUnify.py $USR $lnd $exp "HUM" "PRV" $QNT $THS
+            python TPP_clsUnify.py $USR $lnd $exp "HUM" "CSS" $QNT $THS
+            python TPP_clsUnify.py $USR $lnd $exp "HUM" "MRT" $QNT $THS
+            printf "${GREEN}[------------DtaExplore------------]${CLEAR}\n"
+            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
+            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
+            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
+            printf "${GREEN}[------------DtaTraces-------------]${CLEAR}\n"
+            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
+            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
+            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
         done
-        python TPP_clsUnify.py $USR $lnd $exp "HUM" "PRV" $QNT $THS
-        python TPP_clsUnify.py $USR $lnd $exp "HUM" "CSS" $QNT $THS
-        python TPP_clsUnify.py $USR $lnd $exp "HUM" "MRT" $QNT $THS
-        printf "${GREEN}[------------DtaExplore------------]${CLEAR}\n"
-        python TPP_dtaExplore.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
-        python TPP_dtaExplore.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
-        python TPP_dtaExplore.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
-        printf "${GREEN}[------------DtaTraces-------------]${CLEAR}\n"
-        python TPP_dtaTraces.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
-        python TPP_dtaTraces.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
-        python TPP_dtaTraces.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
     done
-done
+fi
