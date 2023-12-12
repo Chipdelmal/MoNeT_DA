@@ -102,7 +102,7 @@ monet.exportGeneLegend(
 )
 
 
-# STYLE
+
 # lnd = pkl.load(fLists[1000][-1])['landscapes']
 # for i in range(len(lnd)):
 #     plt.plot(lnd[i])

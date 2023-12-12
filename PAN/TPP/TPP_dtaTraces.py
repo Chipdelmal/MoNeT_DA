@@ -58,7 +58,7 @@ CLR = drive.get('colors')
 if DRV != 'HUM':
     YRAN = drive.get('yRange')
 else:
-    YRAN = 1 # aux.getHumanRange(AOI)
+    YRAN = aux.getHumanRange(AOI)
 STYLE = {
     "width": 0.5, "alpha": .005, "dpi": 750, "aspect": 1/5, 
     "colors": CLR, "legend": True,

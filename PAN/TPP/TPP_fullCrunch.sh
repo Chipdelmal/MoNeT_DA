@@ -1,7 +1,9 @@
 #!/bin/bash
 
 USR=$1
+MOS=$2
+HUM=$3
 ###############################################################################
-bash TPP_preCrunch.sh $USR
-bash TPP_pstCrunch.sh $USR
-bash TPP_clsCrunch.sh $USR
+bash TPP_preCrunch.sh $USR $MOS $HUM
+bash TPP_pstCrunch.sh $USR $MOS $HUM
+bash TPP_clsCrunch.sh $USR $MOS $HUM

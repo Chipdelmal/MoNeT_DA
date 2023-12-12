@@ -7,6 +7,7 @@ from glob import glob
 import TPP_aux as aux
 import TPP_gene as drv
 import numpy as np
+import compress_pickle as pkl
 from datetime import datetime
 import MoNeT_MGDrivE as monet
 from more_itertools import locate
@@ -87,6 +88,18 @@ Parallel(n_jobs=JOB)(
     ) for exIx in expIter
 )
 
+# lnd = pkl.load(expIter[1000][1])['population'].T
+# for i in range(len(lnd)):
+#     plt.plot(lnd[i])
+# plt.ylim(0, YRAN)
+# plt.close()
+
+# ix = 1000
+# ref = pkl.load(expIter[ix][1])['population']
+# pop = pkl.load(expIter[ix][-1])['landscapes'][0]
+
+# monet.getPopRatio(ref, pop, 1)
+# np.max(pkl.load(fLists[-1][0])['population'], axis=0)
 
 # dta = np.load(
 #     path.join(PT_OUT, 'E_00920_00811_00965_0000620_0008532-CSS_00_rto.npy')

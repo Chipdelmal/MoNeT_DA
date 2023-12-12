@@ -27,9 +27,9 @@ AGE_GROUP_LABEL = ['0 to 5', '5 to 17', '17 to 40', '40 to 60', '60 and older'] 
 strata = [['00_01', '01_02', '02_03', '03_04', '04_05', '05_06', '06_07', '07_08', '08_09']]
 # Incidence -------------------------------------------------------------------
 statDict = {
-    'I': ['clin_inc', ], 
     'O': ['S', 'T', 'D', 'A', 'U', 'P'],
-    'T': ['clin_inc', ] # ['S', 'T', 'D', 'A', 'U', 'P']
+    'I': ['clin_inc', ] 
+    # 'T': ['clin_inc', ] # ['S', 'T', 'D', 'A', 'U', 'P']
 }
 EPI_CSS_FULL = []
 for st in strata:
@@ -40,10 +40,10 @@ for st in strata:
     }
     EPI_CSS_FULL.append(EPI_CSS)
 # Mortality -------------------------------------------------------------------
-statDict = {
-    'M': ['mort', ], 
+statDict = { 
     'O': ['S', 'T', 'D', 'A', 'U', 'P'],
-    'T': ['mort', ] # ['S', 'T', 'D', 'A', 'U', 'P']
+    'M': ['mort', ]
+    # 'T': ['mort', ] # ['S', 'T', 'D', 'A', 'U', 'P']
 }
 EPI_MRT_FULL = []
 for st in strata:
@@ -57,7 +57,7 @@ for st in strata:
 statDict = {
     'P': ['T', 'D', 'A', 'U'], 
     'O': ['S', 'P'],
-    'T': ['S', 'T', 'D', 'A', 'U', 'P']
+    # 'T': ['S', 'T', 'D', 'A', 'U', 'P']
 }
 EPI_PRV_FULL = []
 for st in strata:
