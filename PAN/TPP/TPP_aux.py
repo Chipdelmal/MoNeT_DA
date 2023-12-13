@@ -189,9 +189,9 @@ def landSelector():
 
 def getHumanRange(AOI):
     if AOI == 'MRT':
-        YRAN = 1e-2
+        YRAN = 0.5e-2
     elif AOI == 'CSS':
-        YRAN = 1e-3
+        YRAN = 0.3e-3
     else:
         YRAN = 1
     return YRAN
