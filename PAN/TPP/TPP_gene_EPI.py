@@ -55,8 +55,8 @@ for st in strata:
     EPI_MRT_FULL.append(EPI_MRT)
 # Prevalence ------------------------------------------------------------------
 statDict = {
-    'P': ['T', 'D', 'A', 'U'], 
     'O': ['S', 'P'],
+    'P': ['T', 'D', 'A', 'U'], 
     # 'T': ['S', 'T', 'D', 'A', 'U', 'P']
 }
 EPI_PRV_FULL = []
