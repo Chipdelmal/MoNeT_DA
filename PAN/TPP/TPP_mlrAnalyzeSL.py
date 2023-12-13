@@ -26,7 +26,7 @@ else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
     QNT = None if (QNT == 'None') else QNT
 # Setup number of threads -----------------------------------------------------
-(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 5, 200)
+(DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 2, 1000)
 CHUNKS = JOB
 ###############################################################################
 # Paths
@@ -83,7 +83,7 @@ indVarsLabel = [i[2:] for i in indVars][:-1]
 ###############################################################################
 # Permutation Importance
 ###############################################################################
-(X_trainS, y_trainS) = aux.unison_shuffled_copies(
+(X_trainS, y_trainS) = mth.unison_shuffled_copies(
     X_train, y_train, size=int(5e3)
 )
 # Permutation scikit ----------------------------------------------------------
