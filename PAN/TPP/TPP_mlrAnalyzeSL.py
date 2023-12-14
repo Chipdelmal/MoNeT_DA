@@ -20,7 +20,7 @@ mlens.config.set_backend('multiprocessing')
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
-        'zelda', 'Kenya', 'highEIR', 'HUM', 'MRT', '50', '0.1', 'CPT'
+        'zelda', 'Kenya', 'highEIR', 'HUM', 'CSS', '50', '0.1', 'CPT'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -109,19 +109,18 @@ plt.close()
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-(IVAR_DELTA, IVAR_STEP) = (0.1, None)
+(IVAR_DELTA, IVAR_STEP) = (0.05, None)
 (TRACES, YLIM) = (1000, (0, 1))
+VRANS = mth.getRanges(df, ['i_shc', 'i_sbc', 'i_hdr', 'i_rgr', 'i_inf'])
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]
     IVAR_STEP = 1 if (np.max(X.T[IVAR_IX]) > 1) else 0.1
     # Get sampling ranges for variables ---------------------------------------
     pdpice = monet.getSamples_PDPICE(
-        MODEL_PREDICT, IVAR_IX, 
-        tracesNum=TRACES,
-        X=X_train, 
-        varRanges=[(0, 1), (0, 1), (0, 1), (0, 1), (0, 1)], 
-        indVarDelta=IVAR_DELTA, indVarStep=IVAR_STEP
+        MODEL_PREDICT, IVAR_IX, X=X_train, 
+        tracesNum=TRACES, indVarDelta=None, 
+        varRanges=VRANS, indVarStep=(0.05, 0.05, 0.1, 0.1, 0.1)
     )
     # Plot --------------------------------------------------------------------
     (fig, ax) = plt.subplots(figsize=(5, 5))
