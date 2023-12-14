@@ -20,7 +20,7 @@ mlens.config.set_backend('multiprocessing')
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
-        'zelda', 'Kenya', 'highEIR', 'LDR', 'HLT', '50', '0.1', 'CPT'
+        'zelda', 'Kenya', 'highEIR', 'HUM', 'CSS', '50', '0.1', 'CPT'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -109,16 +109,18 @@ plt.close()
 ###############################################################################
 # PDP/ICE Dev
 ###############################################################################
-(IVAR_DELTA, IVAR_STEP) = (.025, None)
-(TRACES, YLIM) = (1000, (0, 1))
+(IVAR_DELTA, IVAR_STEP) = (0.1, None)
+(TRACES, YLIM) = (100, (0, 1))
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]
     IVAR_STEP = 1 if (np.max(X.T[IVAR_IX]) > 1) else 0.1
     # Get sampling ranges for variables ---------------------------------------
     pdpice = monet.getSamples_PDPICE(
-        MODEL_PREDICT, IVAR_IX, tracesNum=TRACES,
-        X=X_train, varRanges=None, 
+        MODEL_PREDICT, IVAR_IX, 
+        tracesNum=TRACES,
+        X=X_train, 
+        varRanges=[(0, 1), (0, 1), (0, 1), (0, 1), (0, 1)], 
         indVarDelta=IVAR_DELTA, indVarStep=IVAR_STEP
     )
     # Plot --------------------------------------------------------------------
@@ -128,11 +130,12 @@ for ix in list(range(X_train.shape[-1])):
         pdpKwargs={'color': '#5465ff20', 'ls': '-', 'lw': 0.075},
         iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
     )
-    ax.grid(color='#bfc0c0ff', linestyle = '--', linewidth = 0.5)
+    ax.grid(color='#bfc0c0ff', linestyle='--', linewidth=0.5)
     fPath = path.join(PT_OUT, fNameOut)+f'_{TITLE[2:]}'
     fPath = './tmp/'+fNameOut+f'_{TITLE[2:]}.png'
     plt.savefig(
         fPath, 
-        dpi=500, bbox_inches='tight', pad_inches=0.1, transparent=False
+        dpi=500, bbox_inches='tight', 
+        pad_inches=0.1, transparent=False
     )
     # plt.close()
