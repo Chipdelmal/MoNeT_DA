@@ -20,7 +20,7 @@ mlens.config.set_backend('multiprocessing')
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
-        'zelda', 'Kenya', 'highEIR', 'HUM', 'CSS', '50', '0.1', 'CPT'
+        'zelda', 'Kenya', 'highEIR', 'HUM', 'MRT', '50', '0.1', 'CPT'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -102,7 +102,7 @@ clr = aux.selectColor(MOI)
 plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
 plt.savefig(
-    path.join(PT_IMG, fNameOut+'_PERM.png'), 
+    path.join(fPath), 
     dpi=200, bbox_inches='tight', pad_inches=0, transparent=True
 )
 plt.close()
@@ -110,7 +110,7 @@ plt.close()
 # PDP/ICE Dev
 ###############################################################################
 (IVAR_DELTA, IVAR_STEP) = (0.1, None)
-(TRACES, YLIM) = (100, (0, 1))
+(TRACES, YLIM) = (1000, (0, 1))
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)
     TITLE = df.columns[IVAR_IX]
@@ -127,12 +127,13 @@ for ix in list(range(X_train.shape[-1])):
     (fig, ax) = plt.subplots(figsize=(5, 5))
     (fig, ax) = monet.plotPDPICE(
         pdpice, (fig, ax), YLIM=YLIM, TITLE=TITLE,
-        pdpKwargs={'color': '#5465ff20', 'ls': '-', 'lw': 0.075},
+        pdpKwargs={'color': '#5465ff20', 'ls': '-', 'lw': 0.1},
         iceKwargs={'color': '#E84E73ff', 'ls': ':', 'lw': 3}
     )
     ax.grid(color='#bfc0c0ff', linestyle='--', linewidth=0.5)
     fPath = path.join(PT_OUT, fNameOut)+f'_{TITLE[2:]}'
     fPath = './tmp/'+fNameOut+f'_{TITLE[2:]}.png'
+    print(fPath)
     plt.savefig(
         fPath, 
         dpi=500, bbox_inches='tight', 
