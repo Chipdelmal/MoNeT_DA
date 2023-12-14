@@ -11,7 +11,7 @@ import TPP_gene as drv
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS) = (
-        'zelda', 'Kenya', 'highEIR', 'LDR', 'HLT', '50', '0.1'
+        'zelda', 'BurkinaFaso', 'highEIR', 'HUM', 'CSS', '50', '0.1'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS) = sys.argv[1:]

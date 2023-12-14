@@ -27,7 +27,7 @@ mlens.config.set_backend('multiprocessing')
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
-        'zelda', 'Kenya', 'highEIR', 'HUM', 'MRT', '50', '0.1', 'CPT'
+        'zelda', 'Kenya', 'highEIR', 'HUM', 'CSS', '50', '0.1', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -79,7 +79,7 @@ indVarsLabel = [i[2:] for i in indVars][:-1]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
 if MOI=='WOP':
-    y = y/aux.XRAN[1]
+    y = y/365 # aux.XRAN[1]
 elif MOI=='CPT':
     y = 1-y
 (X_train, X_test, y_train, y_test) = train_test_split(X, y, test_size=0.1)
@@ -93,28 +93,28 @@ estimators = {
         # SGDRegressor(), 
         # BayesianRidge(),
         MLPRegressor(
-            activation='tanh',
+            activation='relu',
             hidden_layer_sizes=[10, 20, 10],
             alpha=2.75e-3
         ),
         MLPRegressor(
-            activation='relu',
+            activation='tanh',
             hidden_layer_sizes=[10, 20, 10],
             alpha=2.75e-3
         ),
     ],
     'sc': [
         # mth.selectMLKeras(MOI, QNT, inDims=X_train.shape[1])[-1],
-        # SVR(),
-        # LGBMRegressor(verbose=0),
-        # XGBRegressor(),
+        SVR(),
+        LGBMRegressor(verbose=0),
+        XGBRegressor(),
         MLPRegressor(
-            activation='tanh',
+            activation='relu',
             hidden_layer_sizes=[10, 20, 10],
             alpha=2.75e-3
         ),
         MLPRegressor(
-            activation='relu',
+            activation='tanh',
             hidden_layer_sizes=[10, 20, 10],
             alpha=2.75e-3
         ),
