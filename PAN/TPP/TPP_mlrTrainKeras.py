@@ -1,13 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' 
 import sys
 import shap
 import numpy as np
 from os import path
 import pandas as pd
 import matplotlib.pyplot as plt
-from itertools import product
 from datetime import datetime
 from keras.layers import Dense
 from keras.models import load_model
@@ -34,7 +35,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'HUM', 'CSS', '50', '0.1', 'CPT'
+        'HUM', 'MRT', '50', '0.1', 'CPT'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -61,7 +62,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_ROT, PT_OUT, tS, 
-    '{} mlrTrainMLQNT [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
+    '{} mlrTrainKeras [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
 )
 ###############################################################################
 # Read Dataframe
@@ -97,20 +98,20 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
-    (batchSize, epochs) = (128*2, 150)
+    (batchSize, epochs) = (128*2, 200)
     def build_model():
         rf = Sequential()
         rf.add(Dense(
             16, activation= "tanh", input_dim=inDims,
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
         ))
         rf.add(Dense(
             32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
         ))
         rf.add(Dense(
             32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
@@ -121,7 +122,7 @@ if DEV:
             metrics=["mean_squared_error"]
         )
         return rf
-    rf = KerasRegressor(build_fn=build_model)
+    rf = KerasRegressor(build_fn=build_model, verbose=0)
 else:
     (epochs, batchSize, rf) = mth.selectMLKeras(
         MOI, QNT, inDims=X_train.shape[1]
@@ -146,9 +147,9 @@ history = rf.fit(
         min_delta=0.001,
         restore_best_weights=True,
         patience=int(epochs*.05),
-        verbose=1
+        verbose=0
     ),
-    verbose=1
+    verbose=0
 )
 # Score -----------------------------------------------------------------------
 y_pred = rf.predict(X_test)
@@ -198,9 +199,9 @@ plt.savefig(
 ###############################################################################
 # SHAP Importance
 ###############################################################################
-(X_trainS, y_trainS) = mth.unison_shuffled_copies(X_train, y_train, size=200)
-explainer = shap.KernelExplainer(rf.predict, X_trainS)
-shap_values = explainer.shap_values(X_trainS, approximate=True)
+(X_trainS, y_trainS) = mth.unison_shuffled_copies(X_train, y_train, size=250)
+explainer = shap.KernelExplainer(rf.predict, X_trainS, verbose=0)
+shap_values = explainer.shap_values(X_trainS, approximate=True, verbose=0)
 shapVals = np.abs(shap_values).mean(0)
 sImp = shapVals/sum(shapVals)
 # SHAP figure -----------------------------------------------------------------
@@ -222,13 +223,6 @@ plt.savefig(
     path.join(PT_IMG, fNameOut+'_SMRY.png'), 
     dpi=200, bbox_inches='tight', pad_inches=0, transparent=False
 )
-# shap.dependence_plot(
-#     indVars.index('i_pmd'), 
-#     shap_values, X_trainS, 
-#     alpha=0.5, dot_size=10,
-#     feature_names=indVars,
-#     interaction_index=indVars.index('i_fvb')
-# )
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
@@ -283,7 +277,7 @@ pd.DataFrame(scoresFinal, index=[0]).to_csv(path.join(PT_OUT, fNameOut+'_VL.csv'
 ###############################################################################
 # Dump Importances to Disk
 ###############################################################################
-iVars = [i[0] for i in aux.SA_RANGES]
+iVars = indVarsLabel
 permSci = pd.DataFrame({
     'names': iVars,
     'mean': perm_importance['importances_mean'], 
@@ -292,109 +286,4 @@ permSci = pd.DataFrame({
 shapImp = pd.DataFrame({'names': iVars, 'mean': shapVals})
 permSci.to_csv(path.join(PT_OUT, fNameOut+'_PMI-SCI.csv'), index=False)
 shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
-
-
-# new_reg_model = keras.models.load_model(path.join(PT_OUT, fNameOut))
-# reg_new = KerasRegressor(new_reg_model)
-# reg_new.initialize(X_train, y_train)
-# y_pred = reg_new.predict(X_test)
-# scoresFinal = {
-#     'r2': r2_score(y_test, y_pred),
-#     'explained_variance': explained_variance_score(y_test, y_pred),
-#     'root_mean_squared_error': mean_squared_error(y_test, y_pred, squared=False),
-#     'mean_absolute_error': mean_absolute_error(y_test, y_pred),
-#     'median_absolute_error ': median_absolute_error(y_test, y_pred),
-#     'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
-# }
-# scoresFinal['r2Adj'] = aux.adjRSquared(
-#     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
-# )
-# print(scoresFinal)
-
-###############################################################################
-# Sweep-Evaluate Model
-###############################################################################
-# (xSca, ySca) = ('linear', 'linear')
-# fltr = {
-#     'i_ren': [30],
-#     'i_res': [30],
-#     'i_rei': [7],
-#     'i_pct': [0.90], 
-#     'i_pmd': [0.90], 
-#     'i_fvb': np.arange(0, .5, 0.005), 
-#     'i_mtf': [1],
-#     'i_mfr': np.arange(0, .5, 0.005)
-# }
-# fltrTitle = fltr.copy()
-# # Assemble factorials ---------------------------------------------------------
-# sweeps = [i for i in fltr.keys() if len(fltr[i])>1]
-# [fltrTitle.pop(i) for i in sweeps]
-# combos = list(zip(*product(fltr[sweeps[0]], fltr[sweeps[1]])))
-# factNum = len(combos[0])
-# for i in range(len(combos)):
-#     fltr[sweeps[i]] = combos[i]
-# for k in fltr.keys():
-#     if len(fltr[k])==1:
-#         fltr[k] = fltr[k]*factNum
-# # Generate probes -------------------------------------------------------------
-# probeVct = np.array((
-#     fltr['i_ren'], fltr['i_res'], fltr['i_rei'],
-#     fltr['i_pct'], fltr['i_pmd'],
-#     fltr['i_mfr'], fltr['i_mtf'], fltr['i_fvb']
-# )).T
-# (x, y) = [list(i) for i in combos]
-# z = rf.predict(probeVct)
-# ###############################################################################
-# # Generate response surface
-# ###############################################################################
-# (ngdx, ngdy) = (1000, 1000)
-# scalers = [1, 1, 1]
-# (xLogMin, yLogMin) = (
-#     min([i for i in sorted(list(set(x))) if i>0]),
-#     min([i for i in sorted(list(set(y))) if i>0])
-# )
-# rs = monet.calcResponseSurface(
-#     x, y, z, 
-#     scalers=scalers, mthd='cubic', 
-#     xAxis=xSca, yAxis=ySca,
-#     xLogMin=xLogMin, yLogMin=yLogMin,
-#     DXY=(ngdx, ngdy)
-# )
-# ###############################################################################
-# # Levels and Ranges
-# ###############################################################################
-# # Get ranges ------------------------------------------------------------------
-# (a, b) = ((min(x), max(x)), (min(y), max(y)))
-# (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
-# # Contour levels --------------------------------------------------------------
-# if MOI == 'WOP':
-#     (zmin, zmax) = (0, 1)
-#     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-#     cntr = [.5]
-# elif MOI == 'CPT':
-#     (zmin, zmax) = (0, 1)
-#     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-#     cntr = [.5]
-# elif MOI == 'POE':
-#     (zmin, zmax) = (0, 1)
-#     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
-#     cntr = [.75]
-#     # lvls = [cntr[0]-.01, cntr[0]]
-# (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
-# ###############################################################################
-# # Plot
-# ###############################################################################
-# (fig, ax) = plt.subplots(figsize=(10, 8))
-# xy = ax.plot(rsG[0], rsG[1], 'k.', ms=.1, alpha=.25, marker='.')
-# cc = ax.contour(
-#     rsS[0], rsS[1], rsS[2], 
-#     levels=cntr, colors='#2b2d42', # drive['colors'][-1][:-2], 
-#     linewidths=2.5, alpha=.9, linestyles='solid'
-# )
-# cs = ax.contourf(
-#     rsS[0], rsS[1], rsS[2], 
-#     linewidths=0,
-#     levels=lvls, cmap=cmap, extend='max'
-# )
-# # cs.cmap.set_over('red')
-# cs.cmap.set_under('white')
+print(scoresFinal)
