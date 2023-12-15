@@ -35,15 +35,15 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'HUM', 'MRT', '50', '0.1', 'CPT'
+        'LDR', 'HLT', '50', '0.1', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
-    QNT = None if (QNT == 'None') else QNT
+    QNT = (None if (QNT == 'None') else QNT)
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 2, 1000)
 CHUNKS = JOB
-DEV = True
+DEV = False
 C_VAL = True
 ###############################################################################
 # Paths
@@ -79,8 +79,8 @@ indVars = [i[0] for i in aux.DATA_HEAD]
 indVarsLabel = [i[2:] for i in indVars][:-1]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
-if MOI=='WOP':
-    y = y/(3*365) # aux.XRAN[1]
+if (MOI=='WOP') or (MOI=='TTI') or (MOI=='TTO'):
+    y = y/aux.XRAN[1]
 elif MOI=='CPT':
     y = 1-y
 (X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.1)
@@ -98,28 +98,29 @@ scoring = [
 # Define Model
 ###############################################################################
 if DEV:
-    (batchSize, epochs) = (128*2, 200)
+    print("* DEVELOPMENT Topology")
+    (batchSize, epochs) = (128, 300)
     def build_model():
         rf = Sequential()
         rf.add(Dense(
             16, activation= "tanh", input_dim=inDims,
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
         ))
         rf.add(Dense(
             32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
         ))
         rf.add(Dense(
             32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
+            kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
         ))
         rf.add(Dense(
             1, activation='sigmoid'
         ))
         rf.compile(
-            loss= "mean_squared_error" , 
-            optimizer="adam", 
-            metrics=["mean_squared_error"]
+            metrics=["mean_squared_error"],
+            loss="mean_squared_error", 
+            optimizer="adam"
         )
         return rf
     rf = KerasRegressor(build_fn=build_model, verbose=0)
@@ -286,4 +287,4 @@ permSci = pd.DataFrame({
 shapImp = pd.DataFrame({'names': iVars, 'mean': shapVals})
 permSci.to_csv(path.join(PT_OUT, fNameOut+'_PMI-SCI.csv'), index=False)
 shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
-print(scoresFinal)
+# print(scoresFinal)

@@ -21,21 +21,21 @@ import TPP_aux as aux
 def selectMLKeras(MOI, QNT='50', inDims=8):
     if QNT:
         if (MOI=='CPT'):
-            print("* CPT Optimizer")
+            print("* CPT Topology")
             (batchSize, epochs) = (128, 300)
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
                     16, activation= "tanh", input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
                 ))
                 rf.add(Dense(
-                    16, activation= "tanh",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+                    32, activation= "LeakyReLU",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
                 ))
                 rf.add(Dense(
-                    16, activation= "tanh",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+                    32, activation= "LeakyReLU",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'
@@ -46,23 +46,23 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
                     metrics=["mean_squared_error"]
                 )
                 return rf
-            rf = KerasRegressor(build_fn=build_model)
-        elif (MOI=='POE'):
-            print("* POE Optimizer")
+            rf = KerasRegressor(build_fn=build_model, verbose=0)
+        elif (MOI=='TTI') or (MOI=='TTO'):
+            print("* TTI/TTO Topology")
             (batchSize, epochs) = (128, 250)
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
-                    16, activation= "sigmoid", input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
+                    16, activation= "tanh", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
                 ))
                 rf.add(Dense(
-                    16, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=3.125e-4)
+                    32, activation= "LeakyReLU",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
                 ))
                 rf.add(Dense(
-                    16, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=3.125e-4)
+                    32, activation= "LeakyReLU",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'
@@ -73,27 +73,23 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
                     metrics=["mean_squared_error"]
                 )
                 return rf
-            rf = KerasRegressor(build_fn=build_model)
+            rf = KerasRegressor(build_fn=build_model, verbose=0)
         elif (MOI=='WOP'):
-            print("* WOP Optimizer")
-            (batchSize, epochs) = (128, 150)
+            print("* WOP Topology")
+            (batchSize, epochs) = (128, 300)
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
-                    16, activation= "sigmoid",
-                    input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.5e-4)
-                ))
-                rf.add(
-                    BatchNormalization(center=True, scale=True)
-                )
-                rf.add(Dense(
-                    32, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=4.25e-4)
+                    16, activation= "tanh", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
                 ))
                 rf.add(Dense(
                     32, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=4.5e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
+                ))
+                rf.add(Dense(
+                    32, activation= "LeakyReLU",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'
@@ -104,7 +100,7 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
                     metrics=["mean_squared_error"]
                 )
                 return rf
-            rf = KerasRegressor(build_fn=build_model)
+            rf = KerasRegressor(build_fn=build_model, verbose=0)
     else:
         if (MOI=='CPT'):
             print("* CPT Optimizer")

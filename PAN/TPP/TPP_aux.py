@@ -429,12 +429,13 @@ def windowAggregate(dynsArray, window=30, aggFun=sum):
         (day0, dayF) = (day0+delta, dayF+delta)
     return wCases
 
-
 def selectColor(MOI):
     if MOI=='CPT':
         clr = '#3a86ff'
-    elif MOI=='POE':
-        clr = '#8338EC'
+    elif MOI=='TTI':
+        clr = '#cdb4db'
+    elif MOI=='TTO':
+        clr = '#85bda6'
     else:
         clr = '#03045e'
     return clr
