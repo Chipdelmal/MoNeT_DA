@@ -371,3 +371,8 @@ def getRanges(df, varNames):
         vran = (np.min(df[v]), np.max(df[v]))
         rangs.append(vran)
     return rangs
+
+
+def adjRSquared(rSquared, samplesNum, featuresNum):
+    rAdj = 1-(1-rSquared)*(samplesNum-1)/(samplesNum-featuresNum-1)
+    return rAdj

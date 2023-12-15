@@ -28,8 +28,8 @@ mlens.config.set_backend('multiprocessing')
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'Kenya', 'highEIR', 
-        'LDR', 'HLT', '50', '0.1', 'CPT'
+        'BurkinaFaso', 'highEIR', 
+        'LDR', 'HLT', '50', '0.1', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -81,7 +81,7 @@ indVarsLabel = [i[2:] for i in indVars][:-1]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
 if MOI=='WOP':
-    y = y/365 # aux.XRAN[1]
+    y = y/(3*365) # aux.XRAN[1]
 elif MOI=='CPT':
     y = 1-y
 (X_train, X_test, y_train, y_test) = train_test_split(X, y, test_size=0.1)

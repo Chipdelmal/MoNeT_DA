@@ -21,8 +21,8 @@ mlens.config.set_backend('multiprocessing')
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'Kenya', 'highEIR', 
-        'HUM', 'CSS', '50', '0.1', 'CPT'
+        'BurkinaFaso', 'highEIR', 
+        'LDR', 'HLT', '50', '0.1', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -112,7 +112,7 @@ plt.close()
 # PDP/ICE Dev
 ###############################################################################
 (IVAR_DELTA, IVAR_STEP) = (0.1, 0.05)
-(TRACES, YLIM) = (500, (0, 1))
+(TRACES, YLIM) = (1500, (0, 1))
 VRANS = mth.getRanges(df, ['i_shc', 'i_sbc', 'i_hdr', 'i_rgr', 'i_inf'])
 for ix in list(range(X_train.shape[-1])):
     (MODEL_PREDICT, IVAR_IX) = (rg.predict, ix)

@@ -32,10 +32,12 @@ import TPP_mlrMethods as mth
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
-        'zelda', 'Kenya', 'highEIR', 'HUM', 'MRT', '50', '0.1', 'CPT'
+        'zelda', 
+        'BurkinaFaso', 'highEIR', 
+        'HUM', 'CSS', '50', '0.1', 'CPT'
     )
 else:
-    (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
+    (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
     QNT = None if (QNT == 'None') else QNT
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 2, 1000)
@@ -77,7 +79,7 @@ indVarsLabel = [i[2:] for i in indVars][:-1]
 dfIn = df[indVars].drop('i_grp', axis=1)
 (X, y) = [np.array(i) for i in (dfIn, df[MOI])]
 if MOI=='WOP':
-    y = y/aux.XRAN[1]
+    y = y/(3*365) # aux.XRAN[1]
 elif MOI=='CPT':
     y = 1-y
 (X_trainR, X_testR, y_train, y_test) = train_test_split(X, y, test_size=0.1)
@@ -159,7 +161,7 @@ scoresFinal = {
     'median_absolute_error ': median_absolute_error(y_test, y_pred),
     'd2_absolute_error_score': d2_absolute_error_score(y_test, y_pred)
 }
-scoresFinal['r2Adj'] = aux.adjRSquared(
+scoresFinal['r2Adj'] = mth.adjRSquared(
     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
 )
 print(scoresFinal)
@@ -172,7 +174,7 @@ if C_VAL:
 ###############################################################################
 # Permutation Importance
 ###############################################################################
-(X_trainS, y_trainS) = aux.unison_shuffled_copies(
+(X_trainS, y_trainS) = mth.unison_shuffled_copies(
     X_train, y_train, size=int(5e3)
 )
 # Permutation scikit ----------------------------------------------------------
@@ -196,7 +198,7 @@ plt.savefig(
 ###############################################################################
 # SHAP Importance
 ###############################################################################
-(X_trainS, y_trainS) = aux.unison_shuffled_copies(X_train, y_train, size=200)
+(X_trainS, y_trainS) = mth.unison_shuffled_copies(X_train, y_train, size=200)
 explainer = shap.KernelExplainer(rf.predict, X_trainS)
 shap_values = explainer.shap_values(X_trainS, approximate=True)
 shapVals = np.abs(shap_values).mean(0)
@@ -230,7 +232,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 4000
+SAMP_NUM = 3000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
@@ -259,10 +261,10 @@ for r in range(len(display.axes_)):
             display.axes_[r][c].set_ylabel("")
             display.axes_[r][c].get_legend().remove()
             xlim = display.axes_[r][c].get_xlim()
-            display.axes_[r][c].set_xlim(
-                aux.SA_RANGES[c][1][0], 
-                min(aux.SA_RANGES[c][1][1], xlim[1])
-            )
+            # display.axes_[r][c].set_xlim(
+            #     aux.SA_RANGES[c][1][0], 
+            #     min(aux.SA_RANGES[c][1][1], xlim[1])
+            # )
         except:
             continue
 display.figure_.savefig(
