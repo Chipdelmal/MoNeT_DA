@@ -35,7 +35,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.1', 'TTI'
+        'LDR', 'HLT', '50', '0.25', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -55,13 +55,15 @@ C_VAL = True
 (gene, fldr) = (drive.get('gDict'), drive.get('folder'))
 (PT_ROT, PT_IMG, PT_DTA, PT_PRE, PT_OUT, PT_MTR) = aux.selectPath(USR, LND, EXP)
 PT_OUT = path.join(PT_ROT, 'ML')
+PT_OUT_THS = path.join(PT_ROT, f'ML{int(float(THS)*100)}')
 PT_IMG = path.join(PT_OUT, 'img')
-[monet.makeFolder(i) for i in [PT_OUT, PT_IMG]]
+PT_IMG_THS = path.join(PT_OUT_THS, 'img')
+[monet.makeFolder(i) for i in [PT_OUT, PT_IMG, PT_OUT_THS, PT_IMG_THS]]
 PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_ROT, PT_OUT, tS, 
+    PT_OUT, PT_OUT_THS, tS, 
     '{} mlrTrainKeras [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
 )
 ###############################################################################
@@ -166,7 +168,7 @@ scoresFinal = {
 scoresFinal['r2Adj'] = mth.adjRSquared(
     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
 )
-print(scoresFinal)
+# print(scoresFinal)
 # Cross-validate --------------------------------------------------------------
 if C_VAL:
     cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
@@ -194,7 +196,7 @@ clr = aux.selectColor(MOI)
 plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
 plt.savefig(
-    path.join(PT_IMG, fNameOut+'_PERM.png'), 
+    path.join(PT_IMG_THS, fNameOut+'_PERM.png'), 
     dpi=200, bbox_inches='tight', pad_inches=0, transparent=True
 )
 ###############################################################################
@@ -211,7 +213,7 @@ clr = aux.selectColor(MOI)
 plt.barh(indVars[:-1][::-1], sImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
 plt.savefig(
-    path.join(PT_IMG, fNameOut+'_SHAP.png'), 
+    path.join(PT_IMG_THS, fNameOut+'_SHAP.png'), 
     dpi=200, bbox_inches='tight', pad_inches=0, transparent=False
 )
 (fig, ax) = plt.subplots(figsize=(4, 6))
@@ -221,7 +223,7 @@ shap.summary_plot(
     show=False
 )
 plt.savefig(
-    path.join(PT_IMG, fNameOut+'_SMRY.png'), 
+    path.join(PT_IMG_THS, fNameOut+'_SMRY.png'), 
     dpi=200, bbox_inches='tight', pad_inches=0, transparent=False
 )
 ###############################################################################
