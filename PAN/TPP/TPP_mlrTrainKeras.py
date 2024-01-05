@@ -195,6 +195,7 @@ clr = aux.selectColor(MOI)
 (fig, ax) = plt.subplots(figsize=(4, 6))
 plt.barh(indVars[:-1][::-1], pImp[::-1], color=clr, alpha=0.8)
 ax.set_xlim(0, 1)
+fig.suptitle(f"{AOI}-{MOI} ({THS}% R²{scoresFinal['r2Adj']:.2f})")
 plt.savefig(
     path.join(PT_IMG_THS, fNameOut+'_PERM.png'), 
     dpi=200, bbox_inches='tight', pad_inches=0, transparent=True
@@ -211,6 +212,7 @@ sImp = shapVals/sum(shapVals)
 clr = aux.selectColor(MOI)
 (fig, ax) = plt.subplots(figsize=(4, 6))
 plt.barh(indVars[:-1][::-1], sImp[::-1], color=clr, alpha=0.8)
+fig.suptitle(f"{AOI}-{MOI} ({THS}% R²{scoresFinal['r2Adj']:.2f})")
 ax.set_xlim(0, 1)
 plt.savefig(
     path.join(PT_IMG_THS, fNameOut+'_SHAP.png'), 
@@ -222,6 +224,7 @@ shap.summary_plot(
     alpha=0.25, feature_names=indVars,
     show=False
 )
+fig.suptitle(f"{AOI}-{MOI} ({THS}% R²{scoresFinal['r2Adj']:.2f})")
 plt.savefig(
     path.join(PT_IMG_THS, fNameOut+'_SMRY.png'), 
     dpi=200, bbox_inches='tight', pad_inches=0, transparent=False
@@ -266,15 +269,15 @@ for r in range(len(display.axes_)):
             continue
 display.figure_.suptitle(f"{AOI}-{MOI} ({THS}% R²{scoresFinal['r2Adj']:.2f})")
 display.figure_.savefig(
-    path.join(PT_IMG, fNameOut+'.png'), 
+    path.join(PT_IMG_THS, fNameOut+'.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
 )
 ###############################################################################
 # Dump Model to Disk
 ###############################################################################
 rf.model_.save(path.join(PT_OUT, fNameOut))
-np.save(path.join(PT_OUT, 'X_train.npy'), X_train)
-np.save(path.join(PT_OUT, 'y_train.npy'), y_train)
+np.save(path.join(PT_OUT_THS, 'X_train.npy'), X_train)
+np.save(path.join(PT_OUT_THS, 'y_train.npy'), y_train)
 if C_VAL:
     pd.DataFrame(scores).to_csv(path.join(PT_OUT, fNameOut+'_CV.csv'))
 pd.DataFrame(scoresFinal, index=[0]).to_csv(path.join(PT_OUT, fNameOut+'_VL.csv'))
@@ -288,6 +291,6 @@ permSci = pd.DataFrame({
     'std': perm_importance['importances_std']
 })
 shapImp = pd.DataFrame({'names': iVars, 'mean': shapVals})
-permSci.to_csv(path.join(PT_OUT, fNameOut+'_PMI-SCI.csv'), index=False)
-shapImp.to_csv(path.join(PT_OUT, fNameOut+'_SHP-SHP.csv'), index=False)
+permSci.to_csv(path.join(PT_OUT_THS, fNameOut+'_PMI-SCI.csv'), index=False)
+shapImp.to_csv(path.join(PT_OUT_THS, fNameOut+'_SHP-SHP.csv'), index=False)
 # print(scoresFinal)
