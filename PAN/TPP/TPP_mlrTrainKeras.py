@@ -262,6 +262,7 @@ for r in range(len(display.axes_)):
             # )
         except:
             continue
+display.figure_.suptitle(f"{AOI}-{MOI} ({THS}% R²{scoresFinal['r2Adj']:.2f})")
 display.figure_.savefig(
     path.join(PT_IMG, fNameOut+'.png'), 
     facecolor='w', bbox_inches='tight', pad_inches=0.1, dpi=300
