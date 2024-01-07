@@ -4,7 +4,7 @@ USR=$1
 MOS=$2
 HUM=$3
 QNT='50'
-THS='0.1'
+THS=$4
 ###############################################################################
 # Constants
 ###############################################################################
@@ -34,9 +34,9 @@ if [ "$MOS" == "True" ]; then
                 python TPP_clsCompile.py $USR $lnd $exp "LDR" "HLT" $QNT $mtr
             done
             python TPP_clsUnify.py $USR $lnd $exp "LDR" "HLT" $QNT $THS
-            printf "${GREEN}[------------DtaProcess------------]${CLEAR}\n"
-            python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
-            python TPP_dtaTraces.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
+            # printf "${GREEN}[------------DtaProcess------------]${CLEAR}\n"
+            # python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
+            # python TPP_dtaTraces.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
         done
     done
 fi
@@ -55,14 +55,14 @@ if [ "$HUM" == "True" ]; then
             python TPP_clsUnify.py $USR $lnd $exp "HUM" "PRV" $QNT $THS
             python TPP_clsUnify.py $USR $lnd $exp "HUM" "CSS" $QNT $THS
             python TPP_clsUnify.py $USR $lnd $exp "HUM" "MRT" $QNT $THS
-            printf "${GREEN}[------------DtaExplore------------]${CLEAR}\n"
-            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
-            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
-            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
-            printf "${GREEN}[------------DtaTraces-------------]${CLEAR}\n"
-            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
-            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
-            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
+            # printf "${GREEN}[------------DtaExplore------------]${CLEAR}\n"
+            # python TPP_dtaExplore.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
+            # python TPP_dtaExplore.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
+            # python TPP_dtaExplore.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
+            # printf "${GREEN}[------------DtaTraces-------------]${CLEAR}\n"
+            # python TPP_dtaTraces.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
+            # python TPP_dtaTraces.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
+            # python TPP_dtaTraces.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
         done
     done
 fi
