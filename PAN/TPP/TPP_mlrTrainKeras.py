@@ -39,7 +39,7 @@ if monet.isNotebook():
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
-    QNT = (None if (QNT == 'None') else QNT)
+    QNT = (None if (QNT=='None') else QNT)
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 2, 1000)
 CHUNKS = JOB

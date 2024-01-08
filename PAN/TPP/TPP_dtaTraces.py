@@ -42,7 +42,7 @@ expsIter = [i for i in expsIter if len(i) > 0]
 ###############################################################################
 # Subset by Folder
 ###############################################################################
-pt_img = path.join(PT_ROT, 'img', 'dtaTraces')
+pt_img = path.join(PT_ROT, 'img', f'dtaTraces{int(float(THS)*100)}')
 monet.makeFolder(pt_img)
 subset = [exp for exp in expsIter if exp[1].find(PT_ROT)==0]
 # Time and head -----------------------------------------------------------
@@ -60,7 +60,7 @@ if DRV != 'HUM':
 else:
     YRAN = aux.getHumanRange(AOI)
 STYLE = {
-    "width": 0.5, "alpha": .005, "dpi": 750, "aspect": 1/5, 
+    "width": 0.5, "alpha": .005, "dpi": 300, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN)
 }
