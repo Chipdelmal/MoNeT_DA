@@ -42,7 +42,7 @@ expsIter = [i for i in expsIter if len(i) > 0]
 ###############################################################################
 # Subset by Folder
 ###############################################################################
-pt_img = path.join(PT_ROT, 'img', 'dtaTraces')
+pt_img = path.join(PT_ROT, 'img', f'dtaTraces{int(float(THS)*100)}')
 monet.makeFolder(pt_img)
 subset = [exp for exp in expsIter if exp[1].find(PT_ROT)==0]
 # Time and head -----------------------------------------------------------
