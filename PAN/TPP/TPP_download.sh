@@ -20,6 +20,7 @@ for lnd in ${LANDS[*]}; do
     for exp in ${EXPERIMENTS[*]}; do
         printf "${BLUE}${lnd} - ${exp}${CLEAR}\n"
         mkdir -p "${BASE_PATH}/${lnd}/${exp}/"
-        scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML*/" "${BASE_PATH}/${lnd}/${exp}/"
+        scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/SUMMARY/" "${BASE_PATH}/${lnd}/${exp}/"
+        # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML*/" "${BASE_PATH}/${lnd}/${exp}/"
     done
 done
