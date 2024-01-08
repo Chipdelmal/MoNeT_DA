@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import warnings
+warnings.filterwarnings("ignore")
 import sys
 import pandas as pd
 from glob import glob
@@ -10,12 +12,10 @@ from datetime import datetime
 import MoNeT_MGDrivE as monet
 from more_itertools import locate
 from joblib import Parallel, delayed
-# import warnings
-# warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT) = (
-        'zelda', 'Kenya', 'highEIR', 'LDR', 'HLT', '50'
+        'zelda', 'BurkinaFaso', 'highEIR', 'LDR', 'HLT', '50'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT) = sys.argv[1:]
@@ -78,7 +78,7 @@ Parallel(n_jobs=JOB)(
 # Merge dataframes chunks
 ###############################################################################
 dfPathsPieces = list(zip(*dfPaths))[:]
-for dfPathsSet in dfPathsPieces:
+for dfPathsSet in dfPathsPieces[::-1]:
     dfFull = pd.concat([pd.read_csv(i) for i in dfPathsSet])
     # Write combined dataframe --------------------------------------------
     fName = dfPathsSet[0].split('-')[0]+'.csv'

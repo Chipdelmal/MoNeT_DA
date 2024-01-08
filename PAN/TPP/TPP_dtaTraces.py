@@ -60,7 +60,7 @@ if DRV != 'HUM':
 else:
     YRAN = aux.getHumanRange(AOI)
 STYLE = {
-    "width": 0.5, "alpha": .005, "dpi": 750, "aspect": 1/5, 
+    "width": 0.5, "alpha": .005, "dpi": 300, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN)
 }

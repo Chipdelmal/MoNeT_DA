@@ -35,8 +35,8 @@ if [ "$MOS" == "True" ]; then
             done
             python TPP_clsUnify.py $USR $lnd $exp "LDR" "HLT" $QNT $THS
             # printf "${GREEN}[------------DtaProcess------------]${CLEAR}\n"
-            # python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
-            # python TPP_dtaTraces.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
+            python TPP_dtaExplore.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
+            python TPP_dtaTraces.py $USR $lnd $exp "LDR" "HLT" $QNT $THS "HLT"
         done
     done
 fi
@@ -56,13 +56,13 @@ if [ "$HUM" == "True" ]; then
             python TPP_clsUnify.py $USR $lnd $exp "HUM" "CSS" $QNT $THS
             python TPP_clsUnify.py $USR $lnd $exp "HUM" "MRT" $QNT $THS
             # printf "${GREEN}[------------DtaExplore------------]${CLEAR}\n"
-            # python TPP_dtaExplore.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
-            # python TPP_dtaExplore.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
-            # python TPP_dtaExplore.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
+            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
+            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
+            python TPP_dtaExplore.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
             # printf "${GREEN}[------------DtaTraces-------------]${CLEAR}\n"
-            # python TPP_dtaTraces.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
-            # python TPP_dtaTraces.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
-            # python TPP_dtaTraces.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
+            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "PRV" $QNT $THS "PRV"
+            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "CSS" $QNT $THS "CSS"
+            python TPP_dtaTraces.py $USR $lnd $exp "HUM" "MRT" $QNT $THS "MRT"
         done
     done
 fi
