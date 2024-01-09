@@ -35,7 +35,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.25', 'TTI'
+        'LDR', 'HLT', '50', '0.25', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -203,7 +203,7 @@ plt.savefig(
 ###############################################################################
 # SHAP Importance
 ###############################################################################
-(X_trainS, y_trainS) = mth.unison_shuffled_copies(X_train, y_train, size=250)
+(X_trainS, y_trainS) = mth.unison_shuffled_copies(X_train, y_train, size=100)
 explainer = shap.KernelExplainer(rf.predict, X_trainS, verbose=0)
 shap_values = explainer.shap_values(X_trainS, approximate=True, verbose=0)
 shapVals = np.abs(shap_values).mean(0)
@@ -232,7 +232,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 3000
+SAMP_NUM = 1500
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
@@ -243,7 +243,7 @@ display = PartialDependenceDisplay.from_estimator(
     ax=ax, kind='both', subsample=SAMP_NUM,
     n_cols=round((len(indVars)-1)), 
     grid_resolution=200, random_state=0,
-    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.075, 'color': clr},
+    ice_lines_kw={'linewidth': 0.1, 'alpha': 0.1, 'color': clr},
     pd_line_kw={'color': '#f72585'}
 )
 display.figure_.subplots_adjust(hspace=0.4)
@@ -275,7 +275,7 @@ display.figure_.savefig(
 ###############################################################################
 # Dump Model to Disk
 ###############################################################################
-rf.model_.save(path.join(PT_OUT, fNameOut))
+rf.model_.save(path.join(PT_OUT_THS, fNameOut))
 np.save(path.join(PT_OUT_THS, 'X_train.npy'), X_train)
 np.save(path.join(PT_OUT_THS, 'y_train.npy'), y_train)
 if C_VAL:
