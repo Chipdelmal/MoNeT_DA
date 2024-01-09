@@ -95,9 +95,32 @@ delta = 0.01
     np.arange(0.80, 1.00+delta, delta),
     np.arange(0.00, 0.20+delta, delta),
     np.array([0.80]),
-    np.array([0, ])
+    np.array([0.00])
 )
 combos = np.array(list(product(*[shcRan, sbcRan, hdrRan, rgrRan, infRan])))
 pred = rf.predict(combos)
 if MOI=='WOP':
     pred = pred*aux.XRAN[1]/365
+###############################################################################
+# 3D Plot Results
+###############################################################################   
+colScale = 'Reds'
+fig = go.Figure(data=go.Scatter3d(
+    x=combos[:,1], y=combos[:,3], z=combos[:,0],
+    customdata=pred,
+    mode='markers',
+    marker=dict(
+        size=2,
+        color=pred,
+        colorscale=colScale,
+        opacity=0.35
+    ),
+    hovertemplate="sbc:%{x:.3f}<br>rgr:%{y:.3f}<br>shc:%{z:.3f}<br>MOI:%{customdata:.3f}"
+))
+fig.update_layout(
+    scene = dict(
+        xaxis_title='sbc',
+        yaxis_title='rgr',
+        zaxis_title='shc',
+    )
+)
