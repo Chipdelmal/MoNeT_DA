@@ -35,7 +35,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.25', 'WOP'
+        'LDR', 'HLT', '50', '0.25', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -232,7 +232,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 1500
+SAMP_NUM = 1000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)

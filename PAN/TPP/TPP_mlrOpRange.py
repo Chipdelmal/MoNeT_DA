@@ -19,7 +19,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.25', 'TTI'
+        'LDR', 'HLT', '50', '0.25', 'CPT'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -62,6 +62,8 @@ df = pd.read_csv(path.join(PT_OUT, fName))
 # Read Model
 ###############################################################################
 modID = 'krs'
-fNameOut = '{}_{}T_{}-{}-MLR'.format(AOI, int(float(THS)*100), MOI, modID)
+fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+    AOI, int(QNT), int(float(THS)*100), MOI, modID
+)
 mdlPath = path.join(PT_OUT_THS, fNameOut)
 rf = load_model(mdlPath)
