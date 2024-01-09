@@ -11,7 +11,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 from keras.layers import Dense
-from keras.models import load_model
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping
 from keras.regularizers import L1L2
