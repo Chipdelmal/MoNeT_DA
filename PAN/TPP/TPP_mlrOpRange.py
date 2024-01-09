@@ -7,7 +7,10 @@ import sys
 import numpy as np
 from os import path
 import pandas as pd
+from itertools import product
+import plotly.graph_objs as go
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from datetime import datetime
 from keras.models import load_model
 import MoNeT_MGDrivE as monet
@@ -19,7 +22,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.25', 'CPT'
+        'LDR', 'HLT', '50', '0.25', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -76,7 +79,25 @@ rf = load_model(mdlPath)
 #   inf: 0.00 - 0.25
 ###############################################################################
 pVect = np.array([
-    [0.75, 0.85, 1, 0, .25],
-    [1.00, 0.80, 1, 0, .25]
+    [0.75, 0.85, 1, 0, 0],
+    [1.00, 0.80, 1, 0, 0]
 ])
-rf.predict(pVect)
+pred = rf.predict(pVect)
+if MOI=='WOP':
+    pred = pred*aux.XRAN[1]/365
+print(pred)
+###############################################################################
+# Factorial Evaluation of Model
+###############################################################################
+delta = 0.01
+(shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
+    np.arange(0.75, 1.00+delta, delta),
+    np.arange(0.80, 1.00+delta, delta),
+    np.arange(0.00, 0.20+delta, delta),
+    np.array([0.80]),
+    np.array([0, ])
+)
+combos = np.array(list(product(*[shcRan, sbcRan, hdrRan, rgrRan, infRan])))
+pred = rf.predict(combos)
+if MOI=='WOP':
+    pred = pred*aux.XRAN[1]/365
