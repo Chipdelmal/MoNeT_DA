@@ -104,23 +104,38 @@ if MOI=='WOP':
 ###############################################################################
 # 3D Plot Results
 ###############################################################################   
-colScale = 'Reds'
+yearsFilter = 1
+fltr = np.array([1 if (i>=yearsFilter) else 0 for i in pred.T[0]])
 fig = go.Figure(data=go.Scatter3d(
-    x=combos[:,1], y=combos[:,3], z=combos[:,0],
-    customdata=pred,
+    x=combos[np.where(fltr)][:,1], 
+    y=combos[np.where(fltr)][:,3], 
+    z=combos[np.where(fltr)][:,0],
+    customdata=pred[np.where(fltr)],
     mode='markers',
     marker=dict(
         size=2,
-        color=pred,
-        colorscale=colScale,
-        opacity=0.35
+        color=pred.T[0][np.where(fltr)],
+        colorscale='Purples',
+        opacity=0.35,
+        cmin=yearsFilter,
+        cmax=2.5
     ),
     hovertemplate="sbc:%{x:.3f}<br>rgr:%{y:.3f}<br>shc:%{z:.3f}<br>MOI:%{customdata:.3f}"
 ))
 fig.update_layout(
+    scene_aspectmode='cube', # 'cube',
     scene = dict(
         xaxis_title='sbc',
         yaxis_title='rgr',
         zaxis_title='shc',
+        xaxis = dict(nticks=4, range=[0.80, 1.00],),
+        yaxis = dict(nticks=4, range=[0.00, 0.20],),
+        zaxis = dict(nticks=4, range=[0.80, 1.00],)
     )
 )
+fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+    AOI, int(QNT), int(float(THS)*100), MOI, modID
+)
+fig.write_html(path.join(PT_IMG_THS, fNameOut+'.html'))
+
+
