@@ -22,7 +22,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.25', 'WOP'
+        'HUM', 'CSS', '50', '0.25', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -113,12 +113,12 @@ fig = go.Figure(data=go.Scatter3d(
     customdata=pred[np.where(fltr)],
     mode='markers',
     marker=dict(
-        size=2,
+        size=5,
         color=pred.T[0][np.where(fltr)],
         colorscale='Purples',
         opacity=0.35,
         cmin=yearsFilter,
-        cmax=2.5
+        cmax=3
     ),
     hovertemplate="sbc:%{x:.3f}<br>rgr:%{y:.3f}<br>shc:%{z:.3f}<br>MOI:%{customdata:.3f}"
 ))
@@ -133,9 +133,7 @@ fig.update_layout(
         zaxis = dict(nticks=4, range=[0.80, 1.00],)
     )
 )
-fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
-    AOI, int(QNT), int(float(THS)*100), MOI, modID
-)
-fig.write_html(path.join(PT_IMG_THS, fNameOut+'.html'))
+# fig.write_html(path.join(PT_IMG_THS, fNameOut+'.html'))
+fig.write_html(path.join('./tmp/', fNameOut+'.html'))
 
 
