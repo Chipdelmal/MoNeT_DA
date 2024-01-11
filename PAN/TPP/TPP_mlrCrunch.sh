@@ -16,8 +16,8 @@ WHITE='\033[0;37m'
 # -----------------------------------------------------------------------------
 LANDS=("BurkinaFaso" "Kenya")
 EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
-METRICS=("CPT" "WOP" "TTI" "TTO")
-METRICS_SUM=("CPT" "WOP" "TTI" "TTO")
+METRICS=("CPT" "WOP" "TTI")
+METRICS_SUM=("CPT" "WOP" "TTI")
 ###############################################################################
 # Setup Path
 ###############################################################################
