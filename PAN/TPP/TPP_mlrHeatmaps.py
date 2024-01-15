@@ -59,7 +59,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_OUT, PT_OUT_THS, tS, 
-    '{} mlrTrainKeras [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
+    '{} mlrHeatmaps [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
 )
 ###############################################################################
 # Read Dataframe
@@ -140,17 +140,18 @@ for ix in range(len(SHC_RAN)):
             (zmin, zmax) = (0, 5)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/2)
             cntr = [YEAR_THS]
+            cmap = monet.generateAlphaColorMapFromColor('#03045eAA')
         elif MOI == 'CPT':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
             cntr = [.75]
+            cmap = monet.generateAlphaColorMapFromColor('#a2d2ffAA')
         elif MOI == 'POE':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
             cntr = [.9]
             lvls = [cntr[0]-.00001, cntr[0]]
         (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
-        cmap = monet.generateAlphaColorMapFromColor('#03045eAA')
         ###############################################################################
         # Plot
         ###############################################################################
