@@ -27,16 +27,19 @@ if monet.isNotebook():
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
     QNT = (None if (QNT=='None') else QNT)
+HDR_PAR = 0.80
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 2, 1000)
 CHUNKS = JOB
 DEV = False
 C_VAL = True
+delta = 0.001
+# Heatmap parameters ----------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
 YEAR_THS = 2
-TICKS_HIDE = False
+TICKS_HIDE = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -94,16 +97,20 @@ print(pred)
 ###############################################################################
 # Factorial Evaluation of Model
 ###############################################################################
-IND_RAN = np.arange(0.75, 1.05, .05)
-ix = -3
+(SHC_RAN, INF_RAN) = (
+    np.arange(0.75, 1.05, .05),
+    np.arange(0, .30, .05)
+)
+(ix, jx) = (-3, 0)
 
-delta = 0.001
+
+
 (shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
-    np.array([IND_RAN[ix]]),
+    np.array([SHC_RAN[ix]]),
     np.arange(0.80, 1.00+delta, delta),
     np.arange(0.00, 0.20+delta, delta),
-    np.array([0.80]),
-    np.array([0.00])
+    np.array([HDR_PAR]),
+    np.array([INF_RAN[jx]])
 )
 combos = np.array(list(product(*[shcRan, sbcRan, hdrRan, rgrRan, infRan])))
 pred = rf.predict(combos)
@@ -161,7 +168,7 @@ cs = ax.contourf(
     levels=[0, YEAR_THS, 5], cmap=cmap, extend='max',
     vmin=YEAR_THS-0.1
 )
-cs.cmap.set_under('white')
+cs.cmap.set_under('#ffffff00')
 # Color bar ---------------------------------------------------------------
 if not TICKS_HIDE:
     cbar = fig.colorbar(cs)
@@ -203,7 +210,20 @@ if TICKS_HIDE:
 fig.tight_layout()
 ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
 ax.set_facecolor("#00000000")
+###############################################################################
+# Export File
+###############################################################################
+# Generate filename -----------------------------------------------------------
+(shcName, sbcName, hdrName, rgrName, infName) = (
+    str(int(shcRan[0]*aux.DATA_SCA['i_shc'])).zfill(aux.DATA_PAD['i_shc']),
+    str(int(sbcRan[0]*aux.DATA_SCA['i_sbc'])).zfill(aux.DATA_PAD['i_sbc']),
+    str(int(hdrRan[0]*aux.DATA_SCA['i_hdr'])).zfill(aux.DATA_PAD['i_hdr']),
+    str(int(rgrRan[0]*aux.DATA_SCA['i_rgr'])).zfill(aux.DATA_PAD['i_rgr']),
+    str(int(infRan[0]*aux.DATA_SCA['i_inf'])).zfill(aux.DATA_PAD['i_inf'])
+)
+fName = f'E_{shcName}_X_{hdrName}_X_{infName}'
+fName = fName+'-{}Q_{}T'.format(QNT, str(int(float(THS)*100)))
 fig.savefig(
-    path.join('./tmp/', 'heat.png'), 
+    path.join('./tmp/', f'{fName}.png'), 
     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
 )
