@@ -35,6 +35,7 @@ C_VAL = True
 (xSca, ySca) = ('linear', 'linear')
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
+YEAR_THS = 2
 ###############################################################################
 # Paths
 ###############################################################################
@@ -82,7 +83,7 @@ rf = load_model(mdlPath)
 #   [4] inf: 0.00 - 0.25
 ###############################################################################
 pVect = np.array([
-    [0.75, 0.85, 1, 0, 0],
+    [1.00, 0.85, 1, 0, 0],
     [1.00, 0.80, 1, 0, 0]
 ])
 pred = rf.predict(pVect)
@@ -92,9 +93,12 @@ print(pred)
 ###############################################################################
 # Factorial Evaluation of Model
 ###############################################################################
+IND_RAN = np.arange(0.75, 1.05, .05)
+ix = -3
+
 delta = 0.001
 (shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
-    np.arange(0.75, 1.00+delta, delta),
+    np.array([IND_RAN[ix]]),
     np.arange(0.80, 1.00+delta, delta),
     np.arange(0.00, 0.20+delta, delta),
     np.array([0.80]),
@@ -102,12 +106,12 @@ delta = 0.001
 )
 combos = np.array(list(product(*[shcRan, sbcRan, hdrRan, rgrRan, infRan])))
 pred = rf.predict(combos)
-# if MOI=='WOP':
-#     pred = pred*aux.XRAN[1]/365
+if MOI=='WOP':
+    pred = pred*aux.XRAN[1]/365
 ###############################################################################
 # Generate response surface
 ###############################################################################
-(x, y, z) = (list(combos.T[3]), list(combos.T[1]), pred)
+(x, y, z) = (list(combos.T[1]), list(combos.T[3]), pred)
 (xMin, yMin) = (
     min([i for i in sorted(list(set(x))) if i>0]),
     min([i for i in sorted(list(set(y))) if i>0])
@@ -116,7 +120,6 @@ rs = monet.calcResponseSurface(
     x, y, z, 
     scalers=(1, 1, 1), mthd='linear', 
     xAxis=xSca, yAxis=ySca,
-    xLogMin=xMin, yLogMin=yMin,
     DXY=(ngdx, ngdy)
 )
 ###############################################################################
@@ -127,9 +130,9 @@ rs = monet.calcResponseSurface(
 (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
 # Contour levels --------------------------------------------------------------
 if MOI == 'WOP':
-    (zmin, zmax) = (0, 0.025)
-    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-    cntr = [0.15]
+    (zmin, zmax) = (0, 5)
+    lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/2)
+    cntr = [YEAR_THS]
 elif MOI == 'CPT':
     (zmin, zmax) = (0, 1)
     lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
@@ -147,7 +150,7 @@ elif MOI == 'POE':
 xy = ax.plot(rsG[0], rsG[1], 'k.', ms=1, alpha=0.25, marker='1')
 cc = ax.contour(
     rsS[0], rsS[1], rsS[2], 
-    levels=lvls, colors='#2b2d42', # drive['colors'][-1][:-2], 
+    levels=cntr, colors='#2b2d42',
     linewidths=2, alpha=.9, linestyles='solid'
 )
 cs = ax.contourf(
