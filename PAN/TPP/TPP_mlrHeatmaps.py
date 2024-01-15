@@ -36,6 +36,7 @@ C_VAL = True
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
 YEAR_THS = 2
+TICKS_HIDE = False
 ###############################################################################
 # Paths
 ###############################################################################
@@ -143,6 +144,7 @@ elif MOI == 'POE':
     cntr = [.9]
     lvls = [cntr[0]-.00001, cntr[0]]
 (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
+cmap = monet.generateAlphaColorMapFromColor('#03045eAA')
 ###############################################################################
 # Plot
 ###############################################################################
@@ -156,6 +158,52 @@ cc = ax.contour(
 cs = ax.contourf(
     rsS[0], rsS[1], rsS[2], 
     linewidths=0,
-    levels=lvls, cmap=cmap, extend='max'
+    levels=[0, YEAR_THS, 5], cmap=cmap, extend='max',
+    vmin=YEAR_THS-0.1
 )
 cs.cmap.set_under('white')
+# Color bar ---------------------------------------------------------------
+if not TICKS_HIDE:
+    cbar = fig.colorbar(cs)
+    cbar.ax.get_yaxis().labelpad = 25
+    cbar.ax.set_ylabel('{}'.format(MOI), fontsize=15, rotation=270)
+# Grid and ticks ----------------------------------------------------------
+if xSca == 'log':
+    gZeroX = [i for i in list(sorted(set(x))) if i>0] 
+    ax.set_xticks([i/scalers[0] for i in gZeroX])
+    ax.axes.xaxis.set_ticklabels(gZeroX)
+else:
+    ax.set_xticks([i/scalers[0] for i in list(sorted(set(x)))])
+    ax.axes.xaxis.set_ticklabels(sorted(set(x)))
+if ySca == 'log':
+    gZeroY = [i for i in list(sorted(set(y))) if i>0] 
+    ax.set_yticks([i/scalers[1] for i in gZeroY])
+    ax.axes.yaxis.set_ticklabels(gZeroY)
+else:
+    ax.set_yticks([i/scalers[1] for i in list(sorted(set(y)))])
+    ax.axes.yaxis.set_ticklabels(sorted(set(y)))
+ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
+ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
+# Axes scales and limits --------------------------------------------------
+ax.set_xscale(xSca)
+ax.set_yscale(ySca)
+plt.xlim(ran[0][0], ran[0][1])
+plt.ylim(ran[1][0], ran[1][1])
+if TICKS_HIDE:
+    ax.axes.xaxis.set_ticklabels([])
+    ax.axes.yaxis.set_ticklabels([])
+    # ax.axes.xaxis.set_visible(False)
+    # ax.axes.yaxis.set_visible(False)
+    ax.xaxis.set_tick_params(width=0)
+    ax.yaxis.set_tick_params(width=0)
+    ax.tick_params(
+        left=False, labelleft=False, bottom=False, labelbottom=False
+    )
+    ax.set_axis_off()
+fig.tight_layout()
+ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
+ax.set_facecolor("#00000000")
+fig.savefig(
+    path.join('./tmp/', 'heat.png'), 
+    dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
+)
