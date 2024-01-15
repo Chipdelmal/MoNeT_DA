@@ -86,14 +86,14 @@ rf = load_model(mdlPath)
 #   [3] rgr: 0.00 - 0.20
 #   [4] inf: 0.00 - 0.25
 ###############################################################################
-pVect = np.array([
-    [1.00, 0.85, 1, 0, 0],
-    [1.00, 0.80, 1, 0, 0]
-])
-pred = rf.predict(pVect)
-if MOI=='WOP':
-    pred = pred*aux.XRAN[1]/365
-print(pred)
+# pVect = np.array([
+#     [1.00, 0.85, 1, 0, 0],
+#     [1.00, 0.80, 1, 0, 0]
+# ])
+# pred = rf.predict(pVect)
+# if MOI=='WOP':
+#     pred = pred*aux.XRAN[1]/365
+# print(pred)
 ###############################################################################
 # Factorial Evaluation of Model
 ###############################################################################
@@ -143,7 +143,7 @@ for ix in range(len(SHC_RAN)):
         elif MOI == 'CPT':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
-            cntr = [.9]
+            cntr = [.75]
         elif MOI == 'POE':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
@@ -221,7 +221,7 @@ for ix in range(len(SHC_RAN)):
             str(int(infRan[0]*aux.DATA_SCA['i_inf'])).zfill(aux.DATA_PAD['i_inf'])
         )
         fName = f'E_{shcName}_X_{hdrName}_X_{infName}'
-        fName = fName+'-{}Q_{}T'.format(QNT, str(int(float(THS)*100)))
+        fName = fName+'-{}_{}Q_{}T'.format(AOI, QNT, str(int(float(THS)*100)))
         # fig.savefig(
         #     path.join('./tmp/', f'{fName}.png'), 
         #     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
@@ -230,3 +230,4 @@ for ix in range(len(SHC_RAN)):
             path.join(PT_IMG_THS, f'{fName}.png'), 
             dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
         )
+        plt.close('all')
