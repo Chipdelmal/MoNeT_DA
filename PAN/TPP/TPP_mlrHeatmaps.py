@@ -112,7 +112,7 @@ for ix in range(len(SHC_RAN)):
             np.array([INF_RAN[jx]])
         )
         combos = np.array(list(product(*[shcRan, sbcRan, hdrRan, rgrRan, infRan])))
-        pred = rf.predict(combos)
+        pred = rf.predict(combos, verbose=0)
         if MOI=='WOP':
             pred = pred*aux.XRAN[1]/365
         ###############################################################################
