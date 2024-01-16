@@ -33,7 +33,7 @@ HDR_PAR = 0.80
 CHUNKS = JOB
 DEV = False
 C_VAL = True
-delta = 0.0025
+delta = 0.005
 # Heatmap parameters ----------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
 (ngdx, ngdy) = (1000, 1000)
@@ -98,8 +98,8 @@ rf = load_model(mdlPath)
 # Factorial Evaluation of Model
 ###############################################################################
 (SHC_RAN, INF_RAN) = (
-    np.arange(0.75, 1.05, .05),
-    np.arange(0, .30, .05)
+    np.arange(0.75, 1.01, .025),
+    np.arange(0, .31, .025)
 )
 (ix, jx) = (-3, 0)
 for ix in range(len(SHC_RAN)):
@@ -240,3 +240,6 @@ for ix in range(len(SHC_RAN)):
             dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
         )
         plt.close('all')
+        
+        
+# E_01050_X_00800_X_0015000-HLT_WOP_50Q_25T
