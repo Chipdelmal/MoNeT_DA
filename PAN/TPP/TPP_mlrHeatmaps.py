@@ -22,7 +22,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'HUM', 'CSS', '50', '0.25', 'WOP'
+        'LDR', 'HLT', '50', '0.25', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -33,7 +33,7 @@ HDR_PAR = 0.80
 CHUNKS = JOB
 DEV = False
 C_VAL = True
-delta = 0.001
+delta = 0.0025
 # Heatmap parameters ----------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
 (ngdx, ngdy) = (1000, 1000)
@@ -140,18 +140,26 @@ for ix in range(len(SHC_RAN)):
             (zmin, zmax) = (0, 5)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/2)
             cntr = [YEAR_THS]
-            cmap = monet.generateAlphaColorMapFromColor('#03045eAA')
         elif MOI == 'CPT':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/20)
             cntr = [.75]
-            cmap = monet.generateAlphaColorMapFromColor('#a2d2ffAA')
         elif MOI == 'POE':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
             cntr = [.9]
             lvls = [cntr[0]-.00001, cntr[0]]
-        (scalers, HD_DEP, _, cmap) = aux.selectDepVars(MOI)
+        (scalers, HD_DEP, _, _) = aux.selectDepVars(MOI)
+        if AOI=='HLT':
+            cmap = monet.generateAlphaColorMapFromColor('#ff006eAA')
+        elif AOI=='CSS':
+            cmap = monet.generateAlphaColorMapFromColor('#03045eAA')
+        elif AOI=='MRT':
+            cmap = monet.generateAlphaColorMapFromColor('#8ac926AA')
+        elif AOI=='PRV':
+            cmap = monet.generateAlphaColorMapFromColor('#a2d2ffAA')
+        else:
+            cmap = monet.generateAlphaColorMapFromColor('#ffb3c6AA')
         ###############################################################################
         # Plot
         ###############################################################################
@@ -222,7 +230,7 @@ for ix in range(len(SHC_RAN)):
             str(int(infRan[0]*aux.DATA_SCA['i_inf'])).zfill(aux.DATA_PAD['i_inf'])
         )
         fName = f'E_{shcName}_X_{hdrName}_X_{infName}'
-        fName = fName+'-{}_{}Q_{}T'.format(AOI, QNT, str(int(float(THS)*100)))
+        fName = fName+'-{}_{}_{}Q_{}T'.format(AOI, MOI, QNT, str(int(float(THS)*100)))
         # fig.savefig(
         #     path.join('./tmp/', f'{fName}.png'), 
         #     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
