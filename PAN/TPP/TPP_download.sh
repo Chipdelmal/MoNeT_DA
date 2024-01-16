@@ -25,3 +25,5 @@ for lnd in ${LANDS[*]}; do
         # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/SUMMARY/" "${BASE_PATH}/${lnd}/${exp}/"
     done
 done
+
+# scp zelda:"/RAID5/marshallShare/ReplacementTPP/BurkinaFaso/highEIR/ML25/img/heatmaps/*.png" "/Users/sanchez.hmsc/Documents/WorkSims/TPP/BurkinaFaso/highEIR/ML25/img/heatmaps"
