@@ -26,4 +26,6 @@ for lnd in ${LANDS[*]}; do
     done
 done
 
-# scp zelda:"/RAID5/marshallShare/ReplacementTPP/BurkinaFaso/highEIR/ML25/img/heatmaps/*.png" "/Users/sanchez.hmsc/Documents/WorkSims/TPP/BurkinaFaso/highEIR/ML25/img/heatmaps"
+# scp zelda:"/RAID5/marshallShare/ReplacementTPP/BurkinaFaso/highEIR/ML25/img/heatmaps/*WOP*.png" "/Users/sanchez.hmsc/Documents/WorkSims/TPP/BurkinaFaso/highEIR/ML25/img/heatmaps"
+# scp zelda:"/RAID5/marshallShare/ReplacementTPP/BurkinaFaso/highEIR/ML33/img/heatmaps/*WOP*.png" "/Users/sanchez.hmsc/Documents/WorkSims/TPP/BurkinaFaso/highEIR/ML33/img/heatmaps"
+# scp zelda:"/RAID5/marshallShare/ReplacementTPP/BurkinaFaso/highEIR/ML50/img/heatmaps/*WOP*.png" "/Users/sanchez.hmsc/Documents/WorkSims/TPP/BurkinaFaso/highEIR/ML50/img/heatmaps"
