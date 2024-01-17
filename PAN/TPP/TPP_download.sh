@@ -13,7 +13,7 @@ RED='\033[0;31m'
 WHITE='\033[0;37m'
 # -----------------------------------------------------------------------------
 LANDS=("BurkinaFaso" "Kenya")
-EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
+EXPERIMENTS=("lowEIR" "medEIR" "highEIR")
 THRESHOLDS=("50" "33" "25")
 ###############################################################################
 # ML Download Loop
@@ -39,6 +39,7 @@ if [ "$HTM" == "True" ]; then
         for exp in ${EXPERIMENTS[*]}; do
             printf "${RED}* Heatmaps: ${CLEAR}${BLUE}${lnd} - ${exp}${CLEAR}\n"
             for ths in ${THRESHOLDS};do
+                mkdir -p "${BASE_PATH}/${lnd}/${exp}/ML${ths}/img/heatmaps/"
                 scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png" "${BASE_PATH}/${lnd}/${exp}/ML${ths}/img/heatmaps/"
             done
         done
