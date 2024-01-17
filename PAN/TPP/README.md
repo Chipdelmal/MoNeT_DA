@@ -1,5 +1,24 @@
 # Target Product Profile (TPP)
 
+## Description
+
+Given a fully-linked drive, we investigate the effect of changes in the following construct's characteristics:
+
+* Homing allele fitness (SHC)
+* Resistant allele fitness cost (SBC)
+* Homology-directed repair (HDR)
+* Resistance generation rate (RGR)
+* Probability of infection (INF)
+
+upon:
+
+* Mosquito reduction (HLT)
+* Incidence (CSS)
+* Mortality (MRT)
+* Prevalence (PRV)
+
+calculated on the Window of Protection (WOP) and Cumulative Potential for Transmission (CPT) metrics. This sensitivity analysis takes place in Burkina Faso, and Kenya at three different levels of Entomological Inoculation Rate (EIR).
+
 ## Pipeline
 
 To generate the whole set of analysis, the following set of bash scripts needs to be run in order.
