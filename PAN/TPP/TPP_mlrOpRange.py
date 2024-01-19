@@ -109,7 +109,7 @@ fltr = np.array([1 if (i>=yearsFilter) else 0 for i in pred.T[0]])
 fig = go.Figure(data=go.Scatter3d(
     x=combos[np.where(fltr)][:,1], 
     y=combos[np.where(fltr)][:,3], 
-    z=combos[np.where(fltr)][:,0],
+    z=combos[np.where(fltr)][:,4],
     customdata=pred[np.where(fltr)],
     mode='markers',
     marker=dict(
@@ -131,6 +131,55 @@ fig.update_layout(
         xaxis = dict(nticks=4, range=[0.80, 1.00],),
         yaxis = dict(nticks=4, range=[0.00, 0.20],),
         zaxis = dict(nticks=4, range=[0.80, 1.00],)
+    )
+)
+# fig.write_html(path.join(PT_IMG_THS, fNameOut+'.html'))
+fig.write_html(path.join('./tmp/', fNameOut+'.html'))
+###############################################################################
+# 3D Plot Results
+###############################################################################   
+delta = 0.01
+(shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
+    np.arange(0.75, 1.00+delta, delta),
+    np.arange(0.80, 1.00+delta, delta),
+    np.arange(0.00, 0.20+delta, delta),
+    np.array([0.80]),
+    np.arange(0.00, 0.25+delta, delta)
+)
+combos = np.array(list(product(*[shcRan, sbcRan, hdrRan, rgrRan, infRan])))
+pred = rf.predict(combos)
+if MOI=='WOP':
+    pred = pred*aux.XRAN[1]/365
+###############################################################################
+# Factorial Evaluation of Model
+###############################################################################
+yearsFilter = 1
+fltr = np.array([1 if (i>=yearsFilter) else 0 for i in pred.T[0]])
+fig = go.Figure(data=go.Scatter3d(
+    x=combos[np.where(fltr)][:,0], 
+    y=combos[np.where(fltr)][:,3]+combos[np.where(fltr)][:,1], 
+    z=combos[np.where(fltr)][:,4],
+    customdata=pred[np.where(fltr)],
+    mode='markers',
+    marker=dict(
+        size=5,
+        color=pred.T[0][np.where(fltr)],
+        colorscale='Purples',
+        opacity=0.25,
+        cmin=yearsFilter,
+        cmax=5
+    ),
+    hovertemplate="sbc:%{x:.3f}<br>rgr:%{y:.3f}<br>shc:%{z:.3f}<br>MOI:%{customdata:.3f}"
+))
+fig.update_layout(
+    scene_aspectmode='cube', # 'cube',
+    scene = dict(
+        xaxis_title='shc',
+        yaxis_title='rgr+sbc',
+        zaxis_title='inf',
+        xaxis = dict(nticks=4, range=[0.75, 1.00],),
+        yaxis = dict(nticks=4, range=[0.80, 1.20],),
+        zaxis = dict(nticks=4, range=[0.00, 0.25],)
     )
 )
 # fig.write_html(path.join(PT_IMG_THS, fNameOut+'.html'))

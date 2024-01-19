@@ -20,7 +20,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.25', 'WOP'
+        'HUM', 'MRT', '50', '0.25', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -37,7 +37,7 @@ delta = 0.005
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
 YEAR_THS = 2
-TICKS_HIDE = True
+TICKS_HIDE = False
 ###############################################################################
 # Paths
 ###############################################################################
@@ -138,29 +138,29 @@ for jx in range(len(INF_RAN)):
     (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
     # Contour levels --------------------------------------------------------------
     if MOI == 'WOP':
-        (zmin, zmax) = (0, 5.5)
-        lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5.5)
+        (zmin, zmax) = (0, 6.5)
+        lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/6.5)
         cntr = [YEAR_THS]
     elif MOI == 'CPT':
         (zmin, zmax) = (0, 1)
-        lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
+        lvls = np.arange(zmin*1, zmax*1.1, (zmax-zmin)/5)
         cntr = [.75]
     elif MOI == 'POE':
         (zmin, zmax) = (0, 1)
-        lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/10)
+        lvls = np.arange(zmin*1, zmax*1.1, (zmax-zmin)/10)
         cntr = [.9]
         lvls = [cntr[0]-.00001, cntr[0]]
     (scalers, HD_DEP, _, _) = aux.selectDepVars(MOI)
     if AOI=='HLT':
-        cmap = monet.generateAlphaColorMapFromColor('#ff006eAA')
+        cmap = monet.generateAlphaColorMapFromColor('#ff006eEE')
     elif AOI=='CSS':
-        cmap = monet.generateAlphaColorMapFromColor('#03045eAA')
+        cmap = monet.generateAlphaColorMapFromColor('#03045eEE')
     elif AOI=='MRT':
-        cmap = monet.generateAlphaColorMapFromColor('#8ac926AA')
+        cmap = monet.generateAlphaColorMapFromColor('#8ac926EE')
     elif AOI=='PRV':
-        cmap = monet.generateAlphaColorMapFromColor('#a2d2ffAA')
+        cmap = monet.generateAlphaColorMapFromColor('#a2d2ffEE')
     else:
-        cmap = monet.generateAlphaColorMapFromColor('#ffb3c6AA')
+        cmap = monet.generateAlphaColorMapFromColor('#ffb3c6EE')
     ###############################################################################
     # Plot
     ###############################################################################
@@ -169,8 +169,10 @@ for jx in range(len(INF_RAN)):
     cc = ax.contour(
         rsS[0], rsS[1], rsS[2], 
         levels=lvls, colors='#2b2d42',
-        linewidths=2, alpha=.9, linestyles='solid'
+        linewidths=2, alpha=.85, linestyles='solid'
     )
+    if not TICKS_HIDE:
+        ax.clabel(cc, cc.levels, inline=True, fontsize=10)
     cs = ax.contourf(
         rsS[0], rsS[1], rsS[2], 
         linewidths=0,
@@ -216,6 +218,9 @@ for jx in range(len(INF_RAN)):
             left=False, labelleft=False, bottom=False, labelbottom=False
         )
         ax.set_axis_off()
+    else:
+        ax.set_xlabel("rgr + sbc")
+        ax.set_ylabel("shc")
     fig.tight_layout()
     ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
     ax.set_facecolor("#00000000")
