@@ -31,7 +31,8 @@ if [ "$MOS" == "True" ]; then
         for exp in ${EXPERIMENTS[*]}; do
             printf "${GREEN}[------------MlrHeatmaps------------]${CLEAR}\n"
             for mtr in ${METRICS[*]}; do
-                python TPP_mlrHeatmaps.py $USR $lnd $exp "LDR" "HLT" $QNT $THS $mtr
+                # python TPP_mlrHeatmaps.py $USR $lnd $exp "LDR" "HLT" $QNT $THS $mtr
+                python TPP_mlrHeatmapsMix.py $USR $lnd $exp "LDR" "HLT" $QNT $THS $mtr
             done
         done
     done
@@ -44,9 +45,12 @@ if [ "$HUM" == "True" ]; then
         for exp in ${EXPERIMENTS[*]}; do
             printf "${GREEN}[------------MlrHeatmaps------------]${CLEAR}\n"
             for mtr in ${METRICS[*]}; do
-                python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "CSS" $QNT $THS $mtr
-                python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "MRT" $QNT $THS $mtr
-                python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "PRV" $QNT $THS $mtr
+                # python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "CSS" $QNT $THS $mtr
+                # python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "MRT" $QNT $THS $mtr
+                # python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "PRV" $QNT $THS $mtr
+                python TPP_mlrHeatmapsMix.py $USR $lnd $exp "HUM" "CSS" $QNT $THS $mtr
+                python TPP_mlrHeatmapsMix.py $USR $lnd $exp "HUM" "MRT" $QNT $THS $mtr
+                python TPP_mlrHeatmapsMix.py $USR $lnd $exp "HUM" "PRV" $QNT $THS $mtr
             done
         done
     done

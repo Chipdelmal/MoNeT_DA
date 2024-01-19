@@ -8,9 +8,7 @@ import numpy as np
 from os import path
 import pandas as pd
 from itertools import product
-import plotly.graph_objs as go
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 from datetime import datetime
 from keras.models import load_model
 import MoNeT_MGDrivE as monet
