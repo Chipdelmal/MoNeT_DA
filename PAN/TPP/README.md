@@ -41,3 +41,7 @@ To generate the whole set of analysis, the following set of bash scripts needs t
 3. Run [`bash TPP_mlrHeatmaps.sh USR MOS_BOOL HUM_BOOL THS`](./TPP_mlrHeatmaps.sh) to generate heatmaps.
     1. [`TPP_mlrHeatmaps.py`](./TPP_mlrHeatmaps.py)
 4. Download files and data from server to local with [`bash TPP_download.sh`](./TPP_download.sh) (paths are hard-coded for convenience).
+
+## Analysis
+
+The main outputs from these analyses are the traces, Keras regression emulators, sensitivity analysis, and heatmaps for the needed variables.
