@@ -31,7 +31,7 @@ HDR_PAR = 0.80
 CHUNKS = JOB
 DEV = False
 C_VAL = True
-delta = 0.01
+delta = 0.005
 # Heatmap parameters ----------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
 (ngdx, ngdy) = (1000, 1000)
@@ -235,7 +235,7 @@ for jx in range(len(INF_RAN)):
         str(int(rgrRan[0]*aux.DATA_SCA['i_rgr'])).zfill(aux.DATA_PAD['i_rgr']),
         str(int(infRan[0]*aux.DATA_SCA['i_inf'])).zfill(aux.DATA_PAD['i_inf'])
     )
-    fName = f'E_{shcName}_X_{hdrName}_X_{infName}'
+    fName = f'E_X_X_{hdrName}_X_{infName}'
     # fName = fName+'-{}_{}_{}Q_{}T-ALT'.format(AOI, MOI, QNT, str(int(float(THS)*100)))
     fName = fName+'-{}_{}_{}Q-ALT'.format(AOI, MOI, QNT)
     # fig.savefig(

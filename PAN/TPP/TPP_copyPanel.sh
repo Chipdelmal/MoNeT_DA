@@ -20,17 +20,14 @@ THRESHOLDS=("25" "33" "50")
 ###############################################################################
 # Purge Loop
 ###############################################################################
+BASE_FILE="/Users/sanchez.hmsc/Documents/WorkSims/TPP/BurkinaFaso/highEIR/ML25/img/heatmaps/PanelMix.svg"
 if [ "$HTM" == "True" ]; then
     for lnd in ${LANDS[*]}; do
         for exp in ${EXPERIMENTS[*]}; do
+            printf "${RED}* Heatmaps: ${CLEAR}${BLUE}${lnd} - ${exp}${CLEAR}\n"
             for ths in ${THRESHOLDS[*]};do
-                printf "${RED}* Heatmaps: ${CLEAR}${BLUE}${lnd} - ${exp}:ML${ths}${CLEAR}\n"
-                if [ "$USR" == "zelda" ]; then
-                    rm /RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png
-                fi
-                if [ "$USR" == "lap" ]; then
                     FPTH="/Users/sanchez.hmsc/Documents/WorkSims/TPP/${lnd}/${exp}/ML${ths}/img/heatmaps/"
-                    find $FPTH -name "*.png" -delete
+                    cp -f $BASE_FILE $FPTH
                 fi
             done
         done
