@@ -126,7 +126,7 @@ for jx in range(len(INF_RAN)):
     )
     rs = monet.calcResponseSurface(
         x, y, z, 
-        scalers=(1, 1, 1), mthd='nearest', 
+        scalers=(1, 1, 1), mthd='linear', 
         xAxis=xSca, yAxis=ySca,
         DXY=(ngdx, ngdy)
     )
