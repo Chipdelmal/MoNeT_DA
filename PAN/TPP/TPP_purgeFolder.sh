@@ -1,7 +1,10 @@
 #!/bin/bash
 
-HTM=$1
+USR=$1
+HTM=$2
 
+# BASE_PATH="/Users/sanchez.hmsc/Documents/WorkSims/TPP"
+# BASE_PATH = '/RAID5/marshallShare/ReplacementTPP/'
 ###############################################################################
 # Constants
 ###############################################################################
@@ -22,8 +25,15 @@ if [ "$HTM" == "True" ]; then
         for exp in ${EXPERIMENTS[*]}; do
             printf "${RED}* Heatmaps: ${CLEAR}${BLUE}${lnd} - ${exp}${CLEAR}\n"
             for ths in ${THRESHOLDS};do
-                rm "/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png"
+                if [ "$USR" == "zelda" ]; then
+                    rm /RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png
+                fi
+                if [ "$USR" == "lap" ]; then
+                    rm '/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png'
+                fi
             done
         done
     done
 fi
+
+

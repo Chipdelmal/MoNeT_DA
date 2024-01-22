@@ -31,13 +31,13 @@ HDR_PAR = 0.80
 CHUNKS = JOB
 DEV = False
 C_VAL = True
-delta = 0.005
+delta = 0.01
 # Heatmap parameters ----------------------------------------------------------
 (xSca, ySca) = ('linear', 'linear')
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
 YEAR_THS = 2
-TICKS_HIDE = False
+TICKS_HIDE = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -121,8 +121,8 @@ for jx in range(len(INF_RAN)):
         pred
     )
     (xMin, yMin) = (
-        min([i for i in sorted(list(set(x))) if i>0]),
-        min([i for i in sorted(list(set(y))) if i>0])
+        min([i for i in sorted(list(set(x))) if (i>0)]),
+        min([i for i in sorted(list(set(y))) if (i>0)])
     )
     rs = monet.calcResponseSurface(
         x, y, z, 
@@ -138,8 +138,8 @@ for jx in range(len(INF_RAN)):
     (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
     # Contour levels --------------------------------------------------------------
     if MOI == 'WOP':
-        (zmin, zmax) = (0, 6.5)
-        lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/6.5)
+        (zmin, zmax) = (0, 5.5)
+        lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5.5)
         cntr = [YEAR_THS]
     elif MOI == 'CPT':
         (zmin, zmax) = (0, 1)
@@ -156,9 +156,9 @@ for jx in range(len(INF_RAN)):
     elif AOI=='CSS':
         cmap = monet.generateAlphaColorMapFromColor('#03045eEE')
     elif AOI=='MRT':
-        cmap = monet.generateAlphaColorMapFromColor('#8ac926EE')
+        cmap = monet.generateAlphaColorMapFromColor('#8338ecEE')
     elif AOI=='PRV':
-        cmap = monet.generateAlphaColorMapFromColor('#a2d2ffEE')
+        cmap = monet.generateAlphaColorMapFromColor('#3a6ea5EE')
     else:
         cmap = monet.generateAlphaColorMapFromColor('#ffb3c6EE')
     ###############################################################################
@@ -236,7 +236,8 @@ for jx in range(len(INF_RAN)):
         str(int(infRan[0]*aux.DATA_SCA['i_inf'])).zfill(aux.DATA_PAD['i_inf'])
     )
     fName = f'E_{shcName}_X_{hdrName}_X_{infName}'
-    fName = fName+'-{}_{}_{}Q_{}T-ALT'.format(AOI, MOI, QNT, str(int(float(THS)*100)))
+    # fName = fName+'-{}_{}_{}Q_{}T-ALT'.format(AOI, MOI, QNT, str(int(float(THS)*100)))
+    fName = fName+'-{}_{}_{}Q-ALT'.format(AOI, MOI, QNT)
     # fig.savefig(
     #     path.join('./tmp/', f'{fName}.png'), 
     #     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
