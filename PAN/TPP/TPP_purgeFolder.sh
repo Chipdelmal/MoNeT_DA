@@ -29,7 +29,8 @@ if [ "$HTM" == "True" ]; then
                     rm /RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png
                 fi
                 if [ "$USR" == "lap" ]; then
-                    rm '/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png'
+                    FPTH="/Users/sanchez.hmsc/Documents/WorkSims/TPP/${lnd}/${exp}/ML${ths}/img/heatmaps/"
+                    find $FPTH -name "*.png" -delete
                 fi
             done
         done
@@ -37,3 +38,5 @@ if [ "$HTM" == "True" ]; then
 fi
 
 
+
+# "/Users/sanchez.hmsc/Documents/WorkSims/TPP/BurkinaFaso/highEIR/ML25/img/heatmaps"
