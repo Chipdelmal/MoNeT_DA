@@ -39,8 +39,12 @@ To generate the whole set of analysis, the following set of bash scripts needs t
 2. Run [`bash TPP_mlrCrunch.sh USR MOS_BOOL HUM_BOOL THS`](./TPP_mlrCrunch.sh) to train Keras models.
     1. [`TPP_mlrTrainKeras.py`](./TPP_mlrTrainKeras.py)
 3. Run [`bash TPP_mlrHeatmaps.sh USR MOS_BOOL HUM_BOOL THS`](./TPP_mlrHeatmaps.sh) to generate heatmaps.
-    1. [`TPP_mlrHeatmaps.py`](./TPP_mlrHeatmaps.py)
+    1. [`TPP_mlrHeatmaps.py`](./TPP_mlrHeatmaps.py) or [`TPP_mlrHeatmapsMix.py`](./TPP_mlrHeatmapsMix.py)
 4. Download files and data from server to local with [`bash TPP_download.sh`](./TPP_download.sh) (paths are hard-coded for convenience).
+5. Modify `PanelMix.svg` in the `/TPP/BurkinaFaso/highEIR/ML25/img/heatmaps/` directory as needed.
+6. Run [`bash TPP_copyPanel.sh`](./TPP_copyPanel.sh) to copy the master `SVG` file and export panels in their respective directories.
+    1. `cp -f $BASE_FILE $FPTH`
+    2. `/Applications/Inkscape.app/Contents/MacOS/inkscape "${FPTH}/PanelMix.svg" --export-filename="${FPTH}/PanelMix-Auto.png" -b "white"`
 
 ## Analysis
 
