@@ -102,7 +102,7 @@ rf = load_model(mdlPath)
 (ix, jx) = (-3, 0)
 for jx in range(len(INF_RAN)):
     (shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
-        np.arange(0.75, 1.00+delta, delta),
+        np.arange(0.80, 1.00+delta, delta),
         np.arange(0.80, 1.00+delta, delta),
         np.arange(0.00, 0.20+delta, delta),
         np.array([HDR_PAR]),
@@ -202,6 +202,14 @@ for jx in range(len(INF_RAN)):
         ax.axes.yaxis.set_ticklabels(sorted(set(y)))
     ax.grid(which='major', axis='x', lw=.1, alpha=0.3, color=(0, 0, 0))
     ax.grid(which='major', axis='y', lw=.1, alpha=0.3, color=(0, 0, 0))
+    ax.vlines(
+        np.arange(ran[0][0], ran[0][1], .05), ran[1][0], ran[1][1],  
+        color="#55555588", lw=0.5
+    ) 
+    ax.hlines(
+        np.arange(ran[1][0], ran[1][1], .05), ran[0][0], ran[0][1],  
+        color="#55555588", lw=0.5
+    ) 
     # Axes scales and limits --------------------------------------------------
     ax.set_xscale(xSca)
     ax.set_yscale(ySca)
@@ -222,7 +230,8 @@ for jx in range(len(INF_RAN)):
         ax.set_xlabel("rgr + sbc")
         ax.set_ylabel("shc")
     fig.tight_layout()
-    ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
+    # ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
+    ax.set_aspect('equal')
     ax.set_facecolor("#00000000")
     ###############################################################################
     # Export File
