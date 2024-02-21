@@ -14,12 +14,17 @@ from keras.models import load_model
 import MoNeT_MGDrivE as monet
 import TPP_aux as aux
 import TPP_gene as drv
+import TPP_mlrMethods as mth
 
-(USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
-        'zelda',
-        'BurkinaFaso', 'highEIR',
-        'HUM', 'CSS', '50', '0.33', 'WOP'
+if monet.isNotebook():
+    (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
+        'zelda', 
+        'BurkinaFaso', 'highEIR', 
+        'HUM', 'MRT', '50', '0.25', 'WOP'
     )
+else:
+    (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
+    QNT = (None if (QNT=='None') else QNT)
 HDR_PAR = 0.80
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 2, 1000)
@@ -61,6 +66,7 @@ if QNT:
     fName = 'SCA_{}_{}Q_{}T.csv'.format(AOI, int(QNT), int(float(THS)*100))
 else:
     fName = 'SCA_{}_{}T_MLR.csv'.format(AOI, int(float(THS)*100))
+df = pd.read_csv(path.join(PT_OUT, fName))
 ###############################################################################
 # Read Model
 ###############################################################################
