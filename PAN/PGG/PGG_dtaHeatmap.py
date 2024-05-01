@@ -107,7 +107,7 @@ fltr = {
     'i_ren': 12.0,
     'i_res': 1.0,
     'i_rei': 7,
-    'i_mtf': 0.5,
+    'i_mtf': 0.375,
     'i_grp': 0.0
 }
 [fltr.pop(i) for i in HD_IND]
