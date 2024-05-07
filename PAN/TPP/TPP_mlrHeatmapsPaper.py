@@ -37,7 +37,7 @@ delta = 0.005
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
 YEAR_THS = 2
-TICKS_HIDE = False
+TICKS_HIDE = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -56,7 +56,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 # Time and head ---------------------------------------------------------------
 tS = datetime.now()
 monet.printExperimentHead(
-    PT_OUT, PT_OUT_THS, tS, 
+    PT_OUT, PT_IMG_THS, tS, 
     '{} mlrHeatmaps [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
 )
 ###############################################################################
@@ -245,9 +245,10 @@ for ix in range(len(SHC_RAN)):
             str(int(rgrRan[0]*aux.DATA_SCA['i_rgr'])).zfill(aux.DATA_PAD['i_rgr']),
             str(int(infRan[0]*aux.DATA_SCA['i_inf'])).zfill(aux.DATA_PAD['i_inf'])
         )
-        fName = f'NE_X_X_{hdrName}_X_{infName}'
+        fName = f'* NE_X_X_{hdrName}_X_{infName}'
         # fName = fName+'-{}_{}_{}Q_{}T-ALT'.format(AOI, MOI, QNT, str(int(float(THS)*100)))
-        fName = fName+'-{}_{}_{}Q-ALT'.format(AOI, MOI, QNT)
+        fName = fName+'-{}_{}_{}Q'.format(AOI, MOI, QNT)
+        print(fName)
         # fig.savefig(
         #     path.join('./tmp/', f'{fName}.png'), 
         #     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
