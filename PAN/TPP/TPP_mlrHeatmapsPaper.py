@@ -96,7 +96,7 @@ rf = load_model(mdlPath)
 # Factorial Evaluation of Model
 ###############################################################################
 (SHC_RAN, INF_RAN) = (
-    np.arange(0.8, 1.01, .1),
+    np.arange(0.8, 1.01, .05),
     np.arange(0, .31, .1)
 )
 (ix, jx) = (-2, 0)
@@ -245,14 +245,10 @@ for ix in range(len(SHC_RAN)):
             str(int(rgrRan[0]*aux.DATA_SCA['i_rgr'])).zfill(aux.DATA_PAD['i_rgr']),
             str(int(infRan[0]*aux.DATA_SCA['i_inf'])).zfill(aux.DATA_PAD['i_inf'])
         )
-        fName = f'* NE_X_X_{hdrName}_X_{infName}'
-        # fName = fName+'-{}_{}_{}Q_{}T-ALT'.format(AOI, MOI, QNT, str(int(float(THS)*100)))
-        fName = fName+'-{}_{}_{}Q'.format(AOI, MOI, QNT)
-        print(fName)
-        # fig.savefig(
-        #     path.join('./tmp/', f'{fName}.png'), 
-        #     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
-        # )
+        fName = f'NE_X_{shcName}_{hdrName}_X_{infName}'
+        fName = fName+'-{}_{}_{}Q_{}T'.format(AOI, MOI, QNT, str(int(float(THS)*100)))
+        # fName = fName+'-{}_{}_{}Q'.format(AOI, MOI, QNT)
+        print(f'* {fName}')
         fig.savefig(
             path.join(PT_IMG_THS, f'{fName}.png'), 
             dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
