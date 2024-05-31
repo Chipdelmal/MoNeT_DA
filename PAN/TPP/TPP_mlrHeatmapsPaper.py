@@ -1,8 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' 
 import sys
 import numpy as np
 from os import path
@@ -19,7 +17,7 @@ import TPP_mlrMethods as mth
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'BurkinaFaso', 'highEIR', 
+        'BurkinaFaso', 'lowEIR', 
         'HUM', 'MRT', '50', '0.5', 'WOP'
     )
 else:
@@ -57,7 +55,7 @@ PT_SUMS = path.join(PT_ROT, 'SUMMARY')
 tS = datetime.now()
 monet.printExperimentHead(
     PT_OUT, PT_IMG_THS, tS, 
-    '{} mlrHeatmaps [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
+    '{} mlrHeatmapsPaper [{}:{}:{}:{}]'.format(DRV, AOI, QNT, THS, MOI)
 )
 ###############################################################################
 # Read Dataframe
@@ -140,6 +138,10 @@ for ix in range(len(SHC_RAN)):
         # Contour levels ----------------------------------------------------------
         if MOI == 'WOP':
             (zmin, zmax) = (0, 6.5)
+            lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/6.5)
+            cntr = [YEAR_THS]
+        if MOI == 'TTI':
+            (zmin, zmax) = (0, 1.5)
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/6.5)
             cntr = [YEAR_THS]
         elif MOI == 'CPT':

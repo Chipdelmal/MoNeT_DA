@@ -48,9 +48,9 @@ if [ "$HUM" == "True" ]; then
                 # python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "CSS" $QNT $THS $mtr
                 # python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "MRT" $QNT $THS $mtr
                 # python TPP_mlrHeatmaps.py $USR $lnd $exp "HUM" "PRV" $QNT $THS $mtr
-                python TPP_mlrHeatmapsMix.py $USR $lnd $exp "HUM" "CSS" $QNT $THS $mtr
-                python TPP_mlrHeatmapsMix.py $USR $lnd $exp "HUM" "MRT" $QNT $THS $mtr
-                python TPP_mlrHeatmapsMix.py $USR $lnd $exp "HUM" "PRV" $QNT $THS $mtr
+                python TPP_mlrHeatmapsPaper.py $USR $lnd $exp "HUM" "CSS" $QNT $THS $mtr
+                python TPP_mlrHeatmapsPaper.py $USR $lnd $exp "HUM" "MRT" $QNT $THS $mtr
+                python TPP_mlrHeatmapsPaper.py $USR $lnd $exp "HUM" "PRV" $QNT $THS $mtr
             done
         done
     done
