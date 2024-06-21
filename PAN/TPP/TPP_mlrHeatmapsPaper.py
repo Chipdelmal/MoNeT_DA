@@ -18,7 +18,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'lowEIR', 
-        'HUM', 'MRT', '50', '0.5', 'WOP'
+        'HUM', 'MRT', '50', '0.5', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -97,7 +97,7 @@ rf = load_model(mdlPath)
     np.arange(0.8, 1.01, .05),
     np.arange(0, .31, .1)
 )
-(ix, jx) = (-2, 0)
+(ix, jx) = (-2, -2)
 for ix in range(len(SHC_RAN)):
     for jx in range(len(INF_RAN)):
         (shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
@@ -109,7 +109,7 @@ for ix in range(len(SHC_RAN)):
         )
         combos = np.array(list(product(*[shcRan, sbcRan, hdrRan, rgrRan, infRan])))
         pred = rf.predict(combos, verbose=0)
-        if MOI=='WOP':
+        if (MOI=='WOP') or (MOI=='TTI'):
             pred = pred*aux.XRAN[1]/365
         ###########################################################################
         # Generate response surface
@@ -119,6 +119,7 @@ for ix in range(len(SHC_RAN)):
             list(combos.T[1]),  
             pred
         )
+        # print(np.min(z), np.max(z))
         (xMin, yMin) = (
             min([i for i in sorted(list(set(x))) if (i>0)]),
             min([i for i in sorted(list(set(y))) if (i>0)])
@@ -141,8 +142,9 @@ for ix in range(len(SHC_RAN)):
             lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/6.5)
             cntr = [YEAR_THS]
         if MOI == 'TTI':
-            (zmin, zmax) = (0, 1.5)
-            lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/6.5)
+            (zmin, zmax) = (0, 1.25)
+            lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
+            lvls = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
             cntr = [YEAR_THS]
         elif MOI == 'CPT':
             (zmin, zmax) = (0, 1)
