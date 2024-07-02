@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import sys
 import numpy as np
 from os import path
@@ -146,7 +145,7 @@ for ix in range(len(SHC_RAN)):
             # lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
             lvls = [1/4, 2/4, 3/4, 4/4, 2, 3, 4, 5]
             cntr = [YEAR_THS]
-            toffset = (435 if LND=='BurkinaFaso' else 416)
+            toffset = (435/365 if LND=='BurkinaFaso' else 416/365)
             z = z-toffset
         elif MOI == 'CPT':
             (zmin, zmax) = (0, 1)
