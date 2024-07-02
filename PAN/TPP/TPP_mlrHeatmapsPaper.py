@@ -143,9 +143,11 @@ for ix in range(len(SHC_RAN)):
             cntr = [YEAR_THS]
         if MOI == 'TTI':
             (zmin, zmax) = (0, 1.25)
-            lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
-            lvls = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+            # lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
+            lvls = [1/4, 2/4, 3/4, 4/4, 2, 3, 4, 5]
             cntr = [YEAR_THS]
+            toffset = (435 if LND=='BurkinaFaso' else 416)
+            z = z-toffset
         elif MOI == 'CPT':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1.1, (zmax-zmin)/5)
