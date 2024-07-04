@@ -2,7 +2,7 @@
 
 MLR=$1
 HTM=$2
-BASE_PATH="/Users/sanchez.hmsc/Documents/WorkSims/TPP"
+BASE_PATH="/Users/chipdelmal/Documents/WorkSims/TPP_New"
 ###############################################################################
 # Constants
 ###############################################################################
@@ -12,9 +12,9 @@ CLEAR='\033[0m'
 RED='\033[0;31m'
 WHITE='\033[0;37m'
 # -----------------------------------------------------------------------------
-LANDS=("BurkinaFaso" "Kenya")
+LANDS=("BurkinaFaso" "Kenya") # "Kenya")
 EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
-THRESHOLDS=("25" "33" "50")
+THRESHOLDS=("50") # "25" "33" 
 ###############################################################################
 # ML Download Loop
 ###############################################################################
@@ -24,7 +24,8 @@ if [ "$MLR" == "True" ]; then
         for exp in ${EXPERIMENTS[*]}; do
             printf "${RED}* ML Regression: ${CLEAR}${BLUE}${lnd} - ${exp}${CLEAR}\n"
             mkdir -p "${BASE_PATH}/${lnd}/${exp}/"
-            scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/img/dtaTraces[0-9][0-9]/" "${BASE_PATH}/${lnd}/${exp}/img/"
+            scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/img/dtaTraces50/" "${BASE_PATH}/${lnd}/${exp}/img/"
+            # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/img/dtaTraces[0-9][0-9]/" "${BASE_PATH}/${lnd}/${exp}/img/"
             # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML*/" "${BASE_PATH}/${lnd}/${exp}/"
             # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/SUMMARY/" "${BASE_PATH}/${lnd}/${exp}/"
         done
