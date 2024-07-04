@@ -118,6 +118,7 @@ for ix in range(len(SHC_RAN)):
             list(combos.T[1]),  
             pred
         )
+        y = [2*(1-i) for i in y]
         # print(np.min(z), np.max(z))
         (xMin, yMin) = (
             min([i for i in sorted(list(set(x))) if (i>0)]),
