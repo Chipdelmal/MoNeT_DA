@@ -29,11 +29,11 @@ def driveSelector(DRIVE, TYPE, popSize=(int(50e6*2.5)), humSize=10000):
     elif TYPE == 'WLD':
         colors = monet.COLWN
     elif TYPE == 'CSS':
-        colors = ['#D1C87A22', '#CA5E5022', '#DBC3A800']
+        colors = ['#D1C87A22', '#CA5E5022', '#43486988']
     elif TYPE == 'MRT':
-        colors = ['#6E855C22', '#56799322', '#DBC3A800']
+        colors = ['#6E855C22', '#56799322', '#43486988']
     elif TYPE == 'PRV':
-        colors = ['#F1B15222', '#80A08E22', '#9FC4E501']
+        colors = ['#F1B15222', '#80A08E22', '#43486988']
     ###########################################################################
     geneDict = {
         'gDict': aggD, 'yRange': yRange, 

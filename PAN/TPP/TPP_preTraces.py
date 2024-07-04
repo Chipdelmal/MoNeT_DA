@@ -52,10 +52,11 @@ else:
     YRAN = aux.getHumanRange(AOI)
 CLR = drive.get('colors')
 STYLE = {
-    "width": 0.5, "alpha": .005, "dpi": 750, "aspect": 1/5, 
+    "width": 2, "alpha": .015, "dpi": 300, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN)
 }
+STYLE['aspect'] = monet.scaleAspect(0.3, STYLE)
 ###############################################################################
 # Load preprocessed files lists
 ###############################################################################

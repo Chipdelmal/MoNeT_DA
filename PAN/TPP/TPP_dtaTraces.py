@@ -11,7 +11,7 @@ warnings.filterwarnings("ignore")
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = (
-        'zelda', 'Kenya', 'highEIR', 'LDR', 'HLT', '50', '0.1', 'HLT'
+        'zelda', 'Kenya', 'highEIR', 'HUM', 'CSS', '50', '0.1', 'CSS'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
@@ -60,7 +60,7 @@ if DRV != 'HUM':
 else:
     YRAN = aux.getHumanRange(AOI)
 STYLE = {
-    "width": 0.5, "alpha": .005, "dpi": 300, "aspect": 1/5, 
+    "width": 2, "alpha": .015, "dpi": 300, "aspect": 1/5, 
     "colors": CLR, "legend": True,
     "xRange": aux.XRAN, "yRange": (0, YRAN)
 }

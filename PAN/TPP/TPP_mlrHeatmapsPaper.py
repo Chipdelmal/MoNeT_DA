@@ -17,7 +17,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'lowEIR', 
-        'HUM', 'MRT', '50', '0.5', 'TTI'
+        'HUM', 'MRT', '50', '0.5', 'WOP'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -34,7 +34,7 @@ delta = 0.005
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
 YEAR_THS = 2
-TICKS_HIDE = True
+TICKS_HIDE = False
 ###############################################################################
 # Paths
 ###############################################################################
