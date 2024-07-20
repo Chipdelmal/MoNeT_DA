@@ -34,7 +34,7 @@ if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
         'BurkinaFaso', 'highEIR', 
-        'LDR', 'HLT', '50', '0.25', 'TTI'
+        'HUM', 'CSS', '50', '0.50', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -73,6 +73,10 @@ if QNT:
 else:
     fName = 'SCA_{}_{}T_MLR.csv'.format(AOI, int(float(THS)*100))
 df = pd.read_csv(path.join(PT_OUT, fName))
+if MOI=='TTI':
+    df = df[
+        df['TTI']<df['TTO']
+    ]
 ###############################################################################
 # Split I/O
 ###############################################################################
@@ -167,7 +171,7 @@ scoresFinal = {
 scoresFinal['r2Adj'] = mth.adjRSquared(
     scoresFinal['r2'], y_pred.shape[0], X_train.shape[1]
 )
-# print(scoresFinal)
+print(scoresFinal)
 # Cross-validate --------------------------------------------------------------
 if C_VAL:
     cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
@@ -231,7 +235,7 @@ plt.savefig(
 ###############################################################################
 # PDP/ICE Plots
 ###############################################################################
-SAMP_NUM = 1000
+SAMP_NUM = 2000
 clr = aux.selectColor(MOI)
 X_plots = np.copy(X_train)
 np.random.shuffle(X_plots)
