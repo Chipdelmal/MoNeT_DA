@@ -16,8 +16,8 @@ import TPP_mlrMethods as mth
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'BurkinaFaso', 'lowEIR', 
-        'HUM', 'MRT', '50', '0.5', 'WOP'
+        'Kenya', 'lowEIR', 
+        'HUM', 'CSS', '50', '0.5', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -96,7 +96,7 @@ rf = load_model(mdlPath)
     np.arange(0.8, 1.01, .05),
     np.arange(0, .31, .1)
 )
-(ix, jx) = (-2, -2)
+(ix, jx) = (-4, -2)
 for ix in range(len(SHC_RAN)):
     for jx in range(len(INF_RAN)):
         (shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
