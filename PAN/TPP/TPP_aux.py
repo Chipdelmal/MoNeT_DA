@@ -170,6 +170,8 @@ def selectPath(USR, LND, EXP):
         PATH_ROOT = f'/RAID5/marshallShare/ReplacementTPP/{LND}/{EXP}/'
     elif USR == 'dsk':
         PATH_ROOT = f'/RAID5/marshallShare/ReplacementTPP/{LND}/{EXP}/'
+    elif USR == 'zeldaNew':
+        PATH_ROOT = f'/RAID5/marshallShare/ReplacementTPP_Recoded/{LND}/{EXP}/'
     (PATH_IMG, PATH_DATA) = (
         '{}img/'.format(PATH_ROOT), 
         '{}'.format(PATH_ROOT)

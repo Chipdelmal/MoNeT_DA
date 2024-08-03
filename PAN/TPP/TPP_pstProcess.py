@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import warnings
-warnings.filterwarnings("ignore")
+
 import sys
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 from glob import glob
 import TPP_aux as aux
@@ -13,9 +14,10 @@ import MoNeT_MGDrivE as monet
 from more_itertools import locate
 from joblib import Parallel, delayed
 
+
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT) = (
-        'zelda', 'BurkinaFaso', 'highEIR', 'LDR', 'HLT', '50'
+        'zelda', 'Kenya', 'highEIR', 'LDR', 'HLT', '50'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT) = sys.argv[1:]

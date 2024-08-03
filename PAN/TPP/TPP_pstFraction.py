@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI) = (
-        'zelda', 'Kenya', 'highEIR', 'HUM', 'CSS'
+        'zeldaNew', 'Kenya', 'highEIR', 'LDR', 'HLT'
     )
 else:
     (USR, LND, EXP, DRV, AOI) = sys.argv[1:]

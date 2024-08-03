@@ -104,10 +104,10 @@ monet.exportGeneLegend(
 
 
 
-lnd = pkl.load(fLists[1000][-1])['landscapes']
-for i in range(len(lnd)):
-    plt.plot(lnd[i])
-plt.ylim(0, YRAN)
-plt.close()
+# lnd = pkl.load(fLists[1000][-1])['landscapes']
+# for i in range(len(lnd)):
+#     plt.plot(lnd[i])
+# plt.ylim(0, YRAN)
+# plt.close()
 
 # np.max(pkl.load(fLists[-1][0])['population'], axis=0)
