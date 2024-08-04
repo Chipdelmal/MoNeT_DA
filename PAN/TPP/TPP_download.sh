@@ -22,11 +22,11 @@ if [ "$MLR" == "True" ]; then
     for lnd in ${LANDS[*]}; do
         mkdir -p "${BASE_PATH}/${lnd}"
         for exp in ${EXPERIMENTS[*]}; do
-            printf "${RED}* ML Regression: ${CLEAR}${BLUE}${lnd} - ${exp}${CLEAR}\n"
+            printf "${RED}* ML Regression: ${CLEAR}${BLUE}${lnd} - ${exp}${CLEAR} [${BASE_PATH}/${lnd}/${exp}/]\n"
             mkdir -p "${BASE_PATH}/${lnd}/${exp}/"
-            scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/img/dtaTraces50/" "${BASE_PATH}/${lnd}/${exp}/img/"
+            # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/img/dtaTraces50/" "${BASE_PATH}/${lnd}/${exp}/img/"
             # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/img/dtaTraces[0-9][0-9]/" "${BASE_PATH}/${lnd}/${exp}/img/"
-            # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML*/" "${BASE_PATH}/${lnd}/${exp}/"
+            scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML*/" "${BASE_PATH}/${lnd}/${exp}/"
             # scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/SUMMARY/" "${BASE_PATH}/${lnd}/${exp}/"
         done
     done
