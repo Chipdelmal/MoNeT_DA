@@ -49,7 +49,7 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
             rf = KerasRegressor(build_fn=build_model, verbose=0)
         elif (MOI=='TTI') or (MOI=='TTO'):
             print("* TTI/TTO Topology")
-            (batchSize, epochs) = (128, 250)
+            (batchSize, epochs) = (128, 1000)
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
@@ -81,15 +81,15 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
                 rf = Sequential()
                 rf.add(Dense(
                     16, activation= "tanh", input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
-                    32, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
+                    16, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
-                    32, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=2.25e-4)
+                    16, activation= "tanh",
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'

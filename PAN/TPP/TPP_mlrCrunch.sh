@@ -14,10 +14,10 @@ CLEAR='\033[0m'
 RED='\033[0;31m'
 WHITE='\033[0;37m'
 # -----------------------------------------------------------------------------
-LANDS=("Kenya") # "BurkinaFaso")
-EXPERIMENTS=("highEIR") # "medEIR" "lowEIR")
-METRICS=("CPT" "WOP" "TTI")
-METRICS_SUM=("CPT" "WOP" "TTI")
+LANDS=("Kenya" "BurkinaFaso")
+EXPERIMENTS=("highEIR" "medEIR" "lowEIR")
+METRICS=("TTI") # "CPT" "WOP" )
+METRICS_SUM=("TTI") # "CPT" "WOP" )
 ###############################################################################
 # Setup Path
 ###############################################################################

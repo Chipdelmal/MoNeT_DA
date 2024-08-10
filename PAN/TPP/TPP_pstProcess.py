@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
 import sys
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
