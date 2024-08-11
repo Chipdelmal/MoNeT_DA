@@ -53,16 +53,12 @@ def selectMLKeras(MOI, QNT='50', inDims=8):
             def build_model():
                 rf = Sequential()
                 rf.add(Dense(
-                    16, activation= "tanh", input_dim=inDims,
-                    kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
+                    32, activation= "tanh", input_dim=inDims,
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
                     32, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
-                ))
-                rf.add(Dense(
-                    32, activation= "LeakyReLU",
-                    kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
+                    kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
                 ))
                 rf.add(Dense(
                     1, activation='sigmoid'
