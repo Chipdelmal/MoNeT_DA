@@ -13,10 +13,11 @@ import TPP_aux as aux
 import TPP_gene as drv
 import TPP_mlrMethods as mth
 
+
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'Kenya', 'lowEIR', 
+        'BurkinaFaso', 'highEIR', 
         'HUM', 'CSS', '50', '0.5', 'TTI'
     )
 else:
@@ -33,8 +34,8 @@ delta = 0.005
 (xSca, ySca) = ('linear', 'linear')
 (ngdx, ngdy) = (1000, 1000)
 scalers = [1, 1, 1]
-YEAR_THS = 2
-TICKS_HIDE = False
+YEAR_THS = 0
+TICKS_HIDE = True
 ###############################################################################
 # Paths
 ###############################################################################
@@ -96,7 +97,7 @@ rf = load_model(mdlPath)
     np.arange(0.8, 1.01, .05),
     np.arange(0, .31, .1)
 )
-(ix, jx) = (-4, -2)
+(ix, jx) = (2, 1)
 for ix in range(len(SHC_RAN)):
     for jx in range(len(INF_RAN)):
         (shcRan, sbcRan, rgrRan, hdrRan, infRan) = (
@@ -119,6 +120,9 @@ for ix in range(len(SHC_RAN)):
             pred
         )
         y = [2*(1-i) for i in y]
+        if MOI=='TTI':
+            toffset = (435/365 if LND=='BurkinaFaso' else 416/365)
+            z = z-toffset
         # print(np.min(z), np.max(z))
         (xMin, yMin) = (
             min([i for i in sorted(list(set(x))) if (i>0)]),
@@ -138,16 +142,16 @@ for ix in range(len(SHC_RAN)):
         (ran, rsG, rsS) = (rs['ranges'], rs['grid'], rs['surface'])
         # Contour levels ----------------------------------------------------------
         if MOI == 'WOP':
-            (zmin, zmax) = (0, 6.5)
-            lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/6.5)
+            (zmin, zmax) = (0, 5.5)
+            lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5.5)
             cntr = [YEAR_THS]
         if MOI == 'TTI':
-            (zmin, zmax) = (0, 1.25)
+            (zmin, zmax) = (0, 1.)
             # lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
-            lvls = [1/4, 2/4, 3/4, 4/4, 2, 3, 4, 5]
+            lvls = [
+                1/4, 2/4, 3/4, 4/4,
+            ]
             cntr = [YEAR_THS]
-            toffset = (435/365 if LND=='BurkinaFaso' else 416/365)
-            z = z-toffset
         elif MOI == 'CPT':
             (zmin, zmax) = (0, 1)
             lvls = np.arange(zmin*1, zmax*1.1, (zmax-zmin)/5)
@@ -184,7 +188,7 @@ for ix in range(len(SHC_RAN)):
             rsS[0], rsS[1], rsS[2], 
             linewidths=0,
             levels=lvls, cmap=cmap, extend='max',
-            vmin=YEAR_THS-1
+            vmin=0
         )
         cs.cmap.set_under('#ffffff00')
         # Color bar ---------------------------------------------------------------
@@ -259,4 +263,4 @@ for ix in range(len(SHC_RAN)):
             path.join(PT_IMG_THS, f'{fName}.png'), 
             dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
         )
-        plt.close('all')
+        # plt.close('all')
