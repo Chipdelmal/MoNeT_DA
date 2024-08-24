@@ -41,7 +41,7 @@ if [ "$HTM" == "True" ]; then
             for ths in ${THRESHOLDS[*]};do
                 printf "${RED}* Heatmaps: ${CLEAR}${BLUE}${lnd} - ${exp}:ML${ths}${CLEAR}\n"
                 mkdir -p "${BASE_PATH}/${lnd}/${exp}/ML${ths}/img/heatmaps/"
-                scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*.png" "${BASE_PATH}/${lnd}/${exp}/ML${ths}/img/heatmaps/"
+                scp -q -r zelda:"/RAID5/marshallShare/ReplacementTPP/${lnd}/${exp}/ML${ths}/img/heatmaps/*TTI*.png" "${BASE_PATH}/${lnd}/${exp}/ML${ths}/img/heatmaps/"
             done
         done
     done
