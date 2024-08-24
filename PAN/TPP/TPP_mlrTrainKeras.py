@@ -33,7 +33,7 @@ import TPP_mlrMethods as mth
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'Kenya', 'lowEIR', 
+        'BurkinaFaso', 'highEIR', 
         'HUM', 'CSS', '50', '0.50', 'TTI'
     )
 else:

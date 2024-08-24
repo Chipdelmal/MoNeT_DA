@@ -17,7 +17,7 @@ import TPP_mlrMethods as mth
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'BurkinaFaso', 'highEIR', 
+        'Kenya', 'highEIR', 
         'HUM', 'CSS', '50', '0.5', 'TTI'
     )
 else:
@@ -69,9 +69,14 @@ df = pd.read_csv(path.join(PT_OUT, fName))
 # Read Model
 ###############################################################################
 modID = 'krs'
-fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
-    AOI, int(QNT), int(float(THS)*100), MOI, modID
-)
+if (MOI=='TTI' and (EXP=='medEIR' or EXP=='lowEIR')):
+    fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+        'MRT', int(QNT), int(float(THS)*100), MOI , modID
+    )
+else:
+    fNameOut = '{}_{}Q_{}T_{}-{}-MLR'.format(
+        AOI, int(QNT), int(float(THS)*100), MOI, modID
+    )
 mdlPath = path.join(PT_OUT_THS, fNameOut)
 rf = load_model(mdlPath)
 ###############################################################################
@@ -123,7 +128,7 @@ for ix in range(len(SHC_RAN)):
         if MOI=='TTI':
             toffset = (435/365 if LND=='BurkinaFaso' else 416/365)
             z = z-toffset
-        # print(np.min(z), np.max(z))
+        print(np.min(z), np.max(z))
         (xMin, yMin) = (
             min([i for i in sorted(list(set(x))) if (i>0)]),
             min([i for i in sorted(list(set(y))) if (i>0)])
@@ -149,7 +154,7 @@ for ix in range(len(SHC_RAN)):
             (zmin, zmax) = (0, 1.)
             # lvls = np.arange(zmin*1, zmax*1, (zmax-zmin)/5)
             lvls = [
-                1/4, 2/4, 3/4, 4/4,
+                1/6, 2/6, 3/6, 4/6, 5/6, 6/6
             ]
             cntr = [YEAR_THS]
         elif MOI == 'CPT':
