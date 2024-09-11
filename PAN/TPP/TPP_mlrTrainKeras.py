@@ -33,7 +33,7 @@ import TPP_mlrMethods as mth
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'BurkinaFaso', 'highEIR', 
+        'Kenya', 'medEIR', 
         'HUM', 'CSS', '50', '0.50', 'TTI'
     )
 else:
@@ -42,8 +42,8 @@ else:
 # Setup number of threads -----------------------------------------------------
 (DATASET_SAMPLE, VERBOSE, JOB, FOLDS, SAMPLES) = (1, 0, 20, 2, 1000)
 CHUNKS = JOB
-DEV = False
-C_VAL = True
+DEV = True
+C_VAL = False
 ###############################################################################
 # Paths
 ###############################################################################
@@ -104,28 +104,28 @@ scoring = [
 ###############################################################################
 if DEV:
     print("* DEVELOPMENT Topology")
-    (batchSize, epochs) = (128, 300)
+    (batchSize, epochs) = (32, 1000)
     def build_model():
         rf = Sequential()
+        # rf.add(Dense(
+        #     8, activation= "tanh", input_dim=inDims,
+        #     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+        # ))
         rf.add(Dense(
-            16, activation= "tanh", input_dim=inDims,
-            kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
+            8, activation= "LeakyReLU", input_dim=inDims,
+            kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         ))
-        rf.add(Dense(
-            32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
-        ))
-        rf.add(Dense(
-            32, activation= "LeakyReLU",
-            kernel_regularizer=L1L2(l1=1e-5, l2=1e-4)
-        ))
+        # rf.add(Dense(
+        #     32, activation= "LeakyReLU",
+        #     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
+        # ))
         rf.add(Dense(
             1, activation='sigmoid'
         ))
         rf.compile(
-            metrics=["mean_squared_error"],
-            loss="mean_squared_error", 
-            optimizer="adam"
+            loss= "mean_squared_error" , 
+            optimizer="adam", 
+            metrics=["mean_squared_error"]
         )
         return rf
     rf = KerasRegressor(build_fn=build_model, verbose=0)
@@ -176,8 +176,9 @@ print(scoresFinal)
 if C_VAL:
     cv = ShuffleSplit(n_splits=K_SPLITS, test_size=T_SIZE)
     scores = cross_validate(
-        rf, X_train, y_train, cv=cv, scoring=scoring, n_jobs=1
+        rf, X_train, y_train, cv=cv, scoring=scoring, n_jobs=8
     )
+    print(scores)
 ###############################################################################
 # Permutation Importance
 ###############################################################################
