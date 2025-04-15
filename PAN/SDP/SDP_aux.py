@@ -36,7 +36,7 @@ DATA_TYPE = {'i_clv': np.double, 'i_ren': np.int8, 'i_res': np.double, 'i_grp': 
         [.05, .10, .25, .50, .75, .90, .95],
         [int((i+1)*365-1) for i in range(5)]
     )
-(JOB_DSK, JOB_SRV, MLR, SAMP_RATE) = (4, 20, False, 1)
+(JOB_DSK, JOB_SRV, MLR, SAMP_RATE) = (4, 40, False, 1)
 
 # #############################################################################
 # Names and patterns
@@ -67,7 +67,10 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def selectPath(USR, DRV, EXP):
     if USR == 'zelda':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20230601/{}/{}/'.format(
+        # PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20230601/{}/{}/'.format(
+        #     DRV, EXP
+        # )
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20250330/{}/{}/'.format(
             DRV, EXP
         )
     elif USR == 'sami':
