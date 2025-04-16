@@ -33,8 +33,8 @@ import TPP_mlrMethods as mth
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'Kenya', 'medEIR', 
-        'HUM', 'CSS', '50', '0.50', 'TTI'
+        'BurkinaFaso', 'lowEIR', 
+        'HUM', 'PRV', '50', '0.50', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -112,11 +112,11 @@ if DEV:
         #     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         # ))
         rf.add(Dense(
-            8, activation= "LeakyReLU", input_dim=inDims,
+            2, activation= "LeakyReLU", input_dim=inDims,
             kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         ))
         # rf.add(Dense(
-        #     32, activation= "LeakyReLU",
+        #     2, activation= "LeakyReLU",
         #     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         # ))
         rf.add(Dense(
@@ -297,4 +297,3 @@ permSci = pd.DataFrame({
 shapImp = pd.DataFrame({'names': iVars, 'mean': shapVals})
 permSci.to_csv(path.join(PT_OUT_THS, fNameOut+'_PMI-SCI.csv'), index=False)
 shapImp.to_csv(path.join(PT_OUT_THS, fNameOut+'_SHP-SHP.csv'), index=False)
-# print(scoresFinal)
