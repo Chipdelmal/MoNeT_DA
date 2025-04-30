@@ -14,6 +14,7 @@ if monet.isNotebook():
 else:
     (USR, DRV, AOI) = (sys.argv[1], sys.argv[2], sys.argv[3])
     (OVW, JOB) = (True, aux.JOB_SRV)
+# print(f'Number of cores: {JOB}')
 ###############################################################################
 MF = (True, True)
 if AOI == 'HLT':

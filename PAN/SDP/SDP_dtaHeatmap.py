@@ -10,13 +10,15 @@ import SDP_aux as aux
 import SDP_gene as drv
 import SDP_land as lnd
 
-if monet.isNotebook():
-    (USR, DRV, QNT, AOI, THS, MOI, EXP) = (
-        'zelda', 'PGS', '50', 'HLT', '0.1', 'WOP', '001'
-    )
-else:
-    (USR, DRV, QNT, AOI, THS, MOI) = sys.argv[1:]
-iVars = ['i_ren', 'i_res', 'i_clv']
+# if monet.isNotebook():
+#     (USR, DRV, QNT, AOI, THS, MOI, EXP) = (
+#         'zelda', 'SDX', '50', 'HLT', '0.1', 'WOP', '001'
+#     )
+# else:
+(USR, DRV, QNT, AOI, THS, MOI, EXP) = (
+    'zelda', 'SDY', '50', 'HLT', '0.1', 'WOP', '003'
+)
+iVars = ['i_res', 'i_clv', 'i_ren']
 exp = EXP
 # iVars = ['i_ren', 'i_res', 'i_fvb']
 # Setup number of threads -----------------------------------------------------
@@ -67,6 +69,7 @@ thsStr = str(int(float(THS)*100))
     'REG_{}_{}Q_{}T.csv'.format(AOI, QNT, thsStr)
 )
 DATA = pd.read_csv(path.join(PT_OUT, fName_I))
+print(DATA['WOP'].unique())
 # Contour levels --------------------------------------------------------------
 # Z levels
 if MOI == 'TTI':

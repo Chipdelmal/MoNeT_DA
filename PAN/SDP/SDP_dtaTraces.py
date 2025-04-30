@@ -10,12 +10,15 @@ import SDP_land as lnd
 import warnings
 warnings.filterwarnings("ignore")
 
-if monet.isNotebook():
-    (USR, DRV, AOI, QNT, THS, TRC) = (
-        'zelda', 'PGS', 'HLT', '50', '0.1', 'HLT'
-    )
-else:
-    (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
+# if monet.isNotebook():
+#     (USR, DRV, AOI, QNT, THS, TRC) = (
+#         'zelda', 'PGS', 'HLT', '50', '0.1', 'HLT'
+#     )
+# else:
+#     (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
+(USR, DRV, AOI, QNT, THS, TRC) = (
+    'zelda', 'SDX', 'HLT', '50', '0.1', 'HLT'
+)
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
@@ -92,6 +95,6 @@ for exp in EXPS:
                 aux.REL_START+i*7 for i in 
                 range(int(exIx[1].split('/')[-1].split('_')[1]))
             ],
-            hLines=[i*1.25e3 for i in range(0, 10)]
+            hLines=[i*100 for i in range(0, 10)]
         ) for exIx in subset
     ) 

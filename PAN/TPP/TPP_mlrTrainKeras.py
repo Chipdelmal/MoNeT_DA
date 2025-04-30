@@ -33,8 +33,8 @@ import TPP_mlrMethods as mth
 if monet.isNotebook():
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = (
         'zelda', 
-        'BurkinaFaso', 'lowEIR', 
-        'HUM', 'PRV', '50', '0.50', 'TTI'
+        'BurkinaFaso', 'medEIR', 
+        'HUM', 'CSS', '50', '0.50', 'TTI'
     )
 else:
     (USR, LND, EXP, DRV, AOI, QNT, THS, MOI) = sys.argv[1:]
@@ -112,11 +112,11 @@ if DEV:
         #     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         # ))
         rf.add(Dense(
-            2, activation= "LeakyReLU", input_dim=inDims,
+            1, activation= "tanh", input_dim=inDims,
             kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         ))
         # rf.add(Dense(
-        #     2, activation= "LeakyReLU",
+        #     1, activation= "LeakyReLU",
         #     kernel_regularizer=L1L2(l1=1e-5, l2=2.75e-4)
         # ))
         rf.add(Dense(

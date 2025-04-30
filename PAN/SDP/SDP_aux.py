@@ -36,8 +36,8 @@ DATA_TYPE = {'i_clv': np.double, 'i_ren': np.int8, 'i_res': np.double, 'i_grp': 
         [.05, .10, .25, .50, .75, .90, .95],
         [int((i+1)*365-1) for i in range(5)]
     )
-(JOB_DSK, JOB_SRV, MLR, SAMP_RATE) = (4, 40, False, 1)
-
+(JOB_DSK, JOB_SRV, MLR, SAMP_RATE) = (40, 40, False, 1)
+REL_START = 0
 # #############################################################################
 # Names and patterns
 # #############################################################################
@@ -70,7 +70,7 @@ def selectPath(USR, DRV, EXP):
         # PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20230601/{}/{}/'.format(
         #     DRV, EXP
         # )
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20250330/{}/{}/'.format(
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20250410/{}/{}/'.format(
             DRV, EXP
         )
     elif USR == 'sami':
@@ -252,7 +252,7 @@ def exportTracesPlot(
         pad = 0
     figArr[0].savefig(
             "{}/{}.png".format(PATH_IMG, nS),
-            dpi=STYLE['dpi'], facecolor=None,
+            dpi=75, facecolor=None,
             orientation='portrait', format='png', 
             transparent=transparent, bbox_inches='tight', pad_inches=pad
         )
