@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 # else:
 #     (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
 (USR, DRV, AOI, QNT, THS, TRC) = (
-    'zelda', 'SDX', 'HLT', '50', '0.1', 'HLT'
+    'zelda', 'SDY', 'HLT', '50', '0.1', 'HLT'
 )
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK

@@ -252,7 +252,7 @@ def exportTracesPlot(
         pad = 0
     figArr[0].savefig(
             "{}/{}.png".format(PATH_IMG, nS),
-            dpi=75, facecolor=None,
+            dpi=50, facecolor=None,
             orientation='portrait', format='png', 
             transparent=transparent, bbox_inches='tight', pad_inches=pad
         )
