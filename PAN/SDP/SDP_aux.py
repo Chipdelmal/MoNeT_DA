@@ -163,7 +163,7 @@ def exportTracesPlot(
     cpt=0, cptPrint=False, 
     poe=0, poePrint=False,
     mnf=0, mnfPrint=False,
-    transparent=False, ticksHide=True, sampRate=1,
+    transparent=False, ticksHide=False, sampRate=1,
     fontsize=5, labelspacing=.1
 ):
     if transparent:
@@ -252,7 +252,7 @@ def exportTracesPlot(
         pad = 0
     figArr[0].savefig(
             "{}/{}.png".format(PATH_IMG, nS),
-            dpi=50, facecolor=None,
+            dpi=200, facecolor=None,
             orientation='portrait', format='png', 
             transparent=transparent, bbox_inches='tight', pad_inches=pad
         )
@@ -269,7 +269,7 @@ def exportPstTracesParallel(
         labelPos=(.7, .9), xpsNum=0, digs=3, 
         autoAspect=False, popScaler=1,
         wopPrint=True, cptPrint=True, poePrint=True, mnfPrint=True, 
-        ticksHide=True, transparent=True, sampRate=1, labelspacing=.1,
+        ticksHide=False, transparent=True, sampRate=1, labelspacing=.1,
         releases=[], hLines=[0]
     ):
     (ix, repFile, tti, tto, wop, mnf, _, poe, cpt) = exIx

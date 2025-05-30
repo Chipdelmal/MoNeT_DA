@@ -10,20 +10,20 @@ import SDP_land as lnd
 import warnings
 warnings.filterwarnings("ignore")
 
-# if monet.isNotebook():
-#     (USR, DRV, AOI, QNT, THS, TRC) = (
-#         'zelda', 'PGS', 'HLT', '50', '0.1', 'HLT'
-#     )
-# else:
-#     (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
-(USR, DRV, AOI, QNT, THS, TRC) = (
-    'zelda', 'SDY', 'HLT', '50', '0.1', 'HLT'
-)
+if monet.isNotebook():
+    (USR, DRV, AOI, QNT, THS, TRC) = (
+        'zelda', 'PGS', 'HLT', '50', '0.1', 'HLT'
+    )
+else:
+    (USR, DRV, AOI, QNT, THS, TRC) = sys.argv[1:]
+# (USR, DRV, AOI, QNT, THS, TRC) = (
+#     'zelda', 'SDY', 'HLT', '50', '0.1', 'HLT'
+# )
 # Setup number of threads -----------------------------------------------------
 JOB = aux.JOB_DSK
 if USR == 'srv':
     JOB = aux.JOB_SRV
-CHUNKS = JOB
+CHUNKS = 80
 ###########################################################################
 # Paths
 ###########################################################################
@@ -89,7 +89,7 @@ for exp in EXPS:
             aux.STABLE_T, 0, QNT, STYLE, pt_img,
             digs=digs, border=True, autoAspect=True, labelPos=(.8, .15),
             wopPrint=False, poePrint=False, mnfPrint=False, cptPrint=False,
-            ticksHide=True,
+            ticksHide=False,
             transparent=True, sampRate=aux.SAMP_RATE,
             releases=[
                 aux.REL_START+i*7 for i in 
