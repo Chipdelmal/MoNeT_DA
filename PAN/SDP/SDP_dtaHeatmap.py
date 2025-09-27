@@ -16,9 +16,9 @@ import SDP_land as lnd
 #     )
 # else:
 (USR, DRV, QNT, AOI, THS, MOI, EXP) = (
-    'zelda', 'SDY', '50', 'HLT', '0.1', 'WOP', '003'
+    'zelda', 'PGS', '50', 'HLT', '0.1', 'WOP', '000'
 )
-iVars = ['i_res', 'i_clv', 'i_ren']
+iVars = ['i_ren', 'i_res', 'i_clv']
 exp = EXP
 # iVars = ['i_ren', 'i_res', 'i_fvb']
 # Setup number of threads -----------------------------------------------------
@@ -253,8 +253,8 @@ fig.savefig(
     dpi=500, bbox_inches='tight', transparent=True, pad_inches=0
 )
 # Clearing and closing (fig, ax) ------------------------------------------
-plt.clf()
-plt.cla() 
-plt.close(fig)
-plt.gcf()
+# plt.clf()
+# plt.cla() 
+# plt.close(fig)
+# plt.gcf()
 

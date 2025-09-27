@@ -5,8 +5,8 @@
 # bash ./SDP_pstFraction.sh $1 IIT
 # bash ./SDP_pstFraction.sh $1 FSR
 # bash ./SDP_pstFraction.sh $1 AXS
-# bash ./SDP_pstFraction.sh $1 PGS
-bash ./SDP_pstFraction.sh $1 SDX
-bash ./SDP_pstFraction.sh $1 SDY
+bash ./SDP_pstFraction.sh $1 PGS
+# bash ./SDP_pstFraction.sh $1 SDX
+# bash ./SDP_pstFraction.sh $1 SDY
 # bash ./SDP_pstFraction.sh $1 CRX
 # bash ./SDP_pstFraction.sh $1 CRY

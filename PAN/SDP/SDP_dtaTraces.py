@@ -95,6 +95,6 @@ for exp in EXPS:
                 aux.REL_START+i*7 for i in 
                 range(int(exIx[1].split('/')[-1].split('_')[1]))
             ],
-            hLines=[i*100 for i in range(0, 10)]
+            hLines=[0, 0]# i*100 for i in range(0, 10)]
         ) for exIx in subset
     ) 

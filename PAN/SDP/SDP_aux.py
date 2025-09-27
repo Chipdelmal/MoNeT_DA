@@ -18,9 +18,9 @@ import warnings
 # #############################################################################
 (XP_ID, XP_PTRN, EXPS) = (
     'SDP', 'E_{}_{}_{}-{}_{}_{}.{}',
-    ('001', '003')
+    ('000', )#'003')
 )
-(POP_SIZE, XRAN, FZ, STABLE_T) = (25e3, (0, 365*3), True, 0)
+(POP_SIZE, XRAN, FZ, STABLE_T) = (20e3, (0, 365*3), True, 0)
 (SUM, AGG, SPA, REP, SRP) = (True, False, False, False, True)
 (DATA_NAMES, DATA_PRE, DATA_PST) = (
     ('TTI', 'TTO', 'WOP', 'RAP', 'MNX', 'POE', 'CPT', 'DER'),
@@ -67,14 +67,14 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def selectPath(USR, DRV, EXP):
     if USR == 'zelda':
-        # PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20230601/{}/{}/'.format(
-        #     DRV, EXP
-        # )
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20250410/{}/{}/'.format(
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20250922/{}/{}/'.format(
             DRV, EXP
         )
+        # PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20250410/{}/{}/'.format(
+        #     DRV, EXP
+        # )
     elif USR == 'sami':
-        PATH_ROOT = '/Users/sanchez.hmsc/Documents/WorkSims/SDP/20230525/{}/{}/'.format(
+        PATH_ROOT = '/Users/sanchez.hmsc/Documents/WorkSims/SDP/20250922/{}/{}/'.format(
             DRV, EXP
         )
     (PATH_IMG, PATH_DATA) = (
