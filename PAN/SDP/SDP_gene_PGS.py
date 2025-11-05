@@ -60,4 +60,4 @@ def driveParameters(TYPE, popSize):
     elif TYPE == 'WLD':
         aggD = monet.generateAggregationDictionary(*PGS_WLD)
         yRange = popSize/2
-    return (aggD, yRange, 'SplitDrive-YG')
+    return (aggD, yRange, 'Theoretical')
