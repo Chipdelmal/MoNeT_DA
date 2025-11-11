@@ -67,7 +67,7 @@ def getExperimentsIDSets(PATH_EXP, skip=-1, ext='.bz'):
 # #############################################################################
 def selectPath(USR, DRV, EXP):
     if USR == 'zelda':
-        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20251024_nup50/{}/{}/'.format(
+        PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20251025_vasa/{}/{}/'.format(
             DRV, EXP
         )
         # PATH_ROOT = '/RAID5/marshallShare/SplitDrive_Suppression/20250410/{}/{}/'.format(

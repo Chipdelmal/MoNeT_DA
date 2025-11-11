@@ -225,10 +225,10 @@ if TICKS_HIDE:
     )
     ax.set_axis_off()
 fig.tight_layout()
+ax.set_xlim(0, 18) # ax.get_xlim()[1])
+ax.set_ylim(0, 500) #ax.get_ylim()[1])
 ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
 ax.set_facecolor("#00000000")
-ax.set_xlim(0, ax.get_xlim()[1])
-ax.set_ylim(0, ax.get_ylim()[1])
 ###########################################################################
 # Export File
 ###########################################################################
